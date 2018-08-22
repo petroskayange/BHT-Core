@@ -9,11 +9,12 @@
 		"role": "Role"
 	},
 	"view_user_attributes": {
-		"username": "username"
-	},
-	"edit_user_attributes": {
 		"username": "username",
-		"password": "password",
-		"role": "Update role"
+			"edit_user_attributes": {
+				"username": "username",
+				"password": "password",
+				"role": "Update role"
 	}
+	}
+
 }
