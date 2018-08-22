@@ -8,35 +8,138 @@
   <script src="./apps/core/assets/js/jquery.min.js"></script>
   <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
 
-	
+  
   <link rel="stylesheet" href="./apps/core/assets/css/maindashboard/header.css">
   <link rel="stylesheet" href="./apps/core/assets/css/maindashboard/footer.css">
+  <link rel="stylesheet" href="./apps/core/assets/css/custom.css">
 
-	<style>
-		.modal-dialog {
-			width: 95% !important;
-		}
+  <style>
+    .modal-dialog {
+      width: 95% !important;
+    }
 
-	</style>
+  </style>
 
-	<script>
-		function showOptions(e) {
-			// Get all buttons with class="btn" inside the container
-			var btns =	document.getElementsByClassName("overview-btns");
+  <script>
+  admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" ">Create user</button>';
+  admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" ">View user</button>';
+  report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" ">Report 1</button>';
+  report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" ">Report 2</button>';
+  report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" ">Report 3</button>';
 
-			// Loop through the buttons and add the active class to the current/clicked button
-			for (var i = 0; i < btns.length; i++) {
-				btns[i].setAttribute('class', 'btn btn-info overview-btns');
-				if(btns[i].innerHTML == e.innerHTML)
-					btns[i].setAttribute('class', 'btn btn-info overview-btns active-btn');
+// overview tab work in progress
+    function overview(){
+      var table = document.createElement("TABLE");
+      table.className = "table table-bordered";
+      var row = table.insertRow(-1);
+      var total_columns = 4; 
+      var total_rows = 7;
+      var table_header = ["", "Today", "This Month", "This Year"]
+
+      for (var x = 0; x < total_columns; x++){
+        var header = document.createElement("TH");
+        header.innerHTML = table_header[x];
+        row.appendChild(header);
+        // var cell = row.insertCell(-1);
+        // cell.className = 'overview-tab';
+      for (var i = 0; i < total_rows; i++) {
+        var cell = row.insertCell(-1);
+        // cell.className = 'overview-tab';
+          if(x === 0 && i === 1)cell.innerHTML= "Total Registered";
+          if(x === 1 && i === 2)cell.innerHTML= '&nbsp';
+          if(x === 2 && i === 3)cell.innerHTML= '&nbsp';
+          if(x === 3 && i === 4)cell.innerHTML= '&nbsp';
+          if(x === 4 && i === 5){
+            cell.setAttribute('span',3);
+            cell.innerHTML = "Current Patient Statistics";
+
+          }
+        }
+      } 
 
 
-			} 
+      var divtable = document.getElementById("generic_tabs");
+      divtable.appendChild(table);
+    }
 
-		}
+    function GenerateTable() {
+
+        //Build an array containing Customer records.
+        var header = new Array();
+        header.push(["", "Today", "This Month", "This Year"]);
+        // header.push([2,1, "John Hammond", "United States"]);
+        // header.push([3,2, "Mudassar Khan", "India"]);
+        // header.push([3,3, "Suzanne Mathews", "France"]);
+        // header.push([7,4, "Robert Schidner", "Russia"]);
+     
+        //Create a HTML Table element.
+        var table = document.createElement("TABLE");
+        table.className = "table table-bordered";
+        
+     
+        //Get the count of columns.
+        var columnCount = header[0].length;
+     
+        //Add the header row.
+        var row = table.insertRow(-1);
+        for (var i = 0; i < columnCount; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = header[0][i];
+            row.appendChild(headerCell);
+        }
+     
+        //Add the data rows.
+        for (var i = 0; i < header.length; i++) {
+
+            row = table.insertRow(-1);
+
+            for (var j = 0; j < columnCount; j++) {
+                var cell = row.insertCell(-1);
+                //cell.innerHTML = header[i][j];
+                if(i === 0 && j === 0)cell.innerHTML= "Total Registered";
+            } 
+
+        }
+     
+        var dvTable = document.getElementById("generic_tabs");
+        dvTable.innerHTML = "";
+        dvTable.appendChild(table);
+}
+// overview tab work in progress
 
 
-	</script>
+    function showOptions(e) {
+      // Get all buttons with class="btn" inside the container
+      var btns =  document.getElementsByClassName("overview-btns");
+
+      // Loop through the buttons and add the active class to the current/clicked button
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute('class', 'btn btn-info overview-btns');
+        if(btns[i].innerHTML == e.innerHTML)
+          btns[i].setAttribute('class', 'btn btn-info overview-btns active-btn');
+
+
+      } 
+
+    }
+    function loadTabContent(id){
+      if(id === "admin"){
+      document.getElementById("generic_tabs").innerHTML= admin_tab_content;
+      }
+      else if(id === "report"){
+      document.getElementById("generic_tabs").innerHTML= report_tab_content;
+      }
+      else{
+        GenerateTable();
+      }
+    }
+
+    $(document).ready(function(){
+
+    });
+
+
+  </script>
 
   <style>
 
@@ -98,62 +201,69 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12" id="tabs-column">
-			<button class="btn btn-info overview-btns" onmousedown="showOptions(this);">Overview</button>
-			<button class="btn btn-info overview-btns" onmousedown="showOptions(this);">Reports</button>
-			<button class="btn btn-info overview-btns" onmousedown="showOptions(this);">Settings</button>
-			<button class="btn btn-info overview-btns" onmousedown="showOptions(this);">Administration</button>
+      <button class="btn btn-info overview-btns" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
+      <button class="btn btn-info overview-btns" id="report" onmousedown="showOptions(this); loadTabContent(this.id);">Reports</button>
+      <button class="btn btn-info overview-btns" id="admin" onmousedown="showOptions(this); loadTabContent(this.id);">Administration</button>
     </div>
-	</div>
+  </div>
+</div>
+
+<div class="container-tab" id="generic_tabs">
+  
 </div>
 
 
 
 
 <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Select module</h4>
-        </div>
-        <div class="modal-body">
-          
-          <!-- ............................................ -->  
-          <div class="card">
-            <img src="./apps/core/assets/images/aids.png" alt="Avatar" style="width:100%">
-            <div class="card-container">
-              <h4><b>National ART</b></h4> 
-              <p>Manage ART/HIV patients</p> 
-            </div>
-          </div>
-          <!-- ............................................ -->  
+      <div class="modal fade" id="myModal" role="dialog">
+         <div class="modal-dialog" name="div2">
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default buttons" data-dismiss="modal">Close</button>
-        </div>
+
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Select module</h4>
+               </div>
+               <div class="modal-body" id="modal-div">
+                  <div class="container">
+                     <div class="row">
+                        <template id="card_template">
+                           <!-- <div class="" > -->
+                           <div class="card col-lg-4 h-100" id="cardDiv" style="margin: 1%;">
+                              <img alt="Avatar" style="width:200px; height: 200px;" id="cardImage">
+                              <div class="card-container">
+                                 <h4><b id="appName"></b></h4>
+                                 <p id="appDescription"></p>
+                              </div>
+                           </div>
+                           <!-- </div> -->
+                        </template>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-default buttons" data-dismiss="modal">Close</button>
+               </div>
+            </div>
+         </div>
       </div>
-      
-    </div>
-  </div>
+
 <!-- Modal -->
 
 
 <footer class="footer">
-	<div class="container-footer">
-		<button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;</button>
-		<button class="btn btn-danger buttons logout" style="width: 200px;">Logout</button>
-	</div>
+  <div class="container-footer">
+    <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;</button>
+    <button class="btn btn-danger buttons logout" style="width: 200px;">Logout</button>
+  </div>
 </footer>
 
 </body>
 
 <script>
-	showOptions(document.getElementsByClassName("overview-btns")[0]);
+  showOptions(document.getElementsByClassName("overview-btns")[0]);
 </script>
-<script src="../assets/javascripts/client-scan-barcode.js"></script>
+<!-- <script src="../assets/javascripts/client-scan-barcode.js"></script> -->
+<script src="apps/core/assets/js/core.js"></script>
 </html>
-
