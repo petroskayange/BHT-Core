@@ -1,0 +1,15 @@
+.container-tab {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.overview-tab {
+	margin-top: 10px;
+	border-right: 1px;
+	border-bottom: 2px;
+
+}
+.overview-tab tr {
+	color: #305d97;
+	  
+}
