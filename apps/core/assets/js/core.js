@@ -1,5 +1,5 @@
 var scheme = "http://"
-var port = ":" + "3000" + "/";
+var port = ":" + "" + "/";
 var ipAddress = "localhost";
 var baseUrl = scheme + ipAddress + port;
 if (document.createElement("template").content) {
@@ -27,7 +27,7 @@ if (document.createElement("template").content) {
         	console.log("apps.json not available. Check if the file is present");
         }
     };
-    xmlhttp.open("GET", "http://localhost:3000/apps/config/apps.json", true);
+    xmlhttp.open("GET", "http://0.0.0.0:0000/apps/config/apps.json", true);
     xmlhttp.send();
 } else {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
