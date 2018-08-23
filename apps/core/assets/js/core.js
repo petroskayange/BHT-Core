@@ -13,16 +13,13 @@ if (document.createElement("template").content) {
     .done(function(data, status){ 
         var applicationData = jQuery.parseJSON(JSON.stringify(data));
         for (var i = 0; i < applicationData.apps.length; i++ ) {
-        applicationName[i] = applicationData.apps[i].applicationName;
-        applicationDescription[i] = applicationData.apps[i].applicationDescription;
-        applicationIcon[i] = applicationData.apps[i].applicationIcon;
-        console.log(i);
-        console.log(applicationIcon[i]);
-        var applicationFolder = applicationData.apps[i].applicationFolder;
-        var applicationJsonUrl = applicationBaseUrl + "/apps/" + applicationFolder + "application.json";
-        console.log(applicationJsonUrl);    
-        checkJson(applicationJsonUrl, applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
-    }
+            applicationName[i] = applicationData.apps[i].applicationName;
+            applicationDescription[i] = applicationData.apps[i].applicationDescription;
+            applicationIcon[i] = applicationData.apps[i].applicationIcon;
+            var applicationFolder = applicationData.apps[i].applicationFolder;
+            var applicationJsonUrl = applicationBaseUrl + "/apps/" + applicationFolder + "application.json";
+            checkJson(applicationJsonUrl, applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
+        }
     })
     .fail(function(){
     console.log("apps.json is missing from the apps/config folder");
@@ -31,29 +28,23 @@ if (document.createElement("template").content) {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
-function newApp(applicationName, applicationDescription, applicationImage, counter) {
+function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
     var temp = document.getElementById("card_template");
     var clon = temp.content.cloneNode(true);
-    let appDiv = document.getElementById("modal-div");
-    let appName = document.getElementById("appName");
+    $("#modal-div").append($('#card_template').html());
     let cardImage = document.getElementById("cardImage");
-    $("#appDescription").text(applicationDescription);
-    $("#appName").text(applicationName);
-    $("#cardImage").attr('src', applicationImage);
-    appName.id = "appName" + counter;
-    appDescription.id = "appDescription" + counter;
-    cardImage.id = "cardImage" + counter;
-    cardImage.onerror = function() { 
-    // console.log(applicationImage);
-    alert("Inserting alternate");
-    cardImage.src = applicationBaseUrl + "/public/assets/images/no_image.png"; 
-  }
+    $("#appDescription").text(applicationDescription).attr('id',"appDescription" + counter);
+    $("#appName").text(applicationName).attr('id',"appName" + counter);
+    $("#cardImage")
+    .on('error',function(){
+        $(this).attr('src', backupImagebackupImage = applicationBaseUrl + "/public/assets/images/no_image.png");
+    }).attr('src', applicationImage).attr('id',"cardImage" + counter);
 }
 
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
     .done(function(){ 
-    newApp(applicationName, applicationDescription, applicationBaseUrl + applicationIconUrl, counter);
+    newModuleCard(applicationName, applicationDescription, applicationBaseUrl + applicationIconUrl, counter);
     })
     .fail(function(){
     console.log("The application " + applicationName + "'s application.json file is not available");
