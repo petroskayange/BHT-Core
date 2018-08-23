@@ -1,3 +1,4 @@
 apps/*
 !apps/core
+!apps/config
 apps/core/application.json
