@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+       // var x = new Date();
+       // var CurrentDate = x.getFullYear() + "-" + parseInt(x.getMonth()+1) + "-" + x.getDate();
+
+      tstCurrentDate = "2018-08-23";
+
+      function getInput(x){
+         if (x === 0){
+            console.log('value from first name input');
+         }
+      }
+
+
+    </script>
+
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+   <!-- <link rel="stylesheet" href="./apps/core/assets/css/custom.css"> -->
+   <!-- <link rel="stylesheet" href="./apps/core/assets/css/bootstrap/bootstrap.min.css"> -->
+
+  </head>
+  <body id="">
+    <div id="">
+      <div id="content">
+        <form action="/new_user" method="POST">
+           <input helpText="First Name" allowFreeText="true" type="text" tt_onUnLoad="getInput(tstCurrentPage);" name="person_name[given_name]" id="person_name_given_name" />
+
+           <input helpText="Last Name" allowFreeText="true" type="text" tt_onUnLoad="getInput(this.id);" name="person_name[family_name]" id="person_name_family_name" />
+
+           <input helpText="User role" type="text" name="user_role[role_id]" id="user_role_role_id" />
+
+           <input helpText="Username" textCase="lower" tt_onload="$(&#39;touchscreenInput5&#39;).value = ($(&#39;user_first_name&#39;).value.substring(0,3)+$(&#39;user_last_name&#39;).value.substring(0,3)).toLowerCase()" validationRule="\w{6}\w*" validationMessage="Username must have at least SIX letters" type="text" name="user[username]" id="user_username" />
+
+           <input helpText="Password" minlength="6" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than six characters" type="password" name="user[plain_password]" id="user_plain_password" />
+
+           <input helpText="Confirm Password" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than FOUR characters." type="password" name="user_confirm[password]" id="user_confirm_password" />
+
+      </form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/";
+  
+</script>

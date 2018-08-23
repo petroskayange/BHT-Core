@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      tstCurrentDate = "2018-08-23";
+
+
+    </script>
+
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <form action="/view_users" method="POST">
+          <input textCase="lower" helpText="Select username" type="text" name="user[username]" id="user_username" />
+            <input type="submit" name="commit" value="Find user" />
+        </form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/";
+  
+</script>
