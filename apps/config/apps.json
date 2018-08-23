@@ -1,16 +1,16 @@
 {
 	"apps": [
 		{
-			"name": "ART",
-			"folder": "ART/",
-			"icon": "/apps/ART/assets/images/aids.png",
-			"description": "Application for HIV testing"
+			"applicationName": "ART",
+			"applicationFolder": "ART/",
+			"applicationIcon": "/apps/ART/assets/images/aids.png",
+			"applicationDescription": "Application for HIV testing"
 		},
 		{
-			"name": "bht",
-			"folder": "core/",
-			"icon": "/apps/core/assets/images/BaobabHealth.png",
-			"description": "Application for BHT "
+			"applicationName": "bht",
+			"applicationFolder": "core/",
+			"applicationIcon": "/apps/core/assets/images/BaobabHealth.png",
+			"applicationDescription": "Application for BHT "
 		}
 	]
 }
