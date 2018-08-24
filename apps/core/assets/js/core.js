@@ -9,16 +9,22 @@ if (document.createElement("template").content) {
     var applicationName = [];
     var applicationDescription = [];
     var applicationIcon = [];
+    var applicationFolder = [];
+    var applicationJsonUrl = [];
     $.get(applicationBaseUrl+"/apps/config/apps.json")
     .done(function(data, status){ 
         var applicationData = jQuery.parseJSON(JSON.stringify(data));
         for (var i = 0; i < applicationData.apps.length; i++ ) {
-            applicationName[i] = applicationData.apps[i].applicationName;
-            applicationDescription[i] = applicationData.apps[i].applicationDescription;
+            applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
+            applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
             applicationIcon[i] = applicationData.apps[i].applicationIcon;
-            var applicationFolder = applicationData.apps[i].applicationFolder;
-            var applicationJsonUrl = applicationBaseUrl + "/apps/" + applicationFolder + "application.json";
-            checkJson(applicationJsonUrl, applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
+            applicationFolder[i] = applicationData.apps[i].applicationFolder ;
+            if (applicationData.apps[i].applicationFolder) {
+                applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
+                checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
+            } else {
+                console.log("no Application folder specified for " + applicationName[i]);
+            }
         }
     })
     .fail(function(){
@@ -29,15 +35,12 @@ if (document.createElement("template").content) {
 }
 
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
-    var temp = document.getElementById("card_template");
-    var clon = temp.content.cloneNode(true);
     $("#modal-div").append($('#card_template').html());
-    let cardImage = document.getElementById("cardImage");
     $("#appDescription").text(applicationDescription).attr('id',"appDescription" + counter);
     $("#appName").text(applicationName).attr('id',"appName" + counter);
     $("#cardImage")
     .on('error',function(){
-        $(this).attr('src', backupImagebackupImage = applicationBaseUrl + "/public/assets/images/no_image.png");
+        $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
     }).attr('src', applicationImage).attr('id',"cardImage" + counter);
 }
 
