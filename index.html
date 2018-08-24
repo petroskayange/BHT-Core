@@ -21,12 +21,24 @@
   </style>
 
   <script>
-  admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" ">Create user</button>';
-  admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" ">View user</button>';
-  report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" ">Report 1</button>';
-  report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" ">Report 2</button>';
-  report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" ">Report 3</button>';
+  admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
+  admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
+  report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
+  report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" "><span>Report 2</span></button>';
+  report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
 
+    function redirect(id){
+      if(id === "create-user"){
+        window.location.href='./apps/core/views/users/new.html';
+      }
+      if(id === "view-user"){
+        window.location.href='./apps/core/views/users/view_users.html';
+      }
+      if(id === "report-1"){
+      }
+      if(id === "report-1"){
+      }
+    }
 // overview tab work in progress
     function overview(){
       var table = document.createElement("TABLE");
