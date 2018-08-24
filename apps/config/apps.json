@@ -1,10 +1,16 @@
 {
 	"apps": [
 		{
-			"name": "ANC",
-			"folder": "ANC/",
-			"icon": "/apps/core/assets/images/BaobabHealth.png",
-			"description": "Antenatal Care Clinic "
+			"applicationName": "ART",
+			"applicationFolder": "ART/",
+			"applicationIcon": "/apps/ART/assets/images/aids.png",
+			"applicationDescription": "Application for HIV testing"
+		},
+		{
+			"applicationName": "bht",
+			"applicationFolder": "core/",
+			"applicationIcon": "/apps/core/assets/images/BaobabHealth.png",
+			"applicationDescription": "Application for BHT "
 		}
 
 	]
