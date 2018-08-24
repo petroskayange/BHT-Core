@@ -3,7 +3,7 @@ var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "localhost"; 
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
-// console.log(applicationBaseUrl); uncomment this out to verify current server settings
+// console.log(applicationBaseUrl); uncomment this out to verify current server settings 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
     var applicationName = [];
