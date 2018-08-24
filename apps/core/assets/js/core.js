@@ -11,21 +11,9 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    $.get(applicationBaseUrl+"/apps/config/apps.json")
+    $.getJSON(applicationBaseUrl+"/apps/config/apps.json")
     .done(function(data, status){ 
-        var applicationData = jQuery.parseJSON(JSON.stringify(data));
-        for (var i = 0; i < applicationData.apps.length; i++ ) {
-            applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
-            applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
-            applicationIcon[i] = applicationData.apps[i].applicationIcon;
-            applicationFolder[i] = applicationData.apps[i].applicationFolder ;
-            if (applicationData.apps[i].applicationFolder) {
-                applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
-                checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
-            } else {
-                console.log("no Application folder specified for " + applicationName[i]);
-            }
-        }
+        parser(data);   
     })
     .fail(function(){
     console.log("apps.json is missing from the apps/config folder");
@@ -52,4 +40,23 @@ function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, appl
     .fail(function(){
     console.log("The application " + applicationName + "'s application.json file is not available");
     });
+}
+
+function parser(applicationData) {
+
+    for (var i = 0; i < applicationData.apps.length; i++ ) {
+                
+    
+    applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
+                applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
+                applicationIcon[i] = applicationData.apps[i].applicationIcon;
+                applicationFolder[i] = applicationData.apps[i].applicationFolder ;
+                if (applicationData.apps[i].applicationFolder) {
+                    applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
+                    checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
+                } else {
+                    console.log("no Application folder specified for " + applicationName[i]);
+                }
+
+            }
 }
