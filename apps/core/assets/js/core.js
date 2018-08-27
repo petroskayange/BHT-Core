@@ -26,10 +26,19 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     $("#modal-div").append($('#card_template').html());
     $("#appDescription").text(applicationDescription).attr('id',"appDescription" + counter);
     $("#appName").text(applicationName).attr('id',"appName" + counter);
+    $("#moduleButton").attr('id',"moduleButton" + counter);
     $("#cardImage")
     .on('error',function(){
         $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
     }).attr('src', applicationImage).attr('id',"cardImage" + counter);
+        $( "#moduleButton"+counter ).click(function() {
+        // alert( "Handler for .click() called." );
+        console.log(applicationImage);
+        changeModule(applicationImage, applicationName);
+        });
+        //  $( "#" ).click(function() {
+        // alert( "Handler for .click() called." );
+        // });
 }
 
 function showUser() {
@@ -68,4 +77,12 @@ function parser(applicationData) {
                 }
 
             }
+}
+
+function changeModule(moduleImage, moduleName) {
+    $(".app-icon").css("background-image", "url("+moduleImage+")");
+    $("#registerButton").css("visibility", "visible");
+    $("#myModal").modal("hide");
+    $("#application-name").text(moduleName);
+
 }

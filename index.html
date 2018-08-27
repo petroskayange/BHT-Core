@@ -182,19 +182,21 @@
   <div class="table-div">
     <div class="table-div-row">
 
-      <div class="table-div-cell app-icon">&nbsp;</div>
+      <div class="table-div-cell app-icon" style="">&nbsp;</div>
       
       <div class="table-div-cell app-details" style="float: left; width: 65%;">
         <table style="width: 100%; margin: 5px;">
           <tr>
             <th>Facility name:</th>
             <td id="client-name">Kamuzu Central Hospital</td>
-            <th align="right">App version:</th>
-            <td id="client-name">v1.0.0</td>
+            <th align="right">Application Name:</th>
+            <td id="application-name">BHT Core</td>
           </tr>
           <tr>
             <th>Location:</th>
             <td id="location-name">&nbsp;</td>
+            <th align="right">App version:</th>
+            <td id="application-version">v1.0.0</td>
           </tr>
           <tr>
             <th>Date:</th>
@@ -251,7 +253,7 @@
                            <!-- <div class="" > -->
                             
                            <div class="card col-4 col-sm-4 col-lg-3 h-100" id="cardDiv" style="margin: 1%;">
-                            <a href="#" class="card-block clearfix"> 
+                            <a href="#" class="card-block clearfix" id="moduleButton"> 
                               <img alt="Avatar" style="width:200px; height: 200px;" id="cardImage">
                               <div class="card-container">
                                  <h4><b id="appName"></b></h4>
@@ -279,14 +281,17 @@
   <div class="container-footer">
     <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal"><span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
     <button class="btn btn-danger buttons logout" style="width: 200px;">Logout</button>
+    <button class="btn buttons logout" style="margin-right: 2px; visibility: hidden; background: green;" id="registerButton">find or register patient</button>
   </div>
 </footer>
 
 </body>
-
 <script>
   showOptions(document.getElementsByClassName("overview-btns")[0]);
 </script>
 <!-- <script src="../assets/javascripts/client-scan-barcode.js"></script> -->
-<script src="apps/core/assets/js/core.js"></script>
+
+<script src="apps/core/assets/js/core.js"> 
+  changeModule();
+</script>
 </html>
