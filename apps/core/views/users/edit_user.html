@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      tstCurrentDate = "2018-08-27";
+
+      // var user_username = document.getElementById("user_username").value;
+      //   if (user_username !== "" || user_username !== null){
+      //       window.location.href = "/index.html";
+      //   }
+      //   else{
+
+      //   }
+
+
+    </script>
+
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+          <!-- <p id="flash_notice" style="color: green">User was successfully Updated.</p> -->
+        <form action='' method= 'POST'>
+          <input helpText="First Name" value="" allowFreeText="true" type="text" name="person_name[given_name]" id="person_name_given_name" />
+
+          <input helpText="Last Name" value="" allowFreeText="true" type="text" name="person_name[family_name]" id="person_name_family_name" />
+
+          <input textCase="lower" helpText="Username" value="" validationRule="\w{4}\w*" validationMessage="Username must have at least FOUR characters" type="text" name="user[username]" id="user_username" />
+
+        </form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/";
+  
+</script>
