@@ -39,7 +39,6 @@
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
             if (localStorage.getItem("password") === confirm_password){
-              // console.log("we are here")
               window.location.href = "http://localhost:3000/apps/core/views/users/show.html";
                }
                else{
@@ -85,8 +84,6 @@
 <script type="text/javascript">
   console.log(localStorage);
   // var tt_cancel_destination = "www.google.com";
-  $( "#user_confirm_password" ).mousedown(function() {
-  alert( "Handler for .mousedown() called." );
-});
+ 
   
 </script>
