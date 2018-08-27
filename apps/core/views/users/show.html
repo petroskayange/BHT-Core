@@ -16,6 +16,7 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
 
   </head>
   <body id="mateme">
@@ -74,23 +75,23 @@
   <table class = 'userdata'  style="float:left">
     <tr>
       <th class='blue'>Username:&nbsp;</th>
-      <td class='blue'>&nbsp;testngi</td>
+      <td class='blue'id="username">&nbsp;testngi</td>
     </tr>
     <tr>
       <th>Role:&nbsp;</th>
-      <td>&nbsp;Clinician</td>
+      <td id="role">&nbsp;Clinician</td>
     </tr>
     <tr>
       <th class='blue'>First name:&nbsp;</th>
-      <td class='blue'>&nbsp;Ww</td>
+      <td class='blue' id="first_name"></td>
     </tr>
     <tr>
       <th>Last name:&nbsp;</th>
-      <td>&nbsp;Doe</td>
+      <td id="last_name">&nbsp;Doe</td>
     </tr>
     <tr>
       <th class='blue'>Date created:&nbsp;</th>
-      <td class='blue'>&nbsp;Friday  24, August, 2018</td>
+      <td class='blue' id="date_created">&nbsp;Friday  24, August, 2018</td>
     </tr>
   </table>
 
@@ -146,6 +147,6 @@
 </html>
 
 <script type="text/javascript">
+  showUser();
   var tt_cancel_destination = "/";
-  
 </script>

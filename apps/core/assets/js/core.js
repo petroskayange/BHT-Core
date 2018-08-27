@@ -32,6 +32,15 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     }).attr('src', applicationImage).attr('id',"cardImage" + counter);
 }
 
+function showUser() {
+    $("#first_name").text(localStorage.getItem("first_name"));
+    $("#last_name").text(localStorage.getItem("last_name"));
+    $("#username").text(localStorage.getItem("username"));
+    $("#date_created").text(localStorage.getItem("date_created"));
+    // $("#role").text(localStorage.getItem("role"));
+    console.log(localStorage);
+}
+
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
     .done(function(){ 
