@@ -3,6 +3,11 @@ var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "localhost"; 
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
+var userRoles = ['admin','clerk','user'];
+$('#userRole').empty();
+$.each(userRoles, function(i, p) {
+    $('#userRole').append($('<option></option>').val(p).html(p));
+});
 // console.log(applicationBaseUrl); uncomment this out to verify current server settings 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
@@ -32,21 +37,17 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
         $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
     }).attr('src', applicationImage).attr('id',"cardImage" + counter);
         $( "#moduleButton"+counter ).click(function() {
-        // alert( "Handler for .click() called." );
         console.log(applicationImage);
         changeModule(applicationImage, applicationName);
         });
-        //  $( "#" ).click(function() {
-        // alert( "Handler for .click() called." );
-        // });
 }
 
 function showUser() {
     $("#first_name").text(localStorage.getItem("first_name"));
     $("#last_name").text(localStorage.getItem("last_name"));
     $("#username").text(localStorage.getItem("username"));
+    $("#role").text(localStorage.getItem("selected_role"));
     $("#date_created").text(localStorage.getItem("date_created"));
-    // $("#role").text(localStorage.getItem("role"));
     console.log(localStorage);
 }
 
@@ -84,5 +85,4 @@ function changeModule(moduleImage, moduleName) {
     $("#registerButton").css("visibility", "visible");
     $("#myModal").modal("hide");
     $("#application-name").text(moduleName);
-
 }
