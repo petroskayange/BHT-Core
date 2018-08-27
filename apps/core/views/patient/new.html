@@ -8,8 +8,10 @@
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
 
-      var d = new Date();
-      d.toDateString();
+       // var x = new Date();
+       // var CurrentDate = x.getFullYear() + "-" + parseInt(x.getMonth()+1) + "-" + x.getDate();
+
+      tstCurrentDate = "2018-08-24";
 
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
@@ -18,6 +20,18 @@
          var d = new Date();
          localStorage.setItem("date_created", d.toDateString());
       }
+
+      // function validatePassword(){
+      //    console.log(localStorage);
+      //    console.log(localStorage.getItem("confirm_password"));
+      //    if (localStorage.getItem("password") === localStorage.getItem("confirm_password")){
+            
+      //    }
+      //    else{
+      //       console.log('passwordmismatch');
+      //    }
+
+      // }
 
 
       function changeNextButton(){
@@ -28,6 +42,7 @@
               window.location.href = "http://localhost:3000/apps/core/views/users/show.html";
                }
                else{
+                //  alert("passwords do not match");
                  
                }
          }
