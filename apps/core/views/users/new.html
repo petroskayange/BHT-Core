@@ -17,6 +17,8 @@
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
          value = $('touchscreenInput' + tstCurrentPage).value
          localStorage.setItem(key, value);
+         var d = new Date();
+         localStorage.setItem("date_created", d.toDateString());
       }
 
       // function validatePassword(){
@@ -37,8 +39,12 @@
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
             if (localStorage.getItem("password") === confirm_password){
+              // console.log("we are here")
+              window.location.href = "http://localhost:3000/apps/core/views/users/show.html";
                }
                else{
+                //  alert("passwords do not match");
+                 
                }
          }
       }
@@ -77,6 +83,10 @@
 </html>
 
 <script type="text/javascript">
-  var tt_cancel_destination = "/";
+  console.log(localStorage);
+  // var tt_cancel_destination = "www.google.com";
+  $( "#user_confirm_password" ).mousedown(function() {
+  alert( "Handler for .mousedown() called." );
+});
   
 </script>
