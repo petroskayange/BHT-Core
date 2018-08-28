@@ -8,10 +8,8 @@
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
 
-       // var x = new Date();
-       // var CurrentDate = x.getFullYear() + "-" + parseInt(x.getMonth()+1) + "-" + x.getDate();
-
-      tstCurrentDate = "2018-08-24";
+       var d = new Date();
+       d.toDateString();
 
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");

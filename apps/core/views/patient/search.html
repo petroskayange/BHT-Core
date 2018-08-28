@@ -37,7 +37,7 @@
 
     <input type="text" name="family_name" id="family_name" field_type="alpha" helpText="Last name" allowFreeText="true" />
 
-    <select allowFreeText="false" helpText=" Gender" id="gender" name="person[gender]" tt_onLoad="$(keyboard).style.display = none"><option value=""></option>
+    <select allowFreeText="false" helpText=" Gender" id="gender" name="person[gender]" tt_onLoad="changeNextButton();"><option value=""></option>
       <option value="Male">Male</option>
       <option value="Female">Female</option></select>
 
@@ -50,6 +50,19 @@
 </html>
 
 <script type="text/javascript">
+
+  function changeNextButton(){
+    __$("nextButton").removeAttribute("onmousedown")
+    __$("nextButton").onmousedown = function(){
+      search_redirect = $('touchscreenInput' + tstCurrentPage).value;
+        if (search_redirect.length > 0){
+          window.location.href = "/apps/core/views/patient/search_results.html";
+        }
+        else{
+          showMessage("Select value to continue")
+      }
+    }
+  }
 
   var patientID = ''
   jQuery(document).ready(function(){
