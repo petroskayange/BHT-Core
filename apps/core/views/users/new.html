@@ -13,10 +13,20 @@
 
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-         value = $('touchscreenInput' + tstCurrentPage).value
+         value = $('touchscreenInput' + tstCurrentPage).value;
          localStorage.setItem(key, value);
          var d = new Date();
+        //  if (document.getElementById("touchscreenInput2")) {
+        //    console.log("here");
+        //  }else {
+        //    console.log("no here");
+        //  }
+           
          localStorage.setItem("date_created", d.toDateString());
+        //  localStorage.setItem("user_role", "clerks");
+        //  localStorage.setItem("", d.toDateString());
+        
+          // "admin"
       }
 
 
@@ -50,7 +60,8 @@
 
            <input helpText="Last Name" allowFreeText="true" type="text" tt_onUnLoad="getInput();" name="person_name[family_name]" key="last_name" id="person_name_family_name" />
 
-           <input helpText="User role" key = "role" type="text" name="user_role[role_id]" id="user_role_role_id" />
+           <select allowFreeText="false" helpText=" Role" id="userRole" name="user[role]"  tt_onLoad="$(&#39;keyboard&#39;).style.display = &#39;none&#39;" tt_onUnLoad="saveSelection();"></select>
+            
 
            <input helpText="Username" key="username" textCase="lower" tt_onload="$(touchscreenInput5).value = ($(user_first_name).value.substring(0,3)+$(user_last_name).value.substring(0,3)).toLowerCase()" validationRule="\w{6}\w*" validationMessage="Username must have at least SIX letters" type="text" tt_onUnLoad="getInput();" name="user[username]" id="user_username" />
 
@@ -67,8 +78,18 @@
 </html>
 
 <script type="text/javascript">
-  console.log(localStorage);
+  // console.log(localStorage);
   // var tt_cancel_destination = "www.google.com";
  
-  
+ function saveSelection() {
+     var j = document.getElementById("touchscreenInput2");
+          // undefined
+          f =  j.getAttribute("tstvalue") 
+          localStorage.setItem("selected_role", f);
+          // console.log(f);
+ } 
+</script>
+
+<script src="../../assets/js/core.js"> 
+      
 </script>
