@@ -42,8 +42,10 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
             $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function() {
-        console.log(applicationImage);
-        changeModule(applicationImage, applicationName);
+        // console.log(applicationImage);
+        localStorage.setItem("applicationImage", applicationImage);
+        localStorage.setItem("applicationName", applicationName);
+        changeModule();
     });
 }
 
@@ -85,11 +87,18 @@ function parser(applicationData) {
     }
 }
 
-function changeModule(moduleImage, moduleName) {
-    $(".app-icon").css("background-image", "url(" + moduleImage + ")");
-    $("#registerButton").css("visibility", "visible");
-    $("#myModal").modal("hide");
-    $("#application-name").text(moduleName);
+function changeModule() {
+    let applicationImage = localStorage.getItem("applicationImage");
+    let applicationName = localStorage.getItem("applicationName");
+    if (applicationName != null && applicationImage != null) {
+            $(".app-icon").css("background-image", "url(" + localStorage.getItem("applicationImage") + ")");
+            $("#registerButton").css("visibility", "visible");
+            $("#myModal").modal("hide");
+            $("#application-name").text(localStorage.getItem("applicationName"));
+            console.log(localStorage);
+    }else {
+        console.log(localStorage);
+    }
 }
 
 function redirect(id) {

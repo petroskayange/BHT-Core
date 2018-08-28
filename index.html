@@ -15,7 +15,7 @@
       <div class="container-fluid">
          <div class="table-div">
             <div class="table-div-row">
-               <div class="table-div-cell app-icon" style="">&nbsp;</div>
+               <div class="table-div-cell app-icon">&nbsp;</div>
                <div class="table-div-cell app-details" style="float: left; width: 65%;">
                   <table style="width: 100%; margin: 5px;">
                      <tr>
@@ -94,12 +94,13 @@
          <div class="container-footer">
             <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal"><span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
             <button class="btn btn-danger buttons logout" style="width: 200px;">Logout</button>
-            <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect()";>Find or Register Patient</button>
+            <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find or Register Patient</button>
          </div>
          </div>
       </footer>
    </body>
-   <script src="apps/core/assets/js/core.js"> 
+   <script src="apps/core/assets/js/core.js"></script>
+   <script>
       (document.getElementsByClassName("overview-btns")[0]);
       changeModule();
    </script>
