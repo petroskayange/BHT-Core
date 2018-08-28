@@ -1,14 +1,19 @@
 //declare your network configurations here
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
-var applicationUrl = "localhost"; 
+var applicationUrl = "localhost";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
-var userRoles = ['admin','clerk','user'];
+admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
+admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
+report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
+report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" "><span>Report 2</span></button>';
+report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
+
+var userRoles = ['admin', 'clerk', 'user'];
 $('#userRole').empty();
 $.each(userRoles, function(i, p) {
     $('#userRole').append($('<option></option>').val(p).html(p));
 });
-// console.log(applicationBaseUrl); uncomment this out to verify current server settings 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
     var applicationName = [];
@@ -16,30 +21,30 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    $.getJSON(applicationBaseUrl+"/apps/config/apps.json")
-    .done(function(data, status){ 
-        parser(data);   
-    })
-    .fail(function(){
-    console.log("apps.json is missing from the apps/config folder");
-    }); 
+    $.getJSON(applicationBaseUrl + "/apps/config/apps.json")
+        .done(function(data, status) {
+            parser(data);
+        })
+        .fail(function() {
+            console.log("apps.json is missing from the apps/config folder");
+        });
 } else {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
     $("#modal-div").append($('#card_template').html());
-    $("#appDescription").text(applicationDescription).attr('id',"appDescription" + counter);
-    $("#appName").text(applicationName).attr('id',"appName" + counter);
-    $("#moduleButton").attr('id',"moduleButton" + counter);
+    $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);
+    $("#appName").text(applicationName).attr('id', "appName" + counter);
+    $("#moduleButton").attr('id', "moduleButton" + counter);
     $("#cardImage")
-    .on('error',function(){
-        $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
-    }).attr('src', applicationImage).attr('id',"cardImage" + counter);
-        $( "#moduleButton"+counter ).click(function() {
+        .on('error', function() {
+            $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
+        }).attr('src', applicationImage).attr('id', "cardImage" + counter);
+    $("#moduleButton" + counter).click(function() {
         console.log(applicationImage);
         changeModule(applicationImage, applicationName);
-        });
+    });
 }
 
 function showUser() {
@@ -53,36 +58,141 @@ function showUser() {
 
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
-    .done(function(){ 
-    newModuleCard(applicationName, applicationDescription, applicationBaseUrl + applicationIconUrl, counter);
-    })
-    .fail(function(){
-    console.log("The application " + applicationName + "'s application.json file is not available");
-    });
+        .done(function() {
+            newModuleCard(applicationName, applicationDescription, applicationBaseUrl + applicationIconUrl, counter);
+        })
+        .fail(function() {
+            console.log("The application " + applicationName + "'s application.json file is not available");
+        });
 }
 
 function parser(applicationData) {
 
-    for (var i = 0; i < applicationData.apps.length; i++ ) {
-                
-    
-    applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
-                applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
-                applicationIcon[i] = applicationData.apps[i].applicationIcon;
-                applicationFolder[i] = applicationData.apps[i].applicationFolder ;
-                if (applicationData.apps[i].applicationFolder) {
-                    applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
-                    checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i],i, applicationIcon[i]);
-                } else {
-                    console.log("no Application folder specified for " + applicationName[i]);
-                }
+    for (var i = 0; i < applicationData.apps.length; i++) {
 
-            }
+
+        applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
+        applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
+        applicationIcon[i] = applicationData.apps[i].applicationIcon;
+        applicationFolder[i] = applicationData.apps[i].applicationFolder;
+        if (applicationData.apps[i].applicationFolder) {
+            applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
+            checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i], i, applicationIcon[i]);
+        } else {
+            console.log("no Application folder specified for " + applicationName[i]);
+        }
+
+    }
 }
 
 function changeModule(moduleImage, moduleName) {
-    $(".app-icon").css("background-image", "url("+moduleImage+")");
+    $(".app-icon").css("background-image", "url(" + moduleImage + ")");
     $("#registerButton").css("visibility", "visible");
     $("#myModal").modal("hide");
     $("#application-name").text(moduleName);
+}
+
+function redirect(id) {
+    if (id === "create-user") {
+        window.location.href = './apps/core/views/users/new.html';
+    }
+    if (id === "view-user") {
+        window.location.href = './apps/core/views/users/view_users.html';
+    }
+    if (id === "report-1") {}
+    if (id === "report-1") {}
+}
+
+function registerPatientRedirect() {
+    window.location.href = './apps/core/views/patient/search.html';
+}
+// overview tab work in progress
+function overview() {
+    var table = document.createElement("TABLE");
+    table.className = "table table-bordered";
+    var row = table.insertRow(-1);
+    var total_columns = 4;
+    var total_rows = 7;
+    var table_header = ["", "Today", "This Month", "This Year"]
+
+    for (var x = 0; x < total_columns; x++) {
+        var header = document.createElement("TH");
+        header.innerHTML = table_header[x];
+        row.appendChild(header);
+        for (var i = 0; i < total_rows; i++) {
+            var cell = row.insertCell(-1);
+            // cell.className = 'overview-tab';
+            if (x === 0 && i === 1) cell.innerHTML = "Total Registered";
+            if (x === 1 && i === 2) cell.innerHTML = '&nbsp';
+            if (x === 2 && i === 3) cell.innerHTML = '&nbsp';
+            if (x === 3 && i === 4) cell.innerHTML = '&nbsp';
+            if (x === 4 && i === 5) {
+                cell.setAttribute('span', 3);
+                cell.innerHTML = "Current Patient Statistics";
+
+            }
+        }
+    }
+
+    var divtable = document.getElementById("generic_tabs");
+    divtable.appendChild(table);
+}
+
+function GenerateTable() {
+
+    //Build an array containing Customer records.
+    var header = new Array();
+    header.push(["", "Today", "This Month", "This Year"]);
+    //Create a HTML Table element.
+    var table = document.createElement("TABLE");
+    table.className = "table table-bordered";
+    var columnCount = header[0].length;
+
+    //Add the header row.
+    var row = table.insertRow(-1);
+    for (var i = 0; i < columnCount; i++) {
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = header[0][i];
+        row.appendChild(headerCell);
+    }
+
+    //Add the data rows.
+    for (var i = 0; i < header.length; i++) {
+
+        row = table.insertRow(-1);
+
+        for (var j = 0; j < columnCount; j++) {
+            var cell = row.insertCell(-1);
+            //cell.innerHTML = header[i][j];
+            if (i === 0 && j === 0) cell.innerHTML = "Total Registered";
+        }
+
+    }
+
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = "";
+    dvTable.appendChild(table);
+}
+// overview tab work in progress
+function showOptions(e) {
+    // Get all buttons with class="btn" inside the container
+    var btns = document.getElementsByClassName("overview-btns");
+
+    // Loop through the buttons and add the active class to the current/clicked button
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute('class', 'btn btn-info overview-btns');
+        if (btns[i].innerHTML == e.innerHTML)
+            btns[i].setAttribute('class', 'btn btn-info overview-btns active-btn');
+    }
+
+}
+
+function loadTabContent(id) {
+    if (id === "admin") {
+        document.getElementById("generic_tabs").innerHTML = admin_tab_content;
+    } else if (id === "report") {
+        document.getElementById("generic_tabs").innerHTML = report_tab_content;
+    } else {
+        GenerateTable();
+    }
 }
