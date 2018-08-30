@@ -9,6 +9,9 @@
       tstUserKeyboardPref = "qwerty";
       tstCurrentDate = "2018-08-24";
 
+       var d = new Date();
+       d.toDateString();
+
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
          value = $('touchscreenInput' + tstCurrentPage).value
