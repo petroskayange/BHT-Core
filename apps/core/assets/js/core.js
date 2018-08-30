@@ -1,13 +1,14 @@
 //declare your network configurations here
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
-var applicationUrl = "localhost";
+var applicationUrl = "0.0.0.0";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
 report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" "><span>Report 2</span></button>';
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
+// alert(window.innerHeight);
 
 var userRoles = ['admin', 'clerk', 'user'];
 $('#userRole').empty();
@@ -21,7 +22,8 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    $.getJSON(applicationBaseUrl + "/apps/config/apps.json")
+    console.log("/apps/config/apps.json");
+    $.getJSON("/apps/config/apps.json")
         .done(function(data, status) {
             parser(data);
         })
@@ -35,11 +37,13 @@ if (document.createElement("template").content) {
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
     $("#modal-div").append($('#card_template').html());
     $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);
+    $("#apptext").text(applicationName).attr('id', "apptext" + counter);
     $("#appName").text(applicationName).attr('id', "appName" + counter);
     $("#moduleButton").attr('id', "moduleButton" + counter);
+    // $("#apptext").text(l("applicationName"));
     $("#cardImage")
         .on('error', function() {
-            $(this).attr('src', applicationBaseUrl + "/public/assets/images/no_image.png");
+            $(this).attr('src', "/public/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function() {
         // console.log(applicationImage);
@@ -47,6 +51,14 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
         localStorage.setItem("applicationName", applicationName);
         changeModule();
     });
+
+    if ((counter%3)== 0 && counter != 0) {
+        console.log("ready to append" + counter);
+        $("#modal-div").append($('<div></div>'));
+
+    }else {
+        console.log("not ready to append" + counter);
+    }
 }
 
 function showUser() {
@@ -61,7 +73,7 @@ function showUser() {
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
         .done(function() {
-            newModuleCard(applicationName, applicationDescription, applicationBaseUrl + applicationIconUrl, counter);
+            newModuleCard(applicationName, applicationDescription,  applicationIconUrl, counter);
         })
         .fail(function() {
             console.log("The application " + applicationName + "'s application.json file is not available");
@@ -78,7 +90,7 @@ function parser(applicationData) {
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
         if (applicationData.apps[i].applicationFolder) {
-            applicationJsonUrl[i] = applicationBaseUrl + "/apps/" + applicationFolder[i] + "application.json";
+            applicationJsonUrl[i] =  "/apps/" + applicationFolder[i] + "application.json";
             checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i], i, applicationIcon[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
@@ -91,7 +103,8 @@ function changeModule() {
     let applicationImage = localStorage.getItem("applicationImage");
     let applicationName = localStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
-            $(".app-icon").css("background-image", "url(" + localStorage.getItem("applicationImage") + ")");
+            $("#application-icon").attr("src",  localStorage.getItem("applicationImage") );
+            // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
             $("#myModal").modal("hide");
             $("#application-name").text(localStorage.getItem("applicationName"));

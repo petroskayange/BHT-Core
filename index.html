@@ -9,13 +9,15 @@
       <link rel="stylesheet" href="./apps/core/assets/css/maindashboard/footer.css">
       <link rel="stylesheet" href="./apps/core/assets/css/custom.css">
       <script src="./apps/core/assets/js/jquery.min.js"></script>
-      <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>  
+      <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
    </head>
    <body>
       <div class="container-fluid">
          <div class="table-div">
             <div class="table-div-row">
-               <div class="table-div-cell app-icon">&nbsp;</div>
+               <div class="table-div-cell app-icon">&nbsp;
+                  <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon">
+               </div>
                <div class="table-div-cell app-details" style="float: left; width: 65%;">
                   <table style="width: 100%; margin: 5px;">
                      <tr>
@@ -64,16 +66,28 @@
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title">Select module</h4>
                </div>
-               <div class="modal-body" id="modal-div">
+               <!-- <button class="carousel-control-next" style="left:0; top:0%;; height:100%;position:absolute;"> < </button> -->
+               <!-- <span class="arrow"></span> -->
+               <button class="previous round">
+               <</button>
+               <button class="next round">></button>
+               <div class="modal-body">
                   <div class="container">
-                     <div class="row">
+                     <div class="row" id="modal-div">
                         <template id="card_template">
                            <!-- <div class="" > -->
-                           <div class="card col-4 col-sm-4 col-lg-3 h-100" id="cardDiv" style="margin: 1%;">
+                           <div class="card col-3 col-sm-2 col-lg-3" id="cardDiv" style="margin: 1%;">
                               <a href="#" class="card-block clearfix" id="moduleButton">
                                  <img alt="Avatar" style="width:200px; height: 200px;" id="cardImage">
+                                 <div class="middle">
+                                    <div class="text">
+                                       <p id="apptext"></p>
+                                    </div>
+                                 </div>
                                  <div class="card-container">
-                                    <h4><b id="appName"></b></h4>
+                                    <h4>
+                                       <b id="appName"></b>
+                                    </h4>
                                     <p id="appDescription"></p>
                                  </div>
                               </a>
@@ -84,7 +98,7 @@
                   </div>
                </div>
                <div class="modal-footer">
-                  <button type="button" class="btn btn-default buttons" data-dismiss="modal">Close</button>
+                  <button class="closeModal" data-dismiss="modal">Close</button>
                </div>
             </div>
          </div>
@@ -92,16 +106,17 @@
       <!-- Modal -->
       <footer class="footer">
          <div class="container-footer">
-            <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal"><span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
-            <button class="btn btn-danger buttons logout" style="width: 200px;">Logout</button>
-            <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find or Register Patient</button>
+            <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+            <span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
+            <button class="btn btn-danger buttons logout" style="width: 200px; font-size: 2rem;">Logout</button>
+            <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find or <br>Register Patient</button>
          </div>
          </div>
       </footer>
    </body>
-   <script src="apps/core/assets/js/core.js"></script>
+   <script src="apps/core/assets/js/core.js "></script>
    <script>
-      (document.getElementsByClassName("overview-btns")[0]);
+      (document.getElementsByClassName("overview-btns ")[0]);
       changeModule();
    </script>
 </html>

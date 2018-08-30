@@ -7,6 +7,7 @@
     <script language="javascript" defer="true">
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
+      tstCurrentDate = "2018-08-24";
 
        var d = new Date();
        d.toDateString();
@@ -37,7 +38,7 @@
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
             if (localStorage.getItem("password") === confirm_password){
-              window.location.href = "http://localhost:3000/apps/core/views/users/show.html";
+              window.location.href = "show.html";
                }
                else{
                 //  alert("passwords do not match");
@@ -51,8 +52,6 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
-   <!-- <link rel="stylesheet" href="./apps/core/assets/css/custom.css"> -->
-   <!-- <link rel="stylesheet" href="./apps/core/assets/css/bootstrap/bootstrap.min.css"> -->
 
   </head>
   <body id="">
@@ -70,7 +69,6 @@
            <input helpText="Password" key="password" minlength="6" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than six characters" tt_onUnLoad="getInput();" type="password" name="user[plain_password]" id="user_plain_password" />
 
            <input helpText="Confirm Password" tt_onload="changeNextButton();" key="confirm_password" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than FOUR characters." type="password" name="user_confirm[password]" id="user_confirm_password" />
-
       </form>
         <div id="footer">
         </div>
@@ -78,10 +76,3 @@
     </div>
   </body>
 </html>
-
-<script type="text/javascript">
-  console.log(localStorage);
-  // var tt_cancel_destination = "www.google.com";
- 
-  
-</script>
