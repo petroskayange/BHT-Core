@@ -11,7 +11,13 @@
       var d = new Date();
       d.toDateString();
 
-
+      function getInput(){
+         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value
+         localStorage.setItem(key, value);
+         var d = new Date();
+         localStorage.setItem("date_created", d.toDateString());
+      }  
     </script>
 
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -33,11 +39,11 @@
 </script>
 
 <form action="" method="GET">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" helpText="First name" allowFreeText="true" />
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
 
-    <input type="text" name="family_name" id="family_name" field_type="alpha" helpText="Last name" allowFreeText="true" />
+    <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" helpText="Last name" allowFreeText="true" />
 
-    <select allowFreeText="false" helpText=" Gender" id="gender" name="person[gender]" tt_onLoad="changeNextButton();"><option value=""></option>
+    <select allowFreeText="false" helpText=" Gender" id="gender" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
       <option value="Male">Male</option>
       <option value="Female">Female</option></select>
 
@@ -57,9 +63,12 @@
       search_redirect = $('touchscreenInput' + tstCurrentPage).value;
         if (search_redirect.length > 0){
           window.location.href = "/apps/core/views/patient/search_results.html";
+          var j = document.getElementById("touchscreenInput2");
+          f =  j.getAttribute("tstvalue") 
+          localStorage.setItem("selected_gender", f);
         }
         else{
-          showMessage("Select value to continue")
+          showMessage("Select value to continue");
       }
     }
   }
