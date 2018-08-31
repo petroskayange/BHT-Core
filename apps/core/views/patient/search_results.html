@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true">
+    <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/apps/core/assets/js/jquery.min.js" defer="true">
     </script>
 
     <script type="text/javascript">
@@ -61,8 +62,8 @@
 
         }
       }
-      createControlAndAssignValue("given_name", "person[names][given_name]", "John");
-      createControlAndAssignValue("family_name", "person[names][family_name]", "Does");
+      createControlAndAssignValue("given_name", "person[names][given_name]", localStorage.getItem("first_name"));
+      createControlAndAssignValue("family_name", "person[names][family_name]", localStorage.getItem("given_name"));
       createControlAndAssignValue("gender", "person[gender]", "M");
     }
 
@@ -196,13 +197,13 @@
 
 </script>
 
-<body onload = "setTimeout('setAttributes();', 300);">
+<body onload = "setTimeout('setAttributes();', 300);setItems();">
   <form action="" method="POST">
         <label for="person">No patients were found:</label>
-    <select name="person[id]" id="person" dualView="true" dualViewOptions="people">
+    <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="">
       <!--option onmousedown="search_remote()">Search from remote server for person with name John Does</option-->
 
-          <option value="0" onmousedown="changeNextButtonText('New Patient')">Create a new person with the name John Does</option>
+          <option value="0" onmousedown="changeNextButtonText('New Patient')" id="names" >Create a new person with the name </option>
 
     </select>
     <input type="hidden" id="identifier" name="identifier" value="" />
@@ -228,9 +229,8 @@
         __$(ctrls[i]).setAttribute("name", ctrls[i]);
       }
     }
-
+    
     //-->
-
   </script>
 </body>
 
@@ -244,6 +244,12 @@
 
       </div>
     </div>
-  </body>
-  
+</body>
+<script>
+  function setItems(){
+    var inputField = document.getElementById("names");
+    var personName = document.createTextNode(" " + localStorage.getItem("first_name") + " " + localStorage.getItem("family_name") );
+    inputField.appendChild(personName);
+  }
+</script>
 </html>
