@@ -4,13 +4,12 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <script language="javascript" defer="true">
+    <script language="javascript">
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
-      tstCurrentDate = "2018-08-24";
 
-       var d = new Date();
-       d.toDateString();
+      var d = new Date();
+      d.toDateString();
 
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
@@ -20,59 +19,281 @@
          localStorage.setItem("date_created", d.toDateString());
       }
 
-      // function validatePassword(){
-      //    console.log(localStorage);
-      //    console.log(localStorage.getItem("confirm_password"));
-      //    if (localStorage.getItem("password") === localStorage.getItem("confirm_password")){
-            
-      //    }
-      //    else{
-      //       console.log('passwordmismatch');
-      //    }
 
-      // }
-
-
-      function changeNextButton(){
-         __$("nextButton").removeAttribute("onmousedown")
-         __$("nextButton").onmousedown = function(){
-            confirm_password = $('touchscreenInput' + tstCurrentPage).value;
-            if (localStorage.getItem("password") === confirm_password){
-              window.location.href = "show.html";
-               }
-               else{
-                //  alert("passwords do not match");
-                 
-               }
-         }
-      }
-
-    </script>
+    </script>    
 
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
 
   </head>
-  <body id="">
-    <div id="">
+  <body id="mateme">
+    <div id="container">
       <div id="content">
-        <form action="/new_user" method="POST">
-           <input helpText="First Name" allowFreeText="true" type="text" tt_onUnLoad="getInput();" name="person_name[given_name]" key="first_name" id="person_name_given_name" />
+        <style>
 
-           <input helpText="Last Name" allowFreeText="true" type="text" tt_onUnLoad="getInput();" name="person_name[family_name]" key="last_name" id="person_name_family_name" />
+  .tt_controls_year_of_birth #qwerty { display:none; }
+  .tt_controls_age_estimate #qwerty { display:none; }
+  .tt_controls_cell_phone_number #qwerty { display:none; }
+  .tt_controls_ground_phone_number #qwerty { display:none; }
+  .tt_controls_office_phone_number #qwerty { display:none; }
 
-           <input helpText="User role" key = "role" type="text" name="user_role[role_id]" id="user_role_role_id" />
+  .tt_controls_year_of_birth #Unknown { display:block; }
+  .tt_controls_age_estimate #Unknown { display:none; }
 
-           <input helpText="Username" key="username" textCase="lower" tt_onload="$(touchscreenInput5).value = ($(user_first_name).value.substring(0,3)+$(user_last_name).value.substring(0,3)).toLowerCase()" validationRule="\w{6}\w*" validationMessage="Username must have at least SIX letters" type="text" tt_onUnLoad="getInput();" name="user[username]" id="user_username" />
+  .tt_controls_middle_name  #na { display: block; }
+  .tt_controls_ground_phone_number #Unknown { display:block; }
 
-           <input helpText="Password" key="password" minlength="6" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than six characters" tt_onUnLoad="getInput();" type="password" name="user[plain_password]" id="user_plain_password" />
+  .tt_controls_region_of_origin .keyboard{display:none;}
+  .tt_controls_current_region .keyboard{display:none;}
 
-           <input helpText="Confirm Password" tt_onload="changeNextButton();" key="confirm_password" textCase="lower" validationRule="\w{4}\w*" validationMessage="Password less than FOUR characters." type="password" name="user_confirm[password]" id="user_confirm_password" />
-      </form>
+  .tt_controls_month_of_birth .keyboard{display:none;}
+  #tt_page_month_of_birth .options{height:570px;}
+  #tt_page_month_of_birth .options li{font-size:30px;}
+
+  .tt_controls_home_village #space , #apostrophe { display:inline; }
+  .tt_controls_home_district #num  { display:none; }
+
+  .tt_controls_current_traditional_authority_ta #space { display:inline; }
+
+  .tt_controls_current_village_residence #space { display:inline; }
+
+  .tt_controls_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_guardian_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_home_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_office_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_occupation .keyboard{display:none;}
+  #tt_page_occupation .options{height:500px;}
+  #tt_page_occupation .options li{font-size:30px;}
+  #space {display:inline;}
+
+  .nota #na {
+    display: block;
+  }
+
+  #num{ display:block; }
+  #char{ display:none; }
+  #apostrophe { display:inline; }
+
+  .tt_controls_home_district #num{ display:none; }
+  .tt_controls_current_district #num{ display:none; }
+
+  .tt_controls_current_city_place_or_area_of_residence #num{ display:block; }
+  .tt_controls_current_city_place_or_area_of_residence #char{ display:block; }
+
+  .tt_controls_closest_landmark_or_plot_number #num{ display:block; }
+  .tt_controls_closest_landmark_or_plot_number #char{ display:block; }
+
+  .azButton .numericKeyboard #char {
+    display: block;
+  }
+
+</style>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/"
+  var date_diff = "2008-08-31"
+
+  function validateDate() {
+    selectYear = parseInt(document.getElementsByName('person[birth_year]')[0].value);
+    selectDay = parseInt(document.getElementsByName('person[birth_day]')[0].value);
+    date = new Date
+    currYear = date.getFullYear();
+    currDay = date.getDate();
+    availableMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    if (selectYear == currYear){
+      currentMonth = [];
+      numOfloops = ((new Date).getMonth() + 1);
+      for(var i = 0; i < numOfloops; i++){
+        currentMonth.push(availableMonths[i]);
+      }
+      rule = currentMonth.join("|");
+      rule = rule + "|Unknown";
+      return $('touchscreenInput'+tstCurrentPage).setAttribute('validationRule',rule);
+    }
+    if (selectYear != currYear) {
+      rule = availableMonths.join("|");
+      rule = rule + "|Unknown";
+      return $('touchscreenInput'+tstCurrentPage).setAttribute('validationRule',rule);
+    }
+  }
+
+  function validateYear() {
+    selectYear = parseInt(document.getElementsByName('person[birth_year]')[0].value);
+    selectDay = parseInt(document.getElementsByName('person[birth_day]')[0].value);
+    date = new Date
+    currYear = date.getFullYear();
+    currDay = date.getDate();
+
+    abMax = parseInt(date_diff.split("-")[0]) - 10;
+
+    jQuery('#touchscreenInput'+ tstCurrentPage).attr("absoluteMax", date_diff.split("-")[0]);
+    console.log(date_diff);
+
+  }
+  function updateMonthAbsMax(){
+    var month = jQuery('#person_birth_month').val();
+    var year = jQuery('#person_birth_year').val();
+    
+    if ((parseInt(year) == parseInt(date_diff.split("-")[0])) && (parseInt(month) > parseInt(date_diff.split("-")[1]))) {
+      var message = "Month selected is greater than Current Month";
+      setTimeout(function () {
+        gotoPage(tstCurrentPage - 1, false, true);
+        showMessage(message,null,30000);
+      }, 10);
+    }
+  }
+
+  function updateDayAbsMax(){
+    var month = jQuery('#person_birth_month').val();
+    var year = jQuery('#person_birth_year').val();
+    if ((parseInt(year) == parseInt(date_diff.split("-")[0])) && (parseInt(month) == parseInt(date_diff.split("-")[1]))){
+      jQuery('#touchscreenInput'+ tstCurrentPage).attr("absoluteMax", date_diff.split("-")[2]);
+    }
+  }
+
+  function validateDay(){
+    date = new Date
+    currYear = date.getFullYear();
+    currDay = date.getDate();
+    currMonth = date.getMonth() + 1;
+    selected_month = parseInt(document.getElementsByName('person[birth_month]')[0].value)
+    selectYear = parseInt(document.getElementsByName('person[birth_year]')[0].value);
+    if (selectYear == currYear) {
+      if (selected_month == currMonth){
+        return $('touchscreenInput'+tstCurrentPage).setAttribute('absoluteMax',currDay);
+      }
+    }
+  }
+
+  function dateCreate(date_str){
+    intyear = 0 ; intmonth = 0 ; intday = 0;
+    intyear = parseInt(date_str.substring(0,4))
+    intmonth = (parseInt(date_str.substring(5,7)) - 1)
+    intday = (parseInt(date_str.substring(8,10)))
+
+    if (intmonth == -1)
+      intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
+
+    if (intday == 0)
+      intday = parseInt(date_str.substring(8,10).substring(1,2))
+
+    return new Date(intyear,intmonth,intday);
+  }
+
+  function set_ajaxURL_for_suggestions(url, filter_value) {
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
+    listSuggestions(tstCurrentPage);
+  }
+
+</script>
+
+<form action="" method="">
+
+<form action="" method="">
+
+<!--   <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
+
+  <input type="text" name="person[names][family_name]" id="family_name" value="Testing" field_type="alpha" helpText="Last name" ajaxURL="/person_names/family_names?search_string=" allowFreeText="true" condition="$(&quot;family_name&quot;).value == &quot;&quot;" /> -->
+
+  <input type="text" name="person[names][middle_name]" id="middle_name" field_type="alpha" tt_onUnload="getInput();" helpText="Middle name" ajaxURL="" allowFreeText="true" optional="true" condition="$('middle_name').value == ''" tt_pageStyleClass="azButton" />
+
+  <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" tt_onUnload="getInput();" absoluteMin="1900" min="1900" tt_onLoad="validateYear()" tt_pageStyleClass="Numeric NumbersOnly" />
+
+  <select name="person[birth_month]" id="person_birth_month" helpText="Month of Birth" condition="$('person_birth_year').value.toLowerCase() != 'unknown'" tt_onUnload="getInput();" validationMessage="Please enter a valid date" tt_onLoad=" validateDate();__$(keyboard).style.display = none;" tt_onUnLoad="updateMonthAbsMax();"><option value=""></option>
+  <option value="1">Jan</option>
+  <option value="2">Feb</option>
+  <option value="3">Mar</option>
+  <option value="4">Apr</option>
+  <option value="5">May</option>
+  <option value="6">Jun</option>
+  <option value="7">Jul</option>
+  <option value="8">Aug</option>
+  <option value="9">Sep</option>
+  <option value="10">Oct</option>
+  <option value="11">Nov</option>
+  <option value="12">Dec</option>
+  <option value="Unknown">Unknown</option></select>
+
+  <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" tt_onUnload="getInput();" absoluteMin="10" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
+
+  <input type="text" name="person[birth_day]" id="person_birth_day" field_type="number" tt_onUnload="getInput();" helpText="Birth Day" validationMessage="Please enter a valid date" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="validateDay(); getDayOfMonthPicker($(person_birth_year).value, $(person_birth_month).value);$(nextButton).style.display = block;updateDayAbsMax();" />
+
+  <label for="region_region_name">Region of Origin</label>
+  <select id= "region_region_name" name="region[region_name]" allowFreeText="false" xhelpText="Region"><option value="" tt_requireNextClick="false" ajaxURL="" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
+      <option value="central">Central Region</option>
+      <option value="north">Northern Region</option>
+      <option value="south">Southern Region</option></select>
+
+  <select id= "address2" name="person[addresses][address2]" allowFreeText="false" helpText="Home District"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
+      <option value="dz">Dedza</option>
+      <option value="dw">Dowa</option>
+      <option value="ks">Kasungu</option>
+      <option value="oth">Ntcheu</option></select>
+
+ <!--  <input type="text" id= "address2_a" name="p[address2_a]" allowFreeText="false" helpText="Specify Home District"><option value="" tt_requireNextClick="true" ajaxURL="" value="" field_type="alpha" condition="$('address2').value == 'Other'" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = block;" /> -->
+
+  <select id="person_addresses_county_district" name="person[addresses][county_district]" allowFreeText="false" helpText="Ancestral Traditional Authority (T/A) or area of residence"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
+      <option value="Chauma">Chauma</option>
+      <option value="kasumbu">Kasumbu</option>
+      <option value="kb">Kasungu Boma</option>
+      <option value="dz">Dedza Boma</option></select>
+
+ <!--  <input tt_onUnLoad="$('person_addresses_county_district').value = $('p_addresses_county_district_a').value" condition="$('address2').value == 'Other'" ajaxURL="/person_addresses/traditional_authority?search_string=" helpText="Specify Ancestral Traditional Authority (T/A) or area of residence" tt_pageStyleClass="azButton" allowFreeText="true" tt_onLoad="$(nextButton).style.display = block;" type="text" name="p[addresses][county_district_a]" id="p_addresses_county_district_a" /> -->
+
+  <select id="person_addresses_neighborhood_cell" name="person[addresses][neighborhood_cell]" allowFreeText="false" helpText="Home Village"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
+      <option value="Chauma">Belele</option>
+      <option value="kasumbu">Chambaya</option>
+      <option value="kb">Chibowa</option>
+      <option value="dz">Chilanga</option></select>
+
+  <select id= "filter_region" name="filter[region]" allowFreeText="false" helpText="Current Region"><option value="" tt_requireNextClick="false" ajaxURL="" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
+      <option value="centrl">Central Region</option>
+      <option value="nrth">Northern Region</option>
+      <option value="sth">Southern Region</option></select>
+
+  <select id= "state_province" name="person[addresses][state_province]" allowFreeText="false" helpText="Current District"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
+      <option value="dza">Dedza</option>
+      <option value="dow">Dowa</option>
+      <option value="kas">Kasungu</option>
+      <option value="othr">Ntcheu</option></select>
+
+  <select id="person_addresses_city_village" name="person[addresses][city_village]" allowFreeText="false" helpText="Location/Village"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
+      <option value="Chama">Chauma</option>
+      <option value="kasmbu">Kasumbu</option>
+      <option value="kab">Kasungu Boma</option>
+      <option value="dez">Dedza Boma</option></select>
+
+  <!-- <input type="text" name="p[addresses][city_village_a]" id="p_addresses_city_village_a" tt_onUnLoad="$(&quot;person_addresses_city_village&quot;).value = $(&quot;p_addresses_city_village_a&quot;).value" condition="$(&quot;filter_t_a&quot;).value == &quot;Other&quot;" ajaxURL="/person_addresses/village?search_string=" allowFreeText="true" field_type="alpha" helpText="Specify Location/Village" tt_pageStyleClass="azButton" tt_requireNextClick="true" tt_onLoad="$(&#39;nextButton&#39;).style.display = &#39;block&#39;;" /> -->
+
+  <input type="text" name="person[addresses][address1]" id="address1" helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" ajaxURL="" tt_pageStyleClass="azButton" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = block;" />
+
+  <input type="text" name="person[cell_phone_number]" id="cellphone" field_type="number" helpText="Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota" />
+
+  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
+
+  <input type="hidden" name="person[gender]" id="person_gender" value="M" />
+  <input type="hidden" name="person[patient]" id="person_patient" value="" />
+
+  <input type="hidden" name="relation" id="relation" value="" />
+
+  <input type="hidden" name="identifier" id="identifier" value="" />
+
+</form>
+
         <div id="footer">
         </div>
       </div>
     </div>
   </body>
 </html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
+  
+</script>

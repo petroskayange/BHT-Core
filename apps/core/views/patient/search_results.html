@@ -64,7 +64,7 @@
       }
       createControlAndAssignValue("given_name", "person[names][given_name]", localStorage.getItem("first_name"));
       createControlAndAssignValue("family_name", "person[names][family_name]", localStorage.getItem("given_name"));
-      createControlAndAssignValue("gender", "person[gender]", "M");
+      createControlAndAssignValue("gender", "person[gender]", localStorage.getItem("M"));
     }
 
     if(pos && (person_id == 0) && !text.match(/New Patient/)){
@@ -104,8 +104,14 @@
       document.forms[0].action = "select";
       clearFields();
       __$('nextButton').onmousedown = function(){
-        gotoNextPage();
+        search_redirect = $('touchscreenInput' + tstCurrentPage).value;
+        if (search_redirect.length > 0){
+          window.location.href = "/apps/core/views/patient/new.html";
       }
+      else{
+          showMessage("Select value to continue");
+      }
+    }
 
       addFields();
       try{
@@ -208,8 +214,8 @@
     </select>
     <input type="hidden" id="identifier" name="identifier" value="" />
     <input type="hidden" id="gender" name="gender" value="M" />
-    <input type="hidden" id="given_name" name="given_name" value="John" />
-    <input type="hidden" id="family_name" name="family_name" value="Does" />
+    <input type="hidden" id="given_name" name="given_name" value="" />
+    <input type="hidden" id="family_name" name="family_name" value="" />
     <input type="hidden" id="family_name2" name="family_name2" value="" />
     <input type="hidden" id="address2" name="address2" value="" />
     <input type="hidden" id="relation" name="relation" value="" />
@@ -248,7 +254,7 @@
 <script>
   function setItems(){
     var inputField = document.getElementById("names");
-    var personName = document.createTextNode(" " + localStorage.getItem("first_name") + " " + localStorage.getItem("family_name") );
+    var personName = document.createTextNode(" " + localStorage.getItem("first_name") + " " + localStorage.getItem("family_name") + "" + localStorage.getItem("gender") );
     inputField.appendChild(personName);
   }
 </script>
