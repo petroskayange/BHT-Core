@@ -10,6 +10,42 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" 
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
 // alert(window.innerHeight);
 
+// URL formulation logic
+var APIURL = "localhost:8000/api/v1/";
+
+var userApi = "user";
+
+var firstName = "firstname";
+
+var lastName = "lastname";
+
+var homeDistrict = "homedistrict";
+
+var homeVillage = "homevillage";
+
+var currentDistrict = "currentdistrict";
+
+var currentTA = "currentta";
+
+var homeTA = "homeTA";
+
+var currentVillage = "currentvillage";
+
+var roles = "roles";
+
+var people = "people";
+
+var person_addresses = "person_addresses";
+
+var person_names = "person_names";
+
+function _ajaxUrl(url){
+  //return APIURL + url;
+  console.log(APIURL + url);
+}
+
+// end of url formulation logic
+
 var userRoles = ['admin', 'clerk', 'user'];
 $('#userRole').empty();
 $.each(userRoles, function(i, p) {

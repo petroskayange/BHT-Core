@@ -22,6 +22,7 @@
 
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
 
   </head>
   <body id="mateme">
@@ -39,7 +40,7 @@
 </script>
 
 <form action="" method="GET">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" onkeypress="_ajaxUrl('first_name');" />
 
     <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" helpText="Last name" allowFreeText="true" />
 
