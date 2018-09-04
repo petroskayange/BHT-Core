@@ -39,9 +39,8 @@ var person_addresses = "person_addresses";
 
 var person_names = "person_names";
 
-function _ajaxUrl(url){
-  //return APIURL + url;
-  console.log(APIURL + url);
+function _ajaxUrl(filter_value, search_string){
+  console.log(APIURL + filter_value + "&search_string=" + search_string);
 }
 
 // end of url formulation logic
