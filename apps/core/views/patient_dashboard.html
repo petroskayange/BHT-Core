@@ -178,16 +178,17 @@
       <!-- Modal -->
       <footer class="footer">
          <div class="container-footer">
-            <button style="margin: 5px 0px 0px; float: right;" onclick="finish();" class="green right" id="btnNext">
-              <span>Finish</span>
-            </button>
+            <button onclick="finish();" class="btn buttons logout" style="margin-right: 5px; background: green;" id="finishbutton">&nbsp; &nbsp; &nbsp;Finish &nbsp; &nbsp; &nbsp;</button>
             <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="/public/assets/images/launcher.png"></span></button>
+            <button class="btn btn-success buttons" style="margin-right: 5px; background: #538fbe;" id="activities">
+              <span>&nbsp; &nbsp; &nbsp;Activities &nbsp; &nbsp; &nbsp;</span>
+            </button>
          </div>
          </div>
       </footer>
    </body>
-   <script src="apps/core/assets/js/core.js "></script>
+   <script src="/apps/core/assets/js/core.js "></script>
    <script>
       (document.getElementsByClassName("overview-btns ")[0]);
       changeModule();
