@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+  <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
+
+  
+  <script language="javascript" defer="true">
+    <!--
+    tstUsername = "";
+    tstUserKeyboardPref = "abc";
+
+tstCurrentDate = "2018-08-31";
+
+function addHereButton(){
+  var button = document.createElement("button");
+  button.id = "addHere";
+  button.innerHTML = "<span>Here</span>";
+  button.style.cssFloat = "right";
+
+  button.onclick = function(){
+    __$("touchscreenInput" + tstCurrentPage).value = "Martin Preuss Centre"
+  }
+
+  if(__$("buttons")){
+    __$("buttons").appendChild(button);
+  }
+}
+
+function removeHereButton(){
+  if(__$("addHere")){
+    __$("buttons").removeChild(__$("addHere"));
+  }
+}
+
+function getSelected(){
+  var choices = "";
+
+  for(var o = 0; o < __$('choice').options.length; o++){
+    if(__$('choice').options[o].selected == true){
+      choices += __$('choice').options[o].innerHTML + " ";
+    }
+  }
+
+  return choices;
+}
+function myfunction() {
+  console.log("mmmm");
+}
+function changeNextButton(){
+         __$("nextButton").removeAttribute("onmousedown")
+         __$("nextButton").onmousedown = function(){
+            confirm_password = $('touchscreenInput' + tstCurrentPage).value;
+            if (sessionStorage.getItem("password") === confirm_password){
+              window.location.href = "show.html";
+               }
+               else{
+                //  alert("passwords do not match");
+                 
+               }
+         }
+      }
+
+function getInput(){
+         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         sessionStorage.setItem(key, value);
+        //  console.log($("#touchscreenInput1").value);
+        alert("here");
+      }
+
+      function getPass() {
+        alert($("#touchscreenInput1").val());
+      }
+
+//-->
+  </script>
+
+  <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+
+  
+</head>
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
+        
+      </div>
+      
+      
+        <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
+<script type="text/javascript">
+  var tt_cancel_destination = "/logout"
+  //barcodeFocusOnce = true;
+  //barcodeScanAction = gotoNextPage;
+
+  function inform() {
+    $('infoBar'+tstCurrentPage).innerHTML = "Muli bwanji, enter your user information or scan your id card. <span style='font-size:0.6em;float:righti;margin-right: 20px;'>(ART Version: v3.7.7-1 - <span >Friday, 31-Aug-2018</span>)</span>";  
+  }           
+</script>
+
+<form id='sessions' action="/" method='post'>
+
+  <label for="login">Username</label>
+  <input field_type="password" helpText="Enter user name" id="login" name="login" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();"/><br>
+
+  <label for="password">Password</label>
+  <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput1';" type="password" tt_onUnload="getPass();"/><br>
+
+  <input name="commit"  onclick="myfunction()" type="submit" value="Submit" tt_onUnload="alert('here');"/>
+</form>
+      <div id="footer">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

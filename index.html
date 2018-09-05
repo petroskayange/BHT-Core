@@ -10,6 +10,25 @@
       <link rel="stylesheet" href="./apps/core/assets/css/custom.css">
       <script src="./apps/core/assets/js/jquery.min.js"></script>
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
+      <script type="text/javascript"> 
+
+
+      document.onload(loadDoc());
+        function loadDoc() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // alert("logged in");
+                }else {
+                    // window.location("http://localhost:3000/apps/core/views/login.html");
+                    // alert("no login");
+                }
+
+            };
+            xhttp.open("GET", "http://localhost:8000/api/v1/auth/login", true);
+            xhttp.send();
+            }
+      </script>
    </head>
    <body>
       <div class="container-fluid">
