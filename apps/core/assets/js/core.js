@@ -47,8 +47,8 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function() {
         // console.log(applicationImage);
-        localStorage.setItem("applicationImage", applicationImage);
-        localStorage.setItem("applicationName", applicationName);
+        sessionStorage.setItem("applicationImage", applicationImage);
+        sessionStorage.setItem("applicationName", applicationName);
         changeModule();
     });
 
@@ -62,12 +62,12 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
 }
 
 function showUser() {
-    $("#first_name").text(localStorage.getItem("first_name"));
-    $("#last_name").text(localStorage.getItem("last_name"));
-    $("#username").text(localStorage.getItem("username"));
-    $("#role").text(localStorage.getItem("selected_role"));
-    $("#date_created").text(localStorage.getItem("date_created"));
-    console.log(localStorage);
+    $("#first_name").text(sessionStorage.getItem("first_name"));
+    $("#last_name").text(sessionStorage.getItem("last_name"));
+    $("#username").text(sessionStorage.getItem("username"));
+    $("#role").text(sessionStorage.getItem("selected_role"));
+    $("#date_created").text(sessionStorage.getItem("date_created"));
+    console.log(sessionStorage);
 }
 
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
@@ -100,17 +100,17 @@ function parser(applicationData) {
 }
 
 function changeModule() {
-    let applicationImage = localStorage.getItem("applicationImage");
-    let applicationName = localStorage.getItem("applicationName");
+    let applicationImage = sessionStorage.getItem("applicationImage");
+    let applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
-            $("#application-icon").attr("src",  localStorage.getItem("applicationImage") );
+            $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
             // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
             $("#myModal").modal("hide");
-            $("#application-name").text(localStorage.getItem("applicationName"));
-            console.log(localStorage);
+            $("#application-name").text(sessionStorage.getItem("applicationName"));
+            console.log(sessionStorage);
     }else {
-        console.log(localStorage);
+        console.log(sessionStorage);
     }
 }
 

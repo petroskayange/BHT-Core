@@ -14,7 +14,7 @@
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
          value = $('touchscreenInput' + tstCurrentPage).value;
-         localStorage.setItem(key, value);
+         sessionStorage.setItem(key, value);
          var d = new Date();
         //  if (document.getElementById("touchscreenInput2")) {
         //    console.log("here");
@@ -22,9 +22,9 @@
         //    console.log("no here");
         //  }
            
-         localStorage.setItem("date_created", d.toDateString());
-        //  localStorage.setItem("user_role", "clerks");
-        //  localStorage.setItem("", d.toDateString());
+         sessionStorage.setItem("date_created", d.toDateString());
+        //  sessionStorage.setItem("user_role", "clerks");
+        //  sessionStorage.setItem("", d.toDateString());
         
           // "admin"
       }
@@ -34,7 +34,7 @@
          __$("nextButton").removeAttribute("onmousedown")
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
-            if (localStorage.getItem("password") === confirm_password){
+            if (sessionStorage.getItem("password") === confirm_password){
               window.location.href = "show.html";
                }
                else{
@@ -78,14 +78,14 @@
 </html>
 
 <script type="text/javascript">
-  // console.log(localStorage);
+  // console.log(sessionStorage);
   // var tt_cancel_destination = "www.google.com";
  
  function saveSelection() {
      var j = document.getElementById("touchscreenInput2");
           // undefined
           f =  j.getAttribute("tstvalue") 
-          localStorage.setItem("selected_role", f);
+          sessionStorage.setItem("selected_role", f);
           // console.log(f);
  } 
 </script>
