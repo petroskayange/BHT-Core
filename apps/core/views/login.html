@@ -68,15 +68,12 @@ function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
          value = $('touchscreenInput' + tstCurrentPage).value;
          sessionStorage.setItem(key, value);
-        //  console.log($("#touchscreenInput1").value);
-        alert("here");
       }
 
       function getPass() {
-        alert($("#touchscreenInput1").val());
+        sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
       }
 
-//-->
   </script>
 
   <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -106,12 +103,12 @@ function getInput(){
 <form id='sessions' action="/" method='post'>
 
   <label for="login">Username</label>
-  <input field_type="password" helpText="Enter user name" id="login" name="login" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();"/><br>
+  <input field_type="password" helpText="Enter user name" id="login" name="login" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();" key="username"/><br>
 
   <label for="password">Password</label>
   <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput1';" type="password" tt_onUnload="getPass();"/><br>
 
-  <input name="commit"  onclick="myfunction()" type="submit" value="Submit" tt_onUnload="alert('here');"/>
+  <input name="commit"  onclick="myfunction()" type="submit" value="Submit" tt_onUnload=""/>
 </form>
       <div id="footer">
       </div>

@@ -11,23 +11,29 @@
       <script src="./apps/core/assets/js/jquery.min.js"></script>
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
-
-
-      document.onload(loadDoc());
-        function loadDoc() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    // alert("logged in");
-                }else {
-                    // window.location("http://localhost:3000/apps/core/views/login.html");
-                    // alert("no login");
-                }
-
-            };
-            xhttp.open("GET", "http://localhost:8000/api/v1/auth/login", true);
-            xhttp.send();
+        $(document).ready(function(){
+            // console.log(sessionStorage.getItem("username"))''
+            if (sessionStorage.getItem("username") != null && sessionStorage.getItem("userPassword") != null) {
+            loadDoc(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
+            }else {
+                alert("not logged in");
+                window.location = "/apps/core/views/login.html";
             }
+        });
+        
+        function loadDoc(username, password) {
+            $.post('http://0.0.0.0:8000/api/v1/auth/login', {username: username, password: password})
+                .done(function(msg){
+                     console.log(msg.authorization.token); 
+                     sessionStorage.setItem("authorization", msg.authorization.token);
+                })
+                .fail(function(xhr, status, error) {
+                    // error handling
+                    console.log(xhr.status);
+                    alert("wrong password");
+                    window.location = "/apps/core/views/login.html";
+                });
+        }
       </script>
    </head>
    <body>
