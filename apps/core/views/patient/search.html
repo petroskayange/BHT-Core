@@ -14,9 +14,9 @@
       function getInput(){
          key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
          value = $('touchscreenInput' + tstCurrentPage).value
-         localStorage.setItem(key, value);
+         sessionStorage.setItem(key, value);
          var d = new Date();
-         localStorage.setItem("date_created", d.toDateString());
+         sessionStorage.setItem("date_created", d.toDateString());
       }  
     </script>
 
@@ -65,7 +65,7 @@
           window.location.href = "/apps/core/views/patient/search_results.html";
           var j = document.getElementById("touchscreenInput2");
           f =  j.getAttribute("tstvalue") 
-          localStorage.setItem("selected_gender", f);
+          sessionStorage.setItem("selected_gender", f);
         }
         else{
           showMessage("Select value to continue");

@@ -21,10 +21,6 @@
   #num{ display:none; }
   #char{ display:none; }
 </style>
-
-<!--<script type="text/javascript" src="/javascripts/prototype.js"/>-->
-
-
 <script type="text/javascript">
   var people = [{}];
   var remote_people;
@@ -62,9 +58,10 @@
 
         }
       }
-      createControlAndAssignValue("given_name", "person[names][given_name]", localStorage.getItem("first_name"));
-      createControlAndAssignValue("family_name", "person[names][family_name]", localStorage.getItem("given_name"));
-      createControlAndAssignValue("gender", "person[gender]", localStorage.getItem("M"));
+
+      createControlAndAssignValue("given_name", "person[names][given_name]", sessionStorage.getItem("first_name"));
+      createControlAndAssignValue("family_name", "person[names][family_name]", sessionStorage.getItem("given_name"));
+      createControlAndAssignValue("gender", "person[gender]", "M");
     }
 
     if(pos && (person_id == 0) && !text.match(/New Patient/)){
@@ -254,7 +251,7 @@
 <script>
   function setItems(){
     var inputField = document.getElementById("names");
-    var personName = document.createTextNode(" " + localStorage.getItem("first_name") + " " + localStorage.getItem("family_name") + "" + localStorage.getItem("gender") );
+    var personName = document.createTextNode(" " + sessionStorage.getItem("first_name") + " " + sessionStorage.getItem("family_name") );
     inputField.appendChild(personName);
   }
 </script>
