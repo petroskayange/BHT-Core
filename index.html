@@ -11,24 +11,19 @@
       <script src="./apps/core/assets/js/jquery.min.js"></script>
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
-
-
-      document.onload(loadDoc());
-        function loadDoc() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    // alert("logged in");
+        $(document).ready(function(){
+            if (sessionStorage.getItem("authorization") == null) {
+                if (sessionStorage.getItem("userPassword") != null) {
+                    signIn();
                 }else {
-                    // window.location("http://localhost:3000/apps/core/views/login.html");
-                    // alert("no login");
+                    alert("not logged in");
+                    //comment out the next line to automatically redirect you to the log in page
+                    // window.location = "/apps/core/views/login.html";
                 }
-
-            };
-            xhttp.open("GET", "http://localhost:8000/api/v1/auth/login", true);
-            xhttp.send();
             }
-      </script>
+        });
+                
+             </script>
    </head>
    <body>
       <div class="container-fluid">
@@ -88,11 +83,9 @@
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title">Select module</h4>
                </div>
-               <!-- <button class="carousel-control-next" style="left:0; top:0%;; height:100%;position:absolute;"> < </button> -->
-               <!-- <span class="arrow"></span> -->
-               <button class="previous round">
+               <!-- <button class="previous round">
                <</button>
-               <button class="next round">></button>
+               <button class="next round">></button> -->
                <div class="modal-body">
                   <div class="container">
                      <div class="row" id="modal-div">
