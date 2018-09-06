@@ -12,29 +12,17 @@
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
         $(document).ready(function(){
-            // console.log(sessionStorage.getItem("username"))''
-            if (sessionStorage.getItem("username") != null && sessionStorage.getItem("userPassword") != null) {
-            loadDoc(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
-            }else {
-                alert("not logged in");
-                window.location = "/apps/core/views/login.html";
+            if (sessionStorage.getItem("authorization") == null) {
+                if (sessionStorage.getItem("userPassword") != null) {
+                    signIn();
+                }else {
+                    alert("not logged in");
+                    // window.location = "/apps/core/views/login.html";
+                }
             }
         });
-        
-        function loadDoc(username, password) {
-            $.post('http://0.0.0.0:8000/api/v1/auth/login', {username: username, password: password})
-                .done(function(msg){
-                     console.log(msg.authorization.token); 
-                     sessionStorage.setItem("authorization", msg.authorization.token);
-                })
-                .fail(function(xhr, status, error) {
-                    // error handling
-                    console.log(xhr.status);
-                    alert("wrong password");
-                    window.location = "/apps/core/views/login.html";
-                });
-        }
-      </script>
+                
+             </script>
    </head>
    <body>
       <div class="container-fluid">
@@ -91,11 +79,9 @@
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title">Select module</h4>
                </div>
-               <!-- <button class="carousel-control-next" style="left:0; top:0%;; height:100%;position:absolute;"> < </button> -->
-               <!-- <span class="arrow"></span> -->
-               <button class="previous round">
+               <!-- <button class="previous round">
                <</button>
-               <button class="next round">></button>
+               <button class="next round">></button> -->
                <div class="modal-body">
                   <div class="container">
                      <div class="row" id="modal-div">

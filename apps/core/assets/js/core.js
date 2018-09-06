@@ -2,6 +2,8 @@
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
+var apiUrl = "0.0.0.0";
+var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -217,4 +219,25 @@ function loadTabContent(id) {
     } else {
         GenerateTable();
     }
+}
+function signIn() {
+    console.log(sessionStorage);
+    alert("Log in successful");
+    loadDoc(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
+}
+function loadDoc(username, password) {
+        jQuery.post('http://' + apiUrl + ':' + apiPort +'/api/v1/auth/login', {
+            username: username,
+            password: password
+        })
+        .done(function(msg) {
+            console.log(msg.authorization.token);
+            sessionStorage.setItem("authorization", msg.authorization.token);
+        })
+        .fail(function(xhr, status, error) {
+            // error handling
+            console.log(xhr.status);
+            alert("wrong password");
+            window.location = "/apps/core/views/login.html";
+        });
 }
