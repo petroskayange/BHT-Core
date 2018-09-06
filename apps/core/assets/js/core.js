@@ -10,6 +10,85 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" 
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
 // alert(window.innerHeight);
 
+// URL formulation logic
+var auth_token = null;
+
+var APIURL = "localhost:8000/api/v1/";
+
+var userApi = "user";
+
+var firstName = "firstname";
+
+var lastName = "lastname";
+
+var homeDistrict = "homedistrict";
+
+var homeVillage = "homevillage";
+
+var currentDistrict = "currentdistrict";
+
+var currentTA = "currentta";
+
+var homeTA = "homeTA";
+
+var currentVillage = "currentvillage";
+
+var roles = "roles";
+
+var people = "people";
+
+var person_addresses = "person_addresses";
+
+var person_names = "person_names";
+
+function _ajaxUrl(res){
+   var result = [];
+    $.getJSON({
+           url: 'http://192.168.18.184:8000/api/v1/' + res,      
+           beforeSend: function(xhr){
+              xhr.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
+          },
+          success: function(data){
+                
+            result = data;
+             //for(var x = 0; x < data.length; x ++){
+                 //console.log(data[x].person_id + "  " + data[x].gender );
+             //}
+          },
+          error: function(){
+              console.log('error message');
+          }
+    }); 
+
+    return result;
+}
+
+ 
+function loadDoc() {
+
+    $.post("http://192.168.18.184:8000/api/v1/auth/login",
+    {
+        username: "admin",
+        password: "test"
+    },
+    function(data,status){
+
+          console.log("Data: " + data + "\nStatus: " + status);
+        if(status.toLocaleLowerCase() === "success") {
+          sessionStorage.setItem(auth_token, data.authorization.token);
+          
+        }
+        else {
+        console.log("no");
+        }
+    });
+}
+
+/*function checkToken(){
+    console.log(sessionStorage.getItem(auth_token));
+}*/
+// end of url formulation logic
+
 var userRoles = ['admin', 'clerk', 'user'];
 $('#userRole').empty();
 $.each(userRoles, function(i, p) {

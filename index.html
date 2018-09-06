@@ -37,7 +37,10 @@
                <div class="table-div-cell app-icon">&nbsp;
                   <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon">
                </div>
-               <div class="table-div-cell app-details" style="float: left; width: 65%;">
+               <div class="table-div-cell app-details" style="float: left; width: 25%;">
+                    <div class="barcode" url="" functionName="alert('test');"></div>
+               </div>
+               <div class="table-div-cell app-details" style="float: left; width: 40%;">
                   <table style="width: 100%; margin: 5px;">
                      <tr>
                         <th>Facility name:</th>
@@ -134,8 +137,9 @@
       </footer>
    </body>
    <script src="apps/core/assets/js/core.js "></script>
+   <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
    <script>
       (document.getElementsByClassName("overview-btns ")[0]);
-      changeModule();
+       changeModule();
    </script>
 </html>
