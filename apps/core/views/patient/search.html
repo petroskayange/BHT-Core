@@ -40,7 +40,7 @@
 </script>
 
 <form action="" method="GET">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" onkeypress="_ajaxUrl('first_name',$('touchscreenInput' + tstCurrentPage).value);" />
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" ajaxURL="/people/search" />
 
     <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" helpText="Last name" allowFreeText="true" />
 

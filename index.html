@@ -12,6 +12,7 @@
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
         $(document).ready(function(){
+            loadDoc(); 
             if (sessionStorage.getItem("authorization") == null) {
                 if (sessionStorage.getItem("userPassword") != null) {
                     signIn();
@@ -21,8 +22,6 @@
                     // window.location = "/apps/core/views/login.html";
                 }
             }
-
-            loadDoc(); 
         });
                 
              </script>

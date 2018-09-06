@@ -623,7 +623,7 @@ function getOptions() {
 
     if (!tstSearchPage) {
         if(tstFormElements[i].getAttribute("ajaxURL") != null){
-            var val = tstFormElements[i].value;
+            var val = tstFormElemens[i].value;
             if (tstFormElements[i].value) {
                 if (tstFormElements[i].tagName == "SELECT")
                     try {
@@ -1094,6 +1094,7 @@ function ajaxSearch(searchstring, resource, property, element){
 }
 
 function ajaxRequest(aElement, aUrl) {
+    console.log(aElement);
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function() {
         handleResult(aElement, httpRequest);
