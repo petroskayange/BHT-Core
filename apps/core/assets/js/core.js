@@ -13,7 +13,7 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 // URL formulation logic
 var auth_token = null;
 
-var APIURL = "localhost:8000/api/v1/";
+var APIURL = "localhost:8000/api/v1/" + firstName
 
 var userApi = "user";
 

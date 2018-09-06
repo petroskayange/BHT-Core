@@ -1078,6 +1078,21 @@ function highlightSelection(options, inputElement){
     }
 }
 
+function ajaxSearch(searchstring, resource, property, element){
+    var url = 'http://192.168.18.184:8000/api/v1/' + resource + '/?' + property + '=' + searchstring;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        handleResult(element, req);
+    };
+    try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
+        req.send(null);
+    } catch (e) {
+        
+    } 
+}
+
 function ajaxRequest(aElement, aUrl) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function() {
