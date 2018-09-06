@@ -103,7 +103,7 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    console.log("/apps/config/apps.json");
+    // console.log("/apps/config/apps.json");
     $.getJSON("/apps/config/apps.json")
         .done(function(data, status) {
             parser(data);
@@ -148,7 +148,7 @@ function showUser() {
     $("#username").text(sessionStorage.getItem("username"));
     $("#role").text(sessionStorage.getItem("selected_role"));
     $("#date_created").text(sessionStorage.getItem("date_created"));
-    console.log(sessionStorage);
+    // console.log(sessionStorage);
 }
 
 function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
@@ -189,9 +189,9 @@ function changeModule() {
             $("#registerButton").css("visibility", "visible");
             $("#myModal").modal("hide");
             $("#application-name").text(sessionStorage.getItem("applicationName"));
-            console.log(sessionStorage);
+            // console.log(sessionStorage);
     }else {
-        console.log(sessionStorage);
+        // console.log(sessionStorage);
     }
 }
 
@@ -300,8 +300,6 @@ function loadTabContent(id) {
     }
 }
 function signIn() {
-    console.log(sessionStorage);
-    alert("Log in successful");
     loadDoc(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
 function loadDoc(username, password) {
@@ -310,12 +308,12 @@ function loadDoc(username, password) {
             password: password
         })
         .done(function(msg) {
-            console.log(msg.authorization.token);
+            alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
         })
         .fail(function(xhr, status, error) {
             // error handling
-            console.log(xhr.status);
+            // console.log(xhr.status);
             alert("wrong password");
             window.location = "/apps/core/views/login.html";
         });
