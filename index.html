@@ -33,7 +33,7 @@
                   <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon">
                </div>
                <div class="table-div-cell app-details" style="float: left; width: 25%;">
-                    <div class="barcode" url="" functionName="alert('test');"></div>
+                    <div class="barcode" url="" functionName=""></div>
                </div>
                <div class="table-div-cell app-details" style="float: left; width: 40%;">
                   <table style="width: 100%; margin: 5px;">
@@ -123,7 +123,7 @@
          <div class="container-footer">
             <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
-            <button class="btn btn-danger buttons logout" style="width: 200px; font-size: 2rem;">Logout</button>
+            <button class="btn btn-danger buttons logout" style="width: 200px; font-size: 2rem;" onmousedown="logout();">Logout</button>
             <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find or <br>Register Patient</button>
          </div>
          </div>
@@ -134,5 +134,8 @@
    <script>
       (document.getElementsByClassName("overview-btns ")[0]);
        changeModule();
+       function logout() {
+        window.location = "/apps/core/views/login.html";
+       }
    </script>
 </html>
