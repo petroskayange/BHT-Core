@@ -300,9 +300,9 @@ function loadTabContent(id) {
     }
 }
 function signIn() {
-    loadDoc(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
+    checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
-function loadDoc(username, password) {
+function checkCredentials(username, password) {
         jQuery.post('http://' + apiUrl + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
