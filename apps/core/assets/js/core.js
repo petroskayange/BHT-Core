@@ -84,9 +84,9 @@ function loadDoc() {
     });
 }
 
-function checkToken(){
+/*function checkToken(){
     console.log(sessionStorage.getItem(auth_token));
-}
+}*/
 // end of url formulation logic
 
 var userRoles = ['admin', 'clerk', 'user'];
