@@ -78,8 +78,7 @@
 
   function searchResults(results){
       
-      var data = JSON.parse(results);
-     
+      var data = JSON.parse(results);     
       var f =  document.getElementById('person');
       var option = document.createElement('option');
       option.setAttribute('value', sessionStorage.getItem('given_name'));
