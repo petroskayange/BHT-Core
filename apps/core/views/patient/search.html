@@ -23,6 +23,7 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/submitparameters.js"></script>
 
   </head>
   <body id="mateme">
@@ -39,14 +40,14 @@
   
 </script>
 
-<form action="" method="GET">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" onkeypress="_ajaxUrl('first_name',$('touchscreenInput' + tstCurrentPage).value);" />
+<form action="search_results.html" method="POST" id="search_results">
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="First name"  key="first_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
 
-    <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" helpText="Last name" allowFreeText="true" />
+    <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
 
-    <select allowFreeText="false" helpText=" Gender" id="gender" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option></select>
+    <select allowFreeText="false" helpText=" Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+      <option value="M">Male</option>
+      <option value="F">Female</option></select>
 
 </form>
         <div id="footer">
@@ -58,19 +59,50 @@
 
 <script type="text/javascript">
 
+  function  submitSearchResults(){
+
+     document.getElementById('cover').style.display = 'inline';
+     var first_name = __$('given_name').value;
+     var last_name = __$('family_name').value;
+     var gender = __$('gender').value;
+     sessionStorage.setItem('given_name', first_name);
+     sessionStorage.setItem('family_name', last_name);
+     sessionStorage.setItem('gender', gender);
+     
+     url = "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
+     functiontobecalled = 'searchResults';
+
+     getParameters(url);
+
+  }
+
+  function searchResults(results){
+      
+      var data = JSON.parse(results);     
+      var f =  document.getElementById('person');
+      var option = document.createElement('option');
+      option.setAttribute('value', sessionStorage.getItem('given_name'));
+      option.setAttribute('onmousedown', 'changeNextButton();');
+      option.setAttribute('id','given_name');
+      option.innerHTML = "Select " + sessionStorage.getItem('given_name') + sessionStorage.getItem('family_name');
+      // f.appendChild(option);
+      // for(var x in data){
+      //   if(data.hasOwnProperty(x)){
+      //      var input = document.createElement('input');
+      //      input.setAttribute('type','hidden');
+      //      input.setAttribute('name','people[]');
+      //      input.setAttribute('value','person[' + data[x].person_id + ']');
+      //      f.appendChild(input);
+      //   }
+      // } 
+      // alert(f.innerHTML);
+      gotoNextPage();
+  }
+
   function changeNextButton(){
     __$("nextButton").removeAttribute("onmousedown")
     __$("nextButton").onmousedown = function(){
-      search_redirect = $('touchscreenInput' + tstCurrentPage).value;
-        if (search_redirect.length > 0){
-          window.location.href = "/apps/core/views/patient/search_results.html";
-          var j = document.getElementById("touchscreenInput2");
-          f =  j.getAttribute("tstvalue") 
-          sessionStorage.setItem("selected_gender", f);
-        }
-        else{
-          showMessage("Select value to continue");
-      }
+           submitSearchResults();
     }
   }
 
@@ -97,3 +129,32 @@
   });
 
 </script>
+
+<style>
+ #cover{
+   position: absolute;
+   background-color: black;
+   width: 100%;
+   height: 102%;
+   left: 0%;
+   top: 0%;
+   z-index: 990;
+   opacity: 0.65;
+   display: none;
+ }
+</style>
+
+<script type="text/javascript">
+function findClient(){
+  
+}
+
+</script>
+
+
+
+
+
+
+
+<div id="cover"></div>

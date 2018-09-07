@@ -200,13 +200,13 @@
 
 </script>
 
-<body onload = "setTimeout('setAttributes();', 300);setItems();">
+<body onload = "setTimeout('setAttributes();', 300);">
   <form action="" method="POST">
         <label for="person">No patients were found:</label>
-    <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="">
+    <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "setItems();">
       <!--option onmousedown="search_remote()">Search from remote server for person with name John Does</option-->
 
-          <option value="0" onmousedown="changeNextButtonText('New Patient')" id="names" >Create a new person with the name </option>
+          <option class="test" value="0" onmousedown="changeNextButtonText('New Patient')">&nbsp;</option>
 
     </select>
     <input type="hidden" id="identifier" name="identifier" value="" />
@@ -250,9 +250,35 @@
 </body>
 <script>
   function setItems(){
-    var inputField = document.getElementById("names");
-    var personName = document.createTextNode(" " + sessionStorage.getItem("first_name") + " " + sessionStorage.getItem("family_name") );
-    inputField.appendChild(personName);
+    //var inputField = document.getElementById("names");
+    //var personName = document.createTextNode(" " + sessionStorage.getItem("given_name") + " " + sessionStorage.getItem("family_name") );
+    //inputField.appendChild(personName);
+   string ="Create a new person with the names " + sessionStorage.getItem("given_name") + " " + sessionStorage.getItem("family_name");
+   document.getElementById("0").innerHTML = string;
+  }
+
+  function getResults(){
+     var f = document.getElementById('person');
+     var option = document.createElement('option');
+      option.setAttribute('value', sessionStorage.getItem('given_name'));
+      option.setAttribute('onmousedown', 'changeNextButton();');
+      option.setAttribute('id','given_name');
+      option.innerHTML = "Select " + sessionStorage.getItem('given_name') + sessionStorage.getItem('family_name');
+      f.appendChild(option);
+
   }
 </script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

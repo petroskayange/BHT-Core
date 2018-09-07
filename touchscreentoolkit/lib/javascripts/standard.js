@@ -1078,25 +1078,47 @@ function highlightSelection(options, inputElement){
     }
 }
 
-function ajaxRequest(aElement, aUrl) {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function() {
-        handleResult(aElement, httpRequest);
+function ajaxRequest(aElement, aUrl){
+    var url = 'http://192.168.18.184:8000/api/v1' + aUrl;
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        
+            if (this.readyState == 4 && this.status == 200) {
+              //document.location = "/confirm/" + this.responseText;
+              var ol = document.createElement('ul');
+              ol.setAttribute("id","tt_currentUnorderedListOptions")
+              var results = JSON.parse(this.responseText);
+              for(var x = 0; x < results.length; x ++){
+                   var li = document.createElement('li');
+                   li.innerHTML = results[x];
+                   li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                   li.setAttribute('tstValue', results[x]);
+                   li.setAttribute('id', x);
+                   li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+                   ol.appendChild(li);
+              }
+            //aElement.appendChild(ol)
+              //alert(ol.innerHTML)
+            handleResult(aElement, ol);
+            }    
     };
     try {
-        httpRequest.open('GET', aUrl, true);
-        httpRequest.send(null);
-    } catch(e){
-    }
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+        req.send(null);
+    } catch (e) {
+        
+    } 
 }
 
-function handleResult(optionsList, aXMLHttpRequest) {
-    if (!aXMLHttpRequest) return;
+function handleResult(optionsList, results) {
+    if (!results) return;
 
     if (!optionsList) return;
 
-    if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
-        optionsList.innerHTML = aXMLHttpRequest.responseText;
+    //if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+        optionsList.innerHTML = results.innerHTML
         if(optionsList.getElementsByTagName("li")[0] != null){
             var optionNodes = optionsList.getElementsByTagName("LI");
             var optionNodeCount = optionNodes.length;
@@ -1134,7 +1156,7 @@ function handleResult(optionsList, aXMLHttpRequest) {
         var val = tstInputTarget.value;
         if (val == null) val = "";
         inputElement.value = val;
-    }
+    //}
 }
 
 function tt_update(sourceElement, navback){
