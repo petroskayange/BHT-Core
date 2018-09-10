@@ -1,7 +1,12 @@
 //declare your network configurations here
+// getAPI();
+
+// window.addEvent('load', function() {
+// var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
+// var apiPort =''; sessionStorage.getItem("apiPort");
+var apiURL,apiPort;
 getAPI();
-var apiURL = sessionStorage.getItem("apiURL");
-var apiPort = sessionStorage.getItem("apiPort");
+// })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
 report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
@@ -302,6 +307,7 @@ function loadTabContent(id) {
 function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
+
 function checkCredentials(username, password) {
         jQuery.post('http://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
@@ -321,10 +327,12 @@ function checkCredentials(username, password) {
         });
 }
 function getAPI() {
-$.getJSON("/apps/config/apps.json")
+jQuery.getJSON("/apps/config/apps.json")
 .done(function(data, status) {
     sessionStorage.setItem("apiURL", data.apiURL);
+    apiURL =  data.apiURL;
     sessionStorage.setItem("apiPort", data.apiPort);
+    apiPort = data.apiPort;
 })
 .fail(function() {
     console.log("apps.json is missing from the apps/config folder");
