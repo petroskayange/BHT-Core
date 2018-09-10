@@ -2,7 +2,7 @@
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
-var apiUrl = "0.0.0.0";
+var apiUrl = "192.168.43.105";
 var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -19,7 +19,7 @@ if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
 // sessionStorage.setItem("displayBarcode", false);
-var APIURL = "localhost:8000/api/v1/";
+var APIURL = "http://192.168.43.105:8000/api/v1/";
 
 
 var userApi = "user";
@@ -51,7 +51,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-           url: 'http://192.168.18.184:8000/api/v1/' + res,      
+           url: 'http://192.168.43.105:8000/api/v1/' + res,      
            beforeSend: function(xhr){
               xhr.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
           },
@@ -73,7 +73,7 @@ function _ajaxUrl(res){
  
 function loadDoc() {
 
-    $.post("http://192.168.18.184:8000/api/v1/auth/login",
+    $.post("http://192.168.43.105:8000/api/v1/auth/login",
     {
         username: "admin",
         password: "test"

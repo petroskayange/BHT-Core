@@ -623,7 +623,7 @@ function getOptions() {
 
     if (!tstSearchPage) {
         if(tstFormElements[i].getAttribute("ajaxURL") != null){
-            var val = tstFormElemens[i].value;
+            var val = tstFormElements[i].value;
             if (tstFormElements[i].value) {
                 if (tstFormElements[i].tagName == "SELECT")
                     try {
@@ -1078,30 +1078,8 @@ function highlightSelection(options, inputElement){
     }
 }
 
-<<<<<<< HEAD
-function ajaxSearch(searchstring, resource, property, element){
-    var url = 'http://192.168.18.184:8000/api/v1/' + resource + '/?' + property + '=' + searchstring;
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function(){
-        handleResult(element, req);
-    };
-    try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
-        req.send(null);
-    } catch (e) {
-        
-    } 
-}
-
-function ajaxRequest(aElement, aUrl) {
-    console.log(aElement);
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function() {
-        handleResult(aElement, httpRequest);
-=======
 function ajaxRequest(aElement, aUrl){
-    var url = 'http://192.168.18.184:8000/api/v1' + aUrl;
+    var url = 'http://192.168.43.105:8000/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1124,7 +1102,6 @@ function ajaxRequest(aElement, aUrl){
               //alert(ol.innerHTML)
             handleResult(aElement, ol);
             }    
->>>>>>> ebfdc4a0fb699e5b1962ce2b8a940207d7f084e2
     };
     try {
         req.open('GET', url, true);
