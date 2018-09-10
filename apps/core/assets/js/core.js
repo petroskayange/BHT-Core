@@ -2,7 +2,7 @@
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
-var apiUrl = "192.168.18.184";
+var apiUrl = "0.0.0.0";
 var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -14,7 +14,10 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 
 // URL formulation logic
 var auth_token = null;
-
+if (sessionStorage.getItem("applicationName") !== null) {
+    showBarcodeDiv();
+}
+// sessionStorage.setItem("displayBarcode", false);
 var APIURL = "localhost:8000/api/v1/";
 
 var userApi = "user";
@@ -133,14 +136,7 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
         changeModule();
     });
 
-    if ((counter%3)== 0 && counter != 0) {
-        console.log("ready to append" + counter);
-        $("#modal-div").append($('<div></div>'));
-
-    }else {
-        console.log("not ready to append" + counter);
-    }
-}
+ }
 
 function showUser() {
     $("#first_name").text(sessionStorage.getItem("first_name"));
@@ -187,6 +183,15 @@ function changeModule() {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
             // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
+            console.log(sessionStorage.getItem("displayBarcode"));
+            if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+                // showBarcode = false
+                showBarcodeDiv();
+               
+            }else {
+                
+            }
+           
             $("#myModal").modal("hide");
             $("#application-name").text(sessionStorage.getItem("applicationName"));
             // console.log(sessionStorage);
@@ -194,7 +199,11 @@ function changeModule() {
         // console.log(sessionStorage);
     }
 }
-
+function showBarcodeDiv() {
+    sessionStorage.setItem("displayBarcode", true)
+    $("#details").width("47.91%");
+    $("#header").append($('#barcode').html());
+}
 function redirect(id) {
     if (id === "create-user") {
         window.location.href = './apps/core/views/users/new.html';
