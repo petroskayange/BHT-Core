@@ -160,8 +160,8 @@ function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, appl
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
-
-
+        sessionStorage.setItem("apiURL", applicationData.apiURL);
+        sessionStorage.setItem("apiPort", applicationData.apiPort);
         applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
         applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
@@ -319,6 +319,7 @@ function checkCredentials(username, password) {
         .done(function(msg) {
             alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
+            window.location.href = "/";
         })
         .fail(function(xhr, status, error) {
             // error handling
