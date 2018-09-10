@@ -79,6 +79,7 @@
                 function validateLocation() {
                     __$("nextButton").removeAttribute("onmousedown");
                     __$("nextButton").onmousedown = function(){
+                        // console.log(sessionStorage);
                         signIn();
                         getLocation();
                     }        
