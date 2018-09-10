@@ -28,14 +28,17 @@
    <body>
       <div class="container-fluid">
          <div class="table-div">
-            <div class="table-div-row">
-               <div class="table-div-cell app-icon">&nbsp;
-                  <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon">
+            <div class="table-div-row" id="header">
+               <div class="table-div-cell app-icon" style="width: 24%;">&nbsp;
+                  <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon" style="">
                </div>
-               <div class="table-div-cell app-details" style="float: left; width: 25%;">
+               <template id="barcode">
+                <div class="table-div-cell app-details" style="float: left; width: 24%;" id="barCodeInner">
                     <div class="barcode" url="" functionName=""></div>
                </div>
-               <div class="table-div-cell app-details" style="float: left; width: 40%;">
+                <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
+               </template>
+               <div class="table-div-cell app-details" style="width: 70%; padding: 1%;" id="details">
                   <table style="width: 100%; margin: 5px;">
                      <tr>
                         <th>Facility name:</th>
@@ -78,7 +81,7 @@
       <!-- Modal -->
       <div class="modal fade" id="myModal" role="dialog">
          <div class="modal-dialog" name="div2">
-            <div class="modal-content">
+            <div class="modal-content" style="margin-left:0px;">
                <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title">Select module</h4>
@@ -91,9 +94,9 @@
                      <div class="row" id="modal-div">
                         <template id="card_template">
                            <!-- <div class="" > -->
-                           <div class="card col-3 col-sm-2 col-lg-3" id="cardDiv" style="margin: 1%;">
+                           <div class="card col-lg-2 col-sm-2" id="cardDiv" style="margin: 10px;">
                               <a href="#" class="card-block clearfix" id="moduleButton">
-                                 <img alt="Avatar" style="width:200px; height: 200px;" id="cardImage">
+                                 <img alt="Avatar" style="width:70px; height: 60px; align-content: center; margin-left: 20%; margin-top: 10%;" id="cardImage">
                                  <div class="middle">
                                     <div class="text">
                                        <p id="apptext"></p>
@@ -113,29 +116,78 @@
                   </div>
                </div>
                <div class="modal-footer">
-                  <button class="closeModal" data-dismiss="modal">Close</button>
+                  <button class="red" data-dismiss="modal">Close</button>
                </div>
             </div>
          </div>
       </div>
       <!-- Modal -->
+      <!-- <button class="btn btn-default" id="btn-confirm">Confirm</button> -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal" style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="margin: 0; ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Are you sure you want to log out?</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
+                <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="alert" role="alert" id="result"></div>
       <footer class="footer">
          <div class="container-footer">
-            <button class="btn btn-success buttons" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+            <button class="btn btn-danger buttons red " style="width: 200px; font-size: 2rem;" id="logout">Logout</button>
+            <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
-            <button class="btn btn-danger buttons logout" style="width: 200px; font-size: 2rem;" onmousedown="logout();">Logout</button>
-            <button class="btn buttons logout" style="margin-right: 10px; visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find or <br>Register Patient</button>
+            <button class="btn buttons green" style="margin-right: 10px; width:250px;font-size:18px;visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find / <br>Register Patient</button>
          </div>
          </div>
       </footer>
    </body>
    <script src="apps/core/assets/js/core.js "></script>
-   <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
    <script>
       (document.getElementsByClassName("overview-btns ")[0]);
        changeModule();
        function logout() {
-        window.location = "/apps/core/views/login.html";
+        if (window.confirm("Do you really want to logout?")) { 
+            window.location = "/apps/core/views/login.html";
+        }
        }
+
+       var modalConfirm = function(callback){
+  
+  $("#logout").on("click", function(){
+    $("#mi-modal").modal('show');
+  });
+
+  $("#modal-btn-si").on("click", function(){
+    callback(true);
+    $("#mi-modal").modal('hide');
+  });
+  
+  $("#modal-btn-no").on("click", function(){
+    callback(false);
+    $("#mi-modal").modal('hide');
+  });
+};
+
+modalConfirm(function(confirm){
+  if(confirm){
+    //Acciones si el usuario confirma
+    // $("#result").html("CONFIRMADO");
+    window.location = "/apps/core/views/login.html";
+  }else{
+    //Acciones si el usuario no confirma
+    // $("#result").html("NO CONFIRMADO");
+
+    $("#mi-modal").modal('hide');
+  }
+});
    </script>
 </html>
