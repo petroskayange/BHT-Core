@@ -1,6 +1,6 @@
 {
 	"apiURL": "0.0.0.0",
-	"apiPORT": "8000",
+	"apiPort": "8000",
 	"apps": [
 		{
 			"applicationName": "ART",
