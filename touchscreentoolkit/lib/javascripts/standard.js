@@ -1081,7 +1081,7 @@ function highlightSelection(options, inputElement){
 }
 
 function ajaxRequest(aElement, aUrl){
-    var url = 'http://'+apiUrl+':'+apiPort+'/api/v1' + aUrl;
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
