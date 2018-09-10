@@ -2,7 +2,7 @@
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
-var apiUrl = "0.0.0.0";
+var apiUrl = "192.168.18.184";
 var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
