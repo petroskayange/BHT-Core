@@ -54,13 +54,15 @@
         sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
     }
     function getLocation() {
-        sessionStorage.setItem("userLocation", document.getElementById("touchscreenInput2").value);
+        var barcode = document.getElementById("touchscreenInput2").value + "$";
+        sessionStorage.setItem("userLocation", barcode);
     }
     
     </script>
 
     <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/apps/core/assets/js/core.js" defer="true"></script>
 </head>
 
 <body id="mateme">
@@ -78,6 +80,7 @@
                     __$("nextButton").removeAttribute("onmousedown");
                     __$("nextButton").onmousedown = function(){
                         signIn();
+                        getLocation();
                     }        
                 }
             </script>
