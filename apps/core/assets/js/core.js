@@ -2,7 +2,7 @@
 var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
-var apiUrl = "192.168.43.105";
+var apiUrl = "192.168.1.154";
 var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -19,7 +19,7 @@ if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
 // sessionStorage.setItem("displayBarcode", false);
-var APIURL = "http://192.168.43.105:8000/api/v1/";
+var APIURL = "http://192.168.1.154:8000/api/v1/";
 
 
 var userApi = "user";
@@ -51,7 +51,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-           url: 'http://192.168.43.105:8000/api/v1/' + res,      
+           url: 'http://192.168.1.154:8000/api/v1/' + res,      
            beforeSend: function(xhr){
               xhr.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
           },
@@ -70,10 +70,10 @@ function _ajaxUrl(res){
     return result;
 }
 
- 
+
 function loadDoc() {
 
-    $.post("http://192.168.43.105:8000/api/v1/auth/login",
+    $.post("http://192.168.1.154:8000/api/v1/auth/login",
     {
         username: "",
         password: ""
@@ -91,9 +91,34 @@ function loadDoc() {
     });
 }
 
-/*function checkToken(){
-    console.log(sessionStorage.getItem(auth_token));
-}*/
+function PersistPersonData(data){
+
+    var url = "http://192.168.1.154:8000/api/v1/people";
+    var req = new XMLHttpRequest();
+    
+    req.onreadystatechange = function() {
+       
+        if (req.readyState == 4  && req.status == 200) {
+            console.log(req.responseText);
+        } else {
+           alert(req.responseText);
+       }
+     }
+
+   try{
+       
+    req.open('POST', url, true);
+    req.setRequestHeader('Content-type','application/jsonp; charset=utf-8');
+    req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+    req.send(JSON.stringify(data));
+   
+   } catch(e){
+     alert(e);
+   }
+    
+
+
+}
 // end of url formulation logic
 
 var userRoles = ['admin', 'clerk', 'user'];
@@ -185,7 +210,7 @@ function changeModule() {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
             // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
-            console.log(sessionStorage.getItem("displayBarcode"));
+           // console.log(sessionStorage.getItem("displayBarcode"));
             if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
                 // showBarcode = false
                 showBarcodeDiv();

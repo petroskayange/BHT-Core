@@ -51,6 +51,7 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
 
   </head>
   <body id="mateme">
@@ -217,9 +218,32 @@
     listSuggestions(tstCurrentPage);
   }
 
+  function AddPerson(){
+   
+    var birthdate = __$("person_birth_year").value + "/" + __$("person_birth_month").value + "/" + __$("person_birth_day").value;
+      
+    var record = {
+                  given_name:   sessionStorage.getItem('given_name'),
+                  middle_name: __$("middle_name").value,
+                  family_name:  sessionStorage.getItem('family_name'),
+                  gender:  sessionStorage.getItem('gender') ,
+                  birthdate: birthdate,
+                  birthdate_estimated: __$('person_age_estimate').value,
+                  home_district: __$('address2').value,
+                  home_village: __$('person_addresses_neighborhood_cell').value,
+                  home_traditional_authority: "Chatha",
+                  current_district: "Lilongwe",
+                  current_village: "Area 15",
+                  current_traditional_authority: "Area 15"
+                  };
+      
+    PersistPersonData(record);
+  }
+ 
+
 </script>
 
-<form action="/apps/core/views/patient_dashboard.html" method="">
+<form action="/apps/core/views/patient_dashboard.html" method="POST">
 
 <!--   <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
 
@@ -299,7 +323,7 @@
 
   <input type="text" name="person[cell_phone_number]" id="cellphone" field_type="number" helpText="Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota" />
 
-  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
+  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput(); AddPerson();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
 
   <input type="hidden" name="person[gender]" id="person_gender" value="M" />
   <input type="hidden" name="person[patient]" id="person_patient" value="" />

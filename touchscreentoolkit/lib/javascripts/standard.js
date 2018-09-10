@@ -1079,7 +1079,7 @@ function highlightSelection(options, inputElement){
 }
 
 function ajaxRequest(aElement, aUrl){
-    var url = 'http://192.168.43.105:8000/api/v1' + aUrl;
+    var url = 'http://192.168.1.154:8000/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
