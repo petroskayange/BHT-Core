@@ -73,8 +73,8 @@ function loadDoc() {
 
     $.post("http://192.168.18.184:8000/api/v1/auth/login",
     {
-        username: "admin",
-        password: "test"
+        username: "",
+        password: ""
     },
     function(data,status){
 
@@ -320,6 +320,7 @@ function checkCredentials(username, password) {
             alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
             window.location.href = "/";
+            sessionStorage.removeItem("userPassword");
         })
         .fail(function(xhr, status, error) {
             // error handling
