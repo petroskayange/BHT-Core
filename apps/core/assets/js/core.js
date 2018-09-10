@@ -1,4 +1,5 @@
 //declare your network configurations here
+getAPI();
 var apiURL = sessionStorage.getItem("apiURL");
 var apiPort = sessionStorage.getItem("apiPort");
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -151,8 +152,7 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
-        sessionStorage.setItem("apiURL", applicationData.apiURL);
-        sessionStorage.setItem("apiPort", applicationData.apiPort);
+        
         applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
         applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
@@ -319,4 +319,14 @@ function checkCredentials(username, password) {
             alert("wrong password");
             window.location = "/apps/core/views/login.html";
         });
+}
+function getAPI() {
+$.getJSON("/apps/config/apps.json")
+.done(function(data, status) {
+    sessionStorage.setItem("apiURL", data.apiURL);
+    sessionStorage.setItem("apiPort", data.apiPort);
+})
+.fail(function() {
+    console.log("apps.json is missing from the apps/config folder");
+});
 }
