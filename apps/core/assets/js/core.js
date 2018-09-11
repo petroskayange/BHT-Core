@@ -71,7 +71,7 @@ function _ajaxUrl(res){
 
 
 function loadDoc() {
-    console.log(protocol);
+    console.log(apiURL);
 
     $.post(protocol + "://" + apiURL + ":" + apiPort + "/api/v1/auth/login",
     {
