@@ -72,18 +72,31 @@
             </div>
             <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
             <script type="text/javascript">
+                var barcode = "";
                 var tt_cancel_destination = "/logout"
                 function inform() {
                     $('infoBar' + tstCurrentPage).innerHTML = "Muli bwanji, enter your user information or scan your id card. <span style='font-size:0.6em;float:righti;margin-right: 20px;'>(ART Version: v3.7.7-1 - <span >Friday, 31-Aug-2018</span>)</span>";
                 }
                 function validateLocation() {
-                    __$("nextButton").removeAttribute("onmousedown");
-                    __$("nextButton").onmousedown = function(){
-                        // console.log(sessionStorage);
-                        signIn();
-                        getLocation();
-                    }        
+                __$("nextButton").removeAttribute("onmousedown");
+                document.getElementById('touchscreenInput2').removeEventListener('keyup', checkKey, false);
+                document.getElementById('touchscreenInput2').addEventListener('keyup', function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                doSignIn();
                 }
+                });
+                __$("nextButton").onmousedown = function(){
+                doSignIn();
+                }
+
+                }
+
+                function doSignIn() {
+                signIn();
+                getLocation();
+                }
+                
             </script>
 
             <form id='sessions' action="/" method='post'>
@@ -95,7 +108,7 @@
                 <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput1';" type="password" tt_onUnload="getPass();" /><br>
                 
                 <label for="location">Location</label>
-                <input field_type="text" helpText="Enter Location" id="location" name="location" textCase="lower" tt_onLoad="validateLocation(); barcodeId = 'touchscreenInput2';" type="text" tt_onUnload="getLocation();" /><br>
+                <input field_type="password" helpText="Enter Location" id="location" name="location" textCase="lower" tt_onLoad="validateLocation(); barcodeId = 'touchscreenInput2';" type="text" tt_onUnload="getLocation();" /><br>
                 
                 <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />
             </form>
