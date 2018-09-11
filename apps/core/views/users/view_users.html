@@ -31,7 +31,7 @@
     <div id="container">
       <div id="content">
         <form action="/view_users" method="POST">
-          <input textCase="lower" helpText="Select username" type="text" name="user[username]" key="username" ajaxURL="/users" tt_onLoad="loadUsernames('/users'); $(keyboard).style.display = none;" tt_onUnLoad="getInput();" id="user_username" />
+          <select textCase="lower" helpText="Select username" type="text" name="user[username]" key="username"  tt_onLoad="loadUsernames('/users'); $(keyboard).style.display = none;" tt_onUnLoad="getInput();" id="user_username" /></select>
             <input type="submit" name="commit" value="Find user" />
         </form>
         <div id="footer">

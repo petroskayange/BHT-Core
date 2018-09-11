@@ -1136,7 +1136,6 @@ function ajaxRequest(aElement, aUrl, objectType){
 
 function setRoles(aURL){
     var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
-    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1168,7 +1167,6 @@ function setRoles(aURL){
 
 function loadUsernames(aURL){
     var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
-    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1177,11 +1175,13 @@ function loadUsernames(aURL){
               var ol = document.createElement('ul');
               ol.setAttribute("id","tt_currentUnorderedListOptions");
               var results = JSON.parse(this.responseText);
+
               for(var x = 0; x < results.length; x ++){
                    var li = document.createElement('li');
                         li.innerHTML = results[x].username;
                         li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
                         li.setAttribute('tstValue', results[x].username);
+                        // console.log(results[x].username);
                         li.setAttribute('id', x);
                         li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
                         ol.appendChild(li);
