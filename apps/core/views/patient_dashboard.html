@@ -10,6 +10,11 @@
       <link rel="stylesheet" href="/apps/core/assets/css/custom.css">
       <script src="/apps/core/assets/js/jquery.min.js"></script>
       <script src="/apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
+       <script type="text/javascript">
+          $(document).ready(function(){
+               console.log('call the getFunction to retrieve the saved client data');
+          });
+       </script>
    </head>
    <body>
 
@@ -192,7 +197,7 @@
    <script>
       (document.getElementsByClassName("overview-btns ")[0]);
       changeModule();
-
+       
       function finish(){
          window.location = "/";
       }

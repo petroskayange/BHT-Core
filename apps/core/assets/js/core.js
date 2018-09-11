@@ -96,9 +96,9 @@ function PersistData(data, res){
     req.onreadystatechange = function() {
        
         if (req.readyState == 4  && req.status == 200) {
-            //callback function here
+           // window.location.href = '/apps/core/views/patient_dashboard.html';
         } else {
-           console.log(req.responseText);
+           console.log("@@@@" + req.responseText);
        }
      }
   
