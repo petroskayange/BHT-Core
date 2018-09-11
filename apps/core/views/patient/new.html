@@ -108,6 +108,7 @@
         ];
 
         for(var i = 0 ; i < attributes.length; i++){
+
           var row = document.createElement('tr');
           row.setAttribute('class','summary-table-row');
           table.appendChild(row);
@@ -124,7 +125,15 @@
           }else if(attributes[i][0].match(/Current TA/i)){
             getObjects(td, attributes[i][1], "TA", "/traditional_authorities?district_id=" + document.getElementById('current_district').value);
           }else if(attributes[i][0].match(/Current Village/i)){
-            getObjects(td, attributes[i][1], "Village", "/villages?village_id=" + document.getElementById('current_ta').value);
+            getObjects(td, attributes[i][1], "Village", "/villages?traditional_authority_id=" + document.getElementById('current_ta').value);
+          }    
+          
+          if(attributes[i][0].match(/Home District/i)){
+            getObjects(td, attributes[i][1], "District", "/districts?region_id=" + document.getElementById('home_region').value);
+          }else if(attributes[i][0].match(/Home TA/i)){
+            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?district_id=" + document.getElementById('home_district').value);
+          }else if(attributes[i][0].match(/Home Village/i)){
+            getObjects(td, attributes[i][1], "Village", "/villages?traditional_authority_id=" + document.getElementById('home_ta').value);
           }    
           
 
@@ -555,7 +564,7 @@ function getObjects(td, attribute, element_name, aUrl) {
       }else if(element_name.match(/Village/i)){
         villages = obj;
         for(var x = 0 ; x < villages.length; x++){
-          if(districts[x].village_id == attribute){
+          if(villages[x].village_id == attribute){
             td.innerHTML = villages[x].name;
             break;
           }
