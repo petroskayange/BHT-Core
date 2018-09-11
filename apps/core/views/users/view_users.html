@@ -19,7 +19,6 @@
          sessionStorage.setItem("date_created", d.toDateString())
       }
 
-
     </script>
 
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -30,7 +29,7 @@
   <body id="mateme">
     <div id="container">
       <div id="content">
-        <form action="/view_users" method="POST">
+        <form action="/apps/core/views/users/show.html" method="POST">
           <select textCase="lower" helpText="Select username" type="text" name="user[username]" key="username"  tt_onLoad="loadUsernames('/users'); $(keyboard).style.display = none;" tt_onUnLoad="getInput();" id="user_username" /></select>
             <input type="submit" name="commit" value="Find user" />
         </form>
