@@ -64,6 +64,7 @@ var tstMessageBoxType = {
 }
 var apiURL = sessionStorage.getItem("apiURL");
 var apiPort = sessionStorage.getItem("apiPort");
+var apiProtocol = sessionStorage.getItem("apiProtocol");
 
 var touchscreenInterfaceEnabled = 0;
 var contentContainer = null;
@@ -1081,9 +1082,8 @@ function highlightSelection(options, inputElement){
     }
 }
 
-function ajaxRequest(aElement, aUrl, objectType){
-    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
-    var object_type = objectType.getAttribute('objectType');
+function ajaxRequest(aElement, aUrl){
+    var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1135,7 +1135,8 @@ function ajaxRequest(aElement, aUrl, objectType){
 }
 
 function setRoles(aURL){
-    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1166,7 +1167,8 @@ function setRoles(aURL){
 }
 
 function loadUsernames(aURL){
-    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){

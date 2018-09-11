@@ -4,8 +4,12 @@
 // window.addEvent('load', function() {
 // var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
 // var apiPort =''; sessionStorage.getItem("apiPort");
+<<<<<<< HEAD
 var apiURL,apiPort;
 var clientRecord = {};
+=======
+var apiURL,apiPort, apiProtocol;
+>>>>>>> 04420ec022f34e81f85a490ec266c9dff7457a5b
 getAPI();
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -52,7 +56,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-        url: 'http://' + apiURL + ':' + apiPort + '/api/v1/' + res,
+        url: apiProtocol+ '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', sessionStorage.getItem(auth_token));
         },
@@ -70,7 +74,7 @@ function _ajaxUrl(res){
  
 function loadDoc() {
 
-    $.post("http://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
+    $.post(apiProtocol+"://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
         username: "",
         password: ""
@@ -326,7 +330,7 @@ function signIn() {
 }
 
 function checkCredentials(username, password) {
-        jQuery.post('http://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
+        jQuery.post(apiProtocol+'://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
         })
@@ -350,6 +354,8 @@ jQuery.getJSON("/apps/config/apps.json")
     apiURL =  data.apiURL;
     sessionStorage.setItem("apiPort", data.apiPort);
     apiPort = data.apiPort;
+    sessionStorage.setItem("apiProtocol", data.apiProtocol);
+    apiProtocol = data.apiProtocol;
 })
 .fail(function() {
     console.log("apps.json is missing from the apps/config folder");
