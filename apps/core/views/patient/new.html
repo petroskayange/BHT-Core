@@ -19,18 +19,36 @@
          sessionStorage.setItem("date_created", d.toDateString());
       }
 
-      // function validatePassword(){
-      //    console.log(localStorage);
-      //    console.log(localStorage.getItem("confirm_password"));
-      //    if (localStorage.getItem("password") === localStorage.getItem("confirm_password")){
-            
-      //    }
-      //    else{
-      //       console.log('passwordmismatch');
-      //    }
+      function changeFinishBtn() {
+        var finishButton =  __$("nextButton");
+        finishButton.setAttribute('onmousedown',"createClient();");
+        finishButton.setAttribute('onclick',"");
+      }
 
-      // }
+      function resetFinishBtn() {
+        var finishButton =  __$("nextButton");
+        finishButton.setAttribute('onmousedown',"gotoNextPage();");
+        finishButton.setAttribute('onclick',"");
+      }
 
+      function createClient() {
+        given_name          = "";
+        middle_name         = "";
+        famiy_name          = "";
+        gender              = __$('gender').value;
+
+
+        current_district    = __$('current_district').value; 
+        current_ta          = __$('current_ta').value;
+        current_village     = __$('current_village').value;
+
+        home_district       = __$('home_district').value;
+        home_ta             = __$('home_ta').value;
+        home_village        = __$('home_village').value;
+
+        landmark            = __$('landmark').value;
+        cell_phone_number   = __$('cellphone').value
+      }
 
       function changeNextButton(){
          __$("nextButton").removeAttribute("onmousedown")
@@ -79,7 +97,6 @@
   #tt_page_month_of_birth .options li{font-size:30px;}
 
   .tt_controls_home_village #space , #apostrophe { display:inline; }
-  .tt_controls_home_district #num  { display:none; }
 
   .tt_controls_current_traditional_authority_ta #space { display:inline; }
 
@@ -106,7 +123,6 @@
   #char{ display:none; }
   #apostrophe { display:inline; }
 
-  .tt_controls_home_district #num{ display:none; }
   .tt_controls_current_district #num{ display:none; }
 
   .tt_controls_current_city_place_or_area_of_residence #num{ display:block; }
@@ -118,6 +134,18 @@
   .azButton .numericKeyboard #char {
     display: block;
   }
+
+  .tt_controls_home_district #viewport { display:inline; }
+  .tt_controls_home_district #num { display:none; }
+
+  #tt_page_home_district #viewport { display: inline !important; }
+  #tt_page_home_ta #viewport { display: inline !important; }
+  #tt_page_home_village #viewport { display: inline !important; }
+
+  #tt_page_current_district #viewport { display: inline !important; }
+  #tt_page_current_ta #viewport { display: inline !important; }
+  #tt_page_current_village #viewport { display: inline !important; }
+
 
 </style>
 
@@ -160,7 +188,6 @@
     abMax = parseInt(date_diff.split("-")[0]) - 10;
 
     jQuery('#touchscreenInput'+ tstCurrentPage).attr("absoluteMax", date_diff.split("-")[0]);
-    console.log(date_diff);
 
   }
   function updateMonthAbsMax(){
@@ -245,15 +272,31 @@
 
 <form action="/apps/core/views/patient_dashboard.html" method="POST">
 
-<!--   <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
+  <input type="text" name="given_name" 
+  id="given_name" field_type="alpha" 
+  key="first_name" helpText="First name"  
+  ajaxURL="/search/given_name?search_string=" 
+  key="first_name" allowFreeText="true" 
+	condition="$(&quot;given_name&quot;).value == &quot;&quot;" /> 
 
-  <input type="text" name="person[names][family_name]" id="family_name" value="Testing" field_type="alpha" helpText="Last name" ajaxURL="/person_names/family_names?search_string=" allowFreeText="true" condition="$(&quot;family_name&quot;).value == &quot;&quot;" /> -->
+  <input type="text" name="person[names][family_name]" 
+  id="family_name" value="Testing" field_type="alpha" 
+  helpText="Last name" 
+  ajaxURL="/search/family_name?search_string=" 
+  allowFreeText="true" 
+	condition="$(&quot;family_name&quot;).value == &quot;&quot;" /> 
 
-  <input type="text" name="person[names][middle_name]" id="middle_name" field_type="alpha" tt_onUnload="getInput();" helpText="Middle name" ajaxURL="" allowFreeText="true" optional="true" condition="$('middle_name').value == ''" tt_pageStyleClass="azButton" />
+  <input type="text" name="person[names][middle_name]" 
+  id="middle_name" field_type="alpha" 
+  helpText="Middle name" 
+  ajaxURL="/search/middle_name?search_string=" 
+  allowFreeText="true" optional="true" 
+  condition="$('middle_name').value == ''" 
+  tt_pageStyleClass="azButton" />
 
-  <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" tt_onUnload="getInput();" absoluteMin="1900" min="1900" tt_onLoad="validateYear()" tt_pageStyleClass="Numeric NumbersOnly" />
+  <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" absoluteMin="1900" min="1900" tt_onLoad="validateYear()" tt_pageStyleClass="Numeric NumbersOnly" />
 
-  <select name="person[birth_month]" id="person_birth_month" helpText="Month of Birth" condition="$('person_birth_year').value.toLowerCase() != 'unknown'" tt_onUnload="getInput();" validationMessage="Please enter a valid date" tt_onLoad=" validateDate();__$(keyboard).style.display = none;" tt_onUnLoad="updateMonthAbsMax();"><option value=""></option>
+  <select name="person[birth_month]" id="person_birth_month" helpText="Month of Birth" condition="$('person_birth_year').value.toLowerCase() != 'unknown'" validationMessage="Please enter a valid date" tt_onLoad=" validateDate();__$(keyboard).style.display = none;" tt_onUnLoad="updateMonthAbsMax();"><option value=""></option>
   <option value="1">Jan</option>
   <option value="2">Feb</option>
   <option value="3">Mar</option>
@@ -268,64 +311,118 @@
   <option value="12">Dec</option>
   <option value="Unknown">Unknown</option></select>
 
-  <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" tt_onUnload="getInput();" absoluteMin="10" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
+  <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" absoluteMin="10" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
 
-  <input type="text" name="person[birth_day]" id="person_birth_day" field_type="number" tt_onUnload="getInput();" helpText="Birth Day" validationMessage="Please enter a valid date" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="validateDay(); getDayOfMonthPicker($(person_birth_year).value, $(person_birth_month).value);$(nextButton).style.display = block;updateDayAbsMax();" />
+  <input type="text" name="person[birth_day]" id="person_birth_day" field_type="number" helpText="Birth Day" validationMessage="Please enter a valid date" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="validateDay(); getDayOfMonthPicker($(person_birth_year).value, $(person_birth_month).value);$(nextButton).style.display = block;updateDayAbsMax();" />
 
-  <label for="region_region_name">Region of Origin</label>
-  <select id= "region_region_name" name="region[region_name]" allowFreeText="false" xhelpText="Region"><option value="" tt_requireNextClick="false" ajaxURL="" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
-      <option value="central">Central Region</option>
-      <option value="north">Northern Region</option>
-      <option value="south">Southern Region</option></select>
 
-  <select id= "address2" name="person[addresses][address2]" allowFreeText="false" helpText="Home District"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
-      <option value="dz">Dedza</option>
-      <option value="dw">Dowa</option>
-      <option value="ks">Kasungu</option>
-      <option value="oth">Ntcheu</option></select>
+  <input type="text" name="region[region_name]" 
+    id="home_region" 
+    field_type="alpha"
+    xhelpText="Region"
+    helpText="Region of origin"
+    ajaxURL = "/regions"
+    setvalue = ""
+    requireNextClick = "false" 
+    tt_pageStyleClass = "NoKeyboard"
+    objectType="region" />
+  
+  <input type="text" name="home_district" 
+    id="home_district" 
+    field_type="alpha" 
+    xhelpText="District"
+    helpText="Home District"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
+    objectType="districts" />
 
- <!--  <input type="text" id= "address2_a" name="p[address2_a]" allowFreeText="false" helpText="Specify Home District"><option value="" tt_requireNextClick="true" ajaxURL="" value="" field_type="alpha" condition="$('address2').value == 'Other'" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = block;" /> -->
+  <input type="text" name="home_ta" 
+    id="home_ta" 
+    field_type="alpha" 
+    xhelpText="TA"
+    helpText="Home TA"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
+    objectType="traditional_authority" />
 
-  <select id="person_addresses_county_district" name="person[addresses][county_district]" allowFreeText="false" helpText="Ancestral Traditional Authority (T/A) or area of residence"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
-      <option value="Chauma">Chauma</option>
-      <option value="kasumbu">Kasumbu</option>
-      <option value="kb">Kasungu Boma</option>
-      <option value="dz">Dedza Boma</option></select>
+  <input type="text" name="home_village" 
+    id="home_village" 
+    field_type="alpha" 
+    xhelpText="Village"
+    helpText="Home Village"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
+    objectType="village" />
 
- <!--  <input tt_onUnLoad="$('person_addresses_county_district').value = $('p_addresses_county_district_a').value" condition="$('address2').value == 'Other'" ajaxURL="/person_addresses/traditional_authority?search_string=" helpText="Specify Ancestral Traditional Authority (T/A) or area of residence" tt_pageStyleClass="azButton" allowFreeText="true" tt_onLoad="$(nextButton).style.display = block;" type="text" name="p[addresses][county_district_a]" id="p_addresses_county_district_a" /> -->
+    <!-- ................... Current Address ........................... -->
+  <input type="text" name="region[region_name]" 
+    id="current_region" 
+    field_type="alpha" 
+    xhelpText="Region"
+    helpText="Current Region"
+    ajaxURL = "/regions"
+    setvalue = ""
+    requireNextClick = "false" 
+    tt_pageStyleClass = "NoKeyboard"
+    objectType="region" />
+  
+  <input type="text" name="current_district" 
+    id="current_district" 
+    field_type="alpha" 
+    xhelpText="District"
+    helpText="Current District"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
+    objectType="districts" />
 
-  <select id="person_addresses_neighborhood_cell" name="person[addresses][neighborhood_cell]" allowFreeText="false" helpText="Home Village"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
-      <option value="Chauma">Belele</option>
-      <option value="kasumbu">Chambaya</option>
-      <option value="kb">Chibowa</option>
-      <option value="dz">Chilanga</option></select>
+  <input type="text" name="current_ta" 
+    id="current_ta" 
+    field_type="alpha" 
+    xhelpText="TA"
+    helpText="Current TA"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
+    objectType="traditional_authority" />
 
-  <select id= "filter_region" name="filter[region]" allowFreeText="false" helpText="Current Region"><option value="" tt_requireNextClick="false" ajaxURL="" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
-      <option value="centrl">Central Region</option>
-      <option value="nrth">Northern Region</option>
-      <option value="sth">Southern Region</option></select>
+  <input type="text" name="current_village" 
+    id="current_village" 
+    field_type="alpha"  
+    xhelpText="Village"
+    helpText="Current Village"
+    setvalue = "" 
+    tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
+    objectType="village" />
+    <!-- ................... Current Address ends ........................... -->
 
-  <select id= "state_province" name="person[addresses][state_province]" allowFreeText="false" helpText="Current District"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;"></option>
-      <option value="dza">Dedza</option>
-      <option value="dow">Dowa</option>
-      <option value="kas">Kasungu</option>
-      <option value="othr">Ntcheu</option></select>
 
-  <select id="person_addresses_city_village" name="person[addresses][city_village]" allowFreeText="false" helpText="Location/Village"><option value="" tt_requireNextClick="false" ajaxURL="" value="" field_type="alpha" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = none;" ></option>
-      <option value="Chama">Chauma</option>
-      <option value="kasmbu">Kasumbu</option>
-      <option value="kab">Kasungu Boma</option>
-      <option value="dez">Dedza Boma</option></select>
 
   <!-- <input type="text" name="p[addresses][city_village_a]" id="p_addresses_city_village_a" tt_onUnLoad="$(&quot;person_addresses_city_village&quot;).value = $(&quot;p_addresses_city_village_a&quot;).value" condition="$(&quot;filter_t_a&quot;).value == &quot;Other&quot;" ajaxURL="/person_addresses/village?search_string=" allowFreeText="true" field_type="alpha" helpText="Specify Location/Village" tt_pageStyleClass="azButton" tt_requireNextClick="true" tt_onLoad="$(&#39;nextButton&#39;).style.display = &#39;block&#39;;" /> -->
 
-  <input type="text" name="person[addresses][address1]" id="address1" helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" ajaxURL="" tt_pageStyleClass="azButton" tt_onUnload="getInput();" tt_onLoad="$(nextButton).style.display = block;" />
+  <input type="text" name="person[addresses][address1]" id="landmark" 
+    helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" 
+    tt_pageStyleClass="azButton" 
+    tt_onLoad="$(nextButton).style.display = block;" />
 
-  <input type="text" name="person[cell_phone_number]" id="cellphone" field_type="number" helpText="Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota" />
+  <input type="text" name="person[cell_phone_number]" id="cellphone" 
+  field_type="number" helpText="Cell Phone Number" 
+  tt_onUnload="resetFinishBtn();" 
+  tt_onLoad="changeFinishBtn();" 
+  validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" 
+  validationMessage="Not a valid phone number" 
+  tt_pageStyleClass="nota" />
 
+<<<<<<< HEAD
   <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput(); AddPerson();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
+=======
+>>>>>>> f0047fb3cbcb869e390ab9218f58616b1ecb70ea
 
-  <input type="hidden" name="person[gender]" id="person_gender" value="M" />
+  <input type="hidden" name="person[gender]" id="gender" value="M" />
   <input type="hidden" name="person[patient]" id="person_patient" value="" />
 
   <input type="hidden" name="relation" id="relation" value="" />
@@ -342,6 +439,65 @@
 </html>
 
 <script type="text/javascript">
-  var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
-  
+var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
+
+/*
+function loadRegions(element) {
+  var url = 'http://127.0.0.1:3001/api/v1/regions';
+  element.innerHTML = null;
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var regions = JSON.parse(this.responseText);
+      for(var i = 0; i < regions.length; i++){
+        var option = document.createElement('option');
+        option.setAttribute('value', regions[i].region_id); 
+        option.innerHTML = regions[i].name;
+        element.appendChild(option); 
+      }
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+  xhttp.send();
+}
+*/
+
+function setUrl(e, name) {
+  __$(e).setAttribute('ajaxURL', "/districts?region_id=2");
+}
+
+
+function QueryString(URL) {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var usefulParam = URL.split("?")[1] || "";
+    var query = usefulParam || "";
+    var vars = query.split("&");
+
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        
+        // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+            query_string[pair[0]] = decodeURIComponent(pair[1]);
+            // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+            var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+            query_string[pair[0]] = arr;
+            // If third or later entry with this name
+        } else {
+            query_string[pair[0]].push(decodeURIComponent(pair[1]));
+        }
+    }
+
+		document.getElementById('given_name').value = query_string.given_name;
+		document.getElementById('family_name').value = query_string.family_name;
+		document.getElementById('gender').value = query_string.gender;
+    return query_string;
+}
+
+QueryString(window.location.href);
 </script>

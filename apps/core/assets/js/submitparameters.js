@@ -3,7 +3,8 @@ var functiontobecalled = null;
 
 function getParameters(aUrl){
 
-    var url = 'http://192.168.1.154:8000/api/v1' + aUrl;
+    var url = 'http://10.42.0.1:3000/api/v1' + aUrl;
+
     
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
