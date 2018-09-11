@@ -103,7 +103,12 @@
       __$('nextButton').onmousedown = function(){
         search_redirect = $('touchscreenInput' + tstCurrentPage).value;
         if (search_redirect.length > 0){
-          window.location.href = "/apps/core/views/patient/new.html";
+          parameters = "?given_name=" + sessionStorage.getItem("given_name");
+          parameters += "&family_name=" + sessionStorage.getItem("family_name");
+          parameters += "&gender=" + sessionStorage.getItem("gender");
+
+
+          window.location.href = "/apps/core/views/patient/new.html" + parameters;
       }
       else{
           showMessage("Select value to continue");
