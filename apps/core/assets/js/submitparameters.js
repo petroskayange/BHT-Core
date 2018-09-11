@@ -1,6 +1,7 @@
 var functiontobecalled = null;
 var apiURL = sessionStorage.getItem("apiURL");
 var apiPort = sessionStorage.getItem("apiPort");
+var apiProtocol = sessionStorage.getItem("apiProtocol");
 
 
 function getParameters(aUrl){

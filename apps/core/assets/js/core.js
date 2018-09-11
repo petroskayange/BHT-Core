@@ -4,7 +4,7 @@
 // window.addEvent('load', function() {
 // var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
 // var apiPort =''; sessionStorage.getItem("apiPort");
-var apiURL,apiPort, protocol;
+var apiURL,apiPort, apiProtocol;
 getAPI();
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -88,24 +88,9 @@ function loadDoc() {
     });
 }
 
-function PersistData(params, res){
-
-    var data = {
-        given_name: "Foobar",
-        middle_name: "J.",
-        family_name: "Random",
-        gender: "F",
-        birthdate: "2000-01-01",
-        birthdate_estimated: false,
-        home_district: "Blantyre",
-        home_village: "Chatha",
-        home_traditional_authority: "Chatha",
-        current_district: "Lilongwe",
-        current_village: "Area 15",
-        current_traditional_authority: "Area 15"
-    }
-
-    var url = protocol + "://" + apiURL + ":" + apiPort + "/v1/" + res;
+function PersistData(data, res){
+     
+    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/" + res;
     var req = new XMLHttpRequest();
     
     req.onreadystatechange = function() {
@@ -123,8 +108,6 @@ function PersistData(params, res){
     req.send(JSON.stringify(data));
 
 }
-// end of url formulation logic
-
 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
