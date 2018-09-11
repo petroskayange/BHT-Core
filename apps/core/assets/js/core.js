@@ -104,9 +104,9 @@ function PersistPersonData(data){
     req.onreadystatechange = function() {
        
         if (req.readyState == 4  && req.status == 200) {
-            console.log(req.responseText);
+            //callback function here
         } else {
-           alert(req.responseText);
+           console.log(req.responseText);
        }
      }
 
