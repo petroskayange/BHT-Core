@@ -322,7 +322,7 @@ function signIn() {
 }
 
 function checkCredentials(username, password) {
-        jQuery.post('http://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
+        jQuery.post(apiProtocol + '://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
         })
@@ -346,6 +346,8 @@ jQuery.getJSON("/apps/config/apps.json")
     apiURL =  data.apiURL;
     sessionStorage.setItem("apiPort", data.apiPort);
     apiPort = data.apiPort;
+    sessionStorage.setItem("apiProtocol", data.apiProtocol);
+    apiProtocol = data.apiProtocol;
 })
 .fail(function() {
     console.log("apps.json is missing from the apps/config folder");

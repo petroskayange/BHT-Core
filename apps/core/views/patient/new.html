@@ -32,26 +32,30 @@
       }
 
       function createClient() {
+
+        birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
+
         parameter = {
-          given_name:         __$('given_name').value,
-          middle_name:        __$("middle_name").value,
-          famiy_name:         __$('family_name').value,
-          gender:             __$('gender').value,
+              given_name:                     __$('given_name').value,
+              middle_name:                    __$("middle_name").value,
+              family_name:                    __$('family_name').value,
+              gender:                         __$('gender').value,
+              birthdate:                      birth_date,
+              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
+              current_district:                __$('current_district').value, 
+              current_traditional_authority:   __$('current_ta').value,
+              current_village:                 __$('current_village').value,
 
-          current_district:   __$('current_district').value, 
-          current_ta:         __$('current_ta').value,
-          current_village:    __$('current_village').value,
+              home_district:                   __$('home_district').value,
+              home_traditional_authority:      __$('home_ta').value,
+              home_village:                    __$('home_village').value,
 
-          home_district:       __$('home_district').value,
-          home_ta:             __$('home_ta').value,
-          home_village:        __$('home_village').value,
-
-          landmark:           __$('landmark').value,
-          cell_phone_number:  __$('cellphone').value
-        }
-
-        PersistData(parameter, 'people');
+              landmark:                        __$('landmark').value,
+              cell_phone_number:               __$('cellphone').value
+            }
+           
+         PersistData(parameter, 'people');
       }
 
       function changeNextButton(){
@@ -70,24 +74,28 @@
 
 
       function summary() {
+
+        birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
+
         parameter = {
-          given_name:         __$('given_name').value,
-          middle_name:        __$("middle_name").value,
-          family_name:         __$('family_name').value,
-          gender:             __$('gender').value,
+              given_name:                     __$('given_name').value,
+              middle_name:                    __$("middle_name").value,
+              family_name:                    __$('family_name').value,
+              gender:                         __$('gender').value,
+              birthdate:                      birth_date,
+              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
+              current_district:                __$('current_district').value, 
+              current_traditional_authority:   __$('current_ta').value,
+              current_village:                 __$('current_village').value,
 
-          current_district:   __$('current_district').value, 
-          current_ta:         __$('current_ta').value,
-          current_village:    __$('current_village').value,
+              home_district:                   __$('home_district').value,
+              home_traditional_authority:      __$('home_ta').value,
+              home_village:                    __$('home_village').value,
 
-          home_district:       __$('home_district').value,
-          home_ta:             __$('home_ta').value,
-          home_village:        __$('home_village').value,
-
-          landmark:           __$('landmark').value,
-          cell_phone_number:  __$('cellphone').value
-        }
+              landmark:                        __$('landmark').value,
+              cell_phone_number:               __$('cellphone').value
+            }
 
         var table = document.createElement('table');
         table.setAttribute('class','summary-table');
