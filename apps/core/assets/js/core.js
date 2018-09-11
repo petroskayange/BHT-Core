@@ -91,11 +91,7 @@ function loadDoc() {
 }*/
 // end of url formulation logic
 
-var userRoles = ['admin', 'clerk', 'user'];
-$('#userRole').empty();
-$.each(userRoles, function(i, p) {
-    $('#userRole').append($('<option></option>').val(p).html(p));
-});
+
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
     var applicationName = [];

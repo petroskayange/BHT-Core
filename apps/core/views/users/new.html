@@ -69,7 +69,7 @@
 
            <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
 
-           <select allowFreeText="false" helpText=" Role" id="userRole" name="user_role" tt_onLoad="$(keyboard).style.display = none" key="role" ajaxURL="/roles" tt_onUnLoad="saveSelection();getInput();"></select>
+           <select allowFreeText="false" helpText=" Role" id="userRole" name="user_role" tt_onLoad="setRoles('/roles?page_size=100'); $(keyboard).style.display = none;" key="role"  tt_onUnLoad="saveSelection();getInput();" ></select>
             
 
            <input helpText="Username" key="username" textCase="lower" tt_onload="$(touchscreenInput5).value = ($(user_first_name).value.substring(0,3)+$(user_last_name).value.substring(0,3)).toLowerCase()" validationRule="\w{6}\w*" validationMessage="Username must have at least SIX letters" type="text" tt_onUnLoad="getInput();" name="user[username]" id="user_username" />
