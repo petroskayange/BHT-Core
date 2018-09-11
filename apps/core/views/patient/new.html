@@ -530,7 +530,7 @@
 var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
 
 function getObjects(td, attribute, element_name, aUrl) {
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
+  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
