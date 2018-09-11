@@ -11,6 +11,14 @@
       var d = new Date();
       d.toDateString();
 
+      function getInput(){
+         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         sessionStorage.setItem(key, value);
+         var d = new Date();           
+         sessionStorage.setItem("date_created", d.toDateString())
+      }
+
 
     </script>
 
@@ -23,7 +31,7 @@
     <div id="container">
       <div id="content">
         <form action="/view_users" method="POST">
-          <input textCase="lower" helpText="Select username" type="text" name="user[username]" id="user_username" />
+          <input textCase="lower" helpText="Select username" type="text" name="user[username]" key="username" ajaxURL="/users" tt_onLoad="loadUsernames('/users'); $(keyboard).style.display = none;" tt_onUnLoad="getInput();" id="user_username" />
             <input type="submit" name="commit" value="Find user" />
         </form>
         <div id="footer">
