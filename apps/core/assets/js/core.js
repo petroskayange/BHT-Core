@@ -117,9 +117,9 @@ if (document.createElement("template").content) {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
-function _foo(data){
+function _foo(data, resource){
 
-    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/people";
+    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
     var xhr = new XMLHttpRequest();
     xhr.onload = function(){
         if(this.readyState === 4 && this.status === 200){

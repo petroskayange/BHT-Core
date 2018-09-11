@@ -124,6 +124,7 @@
                  family_name: sessionStorage.getItem("family_name"),
                  gender: __$('person_gender').value,
                  birthdate: birthDate,
+                 cell_phone_number: __$('cellphone').value,
                  birthdate_estimated: false,
                  home_district: __$('address2').value,
                  home_village: __$('person_addresses_neighborhood_cell').value,
@@ -132,7 +133,8 @@
                  current_village: __$('person_addresses_city_village').value,
                  current_traditional_authority: "Area 15"};
 
-     _foo(data);
+     _foo(data, 'people');
+     
   }
 
   function validateDate() {
