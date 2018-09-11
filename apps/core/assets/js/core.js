@@ -132,8 +132,8 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
  }
 
 function showUser() {
-    $("#first_name").text(sessionStorage.getItem("first_name"));
-    $("#last_name").text(sessionStorage.getItem("last_name"));
+    $("#first_name").text(sessionStorage.getItem("given_name"));
+    $("#last_name").text(sessionStorage.getItem("family_name"));
     $("#username").text(sessionStorage.getItem("username"));
     $("#role").text(sessionStorage.getItem("selected_role"));
     $("#date_created").text(sessionStorage.getItem("date_created"));
