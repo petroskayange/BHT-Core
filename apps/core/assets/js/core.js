@@ -51,7 +51,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-        url: 'http://' + apiURL + ':' + apiPort + '/api/v1/' + res,
+        url: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', sessionStorage.getItem(auth_token));
         },
@@ -70,7 +70,7 @@ function _ajaxUrl(res){
 function loadDoc() {
     console.log(apiURL);
 
-    $.post("http://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
+    $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
         username: "admin",
         password: "test"
@@ -90,7 +90,7 @@ function loadDoc() {
 
 function PersistData(data, res){
      
-    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/" + res;
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + res;
     var req = new XMLHttpRequest();
     
     req.onreadystatechange = function() {

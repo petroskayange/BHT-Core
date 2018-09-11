@@ -73,7 +73,7 @@
         parameter = {
           given_name:         __$('given_name').value,
           middle_name:        __$("middle_name").value,
-          famiy_name:         __$('family_name').value,
+          family_name:         __$('family_name').value,
           gender:             __$('gender').value,
 
 
@@ -89,7 +89,52 @@
           cell_phone_number:  __$('cellphone').value
         }
 
+        var table = document.createElement('table');
+        table.setAttribute('class','summary-table');
 
+        var attributes = [
+          ["Given name", parameter.given_name],
+          ["Middle name", parameter.middle_name],
+          ["Family name", parameter.family_name],
+          ["Gender", parameter.gender],
+          ["Home District", parameter.home_district],
+          ["Home TA", parameter.home_ta],
+          ["Home Village", parameter.home_village],
+          ["Current District", parameter.current_district],
+          ["Current TA", parameter.current_ta],
+          ["Current Village", parameter.current_village],
+          ["Landmark", parameter.landmark],
+          ["Cell phone", parameter.cell_phone_number]
+        ];
+
+        for(var i = 0 ; i < attributes.length; i++){
+          var row = document.createElement('tr');
+          row.setAttribute('class','summary-table-row');
+          table.appendChild(row);
+      
+          var th = document.createElement('th');
+          th.innerHTML = attributes[i][0];
+          row.appendChild(th);
+
+          var td = document.createElement('td');
+          td.innerHTML = attributes[i][1];
+
+          if(attributes[i][0].match(/Current District/i)){
+            getObjects(td, attributes[i][1], "District", "/districts?region_id=" + document.getElementById('current_region').value);
+          }else if(attributes[i][0].match(/Current TA/i)){
+            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?district_id=" + document.getElementById('current_district').value);
+          }else if(attributes[i][0].match(/Current Village/i)){
+            getObjects(td, attributes[i][1], "Village", "/villages?village_id=" + document.getElementById('current_ta').value);
+          }    
+          
+
+          row.appendChild(td);
+
+          
+        }
+
+        var f = document.getElementById('inputFrame' + tstCurrentPage);
+        f.appendChild(table);
       }
 
     </script>    
@@ -198,6 +243,27 @@
     overflow: auto;
   }
 
+ .summary-table {
+   width: 100%;
+   border-collapse: collapse;
+ }
+
+ .summary-table th {
+   border-style: solid;
+   border-width: 0px 0px 1px 0px;
+   text-align: left;
+   padding-left: 5px 0px 10px 0px;
+   width: 20%;
+   height: 40px;
+ }
+
+ .summary-table td {
+   border-style: solid;
+   border-width: 0px 0px 1px 0px;
+   text-align: left;
+   padding-left: 5px 0px 10px 0px;
+   height: 40px;
+ }
 
 </style>
 
@@ -353,6 +419,7 @@
     helpText="Region of origin"
     ajaxURL = "/regions"
     setvalue = ""
+    tt_onLoad="clearInput();"
     requireNextClick = "false" 
     tt_pageStyleClass = "NoKeyboard"
     objectType="region" />
@@ -364,21 +431,21 @@
     helpText="Home District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
+    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
     objectType="districts" />
 
   <input type="text" name="home_ta" 
   id="home_ta" field_type="alpha" 
   helpText="Home TA" 
   ajaxURL="" 
-  tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
+  tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
   objectType="traditional_authority" />
 
   <input type="text" name="home_village" 
   id="home_village" field_type="alpha" 
   helpText="Home Village" 
   ajaxURL="" 
-  tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
+  tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
   objectType="village" />
 
   <!-- Home Address ............................................. -->
@@ -393,6 +460,7 @@
     setvalue = ""
     requireNextClick = "false" 
     tt_pageStyleClass = "NoKeyboard"
+    tt_onLoad="clearInput();"
     objectType="region" />
   
   <input type="text" name="current_district" 
@@ -402,21 +470,21 @@
     helpText="Current District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
+    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
     objectType="districts" />
 
   <input type="text" name="current_ta" 
     id="current_ta" field_type="alpha" 
     helpText="Current TA" 
     ajaxURL="" 
-    tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
+    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
     objectType="traditional_authority" />
 
   <input type="text" name="current_village" 
     id="current_village" field_type="alpha" 
     helpText="Current Village" 
     ajaxURL="" 
-    tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
+    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
     objectType="village" />
 
     <!-- ................... Current Address ends ........................... -->
@@ -464,20 +532,37 @@
 <script type="text/javascript">
 var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
 
-/* ..................................
-function loadRegions(element) {
-  var url = 'http://127.0.0.1:3001/api/v1/regions';
-  element.innerHTML = null;
+function getObjects(td, attribute, element_name, aUrl) {
+  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var regions = JSON.parse(this.responseText);
-      for(var i = 0; i < regions.length; i++){
-        var option = document.createElement('option');
-        option.setAttribute('value', regions[i].region_id); 
-        option.innerHTML = regions[i].name;
-        element.appendChild(option); 
+      var obj = JSON.parse(this.responseText);
+      if(element_name.match(/District/i)){
+        districts = obj;
+        for(var x = 0 ; x < districts.length; x++){
+          if(districts[x].district_id == attribute){
+            td.innerHTML = districts[x].name;
+            break;
+          }
+        }
+      }else if(element_name.match(/TA/i)){
+        traditional_authorities = obj;
+        for(var x = 0 ; x < traditional_authorities.length; x++){
+          if(traditional_authorities[x].traditional_authority_id == attribute){
+            td.innerHTML = traditional_authorities[x].name;
+            break;
+          }
+        }
+      }else if(element_name.match(/Village/i)){
+        villages = obj;
+        for(var x = 0 ; x < villages.length; x++){
+          if(districts[x].village_id == attribute){
+            td.innerHTML = villages[x].name;
+            break;
+          }
+        }
       }
     }
   };
@@ -485,7 +570,6 @@ function loadRegions(element) {
   xhttp.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
   xhttp.send();
 }
-*/
 
 function setUrl(e, name) {
   __$(e).setAttribute('ajaxURL', "/districts?region_id=2");

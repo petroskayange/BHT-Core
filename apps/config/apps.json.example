@@ -1,12 +1,8 @@
 {
-<<<<<<< HEAD
-	"apiURL": "192.168.1.198",
-	"apiPort": "3000",
-	"protocol": "http",
-=======
+
 	"apiURL": "0.0.0.0",
 	"apiPort": "8000",
->>>>>>> b7b3157832070e2dd86aef82b8120821e35c856f
+	"apiProtocol": "http",
 	"apps": [
 		{
 			"applicationName": "ART",
