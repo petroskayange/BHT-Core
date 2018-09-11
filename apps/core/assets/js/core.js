@@ -4,12 +4,7 @@
 // window.addEvent('load', function() {
 // var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
 // var apiPort =''; sessionStorage.getItem("apiPort");
-<<<<<<< HEAD
-var apiURL,apiPort;
-var clientRecord = {};
-=======
 var apiURL,apiPort, apiProtocol;
->>>>>>> 04420ec022f34e81f85a490ec266c9dff7457a5b
 getAPI();
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -119,7 +114,7 @@ if (document.createElement("template").content) {
 
 function _foo(data, resource){
     
-    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
     var xhr = new XMLHttpRequest();
     xhr.onload = function(){
         if(this.readyState === 4 && this.status === 200){
