@@ -62,6 +62,9 @@
 
            <select allowFreeText="false" helpText=" Role" id="userRole" name="user[role]"  tt_onLoad="$(keyboard).style.display = none" tt_onUnLoad="saveSelection();"></select> -->
 
+
+           
+
            <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="First name"  key="first_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
 
            <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
