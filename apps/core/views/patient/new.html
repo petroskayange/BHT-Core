@@ -32,22 +32,26 @@
       }
 
       function createClient() {
-        given_name          = "";
-        middle_name         = "";
-        famiy_name          = "";
-        gender              = __$('gender').value;
+        parameter = {
+          given_name:         __$('given_name').value,
+          middle_name:        __$("middle_name").value,
+          famiy_name:         __$('family_name').value,
+          gender:             __$('gender').value,
 
 
-        current_district    = __$('current_district').value; 
-        current_ta          = __$('current_ta').value;
-        current_village     = __$('current_village').value;
+          current_district:   __$('current_district').value, 
+          current_ta:         __$('current_ta').value,
+          current_village:    __$('current_village').value,
 
-        home_district       = __$('home_district').value;
-        home_ta             = __$('home_ta').value;
-        home_village        = __$('home_village').value;
+          home_district:       __$('home_district').value,
+          home_ta:             __$('home_ta').value,
+          home_village:        __$('home_village').value,
 
-        landmark            = __$('landmark').value;
-        cell_phone_number   = __$('cellphone').value
+          landmark:           __$('landmark').value,
+          cell_phone_number:  __$('cellphone').value
+        }
+
+        console.log(parameter);
       }
 
       function changeNextButton(){
@@ -142,8 +146,17 @@
   #tt_page_home_village #viewport { display: inline !important; }
 
   #tt_page_current_district #viewport { display: inline !important; }
-  #tt_page_current_ta #viewport { display: inline !important; }
-  #tt_page_current_village #viewport { display: inline !important; }
+  
+  #tt_page_current_ta #viewport { 
+    display: inline !important; 
+    height: 55%;
+  }
+
+
+  #tt_page_current_village #viewport { 
+    display: inline !important; 
+    height: 55%;
+  }
 
 
 </style>
@@ -240,7 +253,7 @@
   }
 
   function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=100&search_string=");
     listSuggestions(tstCurrentPage);
   }
 
@@ -356,22 +369,20 @@
     objectType="districts" />
 
   <input type="text" name="current_ta" 
-    id="current_ta" 
-    field_type="alpha" 
-    xhelpText="TA"
-    helpText="Current TA"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
+    field_type ='alpha'
+    id="current_ta"
+    helpText = 'Current TA'
+    tt_pageStyleClass = "azButton"
+    allowFreeText = "false" 
     tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
     objectType="traditional_authority" />
-
+  
   <input type="text" name="current_village" 
-    id="current_village" 
-    field_type="alpha"  
-    xhelpText="Village"
-    helpText="Current Village"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
+    field_type ='alpha'
+    id="current_village"
+    helpText = 'Current Village'
+    tt_pageStyleClass = "azButton"
+    allowFreeText = "false" 
     tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
     objectType="village" />
     <!-- ................... Current Address ends ........................... -->
@@ -385,16 +396,18 @@
     tt_pageStyleClass="azButton" 
     tt_onLoad="$(nextButton).style.display = block;" />
 
-  <input type="text" name="person[cell_phone_number]" id="cellphone" 
-  field_type="number" helpText="Cell Phone Number" 
-  tt_onUnload="resetFinishBtn();" 
-  tt_onLoad="changeFinishBtn();" 
-  validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" 
-  validationMessage="Not a valid phone number" 
-  tt_pageStyleClass="nota" />
+  <input type="text" name="cellphone" id="cellphone" 
+    helpText="Cell phone number"
+    tt_pageStyleClass="azButton" 
+    tt_onLoad="changeFinishBtn();"
+    tt_onUnLoad="resetFinishBtn();"
+    field_type="number"
+    tt_onLoad="$(nextButton).style.display = block;" />
+  
+  <!--input type="text" name="person[cell_phone_number]" id="cellphone" field_type="number" helpText="Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota" /-->
 
 
-  <input type="hidden" name="person[gender]" id="gender" value="M" />
+  <input type="hidden" name="person[gender]" id="gender" value="" />
   <input type="hidden" name="person[patient]" id="person_patient" value="" />
 
   <input type="hidden" name="relation" id="relation" value="" />
