@@ -1,10 +1,11 @@
 var functiontobecalled = null;
+var apiURL = sessionStorage.getItem("apiURL");
+var apiPort = sessionStorage.getItem("apiPort");
 
 
 function getParameters(aUrl){
 
-    var url = "http://" + apiURL + ":" + apiPort + "/api/v1" + aUrl;
-
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
     
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){

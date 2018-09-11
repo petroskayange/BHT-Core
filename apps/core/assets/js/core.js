@@ -1,9 +1,12 @@
 //declare your network configurations here
-var applicationScheme = "http://"
-var applicationPort = ":" + "3000"; //don't forget quotes  
-var applicationUrl = "0.0.0.0";
+// getAPI();
 
-var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
+// window.addEvent('load', function() {
+// var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
+// var apiPort =''; sessionStorage.getItem("apiPort");
+var apiURL,apiPort, protocol;
+getAPI();
+// })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
 report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
@@ -18,7 +21,6 @@ if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
 // sessionStorage.setItem("displayBarcode", false);
-
 
 var userApi = "user";
 
@@ -49,22 +51,17 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-           url: 'http://10.42.0.1:3000/api/v1/' + res,      
-
-           beforeSend: function(xhr){
-              xhr.setRequestHeader('Authorization',sessionStorage.getItem(auth_token));
-          },
-          success: function(data){
-                
+        url: 'http://' + apiURL + ':' + apiPort + '/api/v1/' + res,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', sessionStorage.getItem(auth_token));
+        },
+        success: function (data) {
             result = data;
-             //for(var x = 0; x < data.length; x ++){
-                 //console.log(data[x].person_id + "  " + data[x].gender );
-             //}
-          },
-          error: function(){
-              console.log('error message');
-          }
-    }); 
+        },
+        error: function () {
+            console.log('error message');
+        }
+    });
 
     return result;
 }
@@ -73,7 +70,7 @@ function _ajaxUrl(res){
 function loadDoc() {
     console.log(apiURL);
 
-    $.post(protocol + "://" + apiURL + ":" + apiPort + "/api/v1/auth/login",
+    $.post("http://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
         username: "admin",
         password: "test"
@@ -128,11 +125,7 @@ function PersistData(params, res){
 }
 // end of url formulation logic
 
-var userRoles = ['admin', 'clerk', 'user'];
-$('#userRole').empty();
-$.each(userRoles, function(i, p) {
-    $('#userRole').append($('<option></option>').val(p).html(p));
-});
+
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
     var applicationName = [];
@@ -181,7 +174,7 @@ function showUser() {
     // console.log(sessionStorage);
 }
 
-function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
+function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
         .done(function() {
             newModuleCard(applicationName, applicationDescription,  applicationIconUrl, counter);
@@ -194,15 +187,14 @@ function checkJson(applicationJsonUrl, applicationBaseUrl, applicationName, appl
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
-
-
+        
         applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
         applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
         if (applicationData.apps[i].applicationFolder) {
             applicationJsonUrl[i] =  "/apps/" + applicationFolder[i] + "application.json";
-            checkJson(applicationJsonUrl[i], applicationBaseUrl, applicationName[i], applicationDescription[i], i, applicationIcon[i]);
+            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
         }
@@ -345,6 +337,7 @@ function loadTabContent(id) {
 function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
+
 function checkCredentials(username, password) {
         jQuery.post('http://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
@@ -353,6 +346,7 @@ function checkCredentials(username, password) {
         .done(function(msg) {
             alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
+            window.location.href = "/";
             sessionStorage.removeItem("userPassword");
         })
         .fail(function(xhr, status, error) {
@@ -361,4 +355,16 @@ function checkCredentials(username, password) {
             alert("wrong password");
             window.location = "/apps/core/views/login.html";
         });
+}
+function getAPI() {
+jQuery.getJSON("/apps/config/apps.json")
+.done(function(data, status) {
+    sessionStorage.setItem("apiURL", data.apiURL);
+    apiURL =  data.apiURL;
+    sessionStorage.setItem("apiPort", data.apiPort);
+    apiPort = data.apiPort;
+})
+.fail(function() {
+    console.log("apps.json is missing from the apps/config folder");
+});
 }
