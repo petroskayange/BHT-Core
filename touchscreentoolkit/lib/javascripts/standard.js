@@ -638,7 +638,8 @@ function getOptions() {
             //tstFormElements[tstPages[tstCurrentPage]].getAttribute("ajaxURL") != ''
 
             if (tstFormElements[i].getAttribute("ajaxURL") != ''){
-                ajaxRequest(options,tstFormElements[i].getAttribute("ajaxURL")+val);
+                var pUrl = tstFormElements[i].getAttribute("ajaxURL")+val;
+                ajaxRequest(options, pUrl, tstFormElements[i]);
             // ajaxRequest(tstFormElements[i],tstFormElements[i].getAttribute("ajaxURL")+val);
             }
         }
@@ -1080,29 +1081,111 @@ function highlightSelection(options, inputElement){
     }
 }
 
-function ajaxRequest(aElement, aUrl){
-
+function ajaxRequest(aElement, aUrl, objectType){
     var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
+    var object_type = objectType.getAttribute('objectType');
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         
+			if (this.readyState == 4 && this.status == 200) {
+				//document.location = "/confirm/" + this.responseText;
+				var ol = document.createElement('ul');
+				ol.setAttribute("id","tt_currentUnorderedListOptions")
+				var results = JSON.parse(this.responseText);
+				for(var x = 0; x < results.length; x ++){
+						 var li = document.createElement('li');
+						 if(object_type == 'region'){
+							li.innerHTML = results[x].name;
+							li.setAttribute('tstvalue', results[x].region_id)
+							li.setAttribute('id', results[x].region_id);
+						 }else if(object_type == 'districts'){
+							li.innerHTML = results[x].name;
+							li.setAttribute('tstvalue', results[x].district_id)
+							li.setAttribute('id', results[x].district_id);
+						 }else if(object_type == 'traditional_authority'){
+							li.innerHTML = results[x].name;
+							li.setAttribute('tstvalue', results[x].traditional_authority_id)
+							li.setAttribute('id', results[x].traditional_authority_id);
+						 }else if(object_type == 'village'){
+							li.innerHTML = results[x].name;
+							li.setAttribute('tstvalue', results[x].village_id)
+							li.setAttribute('id', results[x].village_id);
+						 }else{
+							li.innerHTML = results[x];
+							li.setAttribute('tstValue', results[x]);
+							li.setAttribute('id', x);
+						 }
+
+						 li.setAttribute('onmousedown',"null; updateTouchscreenInputForSelect(this);");
+						 li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+						 ol.appendChild(li);
+				}
+			handleResult(aElement, ol);
+			}    
+		};
+
+		try {
+			req.open('GET', url, true);
+			req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+			req.send(null);
+    } catch (e) {
+        
+    } 
+}
+
+function setRoles(aURL){
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    aElement = __$('options');
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        
             if (this.readyState == 4 && this.status == 200) {
-              //document.location = "/confirm/" + this.responseText;
               var ol = document.createElement('ul');
-              ol.setAttribute("id","tt_currentUnorderedListOptions")
+              ol.setAttribute("id","tt_currentUnorderedListOptions");
               var results = JSON.parse(this.responseText);
               for(var x = 0; x < results.length; x ++){
                    var li = document.createElement('li');
-                   li.innerHTML = results[x];
-                   li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
-                   li.setAttribute('tstValue', results[x]);
-                   li.setAttribute('id', x);
-                   li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
-                   ol.appendChild(li);
-              }
-            //aElement.appendChild(ol)
-              //alert(ol.innerHTML)
+                        li.innerHTML = results[x].role;
+                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                        li.setAttribute('tstValue', results[x].role);
+                        li.setAttribute('id', x);
+                        li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+                        ol.appendChild(li);
+             }
+            handleResult(aElement, ol);
+            }    
+    };
+    try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+        req.send(null);
+    } catch (e) {
+        
+    } 
+}
+
+function loadUsernames(aURL){
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    aElement = __$('options');
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        
+            if (this.readyState == 4 && this.status == 200) {
+              var ol = document.createElement('ul');
+              ol.setAttribute("id","tt_currentUnorderedListOptions");
+              var results = JSON.parse(this.responseText);
+
+              for(var x = 0; x < results.length; x ++){
+                   var li = document.createElement('li');
+                        li.innerHTML = results[x].username;
+                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                        li.setAttribute('tstValue', results[x].username);
+                        // console.log(results[x].username);
+                        li.setAttribute('id', x);
+                        li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+                        ol.appendChild(li);
+             }
             handleResult(aElement, ol);
             }    
     };
@@ -1500,7 +1583,9 @@ function navigateToPage(destPage, validate, navback){
 
         // execute JS code when a field's page has just been loaded
         if (tstInputTarget.getAttribute("tt_onLoad")) {
+            try{
             eval(tstInputTarget.getAttribute("tt_onLoad"));
+            }catch(e){}
         }
 
         if(tstFormElements[tstCurrentPage].tagName == "SELECT") {
@@ -2294,7 +2379,9 @@ function listSuggestions(inputTargetPageNumber) {
     var inputElement = __$('touchscreenInput'+inputTargetPageNumber);
 
     if(inputElement.getAttribute("ajaxURL") != null){
-        ajaxRequest(__$('options'),inputElement.getAttribute("ajaxURL")+inputElement.value);
+        var pUrl = inputElement.getAttribute("ajaxURL")+inputElement.value;
+        ajaxRequest(__$('options'), pUrl, inputElement);
+        //ajaxRequest(__$('options'),inputElement.getAttribute("ajaxURL")+inputElement.value);
     } else {
         var optionsList = document.getElementById('options');
         options = optionsList.getElementsByTagName("li");

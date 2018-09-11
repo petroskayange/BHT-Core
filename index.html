@@ -11,11 +11,14 @@
       <script src="./apps/core/assets/js/jquery.min.js"></script>
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
-        $(document).ready(function(){
-            loadDoc(); 
+      $(document).ready(function(){
             if (sessionStorage.getItem("authorization") == null) {
                     alert("not logged in");
                     window.location = "/apps/core/views/login.html";
+                }
+                if (sessionStorage.getItem("applicationName") === null) {
+
+                $("#myModal").modal('show');
                 }
         });
                 

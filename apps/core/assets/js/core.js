@@ -93,11 +93,7 @@ function loadDoc() {
 }*/
 // end of url formulation logic
 
-var userRoles = ['admin', 'clerk', 'user'];
-$('#userRole').empty();
-$.each(userRoles, function(i, p) {
-    $('#userRole').append($('<option></option>').val(p).html(p));
-});
+
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
     var applicationName = [];
@@ -118,7 +114,7 @@ if (document.createElement("template").content) {
 }
 
 function _foo(data, resource){
-
+    
     var url = "http://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
     var xhr = new XMLHttpRequest();
     xhr.onload = function(){
