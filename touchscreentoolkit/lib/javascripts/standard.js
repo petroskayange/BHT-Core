@@ -62,6 +62,8 @@ var tstMessageBoxType = {
     YesNo:{},
     YesNoCancel:{}
 }
+var apiURL = sessionStorage.getItem("apiURL");
+var apiPort = sessionStorage.getItem("apiPort");
 
 var touchscreenInterfaceEnabled = 0;
 var contentContainer = null;
@@ -1079,7 +1081,8 @@ function highlightSelection(options, inputElement){
 }
 
 function ajaxRequest(aElement, aUrl){
-    var url = 'http://192.168.43.105:8000/api/v1' + aUrl;
+
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
