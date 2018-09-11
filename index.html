@@ -11,19 +11,18 @@
       <script src="./apps/core/assets/js/jquery.min.js"></script>
       <script src="./apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript"> 
-        $(document).ready(function(){
+      $(document).ready(function(){
             if (sessionStorage.getItem("authorization") == null) {
-                if (sessionStorage.getItem("userPassword") != null) {
-                    signIn();
-                }else {
                     alert("not logged in");
-                    //comment out the next line to automatically redirect you to the log in page
-                    // window.location = "/apps/core/views/login.html";
+                    window.location = "/apps/core/views/login.html";
                 }
-            }
+                if (sessionStorage.getItem("applicationName") === null) {
+
+                $("#myModal").modal('show');
+                }
         });
                 
-             </script>
+    </script>
    </head>
    <body>
       <div class="container-fluid">
@@ -152,42 +151,35 @@
    </body>
    <script src="apps/core/assets/js/core.js "></script>
    <script>
-      (document.getElementsByClassName("overview-btns ")[0]);
-       changeModule();
-       function logout() {
+    (document.getElementsByClassName("overview-btns ")[0]);
+    changeModule();
+    function logout() {
         if (window.confirm("Do you really want to logout?")) { 
             window.location = "/apps/core/views/login.html";
         }
-       }
+    }
+    var modalConfirm = function(callback){
+    $("#logout").on("click", function(){
+        $("#mi-modal").modal('show');
+    });
 
-       var modalConfirm = function(callback){
-  
-  $("#logout").on("click", function(){
-    $("#mi-modal").modal('show');
-  });
+    $("#modal-btn-si").on("click", function(){
+        callback(true);
+        $("#mi-modal").modal('hide');
+    });
+    
+    $("#modal-btn-no").on("click", function(){
+        callback(false);
+        $("#mi-modal").modal('hide');
+    });
+    };
 
-  $("#modal-btn-si").on("click", function(){
-    callback(true);
-    $("#mi-modal").modal('hide');
-  });
-  
-  $("#modal-btn-no").on("click", function(){
-    callback(false);
-    $("#mi-modal").modal('hide');
-  });
-};
-
-modalConfirm(function(confirm){
-  if(confirm){
-    //Acciones si el usuario confirma
-    // $("#result").html("CONFIRMADO");
-    window.location = "/apps/core/views/login.html";
-  }else{
-    //Acciones si el usuario no confirma
-    // $("#result").html("NO CONFIRMADO");
-
-    $("#mi-modal").modal('hide');
-  }
-});
+    modalConfirm(function(confirm){
+    if(confirm){
+        window.location = "/apps/core/views/login.html";
+    }else{
+        $("#mi-modal").modal('hide');
+    }
+    });
    </script>
 </html>

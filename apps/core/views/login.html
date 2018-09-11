@@ -44,23 +44,6 @@
         return choices;
     }
 
-    function myfunction() {
-        console.log("mmmm");
-    }
-
-    function changeNextButton() {
-        __$("nextButton").removeAttribute("onmousedown")
-        __$("nextButton").onmousedown = function() {
-            confirm_password = $('touchscreenInput' + tstCurrentPage).value;
-            if (sessionStorage.getItem("password") === confirm_password) {
-                window.location.href = "show.html";
-            } else {
-                //  alert("passwords do not match");
-
-            }
-        }
-    }
-
     function getInput() {
         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
         value = $('touchscreenInput' + tstCurrentPage).value;
@@ -70,10 +53,16 @@
     function getPass() {
         sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
     }
+    function getLocation() {
+        var barcode = document.getElementById("touchscreenInput2").value + "$";
+        sessionStorage.setItem("userLocation", barcode);
+    }
+    
     </script>
 
     <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/apps/core/assets/js/core.js" defer="true"></script>
 </head>
 
 <body id="mateme">
@@ -83,10 +72,31 @@
             </div>
             <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
             <script type="text/javascript">
+                var barcode = "";
                 var tt_cancel_destination = "/logout"
                 function inform() {
                     $('infoBar' + tstCurrentPage).innerHTML = "Muli bwanji, enter your user information or scan your id card. <span style='font-size:0.6em;float:righti;margin-right: 20px;'>(ART Version: v3.7.7-1 - <span >Friday, 31-Aug-2018</span>)</span>";
                 }
+                function validateLocation() {
+                __$("nextButton").removeAttribute("onmousedown");
+                document.getElementById('touchscreenInput2').removeEventListener('keyup', checkKey, false);
+                document.getElementById('touchscreenInput2').addEventListener('keyup', function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                doSignIn();
+                }
+                });
+                __$("nextButton").onmousedown = function(){
+                doSignIn();
+                }
+
+                }
+
+                function doSignIn() {
+                signIn();
+                getLocation();
+                }
+                
             </script>
 
             <form id='sessions' action="/" method='post'>
@@ -96,7 +106,10 @@
 
                 <label for="password">Password</label>
                 <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower" tt_onLoad="inform(); barcodeId = 'touchscreenInput1';" type="password" tt_onUnload="getPass();" /><br>
-
+                
+                <label for="location">Location</label>
+                <input field_type="password" helpText="Enter Location" id="location" name="location" textCase="lower" tt_onLoad="validateLocation(); barcodeId = 'touchscreenInput2';" type="text" tt_onUnload="getLocation();" /><br>
+                
                 <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />
             </form>
             <div id="footer">

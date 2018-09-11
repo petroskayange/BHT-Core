@@ -62,6 +62,8 @@ var tstMessageBoxType = {
     YesNo:{},
     YesNoCancel:{}
 }
+var apiURL = sessionStorage.getItem("apiURL");
+var apiPort = sessionStorage.getItem("apiPort");
 
 var touchscreenInterfaceEnabled = 0;
 var contentContainer = null;
@@ -1080,8 +1082,9 @@ function highlightSelection(options, inputElement){
 }
 
 function ajaxRequest(aElement, aUrl, objectType){
-    var url = 'http://localhost:3001/api/v1' + aUrl;
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
     var object_type = objectType.getAttribute('objectType');
+
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         
@@ -1126,6 +1129,70 @@ function ajaxRequest(aElement, aUrl, objectType){
 			req.open('GET', url, true);
 			req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
 			req.send(null);
+    } catch (e) {
+        
+    } 
+}
+
+function setRoles(aURL){
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    console.log(url);
+    aElement = __$('options');
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        
+            if (this.readyState == 4 && this.status == 200) {
+              var ol = document.createElement('ul');
+              ol.setAttribute("id","tt_currentUnorderedListOptions");
+              var results = JSON.parse(this.responseText);
+              for(var x = 0; x < results.length; x ++){
+                   var li = document.createElement('li');
+                        li.innerHTML = results[x].role;
+                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                        li.setAttribute('tstValue', results[x].role);
+                        li.setAttribute('id', x);
+                        li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+                        ol.appendChild(li);
+             }
+            handleResult(aElement, ol);
+            }    
+    };
+    try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+        req.send(null);
+    } catch (e) {
+        
+    } 
+}
+
+function loadUsernames(aURL){
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1' + aURL;
+    console.log(url);
+    aElement = __$('options');
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        
+            if (this.readyState == 4 && this.status == 200) {
+              var ol = document.createElement('ul');
+              ol.setAttribute("id","tt_currentUnorderedListOptions");
+              var results = JSON.parse(this.responseText);
+              for(var x = 0; x < results.length; x ++){
+                   var li = document.createElement('li');
+                        li.innerHTML = results[x].username;
+                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                        li.setAttribute('tstValue', results[x].username);
+                        li.setAttribute('id', x);
+                        li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
+                        ol.appendChild(li);
+             }
+            handleResult(aElement, ol);
+            }    
+    };
+    try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+        req.send(null);
     } catch (e) {
         
     } 
