@@ -5,6 +5,10 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
     <script language="javascript" defer="true">
+      var apiURL = sessionStorage.getItem("apiURL");
+      var apiPort = sessionStorage.getItem("apiPort");
+      var apiProtocol = sessionStorage.getItem("apiProtocol");
+
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
 
@@ -24,7 +28,34 @@
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
             if (sessionStorage.getItem("password") === confirm_password){
-              window.location.href = "show.html";
+                var password = confirm_password;
+                var username = sessionStorage.getItem("username");
+                var given_name = sessionStorage.getItem("given_name");
+                var family_name = sessionStorage.getItem("family_name");
+                var role = sessionStorage.getItem("role");
+                var http = new XMLHttpRequest();
+                var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/users';
+                var params = 'username='+username+'&password='+password+'&given_name='+given_name+'&family_name='+family_name+'&role='+role;
+                http.open('POST', url, true);
+                //Send the proper header information along with the request
+                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                http.onreadystatechange = function() {//Call a function when the state changes.
+                    if(http.readyState == 4 ) {
+                      // alert(http.responseText);
+                      
+                      if(http.status == 201) {
+                        window.location.href = "show.html";
+                      }
+                      else if (http.status == 409){
+                      alert("Username already exists");
+                    }else {
+                      alert("error" + http.status);
+                    }
+                    }
+                }
+                http.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+                http.send(params);
                }
                else{
                  
@@ -44,8 +75,8 @@
   <body id="">
     <div id="">
       <div id="content">
-        <form action="/new_user" method="POST">        
-           <input type="text" name="given_name" id="given_name" field_type="alpha" helpText="First name"  key="first_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
+        <form  method="POST">        
+           <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="given name"  key="given_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
 
            <input type="text" name="family_name" id="family_name" field_type="alpha" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
 

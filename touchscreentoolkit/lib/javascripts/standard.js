@@ -1082,7 +1082,7 @@ function highlightSelection(options, inputElement){
     }
 }
 
-function ajaxRequest(aElement, aUrl){
+function ajaxRequest(aElement, aUrl, object_type){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
 
     var req = new XMLHttpRequest();
