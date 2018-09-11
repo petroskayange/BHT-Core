@@ -16,6 +16,10 @@
                     alert("not logged in");
                     window.location = "/apps/core/views/login.html";
                 }
+                if (sessionStorage.getItem("applicationName") === null) {
+
+                $("#myModal").modal('show');
+                }
         });
                 
     </script>
