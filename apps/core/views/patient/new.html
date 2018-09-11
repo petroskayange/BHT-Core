@@ -153,9 +153,24 @@
   }
 
 
-  #tt_page_current_village #viewport { 
-    display: inline !important; 
-    height: 55%;
+  #tt_page_home_ta .inputFrameClass {
+    height: 50%;
+    overflow: auto;
+  }
+
+  #tt_page_home_village .inputFrameClass {
+    height: 50%;
+    overflow: auto;
+  }
+
+  #tt_page_current_ta .inputFrameClass {
+    height: 50%;
+    overflow: auto;
+  }
+
+  #tt_page_current_village .inputFrameClass {
+    height: 50%;
+    overflow: auto;
   }
 
 
@@ -253,7 +268,7 @@
   }
 
   function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=100&search_string=");
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=100&name=");
     listSuggestions(tstCurrentPage);
   }
 
@@ -304,7 +319,7 @@
 
   <input type="text" name="person[birth_day]" id="person_birth_day" field_type="number" helpText="Birth Day" validationMessage="Please enter a valid date" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="validateDay(); getDayOfMonthPicker($(person_birth_year).value, $(person_birth_month).value);$(nextButton).style.display = block;updateDayAbsMax();" />
 
-
+  <!-- Home Address ............................................. -->
   <input type="text" name="region[region_name]" 
     id="home_region" 
     field_type="alpha"
@@ -327,24 +342,20 @@
     objectType="districts" />
 
   <input type="text" name="home_ta" 
-    id="home_ta" 
-    field_type="alpha" 
-    xhelpText="TA"
-    helpText="Home TA"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
-    objectType="traditional_authority" />
+  id="home_ta" field_type="alpha" 
+  helpText="Home TA" 
+  ajaxURL="" 
+  tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
+  objectType="traditional_authority" />
 
   <input type="text" name="home_village" 
-    id="home_village" 
-    field_type="alpha" 
-    xhelpText="Village"
-    helpText="Home Village"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
-    objectType="village" />
+  id="home_village" field_type="alpha" 
+  helpText="Home Village" 
+  ajaxURL="" 
+  tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
+  objectType="village" />
+
+  <!-- Home Address ............................................. -->
 
     <!-- ................... Current Address ........................... -->
   <input type="text" name="region[region_name]" 
@@ -369,22 +380,19 @@
     objectType="districts" />
 
   <input type="text" name="current_ta" 
-    field_type ='alpha'
-    id="current_ta"
-    helpText = 'Current TA'
-    tt_pageStyleClass = "azButton"
-    allowFreeText = "false" 
+    id="current_ta" field_type="alpha" 
+    helpText="Current TA" 
+    ajaxURL="" 
     tt_onLoad="set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
     objectType="traditional_authority" />
-  
+
   <input type="text" name="current_village" 
-    field_type ='alpha'
-    id="current_village"
-    helpText = 'Current Village'
-    tt_pageStyleClass = "azButton"
-    allowFreeText = "false" 
+    id="current_village" field_type="alpha" 
+    helpText="Current Village" 
+    ajaxURL="" 
     tt_onLoad="set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
     objectType="village" />
+
     <!-- ................... Current Address ends ........................... -->
 
 
@@ -426,7 +434,7 @@
 <script type="text/javascript">
 var tt_cancel_destination = "/apps/core/views/patient/search_results.html";
 
-/*
+/* ..................................
 function loadRegions(element) {
   var url = 'http://127.0.0.1:3001/api/v1/regions';
   element.innerHTML = null;
