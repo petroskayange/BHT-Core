@@ -5,6 +5,7 @@
 // var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
 // var apiPort =''; sessionStorage.getItem("apiPort");
 var apiURL,apiPort;
+var clientRecord = {};
 getAPI();
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
@@ -116,21 +117,8 @@ if (document.createElement("template").content) {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
-function _foo(){
-    var data = {
-        given_name: "Foobar",
-        middle_name: "J.",
-        family_name: "Random",
-        gender: "F",
-        birthdate: "2000-01-01",
-        birthdate_estimated: false,
-        home_district: "Blantyre",
-        home_village: "Chatha",
-        home_traditional_authority: "Chatha",
-        current_district: "Lilongwe",
-        current_village: "Area 15",
-        current_traditional_authority: "Area 15"
-    }
+function _foo(data){
+
     var url = "http://" + apiURL + ":" + apiPort + "/api/v1/people";
     var xhr = new XMLHttpRequest();
     xhr.onload = function(){
@@ -145,7 +133,7 @@ function _foo(){
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
     xhr.send(JSON.stringify(data));
-    
+
 }
 
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {

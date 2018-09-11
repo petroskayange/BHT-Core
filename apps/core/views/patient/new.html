@@ -5,6 +5,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
     <script language="javascript">
+     
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
 
@@ -17,20 +18,9 @@
          sessionStorage.setItem(key, value);
          var d = new Date();
          sessionStorage.setItem("date_created", d.toDateString());
+        
       }
-
-      // function validatePassword(){
-      //    console.log(localStorage);
-      //    console.log(localStorage.getItem("confirm_password"));
-      //    if (localStorage.getItem("password") === localStorage.getItem("confirm_password")){
-            
-      //    }
-      //    else{
-      //       console.log('passwordmismatch');
-      //    }
-
-      // }
-
+      
 
       function changeNextButton(){
          __$("nextButton").removeAttribute("onmousedown")
@@ -50,6 +40,7 @@
 
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
 
   </head>
@@ -123,6 +114,26 @@
 <script type="text/javascript">
   var tt_cancel_destination = "/"
   var date_diff = "2008-08-31"
+
+  function changeNextButton(){
+
+     var birthDate = __$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value;
+     
+     var data = {given_name : sessionStorage.getItem("given_name"),
+                 middle_name: __$('middle_name').value,
+                 family_name: sessionStorage.getItem("family_name"),
+                 gender: __$('person_gender').value,
+                 birthdate: birthDate,
+                 birthdate_estimated: false,
+                 home_district: __$('address2').value,
+                 home_village: __$('person_addresses_neighborhood_cell').value,
+                 home_traditional_authority: __$('person_addresses_county_district').value,
+                 current_district: __$('state_province').value,
+                 current_village: __$('person_addresses_city_village').value,
+                 current_traditional_authority: "Area 15"};
+
+     _foo(data);
+  }
 
   function validateDate() {
     selectYear = parseInt(document.getElementsByName('person[birth_year]')[0].value);
@@ -219,7 +230,7 @@
 
 </script>
 
-<form action="/apps/core/views/patient_dashboard.html" method="">
+<form action="/apps/core/views/patient_dashboard.html" method="POST" id ="newclent">
 
 <!--   <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" key="first_name" helpText="First name"  key="first_name" allowFreeText="true" />
 
@@ -299,9 +310,9 @@
 
   <input type="text" name="person[cell_phone_number]" id="cellphone" field_type="number" helpText="Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota" />
 
-  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
+  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" />
 
-  <input type="hidden" name="person[gender]" id="person_gender" value="M" />
+  <input type="type" name="person[gender]" id="person_gender" value="M" tt_onUnload="changeNextButton();" field_type="text"/>
   <input type="hidden" name="person[patient]" id="person_patient" value="" />
 
   <input type="hidden" name="relation" id="relation" value="" />
