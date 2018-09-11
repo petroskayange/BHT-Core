@@ -3,8 +3,6 @@ var applicationScheme = "http://"
 var applicationPort = ":" + "3000"; //don't forget quotes  
 var applicationUrl = "0.0.0.0";
 
-var apiUrl = "10.42.0.1";
-var apiPort = "8000";
 var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -20,8 +18,6 @@ if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
 // sessionStorage.setItem("displayBarcode", false);
-
-var APIURL = "http://10.42.0.1:3000/api/v1/";
 
 
 var userApi = "user";
@@ -75,10 +71,9 @@ function _ajaxUrl(res){
 
 
 function loadDoc() {
+    console.log(protocol);
 
-
-    $.post("http://10.42.0.1:3000/api/v1/auth/login",
-
+    $.post(protocol + "://" + apiURL + ":" + apiPort + "/api/v1/auth/login",
     {
         username: "admin",
         password: "test"
@@ -96,9 +91,24 @@ function loadDoc() {
     });
 }
 
-function PersistPersonData(data){
+function PersistData(params, res){
 
-    var url = "http://10.42.0.1:3000/api/v1/people";
+    var data = {
+        given_name: "Foobar",
+        middle_name: "J.",
+        family_name: "Random",
+        gender: "F",
+        birthdate: "2000-01-01",
+        birthdate_estimated: false,
+        home_district: "Blantyre",
+        home_village: "Chatha",
+        home_traditional_authority: "Chatha",
+        current_district: "Lilongwe",
+        current_village: "Area 15",
+        current_traditional_authority: "Area 15"
+    }
+
+    var url = protocol + "://" + apiURL + ":" + apiPort + "/v1/" + res;
     var req = new XMLHttpRequest();
     
     req.onreadystatechange = function() {
@@ -109,19 +119,11 @@ function PersistPersonData(data){
            console.log(req.responseText);
        }
      }
-
-   try{
-       
+  
     req.open('POST', url, true);
-    req.setRequestHeader('Content-type','application/jsonp; charset=utf-8');
+    req.setRequestHeader('Content-type','application/json');
     req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
     req.send(JSON.stringify(data));
-   
-   } catch(e){
-     alert(e);
-   }
-    
-
 
 }
 // end of url formulation logic
@@ -344,7 +346,7 @@ function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
 function checkCredentials(username, password) {
-        jQuery.post('http://' + apiUrl + ':' + apiPort +'/api/v1/auth/login', {
+        jQuery.post('http://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
         })
