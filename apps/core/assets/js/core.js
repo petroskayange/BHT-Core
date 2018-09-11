@@ -1,12 +1,4 @@
 //declare your network configurations here
-<<<<<<< HEAD
-var applicationScheme = "http://"
-var applicationPort = ":" + "3000"; //don't forget quotes  
-var applicationUrl = "0.0.0.0";
-var apiUrl = "192.168.43.105";
-var apiPort = "8000";
-var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
-=======
 // getAPI();
 
 // window.addEvent('load', function() {
@@ -15,7 +7,6 @@ var applicationBaseUrl = applicationScheme + applicationUrl + applicationPort;
 var apiURL,apiPort;
 getAPI();
 // })
->>>>>>> 715cdcfdf7e50803bc68a17253a787ebe2bf5a76
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
 report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
@@ -30,11 +21,6 @@ if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
 // sessionStorage.setItem("displayBarcode", false);
-<<<<<<< HEAD
-var APIURL = "http://192.168.43.105:8000/api/v1/";
-
-=======
->>>>>>> 715cdcfdf7e50803bc68a17253a787ebe2bf5a76
 
 var userApi = "user";
 
@@ -128,6 +114,38 @@ if (document.createElement("template").content) {
         });
 } else {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
+}
+
+function _foo(){
+    var data = {
+        given_name: "Foobar",
+        middle_name: "J.",
+        family_name: "Random",
+        gender: "F",
+        birthdate: "2000-01-01",
+        birthdate_estimated: false,
+        home_district: "Blantyre",
+        home_village: "Chatha",
+        home_traditional_authority: "Chatha",
+        current_district: "Lilongwe",
+        current_village: "Area 15",
+        current_traditional_authority: "Area 15"
+    }
+    var url = "http://" + apiURL + ":" + apiPort + "/api/v1/people";
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(){
+        if(this.readyState === 4 && this.status === 200){
+            //some logic here...
+        } else {
+            //
+        }
+    }
+
+    xhr.open('POST',url, true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+    xhr.send(JSON.stringify(data));
+    
 }
 
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
