@@ -1,0 +1,44 @@
+
+.yes_no_table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 25px;
+}
+
+.yes_no_container {
+  width: 10%;
+  text-align: middle; 
+}
+
+.yes_no_btns {
+  display:block;
+  width:70px;
+  height:70px;
+  line-height:50px;
+  border: 2px solid #f5f5f5;
+  border-radius: 50%;
+  color:#f5f5f5;
+  text-align:center;
+  text-decoration:none;
+  background: #464646;
+  box-shadow: 0 0 3px gray;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.yes_no_text {
+  display: block;
+  width: 76%;
+  padding: 10%;
+  height: auto;
+}
+
+.not-clicked {
+  background: #464646;
+}
+
+.clicked {
+  background: #008000;
+  color: white;
+}
+
