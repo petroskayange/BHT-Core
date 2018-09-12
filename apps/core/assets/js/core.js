@@ -16,6 +16,7 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 
 // URL formulation logic
 var auth_token = null;
+
 if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
@@ -50,7 +51,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-        url: apiProtocol+ '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
+        url: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', sessionStorage.getItem(auth_token));
         },
@@ -65,13 +66,14 @@ function _ajaxUrl(res){
     return result;
 }
 
- 
-function loadDoc() {
 
-    $.post(apiProtocol+"://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
+function loadDoc() {
+    console.log(apiURL);
+
+    $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "test"
     },
     function(data,status){
 
@@ -86,11 +88,26 @@ function loadDoc() {
     });
 }
 
-/*function checkToken(){
-    console.log(sessionStorage.getItem(auth_token));
-}*/
-// end of url formulation logic
+function PersistData(data, res){
+     
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + res;
+    var req = new XMLHttpRequest();
+    
+    req.onreadystatechange = function() {
+       
+        if (req.readyState == 4  && req.status == 200) {
+           // window.location.href = '/apps/core/views/patient_dashboard.html';
+        } else {
+           console.log("@@@@" + req.responseText);
+       }
+     }
+  
+    req.open('POST', url, true);
+    req.setRequestHeader('Content-type','application/json');
+    req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+    req.send(JSON.stringify(data));
 
+}
 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
@@ -175,7 +192,7 @@ function changeModule() {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
             // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
-            console.log(sessionStorage.getItem("displayBarcode"));
+           // console.log(sessionStorage.getItem("displayBarcode"));
             if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
                 // showBarcode = false
                 showBarcodeDiv();
@@ -305,7 +322,7 @@ function signIn() {
 }
 
 function checkCredentials(username, password) {
-        jQuery.post(apiProtocol+'://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
+        jQuery.post(apiProtocol + '://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
         })

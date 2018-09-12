@@ -31,7 +31,6 @@
         finishButton.setAttribute('onclick',"");
       }
 
-
       function createClient() {
         var summary_table = document.getElementsByClassName('summary-table')[0];
         var rows  = summary_table.getElementsByTagName('tr');
@@ -63,15 +62,15 @@
 					}else if(title.match(/Home District/i)){
 						parametersPassed.home_district = data; 
 					}else if(title.match(/Home TA/i)){
-						parametersPassed.home_traditional_authority = data; 
+						parametersPassed.home_traditional_authority = (data || 'Unknown'); 
 					}else if(title.match(/Home Village/i)){
-						parametersPassed.home_village = data; 
+						parametersPassed.home_village = (data || 'Unknown'); 
 					}else if(title.match(/Current District/i)){
-						parametersPassed.current_district = data; 
+						parametersPassed.current_district = (data || 'Unknown'); 
 					}else if(title.match(/Current TA/i)){
 						parametersPassed.current_traditional_authority = data; 
 					}else if(title.match(/Current Village/i)){
-						parametersPassed.current_village = data; 
+						parametersPassed.current_village = (data || 'Unknown'); 
 					}else if(title.match(/Landmark/i)){
 						parametersPassed.landmark = data; 
 					}else if(title.match(/Cell phone/i)){
@@ -103,57 +102,28 @@
       }
 
       function summary() {
-        birthdate_estimated = 0;
-        birthdate = null;
 
-        
-        var age_estimated = document.getElementById('person_age_estimate').value;
-        birthdate_year = document.getElementById('person_birth_year').value;
-        birthdate_month = document.getElementById('person_birth_month').value;
-        birthdate_day = document.getElementById('person_birth_day').value;
-        
-        if(document.getElementById('person_birth_year').value.match(/Unknown/i)){
-          var age_estimated = document.getElementById('person_age_estimate').value;
-          birthdate = calBirthdateFromEstimetedYear(age_estimated);
-          birthdate_estimated = 1;
-        }else{
-          if(document.getElementById('person_birth_month').value.match(/Unknown/i)){
-            birthdate = document.getElementById('person_birth_year').value;
-            birthdate_estimated = 1;
-            birthdate += "-01-01"
-          }else if(document.getElementById('person_birth_day').value.match(/Unknown/i)){
-            birthdate = document.getElementById('person_birth_year').value;
-            birthdate += "-" + document.getElementById('person_birth_month').value;
-            birthdate_estimated = 1;
-            birthdate += "-15"
-          }else{
-            birthdate = document.getElementById('person_birth_year').value;
-            birthdate += "-" + document.getElementById('person_birth_month').value;
-            birthdate += "-" + document.getElementById('person_birth_day').value;
-          } 
-        }
+        birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
 
-        
         parameter = {
-          given_name:           __$('given_name').value,
-          middle_name:          __$("middle_name").value,
-          family_name:          __$('family_name').value,
-          gender:               __$('gender').value,
-          birthdate:            birthdate,
-          birthdate_estimated:  birthdate_estimated,
+              given_name:                     __$('given_name').value,
+              middle_name:                    __$("middle_name").value,
+              family_name:                    __$('family_name').value,
+              gender:                         __$('gender').value,
+              birthdate:                      birth_date,
+              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
+              current_district:                __$('current_district').value, 
+              current_traditional_authority:   __$('current_ta').value,
+              current_village:                 __$('current_village').value,
 
-          current_district:     __$('current_district').value, 
-          current_ta:           __$('current_ta').value,
-          current_village:      __$('current_village').value,
+              home_district:                   __$('home_district').value,
+              home_traditional_authority:      __$('home_ta').value,
+              home_village:                    __$('home_village').value,
 
-          home_district:        __$('home_district').value,
-          home_ta:              __$('home_ta').value,
-          home_village:         __$('home_village').value,
-
-          landmark:             __$('landmark').value,
-          cell_phone_number:    __$('cellphone').value
-        }
+              landmark:                        __$('landmark').value,
+              cell_phone_number:               __$('cellphone').value
+            }
 
         var table = document.createElement('table');
         table.setAttribute('class','summary-table');
@@ -166,10 +136,10 @@
           ["Birthdate", parameter.birthdate],
           ["Birthdate Estimated", parameter.birthdate_estimated],
           ["Home District", parameter.home_district],
-          ["Home TA", parameter.home_ta],
+          ["Home TA", parameter.home_traditional_authority],
           ["Home Village", parameter.home_village],
           ["Current District", parameter.current_district],
-          ["Current TA", parameter.current_ta],
+          ["Current TA", parameter.current_traditional_authority],
           ["Current Village", parameter.current_village],
           ["Landmark", parameter.landmark],
           ["Cell phone", parameter.cell_phone_number]
@@ -219,6 +189,7 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
 
   </head>
   <body id="mateme">
@@ -465,7 +436,7 @@
   }
 
   function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=100&name=");
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=1000&name=");
     listSuggestions(tstCurrentPage);
   }
 
@@ -526,7 +497,7 @@
 	}
 </script>
 
-<form action="/apps/core/views/patient_dashboard.html" method="">
+<form action="/apps/core/views/patient_dashboard.html" method="POST">
 
   <input type="text" name="given_name" 
   id="given_name" field_type="alpha" 
@@ -610,7 +581,8 @@
   <input type="text" name="home_ta" 
   id="home_ta" field_type="alpha" 
   helpText="Home TA" 
-  ajaxURL="" 
+  ajaxURL=""
+  condition="$('home_region').value != '4'" 
   tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
   objectType="traditional_authority" />
 
@@ -618,6 +590,7 @@
   id="home_village" field_type="alpha" 
   helpText="Home Village" 
   ajaxURL="" 
+  condition="$('home_region').value != '4'" 
   tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
   objectType="village" />
 
@@ -650,6 +623,7 @@
     id="current_ta" field_type="alpha" 
     helpText="Current TA" 
     ajaxURL="" 
+    condition="$('current_region').value != '4'" 
     tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
     objectType="traditional_authority" />
 
@@ -657,6 +631,7 @@
     id="current_village" field_type="alpha" 
     helpText="Current Village" 
     ajaxURL="" 
+    condition="$('current_region').value != '4'" 
     tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
     objectType="village" />
 
@@ -684,6 +659,7 @@
     tt_onUnLoad="resetFinishBtn();"
     optional = "true" tt_pageStyleClass = "NoControls" /> 
 
+  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
 
   <input type="hidden" name="person[gender]" id="gender" value="" />
   <input type="hidden" name="person[patient]" id="person_patient" value="" />
