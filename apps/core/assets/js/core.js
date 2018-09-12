@@ -6,6 +6,9 @@
 // var apiPort =''; sessionStorage.getItem("apiPort");
 var apiURL,apiPort, apiProtocol;
 getAPI();
+var url = window.location.href;
+// var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -147,15 +150,54 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     });
 
  }
+ function getName(user_id, url, port, protocol) {
+    //  console.log(apiURL);
+    
+    jQuery.getJSON({
+        url: protocol+'://'+url+':' + port+ '/api/v1/users/'+user_id,
+        data: { },
+        type: 'GET',
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));},
+        success: function(result) {
+            var username = result.username;
+            var allRoles = '';
+            var roles_length = result.roles.length;
+            console.log(roles_length);
+                for (let index = 0; index < roles_length; index++) {
+                    allRoles = result.roles[index].role + ", "+ allRoles;
+                    console.log(result.roles[index].role);
+                }    
+           var role = result.roles.role;
+            var date_created = result.date_created;
+            var given_name = result.person.names[0].given_name;
+            var family_name = result.person.names[0].family_name;
+            showUser(username,given_name, family_name, allRoles, date_created);
 
-function showUser() {
-    $("#first_name").text(sessionStorage.getItem("given_name"));
-    $("#last_name").text(sessionStorage.getItem("family_name"));
-    $("#username").text(sessionStorage.getItem("username"));
-    $("#role").text(sessionStorage.getItem("selected_role"));
-    $("#date_created").text(sessionStorage.getItem("date_created"));
-    // console.log(sessionStorage);
+        }
+        });
+    }
+
+function showUser(username, given_name, family_name, role, date_created) {
+    
+    document.getElementById("first_name").innerHTML = given_name;
+    document.getElementById("last_name").innerHTML = family_name;
+    document.getElementById("username").innerHTML = username;
+    document.getElementById("role").innerHTML = role;
+    document.getElementById("date_created").innerHTML = date_created;
 }
+
+function setUser() {
+    var given_name = document.getElementById("first_name").textContent;
+    var family_name = document.getElementById("last_name").textContent;
+    var username = document.getElementById("username").textContent;
+    console.log(given_name);
+    sessionStorage.setItem("given_name", given_name);
+    // var family_name = $("#last_name").innerHTML;
+    sessionStorage.setItem("family_name", family_name);
+    // var username = $("#username").innerHTML;
+    sessionStorage.setItem("username", username);
+}
+
 
 function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
