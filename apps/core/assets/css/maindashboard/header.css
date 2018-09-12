@@ -88,6 +88,9 @@
     padding-bottom: 5px;
     float: left;
     text-align: center;
+    margin-right: auto; 
+    margin-left: auto;
+    display: block;
     margin: 5px;
     border: 1px solid #2e6da4;
     cursor: pointer;
