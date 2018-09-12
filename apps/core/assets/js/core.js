@@ -73,11 +73,7 @@ function _ajaxUrl(res){
 function loadDoc() {
     console.log(apiURL);
 
-<<<<<<< HEAD
-    $.post(apiProtocol+"://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
-=======
     $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
->>>>>>> b9227ca88abca8a4a8ec3859a5ba1c94939867c3
     {
         username: "admin",
         password: "test"

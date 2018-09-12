@@ -1082,14 +1082,9 @@ function highlightSelection(options, inputElement){
     }
 }
 
-<<<<<<< HEAD
-function ajaxRequest(aElement, aUrl){
-    var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
-=======
 function ajaxRequest(aElement, aUrl, objectType){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
     var object_type = objectType.getAttribute('objectType');
->>>>>>> b9227ca88abca8a4a8ec3859a5ba1c94939867c3
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
