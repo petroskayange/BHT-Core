@@ -369,7 +369,6 @@ function checkCredentials(username, password) {
             password: password
         })
         .done(function(msg) {
-            alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
             window.location.href = "/";
             sessionStorage.removeItem("userPassword");
@@ -377,7 +376,7 @@ function checkCredentials(username, password) {
         .fail(function(xhr, status, error) {
             // error handling
             // console.log(xhr.status);
-            alert("wrong password");
+            showMessage("Wrong username or password");
             window.location = "/apps/core/views/login.html";
         });
 }
