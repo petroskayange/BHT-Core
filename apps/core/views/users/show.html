@@ -101,7 +101,7 @@
       <tr>
         <td>
           <button id="edit" class="silver" style="margin-top:10px;"
-                  onmousedown="document.location = '/apps/core/views/users/edit_user.html'"><span>Edit User names</span>
+                  onmousedown="setUser(); editUser();"><span>Edit User names</span>
           </button>
         </td>
       </tr>
@@ -131,7 +131,7 @@
   </div>
 
   <div id="nav" style="position: absolute;bottom: 0%; left: 0px; width:99.5%; height: 10%; background: #333333;">
-    <button class="green" style="float: right; margin-right: 20px; margin-top: 9px; width: 150px;" onclick="window.location= tt_cancel_destination">
+    <button class="green" style="float: right; margin-right: 20px; margin-top: 9px; width: 150px;" onclick="setUser();window.location= tt_cancel_destination">
       <span>
         Finish
       </span>
@@ -148,6 +148,11 @@
 </html>
 
 <script type="text/javascript">
-  showUser();
+  var url = new URL(url);
+  var id = url.searchParams.get("user_id");
+  getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
   var tt_cancel_destination = "/";
+  function editUser() {
+    document.location = '/apps/core/views/users/edit_user.html?user_id='+id;
+  }
 </script>

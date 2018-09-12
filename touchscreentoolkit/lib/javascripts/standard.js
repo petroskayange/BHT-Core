@@ -1182,10 +1182,11 @@ function loadUsernames(aURL){
               for(var x = 0; x < results.length; x ++){
                    var li = document.createElement('li');
                         li.innerHTML = results[x].username;
-                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);");
+                        console.log();
                         li.setAttribute('tstValue', results[x].username);
-                        // console.log(results[x].username);
-                        li.setAttribute('id', x);
+                        li.setAttribute('user_id', results[x].user_id);
+                        var user_id =results[x].user_id;
+                        li.setAttribute('onmousedown',"updateTouchscreenInputForSelect(this);addID("+user_id+");");
                         li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
                         ol.appendChild(li);
              }
@@ -1199,6 +1200,10 @@ function loadUsernames(aURL){
     } catch (e) {
         
     } 
+}
+
+function addID(user_id) {
+    sessionStorage.setItem('user_id', user_id);
 }
 
 function handleResult(optionsList, results) {
@@ -4895,7 +4900,6 @@ function add_options(groupKids, parent, single, mapToParent, groupNumber){
     if(mapToParent){
         __$("group" + groupNumber).setAttribute("childrenGroup", parentTag);
     }
-
 }
 
 function deselectSection(group){
