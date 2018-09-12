@@ -74,6 +74,11 @@
          }
       }
 
+      function calBirthdateFromEstimetedYear(age){
+        var currYear = new Date().getFullYear();
+        estYear = (currYear - parseInt(age));
+        return (estYear + "-07-01");
+      }
 
       function summary() {
 
@@ -107,6 +112,8 @@
           ["Middle name", parameter.middle_name],
           ["Family name", parameter.family_name],
           ["Gender", parameter.gender],
+          ["Birthdate", parameter.birthdate],
+          ["Birthdate Estimated", parameter.birthdate_estimated],
           ["Home District", parameter.home_district],
           ["Home TA", parameter.home_traditional_authority],
           ["Home Village", parameter.home_village],
@@ -273,7 +280,7 @@
    text-align: left;
    padding-left: 5px 0px 10px 0px;
    width: 20%;
-   height: 40px;
+   height: 30px;
  }
 
  .summary-table td {
@@ -281,7 +288,15 @@
    border-width: 0px 0px 1px 0px;
    text-align: left;
    padding-left: 5px 0px 10px 0px;
-   height: 40px;
+   height: 30px;
+ }
+
+ .tt_controls_month_of_birth .keyboard {
+   display: none !important;
+ }
+
+ .tt_controls_birth_day #qwerty {
+   display: none;
  }
 
 </style>
@@ -313,6 +328,11 @@
       rule = rule + "|Unknown";
       return $('touchscreenInput'+tstCurrentPage).setAttribute('validationRule',rule);
     }
+  }
+
+  function setAbsoluteMaxBirthYear(){
+    var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+    element.setAttribute("absoluteMax", (new Date().getFullYear())); 
   }
 
   function validateYear() {
@@ -348,6 +368,27 @@
     }
   }
 
+  function validateMonth() {
+    var nextBtn =  __$("nextButton");
+    nextBtn.setAttribute('onmousedown',"validateBirthYearMonth();");
+    nextBtn.setAttribute('onclick',"");
+  }
+
+  function validateBirthYearMonth() {
+    setYear = parseInt(document.getElementById('person_birth_year').value);
+    if(setYear == (new Date().getFullYear())){
+      var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+      var selectedMonth = parseInt(element.getAttribute('tstValue'));
+      var currMonth     = parseInt(new Date().getMonth() + 1);
+      if(selectedMonth > currMonth){
+        showMessage("Selected month is greater than current month");
+        return;
+      }
+    }
+
+    gotoNextPage();
+  }
+
   function validateDay(){
     date = new Date
     currYear = date.getFullYear();
@@ -362,19 +403,15 @@
     }
   }
 
-  function dateCreate(date_str){
-    intyear = 0 ; intmonth = 0 ; intday = 0;
-    intyear = parseInt(date_str.substring(0,4))
-    intmonth = (parseInt(date_str.substring(5,7)) - 1)
-    intday = (parseInt(date_str.substring(8,10)))
+  function buildSetDate(date_str){
+    
+    date_arr = date_str.split('-');
+    intyear = parseInt(date_arr[0]);
+    intmonth = parseInt(date_arr[1]);
+    intday = parseInt(date_arr[2]);
 
-    if (intmonth == -1)
-      intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
 
-    if (intday == 0)
-      intday = parseInt(date_str.substring(8,10).substring(1,2))
-
-    return new Date(intyear,intmonth,intday);
+    return new Date(intyear,intmonth, (intday + 1));
   }
 
   function set_ajaxURL_for_suggestions(url, filter_value) {
@@ -382,6 +419,56 @@
     listSuggestions(tstCurrentPage);
   }
 
+  var dob_year = null ; var dob_month = null ; dob_day = null;
+  var set_dob = null;
+  
+  function setUpPageForDateValidation() {
+    var nextBtn =  __$("nextButton");
+    nextBtn.setAttribute('onmousedown',"validateDOB();");
+    nextBtn.setAttribute('onclick',"");
+  }
+
+  function validateDOB() {
+    setDOB();
+    var valid_date = validateEnteredDate(set_dob);
+
+    if(!valid_date){
+      showMessage("Invalid Date");
+      return;
+    }
+
+    currDate  = new Date();
+    currDate  = new Date(currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate());
+    setDate   = new Date(set_dob);
+    
+    if(setDate > currDate){
+      showMessage("Birthdate more than the current date");
+      return;
+    }
+    
+    gotoNextPage();
+  }
+  
+  function setDOB() {
+    try {
+      dob_year = document.getElementById('person_birth_year').value; //getElementsByTagName("input")[0].value
+    }catch(e){ dob_year = dob_year }
+    try {
+      dob_month = document.getElementById('person_birth_month').value; //getElementsByTagName("input")[0].getAttribute('tstvalue')
+      if (dob_month.length == 1)
+        dob_month = 0 + dob_month
+    }catch(e){ dob_month = dob_month }
+    try {
+      dob_day = document.getElementById('person_birth_day').value; //getElementsByTagName("input")[0].value
+      if(dob_day.length < 1)
+        dob_day = document.getElementById('touchscreenInput' + tstCurrentPage).value; //getElementsByTagName("input")[0].value
+
+      if (dob_day.length == 1)
+        dob_day = 0 + dob_day
+    }catch(e){ dob_day = dob_day }
+
+    set_dob = (dob_year + '-' + dob_month + '-' + dob_day)
+  }
 
 </script>
 
@@ -409,26 +496,39 @@
   condition="$('middle_name').value == ''" 
   tt_pageStyleClass="azButton" />
 
-  <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" absoluteMin="1900" min="1900" tt_onLoad="validateYear()" tt_pageStyleClass="Numeric NumbersOnly" />
+  <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" 
+    absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxBirthYear()" 
+    tt_pageStyleClass="Numeric NumbersOnly" />
 
-  <select name="person[birth_month]" id="person_birth_month" helpText="Month of Birth" condition="$('person_birth_year').value.toLowerCase() != 'unknown'" validationMessage="Please enter a valid date" tt_onLoad=" validateDate();__$(keyboard).style.display = none;" tt_onUnLoad="updateMonthAbsMax();"><option value=""></option>
-  <option value="1">Jan</option>
-  <option value="2">Feb</option>
-  <option value="3">Mar</option>
-  <option value="4">Apr</option>
-  <option value="5">May</option>
-  <option value="6">Jun</option>
-  <option value="7">Jul</option>
-  <option value="8">Aug</option>
-  <option value="9">Sep</option>
-  <option value="10">Oct</option>
-  <option value="11">Nov</option>
-  <option value="12">Dec</option>
-  <option value="Unknown">Unknown</option></select>
+  <select name="person[birth_month]" id="person_birth_month" helpText="Month of Birth" 
+    condition="$('person_birth_year').value.toLowerCase() != 'unknown'" 
+    validationMessage="Please enter a valid date" tt_onUnLoad="resetFinishBtn();" 
+    tt_onLoad=" validateMonth();__$(keyboard).style.display = none;">
+      <option value=""></option>
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">Mar</option>
+      <option value="4">Apr</option>
+      <option value="5">May</option>
+      <option value="6">Jun</option>
+      <option value="7">Jul</option>
+      <option value="8">Aug</option>
+      <option value="9">Sep</option>
+      <option value="10">Oct</option>
+      <option value="11">Nov</option>
+      <option value="12">Dec</option>
+      <option value="Unknown">Unknown</option>
+    </select>
 
   <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" absoluteMin="10" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
 
-  <input type="text" name="person[birth_day]" id="person_birth_day" field_type="number" helpText="Birth Day" validationMessage="Please enter a valid date" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="validateDay(); getDayOfMonthPicker($(person_birth_year).value, $(person_birth_month).value);$(nextButton).style.display = block;updateDayAbsMax();" />
+  <input type="text" name="person[birth_day]" 
+    id="person_birth_day" 
+    field_type="number" helpText="Birth Day" 
+    condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" 
+    tt_onLoad="setUpPageForDateValidation();" 
+    tt_onUnLoad="resetFinishBtn();" />
+
 
   <!-- Home Address ............................................. -->
   <input type="text" name="region[region_name]" 
@@ -626,4 +726,53 @@ function QueryString(URL) {
 }
 
 QueryString(window.location.href);
+
+function validateEnteredDate(inputText){
+  // Match the date format through regular expression
+  if(inputText.match(/-/i)) {
+
+    //Test which seperator is used '/' or '-'
+    var pdate = inputText.split('-');
+
+    var dd = parseInt(pdate[2]);
+    var mm  = parseInt(pdate[1]);
+    var yy = parseInt(pdate[0]);
+
+    if(dd == 0){
+      return false;
+    }
+
+    // Create list of days of a month [assume there is no leap year by default]
+    var ListofDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+    if (mm==1 || mm>2){
+      if (dd>ListofDays[mm-1]) {
+        //alert('Invalid date format!');
+        return false;
+      }
+    }
+  
+    if (mm==2) {
+      var lyear = false;
+      if ( (!(yy % 4) && yy % 100) || !(yy % 400)){
+        lyear = true;
+      }
+  
+      if ((lyear==false) && (dd>=29)) {
+        //alert('Invalid date format!');
+        return false;
+      }
+  
+      if ((lyear==true) && (dd>29)){
+        //alert('Invalid date format!');
+        return false;
+      }
+    }
+  }else{
+    //alert("Invalid date format!");
+    //document.form1.text1.focus();
+    return false;
+  }
+
+  return true;
+}
 </script>
