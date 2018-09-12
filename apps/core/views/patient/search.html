@@ -23,7 +23,6 @@
     <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/submitparameters.js"></script>
 
   </head>
   <body id="mateme">
@@ -33,6 +32,7 @@
 .tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
 
 .tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
 </style>
 
 <script type="text/javascript">
@@ -62,7 +62,6 @@
 
   function  submitSearchResults(){
 
-     document.getElementById('cover').style.display = 'inline';
      var first_name = __$('given_name').value;
      var last_name = __$('family_name').value;
      var gender = __$('gender').value;
@@ -70,34 +69,7 @@
      sessionStorage.setItem('family_name', last_name);
      sessionStorage.setItem('gender', gender);
      
-     url = "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
-     functiontobecalled = 'searchResults';
-
-     getParameters(url);
-
-  }
-
-  function searchResults(results){
-      
-      var data = JSON.parse(results);     
-      var f =  document.getElementById('person');
-      var option = document.createElement('option');
-      option.setAttribute('value', sessionStorage.getItem('given_name'));
-      option.setAttribute('onmousedown', 'changeNextButton();');
-      option.setAttribute('id','given_name');
-      option.innerHTML = "Select " + sessionStorage.getItem('given_name') + sessionStorage.getItem('family_name');
-      // f.appendChild(option);
-      // for(var x in data){
-      //   if(data.hasOwnProperty(x)){
-      //      var input = document.createElement('input');
-      //      input.setAttribute('type','hidden');
-      //      input.setAttribute('name','people[]');
-      //      input.setAttribute('value','person[' + data[x].person_id + ']');
-      //      f.appendChild(input);
-      //   }
-      // } 
-      // alert(f.innerHTML);
-      gotoNextPage();
+     document.location = "search_results.html"; 
   }
 
   function changeNextButton(){
@@ -131,31 +103,4 @@
 
 </script>
 
-<style>
- #cover{
-   position: absolute;
-   background-color: black;
-   width: 100%;
-   height: 102%;
-   left: 0%;
-   top: 0%;
-   z-index: 990;
-   opacity: 0.65;
-   display: none;
- }
-</style>
 
-<script type="text/javascript">
-function findClient(){
-  
-}
-
-</script>
-
-
-
-
-
-
-
-<div id="cover"></div>
