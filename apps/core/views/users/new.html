@@ -58,7 +58,7 @@
                 http.send(params);
                }
                else{
-                 
+                 showMessage('Password Mismatch', null,10000000000);
                }
          }
       }
@@ -76,7 +76,7 @@
     <div id="">
       <div id="content">
         <form  method="POST">        
-           <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="given name"  key="given_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
+           <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="First name"  key="given_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
 
            <input type="text" name="family_name" id="family_name" field_type="alpha" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
 
