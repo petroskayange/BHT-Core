@@ -32,32 +32,53 @@
       }
 
       function createClient() {
+        var summary_table = document.getElementsByClassName('summary-table')[0];
+        var rows  = summary_table.getElementsByTagName('tr');
+  
+        var parametersPassed = {
+          given_name: null, middle_name: null, family_name: null,
+          gender: null, birthdate: null, birthdate_estimated: null,
+          home_district: null, home_traditional_authority: null, home_village: null,
+          current_district: null, current_traditional_authority: null, current_village: null,
+					landmark: null, cell_phone_number: null
+        }
 
-        birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
+        for(var i = 0 ; i < rows.length ; i++){
+          var title = rows[i].getElementsByTagName('th')[0].innerHTML.trim();
+          var data 	= rows[i].getElementsByTagName('td')[0].innerHTML.trim();
 
-        parameter = {
-              given_name:                     __$('given_name').value,
-              middle_name:                    __$("middle_name").value,
-              family_name:                    __$('family_name').value,
-              gender:                         __$('gender').value,
-              birthdate:                      birth_date,
-              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
+					if(title.match(/Given name/i)){
+						parametersPassed.given_name = data; 
+					}else if(title.match(/Middle name/i)){
+						parametersPassed.middle_name = data; 
+					}else if(title.match(/Family name/i)){
+						parametersPassed.family_name = data; 
+					}else if(title.match(/Gender/i)){
+						parametersPassed.gender = data[0]; 
+					}else if(title.match(/Birthdate Estimated/i)){
+						parametersPassed.birthdate_estimated = data; 
+					}else if(title.match(/Birthdate/i)){
+						parametersPassed.birthdate = data; 
+					}else if(title.match(/Home District/i)){
+						parametersPassed.home_district = data; 
+					}else if(title.match(/Home TA/i)){
+						parametersPassed.home_traditional_authority = data; 
+					}else if(title.match(/Home Village/i)){
+						parametersPassed.home_village = data; 
+					}else if(title.match(/Current District/i)){
+						parametersPassed.current_district = data; 
+					}else if(title.match(/Current TA/i)){
+						parametersPassed.current_traditional_authority = data; 
+					}else if(title.match(/Current Village/i)){
+						parametersPassed.current_village = data; 
+					}else if(title.match(/Landmark/i)){
+						parametersPassed.landmark = data; 
+					}else if(title.match(/Cell phone/i)){
+						parametersPassed.cell_phone_number = data; 
+					}
+        }
 
-              current_district:                __$('current_district').value, 
-              current_traditional_authority:   __$('current_ta').value,
-              current_village:                 __$('current_village').value,
-
-              home_district:                   __$('home_district').value,
-              home_traditional_authority:      __$('home_ta').value,
-              home_village:                    __$('home_village').value,
-
-              landmark:                        __$('landmark').value,
-              cell_phone_number:               __$('cellphone').value
-            }
-           
-         PersistData(parameter, 'people');
-         
-        // window.location.href = '/apps/core/views/patient_dashboard.html';
+        postClientParamaters(parametersPassed);
       }
 
       function changeNextButton(){
@@ -470,6 +491,10 @@
     set_dob = (dob_year + '-' + dob_month + '-' + dob_day)
   }
 
+	function setOverFow() {
+		var element = document.getElementById("inputFrame" + tstCurrentPage);
+		element.style="overflow: auto;";
+	}
 </script>
 
 <form action="/apps/core/views/patient_dashboard.html" method="POST">
@@ -550,7 +575,7 @@
     helpText="Home District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
+    tt_onLoad="clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
     objectType="districts" />
 
   <input type="text" name="home_ta" 
@@ -589,7 +614,7 @@
     helpText="Current District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
+    tt_onLoad="clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
     objectType="districts" />
 
   <input type="text" name="current_ta" 
@@ -775,4 +800,42 @@ function validateEnteredDate(inputText){
 
   return true;
 }
+
+function postClientParamaters(parametersPassed) {
+  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/people';
+	var parametersPassed = JSON.stringify(parametersPassed);
+	showStatus();
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 201) {
+      var obj = JSON.parse(this.responseText);
+			createPatient(obj['person_id']);
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send(parametersPassed);
+}
+
+function createPatient(person_id) {
+  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/patients';
+	var parametersPassed = JSON.stringify({person_id: person_id});
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 201) {
+      var obj = JSON.parse(this.responseText);
+			document.location = "../patient_dashboard.html?patient_id=" + person_id;
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send(parametersPassed);
+}
+
+
+
 </script>
