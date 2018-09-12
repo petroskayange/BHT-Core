@@ -1137,7 +1137,6 @@ function ajaxRequest(aElement, aUrl, objectType){
 
 function setRoles(aURL){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aURL;
-    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1169,7 +1168,6 @@ function setRoles(aURL){
 
 function loadUsernames(aURL){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aURL;
-    console.log(url);
     aElement = __$('options');
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
@@ -1182,7 +1180,6 @@ function loadUsernames(aURL){
               for(var x = 0; x < results.length; x ++){
                    var li = document.createElement('li');
                         li.innerHTML = results[x].username;
-                        console.log();
                         li.setAttribute('tstValue', results[x].username);
                         li.setAttribute('user_id', results[x].user_id);
                         var user_id =results[x].user_id;

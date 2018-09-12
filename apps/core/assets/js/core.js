@@ -71,7 +71,6 @@ function _ajaxUrl(res){
 
 
 function loadDoc() {
-    console.log(apiURL);
 
     $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
@@ -80,13 +79,11 @@ function loadDoc() {
     },
     function(data,status){
 
-          console.log("Data: " + data + "\nStatus: " + status);
         if(status.toLocaleLowerCase() === "success") {
           sessionStorage.setItem(auth_token, data.authorization.token);
           
         }
         else {
-        console.log("no");
         }
     });
 }
@@ -119,7 +116,6 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    // console.log("/apps/config/apps.json");
     $.getJSON("/apps/config/apps.json")
         .done(function(data, status) {
             parser(data);
@@ -162,7 +158,6 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
             $(this).attr('src', "/public/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function() {
-        // console.log(applicationImage);
         sessionStorage.setItem("applicationImage", applicationImage);
         sessionStorage.setItem("applicationName", applicationName);
         changeModule();
@@ -170,7 +165,6 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
 
  }
  function getName(user_id, url, port, protocol) {
-    //  console.log(apiURL);
     
     jQuery.getJSON({
         url: protocol+'://'+url+':' + port+ '/api/v1/users/'+user_id,
@@ -181,10 +175,8 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
             var username = result.username;
             var allRoles = '';
             var roles_length = result.roles.length;
-            console.log(roles_length);
                 for (let index = 0; index < roles_length; index++) {
                     allRoles = result.roles[index].role + ", "+ allRoles;
-                    console.log(result.roles[index].role);
                 }    
            var role = result.roles.role;
             var date_created = result.date_created;
@@ -209,11 +201,8 @@ function setUser() {
     var given_name = document.getElementById("first_name").textContent;
     var family_name = document.getElementById("last_name").textContent;
     var username = document.getElementById("username").textContent;
-    console.log(given_name);
     sessionStorage.setItem("given_name", given_name);
-    // var family_name = $("#last_name").innerHTML;
     sessionStorage.setItem("family_name", family_name);
-    // var username = $("#username").innerHTML;
     sessionStorage.setItem("username", username);
 }
 
@@ -251,11 +240,8 @@ function changeModule() {
     let applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
-            // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
-           // console.log(sessionStorage.getItem("displayBarcode"));
             if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
-                // showBarcode = false
                 showBarcodeDiv();
                
             }else {
@@ -264,9 +250,7 @@ function changeModule() {
            
             $("#myModal").modal("hide");
             $("#application-name").text(sessionStorage.getItem("applicationName"));
-            // console.log(sessionStorage);
     }else {
-        // console.log(sessionStorage);
     }
 }
 function showBarcodeDiv() {
@@ -394,7 +378,6 @@ function checkCredentials(username, password) {
         })
         .fail(function(xhr, status, error) {
             // error handling
-            // console.log(xhr.status);
             showMessage("Wrong username or password");
             window.location = "/apps/core/views/login.html";
         });
