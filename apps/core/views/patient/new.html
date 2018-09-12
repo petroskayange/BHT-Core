@@ -63,15 +63,15 @@
 					}else if(title.match(/Home District/i)){
 						parametersPassed.home_district = data; 
 					}else if(title.match(/Home TA/i)){
-						parametersPassed.home_traditional_authority = data; 
+						parametersPassed.home_traditional_authority = (data || 'Unknown'); 
 					}else if(title.match(/Home Village/i)){
-						parametersPassed.home_village = data; 
+						parametersPassed.home_village = (data || 'Unknown'); 
 					}else if(title.match(/Current District/i)){
-						parametersPassed.current_district = data; 
+						parametersPassed.current_district = (data || 'Unknown'); 
 					}else if(title.match(/Current TA/i)){
 						parametersPassed.current_traditional_authority = data; 
 					}else if(title.match(/Current Village/i)){
-						parametersPassed.current_village = data; 
+						parametersPassed.current_village = (data || 'Unknown'); 
 					}else if(title.match(/Landmark/i)){
 						parametersPassed.landmark = data; 
 					}else if(title.match(/Cell phone/i)){
@@ -465,7 +465,7 @@
   }
 
   function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=100&name=");
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=1000&name=");
     listSuggestions(tstCurrentPage);
   }
 
@@ -610,7 +610,8 @@
   <input type="text" name="home_ta" 
   id="home_ta" field_type="alpha" 
   helpText="Home TA" 
-  ajaxURL="" 
+  ajaxURL=""
+  condition="$('home_region').value != '4'" 
   tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
   objectType="traditional_authority" />
 
@@ -618,6 +619,7 @@
   id="home_village" field_type="alpha" 
   helpText="Home Village" 
   ajaxURL="" 
+  condition="$('home_region').value != '4'" 
   tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
   objectType="village" />
 
@@ -650,6 +652,7 @@
     id="current_ta" field_type="alpha" 
     helpText="Current TA" 
     ajaxURL="" 
+    condition="$('current_region').value != '4'" 
     tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
     objectType="traditional_authority" />
 
@@ -657,6 +660,7 @@
     id="current_village" field_type="alpha" 
     helpText="Current Village" 
     ajaxURL="" 
+    condition="$('current_region').value != '4'" 
     tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
     objectType="village" />
 
