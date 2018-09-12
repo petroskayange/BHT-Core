@@ -1084,6 +1084,7 @@ function highlightSelection(options, inputElement){
 
 function ajaxRequest(aElement, aUrl, object_type){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
+    var object_type = objectType.getAttribute('objectType');
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
