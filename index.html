@@ -78,7 +78,7 @@
       <div class="container-tab" id="generic_tabs">
       </div>
       <!-- Modal -->
-      <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
          <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px;">
                <div class="modal-header">
@@ -93,7 +93,7 @@
                      <div class="row" id="modal-div">
                         <template id="card_template">
                            <!-- <div class="" > -->
-                           <div class="card col-lg-2 col-sm-2" id="cardDiv" style="margin: 10px;">
+                           <div class="app-btn" id="cardDiv" style="margin: 10px;">
                               <a href="#" class="card-block clearfix" id="moduleButton">
                                  <img alt="Avatar" style="width:70px; height: 60px; align-content: center; margin-left: 20%; margin-top: 10%;" id="cardImage">
                                  <div class="middle">
@@ -114,9 +114,9 @@
                      </div>
                   </div>
                </div>
-               <div class="modal-footer">
+<!--                <div class="modal-footer">
                   <button class="red" data-dismiss="modal">Close</button>
-               </div>
+               </div> -->
             </div>
          </div>
       </div>
@@ -144,7 +144,7 @@
             <button class="btn btn-danger buttons red " style="width: 200px; font-size: 2rem;" id="logout">Logout</button>
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Modules &nbsp; &nbsp; &nbsp;<img src="public/assets/images/launcher.png"></span></button>
-            <button class="btn buttons green" style="margin-right: 10px; width:250px;font-size:18px;visibility: hidden; background: green;" id="registerButton" onmousedown="registerPatientRedirect();">Find / <br>Register Patient</button>
+            <button class="green" style="margin: 5px; width: 285px; padding: 0px;" visibility: hidden; id="registerButton" onmousedown="registerPatientRedirect();" ><span>Find or Register Patient</span></button>
          </div>
          </div>
       </footer>
