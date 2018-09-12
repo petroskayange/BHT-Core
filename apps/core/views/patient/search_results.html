@@ -59,8 +59,8 @@
         }
       }
 
-      createControlAndAssignValue("given_name", "person[names][given_name]", sessionStorage.getItem("first_name"));
-      createControlAndAssignValue("family_name", "person[names][family_name]", sessionStorage.getItem("given_name"));
+      createControlAndAssignValue("given_name", "person[names][given_name]", sessionStorage.getItem("given_name"));
+      createControlAndAssignValue("family_name", "person[names][family_name]", sessionStorage.getItem("family_name"));
       createControlAndAssignValue("gender", "person[gender]", "M");
     }
 
