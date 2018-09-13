@@ -106,3 +106,12 @@
     -webkit-box-shadow: inset 0 0 10px #000000;
     box-shadow: inset 0 0 10px #000000;
 }
+
+.cells {
+    display: table-cell;
+    border: 1px dotted #d3d3d3;
+    border-radius: 2px;
+}
+.cells {
+    display: table-cell;
+}
