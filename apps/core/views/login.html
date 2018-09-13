@@ -9,8 +9,9 @@
     <script language="javascript" defer="true">
     tstUsername = "";
     tstUserKeyboardPref = "abc";
-    tstCurrentDate = "2018-08-31";
     sessionStorage.clear();
+    var d = new Date();
+    d.toDateString();
     function addHereButton() {
         var button = document.createElement("button");
         button.id = "addHere";
@@ -75,7 +76,7 @@
                 var barcode = "";
                 var tt_cancel_destination = "/logout"
                 function inform() {
-                    $('infoBar' + tstCurrentPage).innerHTML = "Muli bwanji, enter your user information or scan your id card. <span style='font-size:0.6em;float:righti;margin-right: 20px;'>(ART Version: v3.7.7-1 - <span >Friday, 31-Aug-2018</span>)</span>";
+                    $('infoBar' + tstCurrentPage).innerHTML = "Muli bwanji, enter your user information or scan your id card";
                 }
                 function validateLocation() {
                 __$("nextButton").removeAttribute("onmousedown");

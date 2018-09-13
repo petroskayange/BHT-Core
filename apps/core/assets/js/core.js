@@ -6,6 +6,9 @@
 // var apiPort =''; sessionStorage.getItem("apiPort");
 var apiURL,apiPort, apiProtocol;
 getAPI();
+var url = window.location.href;
+// var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -16,6 +19,7 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 
 // URL formulation logic
 var auth_token = null;
+
 if (sessionStorage.getItem("applicationName") !== null) {
     showBarcodeDiv();
 }
@@ -50,7 +54,7 @@ var person_names = "person_names";
 function _ajaxUrl(res){
    var result = [];
     $.getJSON({
-        url: apiProtocol+ '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
+        url: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', sessionStorage.getItem(auth_token));
         },
@@ -65,32 +69,45 @@ function _ajaxUrl(res){
     return result;
 }
 
- 
+
 function loadDoc() {
 
-    $.post(apiProtocol+"://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
+    $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
     {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "test"
     },
     function(data,status){
 
-          console.log("Data: " + data + "\nStatus: " + status);
         if(status.toLocaleLowerCase() === "success") {
           sessionStorage.setItem(auth_token, data.authorization.token);
           
         }
         else {
-        console.log("no");
         }
     });
 }
 
-/*function checkToken(){
-    console.log(sessionStorage.getItem(auth_token));
-}*/
-// end of url formulation logic
+function PersistData(data, res){
+     
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + res;
+    var req = new XMLHttpRequest();
+    
+    req.onreadystatechange = function() {
+       
+        if (req.readyState == 4  && req.status == 200) {
+           // window.location.href = '/apps/core/views/patient_dashboard.html';
+        } else {
+           console.log("@@@@" + req.responseText);
+       }
+     }
+  
+    req.open('POST', url, true);
+    req.setRequestHeader('Content-type','application/json');
+    req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+    req.send(JSON.stringify(data));
 
+}
 
 if (document.createElement("template").content) {
     /*Code for browsers that supports the TEMPLATE element*/
@@ -99,7 +116,6 @@ if (document.createElement("template").content) {
     var applicationIcon = [];
     var applicationFolder = [];
     var applicationJsonUrl = [];
-    // console.log("/apps/config/apps.json");
     $.getJSON("/apps/config/apps.json")
         .done(function(data, status) {
             parser(data);
@@ -123,22 +139,54 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
             $(this).attr('src', "/public/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function() {
-        // console.log(applicationImage);
         sessionStorage.setItem("applicationImage", applicationImage);
         sessionStorage.setItem("applicationName", applicationName);
         changeModule();
     });
 
  }
+ function getName(user_id, url, port, protocol) {
+    
+    jQuery.getJSON({
+        url: protocol+'://'+url+':' + port+ '/api/v1/users/'+user_id,
+        data: { },
+        type: 'GET',
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));},
+        success: function(result) {
+            var username = result.username;
+            var allRoles = '';
+            var roles_length = result.roles.length;
+                for (let index = 0; index < roles_length; index++) {
+                    allRoles = result.roles[index].role + ", "+ allRoles;
+                }    
+           var role = result.roles.role;
+            var date_created = result.date_created;
+            var given_name = result.person.names[0].given_name;
+            var family_name = result.person.names[0].family_name;
+            showUser(username,given_name, family_name, allRoles, date_created);
 
-function showUser() {
-    $("#first_name").text(sessionStorage.getItem("given_name"));
-    $("#last_name").text(sessionStorage.getItem("family_name"));
-    $("#username").text(sessionStorage.getItem("username"));
-    $("#role").text(sessionStorage.getItem("selected_role"));
-    $("#date_created").text(sessionStorage.getItem("date_created"));
-    // console.log(sessionStorage);
+        }
+        });
+    }
+
+function showUser(username, given_name, family_name, role, date_created) {
+    
+    document.getElementById("first_name").innerHTML = given_name;
+    document.getElementById("last_name").innerHTML = family_name;
+    document.getElementById("username").innerHTML = username;
+    document.getElementById("role").innerHTML = role;
+    document.getElementById("date_created").innerHTML = date_created;
 }
+
+function setUser() {
+    var given_name = document.getElementById("first_name").textContent;
+    var family_name = document.getElementById("last_name").textContent;
+    var username = document.getElementById("username").textContent;
+    sessionStorage.setItem("given_name", given_name);
+    sessionStorage.setItem("family_name", family_name);
+    sessionStorage.setItem("username", username);
+}
+
 
 function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
@@ -173,11 +221,8 @@ function changeModule() {
     let applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
-            // $(this).attr('src', "/public/assets/images/no_image.png");
             $("#registerButton").css("visibility", "visible");
-            console.log(sessionStorage.getItem("displayBarcode"));
             if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
-                // showBarcode = false
                 showBarcodeDiv();
                
             }else {
@@ -186,9 +231,7 @@ function changeModule() {
            
             $("#myModal").modal("hide");
             $("#application-name").text(sessionStorage.getItem("applicationName"));
-            // console.log(sessionStorage);
     }else {
-        // console.log(sessionStorage);
     }
 }
 function showBarcodeDiv() {
@@ -305,20 +348,18 @@ function signIn() {
 }
 
 function checkCredentials(username, password) {
-        jQuery.post(apiProtocol+'://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
+        jQuery.post(apiProtocol + '://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
             username: username,
             password: password
         })
         .done(function(msg) {
-            alert("log in successful");
             sessionStorage.setItem("authorization", msg.authorization.token);
             window.location.href = "/";
             sessionStorage.removeItem("userPassword");
         })
         .fail(function(xhr, status, error) {
             // error handling
-            // console.log(xhr.status);
-            alert("wrong password");
+            showMessage("Wrong username or password");
             window.location = "/apps/core/views/login.html";
         });
 }
