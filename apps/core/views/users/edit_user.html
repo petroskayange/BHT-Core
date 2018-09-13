@@ -1,49 +1,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <script language="javascript" defer="true">
-      tstUsername = "";
-      tstUserKeyboardPref = "qwerty";
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
+  <script language="javascript" defer="true">
+    tstUsername = "";
+    tstUserKeyboardPref = "qwerty";
+
+    var d = new Date();
+    d.toDateString();
+
+    function getInput() {
+      key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+      value = $('touchscreenInput' + tstCurrentPage).value;
+      sessionStorage.setItem(key, value);
       var d = new Date();
-      d.toDateString();
-
-      function getInput(){
-         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-         value = $('touchscreenInput' + tstCurrentPage).value;
-         sessionStorage.setItem(key, value);
-         var d = new Date();           
-         sessionStorage.setItem("date_created", d.toDateString())
-      }
-
-      function addInput(field_name) {
-        __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+      sessionStorage.setItem("date_created", d.toDateString())
     }
-    </script>
 
-    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+    function addInput(field_name) {
+      __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+    }
+  </script>
 
-  </head>
-  <body id="mateme">
-    <div id="container">
-      <div id="content">
-          <!-- <p id="flash_notice" style="color: green">User was successfully Updated.</p> -->
-        <form method= 'POST'>
-          <input helpText="First Name" value="" allowFreeText="true" type="text" key="given_name" name="given_name" id="given_name" tt_onLoad="addInput('given_name');" tt_onUnload="getInput();" ajaxURL="/search/given_name?search_string=" />
+  <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
 
-          <input helpText="Last Name" key="family_name" value="" tt_onLoad="editUser();addInput('family_name');"field_type="alpha" allowFreeText="true" type="text" name="family_name" id="family_name" tt_onUnload="getInput();" ajaxURL="/search/family_name?search_string=" />
-        </form>
-        <div id="footer">
-        </div>
+</head>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <!-- <p id="flash_notice" style="color: green">User was successfully Updated.</p> -->
+      <form method='POST'>
+        <input helpText="First Name" value="" allowFreeText="true" type="text" key="given_name" name="given_name" id="given_name"
+          tt_onLoad="addInput('given_name');" tt_onUnload="getInput();" ajaxURL="/search/given_name?search_string=" />
+
+        <input helpText="Last Name" key="family_name" value="" tt_onLoad="editUser();addInput('family_name');"
+          field_type="alpha" allowFreeText="true" type="text" name="family_name" id="family_name" tt_onUnload="getInput();"
+          ajaxURL="/search/family_name?search_string=" />
+      </form>
+      <div id="footer">
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
 
 <script type="text/javascript">
@@ -54,50 +60,49 @@
   var apiProtocol = sessionStorage.getItem("apiProtocol");
   var id = url.searchParams.get("user_id");
   getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
- 
+
   function editUser() {
-                __$("nextButton").removeAttribute("onmousedown");
-                document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
-                document.getElementById('touchscreenInput1').addEventListener('keyup', function(event) {
-                event.preventDefault();
-                if (event.keyCode === 13) {
-                  postEdit();
-                }
-                });
-                __$("nextButton").onmousedown = function(){
-                  postEdit();
-                }
+    __$("nextButton").removeAttribute("onmousedown");
+    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
+    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        postEdit();
+      }
+    });
+    __$("nextButton").onmousedown = function () {
+      postEdit();
+    }
 
   }
 
-  function postEdit(){
-                getInput();
-                given_name = sessionStorage.getItem("given_name")
-                family_name = sessionStorage.getItem("family_name");
-                var http = new XMLHttpRequest();
-                var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/users/'+id;
-                var params = 'given_name='+given_name+'&family_name='+family_name;
-                http.open('PUT', url, true);
-                //Send the proper header information along with the request
-                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                http.onreadystatechange = function() {//Call a function when the state changes.
-                    if(http.readyState == 4 ) {
-                      // alert(http.responseText);
-                      
-                      if(http.status == 200) {
-                        // window.location.href = "show.html";
-                        document.location = '/apps/core/views/users/show.html?user_id='+id;
-                      }
-                      else if (http.status == 400){
-                      alert("Bad Request");
-                    }else {
-                      alert("error" + http.status);
-                    }
-                    }
-                }
-                http.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
-                http.send(params);
-               
+  function postEdit() {
+    getInput();
+    given_name = sessionStorage.getItem("given_name")
+    family_name = sessionStorage.getItem("family_name");
+    var http = new XMLHttpRequest();
+    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/users/' + id;
+    var params = JSON.stringify({
+      given_name: sessionStorage.getItem("given_name"),
+      family_name: sessionStorage.getItem("family_name"),
+    });
+    http.open('PUT', url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+      if (http.readyState == 4) {
+
+        if (http.status == 200) {
+          document.location = '/apps/core/views/users/show.html?user_id=' + id;
+        } else if (http.status == 400) {
+          alert("Bad Request");
+        } else {
+          alert("error" + http.status);
+        }
       }
-  
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    http.send(params);
+
+  }
 </script>
