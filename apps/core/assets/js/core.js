@@ -354,7 +354,7 @@ function checkCredentials(username, password) {
         })
         .done(function(msg) {
             sessionStorage.setItem("authorization", msg.authorization.token);
-            window.location.href = "/";
+            window.location.href = "location.html";
             sessionStorage.removeItem("userPassword");
         })
         .fail(function(xhr, status, error) {
