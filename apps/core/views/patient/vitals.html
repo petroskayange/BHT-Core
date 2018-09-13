@@ -439,7 +439,7 @@ function confirmIfWeightIsEntered() {
           tt_pageStyleClass= "NoControls" helpText="Vitals" optional = "true"/>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none';" 
+          tt_onLoad="__$('keyboard').style.display = 'none';buildVitalSummary();" 
           tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"/>
 
       
