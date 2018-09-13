@@ -129,7 +129,7 @@
                      <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
                         <tr>
                            <td style="width: 40px; text-align: right;">
-                              <img src= "/apps/core/assets/images/diabetes.png"/>
+                              <img id="appIcon"/>
                            </td>
                         </tr>
                      </table>
@@ -206,12 +206,11 @@
       <!-- Modal -->
       <footer class="footer">
          <div class="container-footer">
-            <button onclick="finish();" class="btn buttons logout" style="margin-right: 5px; background: green;" id="finishbutton">&nbsp; &nbsp; &nbsp;Finish &nbsp; &nbsp; &nbsp;</button>
+            <button onclick="finish();" class="button green navButton" style="margin-right: 5px; padding: 0px;" id="finishbutton"><span>&nbsp; &nbsp; &nbsp;Finish &nbsp; &nbsp; &nbsp;</span></button>
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Applications &nbsp; &nbsp; &nbsp;<img src="/public/assets/images/launcher.png"></span></button>
-            <button class="btn btn-success buttons" style="margin-right: 5px; background: #538fbe;" id="activities">
-            <span>&nbsp; &nbsp; &nbsp;Activities &nbsp; &nbsp; &nbsp;</span>
-            </button>
+            <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+            <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span></button>
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span></button>
          </div>
@@ -228,6 +227,7 @@
       }
       
       changeIcon("Male");
+      document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
    </script>
 </html>
 
