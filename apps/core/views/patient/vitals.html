@@ -25,6 +25,7 @@
 .cell-left {
   float: left;
   width: 12%;
+  padding-left: 10%;
 }
 
 .cell-right {
@@ -185,7 +186,9 @@ function buildVitalsButtons(element) {
 		["Weight","weight.png"],
 		["Height","height.png"],
 		["BP","bp.png"],
-		["Temp","temp.png"]
+		["Temp","temp.png"],
+		["SPO2","spo2.png"],
+		["Pulse","pulse-rate.png"]
  	];
  
   var btnCont = document.createElement('div')
@@ -277,12 +280,54 @@ function validateUserInput() {
     validation_result = validateHeight(data);
   }else if(activeInput.id.match(/bp/i)){
     validation_result = validateBP(data);
+  }else if(activeInput.id.match(/Temp/i)){
+    validation_result = validateTemp(data);
+  }else if(activeInput.id.match(/SPO2/i)){
+    validation_result = validateSPO2(data);
+  }else if(activeInput.id.match(/Pulse/i)){
+    validation_result = validatePulse(data);
   }else{
     validation_result = true;
   }
   
   
   return validation_result;
+}
+
+function validatePulse(pulse){
+  if(pulse.trim().length < 1)
+    return true;
+
+  if(!isNumeric(pulse)){
+    showMessage("Not a valid Pulse Rate.<br />Please enter a valid reading.");
+    return false;
+  }
+
+  return true;
+}
+
+function validateSPO2(spo2){
+  if(spo2.trim().length < 1)
+    return true;
+
+  if(!isNumeric(spo2)){
+    showMessage("Not a valid Blood oxygen saturation.<br />Please enter a valid reading.");
+    return false;
+  }
+
+  return true;
+}
+
+function validateTemp(temp){
+  if(temp.trim().length < 1)
+    return true;
+
+  if(!isNumeric(temp)){
+    showMessage("Not a valid temp - please enter a valid temp reading.");
+    return false;
+  }
+
+  return true;
 }
 
 
@@ -306,7 +351,7 @@ function validateWeight(weight){
   }
 
   if(!isNumeric(weight)){
-    showMessage("Not a validate weight - please enter a valid weight.");
+    showMessage("Not a valid weight - please enter a valid weight.");
     return false;
   }
 
@@ -430,7 +475,7 @@ function submitVitals() {
   var encounter = {
     encounter_type_name: 'Vitals',
     encounter_type_id:  6,
-    patient_id: 56,
+    patient_id: 50,
     encounter_datetime: null
   }
 
@@ -467,6 +512,10 @@ function postVitalsObs(encounter_id) {
       vitals_observations.push({concept_id: 5086,  value_numeric: bp_diastolic})
     }else if(name.match(/Temp/i)) {
       vitals_observations.push({concept_id: 5088,  value_numeric: vital, value_modifier: "°C"})
+    }else if(name.match(/SPO2/i)) {
+      vitals_observations.push({concept_id: 5092,  value_numeric: vital, value_modifier: "o2"})
+    }else if(name.match(/Pulse/i)) {
+      vitals_observations.push({concept_id: 5087,  value_numeric: vital})
     } 
   }
 
