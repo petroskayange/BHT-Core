@@ -4,4 +4,4 @@ apps/core/application.json
 apps/config/apps.json
 apps/core
 *.swp
-apps/.*
+apps/
