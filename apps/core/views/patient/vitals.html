@@ -1,0 +1,146 @@
+
+<script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+<script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+
+<style>
+
+.main-table-div {
+  display: table;
+  width: 100%;
+}
+
+.main-table-div-row {
+  display: table-row;
+}
+
+.main-table-div-cell {
+  display: table-cell;
+}
+
+.cell-left {
+  float: left;
+  width: 300px;
+}
+
+
+.table-main {
+  display: table;
+  width: 100%;
+  overflow: auto;
+}
+
+.table-main-row {
+  display: table-row;
+  border-collapse: separate;
+}
+
+.table-main-cell {
+/*  display: table-cell;
+  border-style: solid;
+  border-width: 1px;
+  text-align: center;
+
+  padding: 10px;
+  box-shadow: 5px 10px;
+
+  height: 20px;
+  width: 30px; */
+}
+
+.separator {
+  border-style: none;
+  padding-bottom: 300px;
+}
+
+</style>
+
+
+<script>
+
+function buildVitalsPage() {
+  var inputFrame = document.getElementById("inputFrame" + tstCurrentPage);
+
+  var mainContainer = document.createElement('div');
+  mainContainer.setAttribute("class", "main-table-div");
+
+  var mainContainerRow = document.createElement('div');
+  mainContainerRow.setAttribute("class", "main-table-div-row");
+  mainContainer.appendChild(mainContainerRow);
+
+  var cells = ['left','right'];
+  for(var i = 0 ; i < cells.length; i++){
+    var mainContainerCell = document.createElement('div');
+    mainContainerCell.setAttribute("class", "main-table-div-cell cell-" + cells[i]);
+
+    if(cells[i] == 'left') {
+      buildVitalsButtons(mainContainerCell);
+    }
+
+    mainContainerRow.appendChild(mainContainerCell);
+  }
+
+  inputFrame.appendChild(mainContainer);
+}
+
+function buildVitalsButtons(element) {
+  var buttons = ["Weight","Height","BP", "Temp", "Blood ce"];
+  
+  var btnCont = document.createElement('div')
+  btnCont.setAttribute('class',"table-main");  
+  for(var i = 0; i < buttons.length; i++){
+    var btnContRow = document.createElement('div')
+    btnContRow.setAttribute('class',"table-main-row");
+    btnCont.appendChild(btnContRow);  
+    var cell = document.createElement('div');
+    cell.setAttribute('class',"table-main-cell separator");
+    cell.innerHTML = '&nbsp;'
+
+
+    var btnContRow = document.createElement('div')
+    btnContRow.setAttribute('class',"table-main-row");
+    var cell = document.createElement('div');
+    btnContRow.appendChild(cell);
+    cell.setAttribute('class',"table-main-cell");
+    buildBTN(cell, buttons[i], i);
+    btnCont.appendChild(btnContRow);  
+  }
+   
+  element.appendChild(btnCont);
+}
+
+function buildBTN(element, name, i) {
+  var a = document.createElement('a');
+  a.setAttribute("class", "btns");
+  a.setAttribute("href", "#");
+  a.innerHTML = name;
+  a.setAttribute("onmousedown","alert(this)");
+  a.setAttribute("id","vitals-" + i);
+  element.appendChild(a);
+}
+
+</script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+
+      <form onsubmit="submitEncounter();">
+
+        <input type="text" name="summary"
+          tt_onLoad="__$('keyboard').style.display = 'none';buildVitalsPage();;" 
+          tt_pageStyleClass= "NoControls" helpText="Vitals" optional = "true"/>
+
+        <input type="text" name="summary"
+          tt_onLoad="__$('keyboard').style.display = 'none';" 
+          tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"/>
+
+      
+
+      </form>
+
+   </div>
+ </div>
+</body>
+
