@@ -1,0 +1,18 @@
+{
+	"app_attributes": {
+		"app_name": "application name",
+		"icon": "base64",
+		"version": "version number"
+	},
+	"overview": {
+		"link": "link/to/jsonfile/"
+	},
+	"reports": {
+		"report": {
+			"name": "report name",
+			"type": "report type",
+			"icon": "base64",
+			"data": []
+		}
+	}
+}

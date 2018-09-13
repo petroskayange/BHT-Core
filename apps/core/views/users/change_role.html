@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+
+  <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
+  <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+
+</head>
+<script language="javascript" defer="true">
+  var tt_cancel_destination = "/";
+      var url = new URL(url);
+      var apiURL = sessionStorage.getItem("apiURL");
+      var apiPort = sessionStorage.getItem("apiPort");
+      var apiProtocol = sessionStorage.getItem("apiProtocol");
+      var id = url.searchParams.get("user_id");
+      console.log(id);
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         sessionStorage.setItem(key, value);
+         var d = new Date();           
+         sessionStorage.setItem("date_created", d.toDateString())
+      }
+
+      function changeNextButton(){
+         __$("nextButton").removeAttribute("onmousedown")
+         __$("nextButton").onmousedown = function(){
+            confirm_password = $('touchscreenInput' + tstCurrentPage).value;
+            
+              role = [$('touchscreenInput' + tstCurrentPage).value];
+                  postEdit(id, role);
+                
+                 
+         }
+      }
+      
+
+    function postEdit(id, role) {
+    getInput();
+    var http = new XMLHttpRequest();
+    let urlfinal = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/users/' + id;
+    var params = JSON.stringify({
+      roles: role,
+    });
+    console.log(role);
+    http.open('PUT', urlfinal, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+      if (http.readyState == 4) {
+
+        if (http.status == 200) {
+          document.location = '/apps/core/views/users/show.html?user_id=' + id;
+        } else if (http.status == 400) {
+          alert("Bad Request");
+        } else {
+          alert("error" + http.status);
+        }
+      }
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    http.send(params);
+
+  }
+    
+
+    </script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <form action='' method='POST'>
+
+          <select allowFreeText="false" helpText=" Role" id="userRole" name="user_role" tt_onLoad="changeNextButton();setRoles('/roles?page_size=100'); $(keyboard).style.display = none;"
+          key="role" tt_onUnLoad="getInput();"></select>
+
+
+      </form>
+
+      <div id="footer">
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/";
+</script>
