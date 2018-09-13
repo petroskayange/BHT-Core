@@ -108,7 +108,7 @@
       <tr>
         <td>
           <button id="change_password" class="silver" style="margin-top:10px;"
-                  onmousedown="document.location = '/apps/core/views/users/change_password.html'"><span>Change Password</span>
+                  onmousedown="editPassword();"><span>Change Password</span>
           </button>
         </td>
       </tr>
@@ -116,12 +116,12 @@
          <tr>
           <td>
             <button id="edit" class="silver" style="margin-top:10px;"
-                    onmousedown="document.location = '/'"><span>Update Role</span>
+                    onmousedown="editRole();"><span>Update Role</span>
             </button>
           </td>
         </tr>
        <!-- <tr>
-          <td>
+          <td
             <button id="change_password" class="silver" style="margin-top:10px;"
                     onmousedown="document.location = '/user/delete_role?id=26'"><span>Delete Role</span>
             </button>
@@ -154,5 +154,11 @@
   var tt_cancel_destination = "/";
   function editUser() {
     document.location = '/apps/core/views/users/edit_user.html?user_id='+id;
+  }
+  function editPassword() {
+    document.location = '/apps/core/views/users/change_password.html?user_id='+id;
+  }
+  function editRole() {
+    document.location = '/apps/core/views/users/change_role.html?user_id='+id;
   }
 </script>
