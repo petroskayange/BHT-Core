@@ -1,7 +1,7 @@
-!apps/*
 !apps/core
 !apps/config
 apps/core/application.json
 apps/config/apps.json
 apps/core
 *.swp
+apps/.*
