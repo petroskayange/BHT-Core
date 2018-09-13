@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" href="/apps/core/assets/css/vitals-keypad.css" type="text/css">
 <script type="text/javascript" src="/apps/core/assets/js/vitals-keypad.js"></script>
+<script type="text/javascript" src="/apps/core/assets/js/post_parameters.js"></script>
 
 <style>
 
@@ -105,7 +106,7 @@ img {
 .button-diabled {
   color: currentColor;
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.2;
   text-decoration: none;
 }
 
@@ -425,6 +426,76 @@ function confirmIfWeightIsEntered() {
   setVital(e);
 }
 
+function submitVitals() {
+  var encounter = {
+    encounter_type_name: 'Vitals',
+    encounter_type_id:  6,
+    patient_id: 56,
+    encounter_datetime: null
+  }
+
+  submitEncounter(encounter, "postVitalsObs");
+}
+
+function postVitalsObs(encounter_id) {
+
+  var vitals_observations = [];
+
+  for(var name in vitalsEntered){
+    var vital = vitalsEntered[name];
+    vname = null;
+
+    try{
+      if(vital.length > 0){
+        vname = name;
+      }
+    }catch(e){
+    }
+
+    if(!vname)
+      continue;
+
+    if(name.match(/weight/i)) {
+      vitals_observations.push({concept_id: 5089, value_numeric: vital, value_modifier: "kg"})
+    }else if(name.match(/height/i)) {
+      vitals_observations.push({concept_id: 5090,  value_numeric: vital, value_modifier: "cm"})
+    }else if(name.match(/BP/i)) {
+      var bp_systolic = vital.split("/")[0];
+      var bp_diastolic = vital.split("/")[1];
+
+      vitals_observations.push({concept_id: 5085,  value_numeric: bp_systolic})
+      vitals_observations.push({concept_id: 5086,  value_numeric: bp_diastolic})
+    }else if(name.match(/Temp/i)) {
+      vitals_observations.push({concept_id: 5088,  value_numeric: vital, value_modifier: "°C"})
+    } 
+  }
+
+  var obs = {
+    encounter_id: encounter_id,
+    observations: vitals_observations
+  };
+
+  if(vitals_observations.length > 0)
+    createObs(obs, "nextPage")
+
+  
+}
+
+function nextPage() {
+  alert("Done");
+}
+
+function changeNextBtnToSubmit() {
+  var nextBtn = document.getElementById('nextButton');
+  nextBtn.setAttribute("onmousedown","submitVitals();");
+  nextBtn.setAttribute("onclick","");
+}
+
+function resetNextButton() {
+  var nextBtn = document.getElementById('nextButton');
+  nextBtn.setAttribute("onmousedown","gotoNextPage();");
+}
+
 </script>
 
 <body id="mateme">
@@ -439,8 +510,9 @@ function confirmIfWeightIsEntered() {
           tt_pageStyleClass= "NoControls" helpText="Vitals" optional = "true"/>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none';buildVitalSummary();" 
-          tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"/>
+          tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtnToSubmit();buildVitalSummary();" 
+          tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"
+          tt_onUnLoad="resetNextButton();" />
 
       
 
