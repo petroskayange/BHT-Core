@@ -1085,7 +1085,7 @@ function highlightSelection(options, inputElement){
 function ajaxRequest(aElement, aUrl, objectType){
     var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
     var object_type = objectType.getAttribute('objectType');
-
+   
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(){
         
@@ -1111,12 +1111,21 @@ function ajaxRequest(aElement, aUrl, objectType){
 						 }else if(object_type == 'village'){
 							li.innerHTML = results[x].name;
 							li.setAttribute('tstvalue', results[x].village_id)
-							li.setAttribute('id', results[x].village_id);
-						 }else{
-							li.innerHTML = results[x];
-							li.setAttribute('tstValue', results[x]);
-							li.setAttribute('id', x);
-						 }
+                            li.setAttribute('id', results[x].village_id);
+                         }else if(object_type == 'states'){
+                             console.log(results[x])
+                            li.innerHTML = results[x].states[x].concept.concept_names;
+							li.setAttribute('tstValue', results[x].states[x].concept.concept_names);
+                            li.setAttribute('id', x);
+                         }else if(object_type == "program"){
+                            li.innerHTML = results[x].name;
+							li.setAttribute('tstValue', results[x].program_id);
+                            li.setAttribute('id', x)
+                        }else{
+                            li.innerHTML = results[x];
+                            li.setAttribute('tstValue', results[x]);
+                            li.setAttribute('id', x);
+                        }
 
 						 li.setAttribute('onmousedown',"null; updateTouchscreenInputForSelect(this);");
 						 li.setAttribute('onclick',"null; updateTouchscreenInputForSelect(this);")
