@@ -1113,10 +1113,16 @@ function ajaxRequest(aElement, aUrl, objectType){
 							li.setAttribute('tstvalue', results[x].village_id)
                             li.setAttribute('id', results[x].village_id);
                          }else if(object_type == 'states'){
-                             console.log(results[x])
-                            li.innerHTML = results[x].states[x].concept.concept_names;
-							li.setAttribute('tstValue', results[x].states[x].concept.concept_names);
-                            li.setAttribute('id', x);
+
+                            var states = results[x].states; 
+
+                            for(var s = 0 ; s < states.length; s++) {
+                                li.innerHTML = states[s].concept.concept_names[0].name;
+                                li.setAttribute('tstValue', states[s].concept.concept_id);
+                                li.setAttribute('id', s);
+                                console.log(li.innerHTML);
+                            } 
+                            
                          }else if(object_type == "program"){
                             li.innerHTML = results[x].name;
 							li.setAttribute('tstValue', results[x].program_id);
