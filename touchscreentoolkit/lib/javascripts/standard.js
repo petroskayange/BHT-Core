@@ -2393,11 +2393,12 @@ function press(pressedChar){
 //ugly hack but it works!
 //refresh options
 function listSuggestions(inputTargetPageNumber) {
+    
     if (inputTargetPageNumber == undefined) {
         return;
     }
     var inputElement = __$('touchscreenInput'+inputTargetPageNumber);
-
+   
     if(inputElement.getAttribute("ajaxURL") != null){
         var pUrl = inputElement.getAttribute("ajaxURL")+inputElement.value;
         ajaxRequest(__$('options'), pUrl, inputElement);
