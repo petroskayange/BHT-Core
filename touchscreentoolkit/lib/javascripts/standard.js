@@ -1113,7 +1113,7 @@ function ajaxRequest(aElement, aUrl, objectType){
 							li.setAttribute('tstvalue', results[x].village_id)
                             li.setAttribute('id', results[x].village_id);
                          }else if(object_type == 'states'){
-                             console.log(results[x].states[x]);
+                             console.log(results[x])
                             li.innerHTML = results[x].states[x].concept.concept_names;
 							li.setAttribute('tstValue', results[x].states[x].concept.concept_names);
                             li.setAttribute('id', x);
