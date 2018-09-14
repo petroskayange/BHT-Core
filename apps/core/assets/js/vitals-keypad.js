@@ -1,7 +1,3 @@
-
-
-
-
 function buildKeyPad() {
   document.getElementById("clearButton").style="display: none;"
   var table = document.createElement('table');
