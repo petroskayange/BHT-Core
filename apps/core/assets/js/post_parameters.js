@@ -1,5 +1,3 @@
-
-
 function submitEncounter(encounter, returnToFunction) {
   var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/encounters';
 
