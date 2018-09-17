@@ -75,48 +75,48 @@
         <div class="headTab" id="tableDiv1">
           <table width="100%" cellpadding="1">
             <tr>
-              <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText"></th>
+              <td style="width: 5%; vertical-align: middle; text-align: left;">
+                <img src= "/apps/core/assets/images/male24x32.png" id="icon_id" alt="person_icon">
+              </td>
+              <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText">John Doe</th>
+            </tr>
+            <tr style="border-top: 1px solid rgb(0, 69, 134);">
+              <td style="text-align: right; padding: 5px; font-weight: bold; width: 12%;" class="blueText" id="primary_id_label">National id</td>
+              <td style="text-align: left; font-weight: bold; width: 3px;">:</td>
+              <td id="primary_id"></td>
             </tr>
             <tr>
-              <th style="text-align: left; font-size: 14px; padding-left: 5px; border-bottom: 1px solid rgb(0, 69, 134);" class="blueText">Identifiers</th>
+              <td style="text-align: left; padding: 5px; font-weight: bold; width: 100px;" class="blueText">Age</td>
+              <td style="text-align: left; width: 3px;">:</td>
+              <td id="age"></td>
             </tr>
-            <tr></tr>
-            <td>
-              <table style="font-size: 12px;" width="100%">
-                <tr>
-                  <td style="text-align: right; font-weight: bold;" class="blueText" id="primary_id_label">National id</td>
-                  <td style="text-align: center; width: 3px;">:</td>
-                  <td id="primary_id"></td>
-                </tr>
-              </table>
-            </td>
           </table>
         </div></td>
       <td style="width: 48%; padding: 5px;">
         <div class="headTab">
           <table style="font-size: 14px;" width="100%">
             <tr>
-              <td style="text-align: right; font-weight: bold; width: 100px;" class="blueText">Gender</td>
+              <td style="text-align: left; padding: 1px; font-weight: bold; width: 100px;" class="blueText">Title1</td>
               <td style="text-align: center; width: 3px;">:</td>
               <td id="gender"></td>
             </tr>
             <tr>
-              <td style="text-align: right; font-weight: bold;" class="blueText">Age</td>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Title2</td>
               <td style="text-align: center; width: 3px;">:</td>
               <td id="age"></td>
             </tr>
             <tr>
-              <td style="text-align: right; font-weight: bold; vertical-align: top;" class="blueText">Address</td>
+              <td style="text-align: left; padding: 1px; font-weight: bold; vertical-align: top;" class="blueText">Address</td>
               <td style="text-align: center; width: 3px; vertical-align: top;">:</td>
               <td id="addressl1">,</td>
             </tr>
             <tr>
-              <td style="text-align: right; font-weight: bold;" class="blueText">&nbsp;</td>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
               <td style="text-align: center; width: 3px;">&nbsp;</td>
               <td id="addressl2"></td>
             </tr>
             <tr>
-              <td style="text-align: right; font-weight: bold;" class="blueText">Phone</td>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Phone</td>
               <td style="text-align: center; width: 3px;">:</td>
               <td id="phone_number"></td>
             </tr>
@@ -126,8 +126,9 @@
         <div class="headTab" id="modApp" style="text-align: center; cursor: pointer;">
           <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
             <tr>
-              <td style="width: 40px; text-align: right;">
-                <!-- <img src="data:image/png;base64,"/></td> -->
+              <td style="width: 150px; text-align: right;">
+                <img id="appIcon" />
+              </td>
             </tr>
           </table>
         </div></td>
@@ -137,8 +138,6 @@
         <div id="main" style="width: 100%; box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75); overflow: hidden; height: 534px; border: 1px solid rgb(52, 93, 181);">
           <table style="border-collapse: collapse; border: 1px solid rgb(52, 93, 181);" width="100%" cellspacing="0" cellpadding="5" border="1">
             <tr style="background-color: rgb(52, 93, 181);">
-              <!-- <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: left; font-weight: bold; padding-left: 10px;">&nbsp;
-              </td> -->
               <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;">Visit History
               </td>
               <td style="border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;" id="header">Date:
@@ -148,12 +147,10 @@
                   <span id="session-date" style="color: red; "></span>
                 <!-- end  -->
                 Next Task: <span id="next-task">&nbsp;</span></td>
-<!--               <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: left; font-weight: bold; background-color: rgb(7, 32, 85); padding-left: 10px;">Tasks
-              </td> -->
             </tr>
             <tr>
               <td rowspan="3">
-                <div id="visits" style="width: 100%; overflow: auto; height: 301px; border: 1px solid rgb(255, 255, 255);">
+                <div id="visits" style="width: 100%; overflow: auto; height: 505px; border: 1px solid rgb(255, 255, 255);">
                   <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
 
                   </ul>
