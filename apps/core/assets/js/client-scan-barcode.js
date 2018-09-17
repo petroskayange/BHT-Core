@@ -58,8 +58,9 @@ function postID(identifier) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      //document.location = "/confirm/" + this.responseText;
-      callbackFunction(this.responseText);
+      // document.location = "/confirm/" + this.responseText;
+      document.location = patient_index_url + "?patient_id="+identifier;
+      // callbackFunction(this.responseText);
     }
   };
   xhttp.open("GET", patient_index_url + "?identifier=" + identifier, true);

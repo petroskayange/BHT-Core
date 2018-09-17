@@ -9,18 +9,15 @@ var applicationName = sessionStorage.getItem("applicationName");
 function checkIfEncounterCaptured(encounterType, name) {
   
     var url = '/apps/' + applicationName[0] +'/application.json';;
-    // console.log(applicationName);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
-      // console.log(encounterType);
       if (this.readyState == 4 && this.status == 200) {
         var results = JSON.parse(this.responseText);
         var available = results.encounters[encounterType].available;
         var url = results.encounters[encounterType].url;
-        console.log(available);
         if (available == false) {
           window.location.href = '/';
-        }else {
+        }else if (available == true){
           window.location.href = url;
         }
       }
