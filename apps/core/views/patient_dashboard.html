@@ -21,16 +21,17 @@
   var patientID = "";
   var selectedEncounterID = "";
 
-  function cancel(){
-    window.location = "/";
-  }
-
   function finish(){
     window.location = "/";
   }
 
-  function editDemographics(){
-    
+  function changeIcon(gender) {
+      var img = document.getElementById('icon_id');
+      if (gender === "Male") {
+          img.setAttribute("src", "/apps/core/assets/images/male24x32.png");
+      } else {
+          img.setAttribute("src", "/apps/core/assets/images/female32x32.png");
+      }
   }
   
 </script>
@@ -179,7 +180,66 @@
 
   </table>
 
-  <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
+    <!-- Modal -->
+  <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
+    <div class="modal-dialog" name="div2">
+      <div class="modal-content" style="margin-left:0px;">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Select module</h4>
+        </div>
+        <!-- <button class="previous round">
+                  <</button>
+                  <button class="next round">></button> -->
+        <div class="modal-body">
+          <div class="container">
+            <div class="row" id="modal-div">
+              <template id="card_template">
+                <!-- <div class="" > -->
+                <div class="app-btn" id="cardDiv" style="margin: 10px;">
+                  <a href="#" class="card-block clearfix" id="moduleButton">
+                    <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                    <div class="middle">
+                      <div class="text">
+                        <p id="apptext"></p>
+                      </div>
+                    </div>
+                    <div class="card-container">
+                      <h4>
+                        <b id="appName"></b>
+                      </h4>
+                      <p id="appDescription"></p>
+                    </div>
+                  </a>
+                </div>
+                <!-- </div> -->
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <footer class="footer">
+    <div class="container-footer">
+      <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+      </button>
+      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/public/assets/images/launcher.png"></span>
+      </button>
+      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+        <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
+      </button>
+      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+      </button>
+    </div>
+    </div>
+  </footer>
+
+<!--   <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
     <div class="buttons" style="margin-bottom: -200px; padding-bottom: 10px; padding-top: 10px;">
       <button onclick="cancel();" style="margin: 5px 0px 0px;" class="red left">
         <span>Cancel</span>
@@ -197,7 +257,7 @@
         <span>Activities</span>
       </button>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <div id="cover">
@@ -211,6 +271,60 @@
   <button autofocus onclick="confirmAction();">Confirm</button>
 </div>
 </body>
+<script src="/apps/core/assets/js/core.js "></script>
+<script>
+  var url = new URL(url);
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
+  var id = url.searchParams.get("patient_id");
+  (document.getElementsByClassName("overview-btns ")[0]);
+  changeModule();
+  url = new URL(url);
+  var d = new Date();
+
+  function ajaxRequest() {
+    console.log("here");
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+
+      if (this.readyState == 4 && this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        console.log(results.person.names[0].given_name);
+        var age = results.person.birthdate;
+        var gender = results.person.gender;
+
+        var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+        var addressl1 = results.person.addresses[0].address1;
+        var addressl2 = results.person.addresses[0].address2;
+        setValues(patient_name, gender, age, addressl1, addressl2, null);
+      }
+    };
+    try {
+      req.open('GET', url, true);
+      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+      req.send(null);
+    } catch (e) {}
+  }
+
+  function finish() {
+    window.location = "/";
+  }
+
+  function setValues(patient_name, gender, age, addressl1, addressl2, phone_number) {
+    document.getElementById("patient_name").innerHTML = patient_name;
+    document.getElementById("gender").innerHTML = gender;
+    document.getElementById("age").innerHTML = age;
+    document.getElementById("addressl1").innerHTML = "lilongwe";
+    document.getElementById("addressl2").innerHTML = "blantyre";
+    document.getElementById("phone_number").innerHTML = "0884698204";
+    changeIcon("Male");
+  }
+
+  document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
+  ajaxRequest();
+</script>
 </html>
 
 <style type="text/css">
