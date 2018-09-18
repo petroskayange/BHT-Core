@@ -42,9 +42,11 @@
 
 
 <form action="search_results.html" method="POST" id="search_results">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="First name"  key="first_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();"
+     helpText="First name"  key="first_name" 
+    allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
 
-    <input type="text" name="family_name" id="family_name" field_type="alpha" tt_onUnload="getInput();" key="family_name" tt_onUnLoad="getInput();" ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
+    <input type="text" name="family_name" id="family_name" field_type="alpha"  ajaxURL="/search/family_name?search_string=" helpText="Last name" allowFreeText="true" />
 
     <select allowFreeText="false" helpText=" Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
       <option value="M">Male</option>
