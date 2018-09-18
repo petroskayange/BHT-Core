@@ -1219,6 +1219,7 @@ function addID(user_id) {
 }
 
 function handleResult(optionsList, results) {
+    
     if (!results) return;
 
     if (!optionsList) return;
@@ -1667,6 +1668,7 @@ function inputIsValid() {
 }
 
 function confirmValue() {
+    
     var confirmationBar = __$("confirmationBar");
     confirmationBar.innerHTML = "<span style='font-size: 2em;'>Username: </span>";
     var username = document.createElement("input");

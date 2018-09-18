@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="/touchscreentoolkit/lib/stylesheets/set_date.css?1531829709">
+    <script language="javascript" defer="true">
+
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+       function resetFinishBtn() {
+          var finishButton =  __$("nextButton");
+          finishButton.setAttribute('onmousedown',"gotoNextPage();");
+          finishButton.setAttribute('onclick',"");
+       }
+
+        function set_ajaxURL_for_suggestions(url) {
+            $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+            listSuggestions(tstCurrentPage);
+        }
+
+        function getInput(){
+
+        }
+
+        function validateDate() {
+            year = parseFloat(document.getElementsByName('set_year')[0].value)
+            month = parseFloat(document.getElementsByName('set_month')[0].value)
+            day = parseFloat(document.getElementsByName('set_day')[0].value)
+            return dateDiff(year,month,day);
+        }
+
+        function dateDiff(year,month,day){
+          today = new Date();
+          dateStr = today.getDate();
+          monthStr = today.getMonth() + 1;
+          yearStr = today.getFullYear();
+          today = new Date(parseFloat(yearStr),parseFloat(monthStr),parseFloat(dateStr));
+          set_date = new Date(parseFloat(year),parseFloat(month),parseFloat(day));
+          return (today > set_date)
+        }
+    </script>
+
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/dateselector.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+            .tt_controls_program_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+           .tt_controls_program_states #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+        </style>
+
+        <script type="text/javascript">
+
+           var tt_cancel_destination = "/";
+        
+        </script>
+
+        <form action="search_results.html" method="POST" id="search_results">
+
+            <input  type="text" name="program_name"
+              id="program_name"
+              objectType="program"
+              field_type="alpha"
+              helpText="Program name"
+              key="program_name"
+              tt_onUnLoad="getInput();"
+              ajaxURL="/programs?page_size=10&name="
+              tt_pageStyleClass= "NoKeyboard" />
+              
+            <select name="program_states" 
+              id="program_states" 
+              field_type="alpha"
+              helpText="Program states"
+              key="program_states"
+              tt_onLoad="set_ajaxURL_for_suggestions('/programs/' + document.getElementById('program_name').value + '/workflows');"  
+              tt_pageStyleClass = "NoKeyboard"
+              objectType="states" />
+
+            <!-- <input field_type="date"
+              helpText="Date"
+              id="set_date"
+              name="set_date"
+              type="text" /> -->
+  
+            <input field_type="number"
+              name="set_date"
+              type="text"
+              id="set_year"
+              absoluteMin="2018"
+              helpText="Year" />
+
+            <select name="program_month"
+               id="program_month"
+               helpText="Month" 
+               key="program_month"
+               condition="$('set_year').value.toLowerCase() != 'unknown'" 
+               validationMessage="Please enter a valid date" 
+                tt_onLoad=" validateMonth();"
+                tt_pageStyleClass = "NoKeyboard" />
+                 <option value=""></option>
+                 <option value="1">Jan</option>
+                 <option value="2">Feb</option>
+                 <option value="3">Mar</option>
+                 <option value="4">Apr</option>
+                 <option value="5">May</option>
+                 <option value="6">Jun</option>
+                 <option value="7">Jul</option>
+                 <option value="8">Aug</option>
+                 <option value="9">Sep</option>
+                 <option value="10">Oct</option>
+                 <option value="11">Nov</option>
+                 <option value="12">Dec</option>
+             />
+
+          </form>
+        <div id="footer"></div>
+      </div>
+    </div>
+  </body>
+</html>
+
