@@ -1,182 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <title>Baobab Health Trust</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/apps/core/assets/css/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/header.css">
-  <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/footer.css">
-  <link rel="stylesheet" href="/apps/core/assets/css/custom.css">
-  <script src="/apps/core/assets/js/jquery.min.js"></script>
-  <script src="/apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function () {
-      console.log('call the getFunction to retrieve the saved client data');
-    });
-  </script>
-</head>
-
-<body>
-  <style type="text/css">
-    .headTab {
-      border: 1px solid #004586;
-    }
-
-    .headTab {
-      height: 120px;
-    }
-
-    .headTab {
-      overflow: hidden;
-    }
-
-    .headTab {
-      box-shadow: 5px 2px 5px 0 rgba(0, 0, 0, 0.75);
-    }
-
-    .headTab {
-      width: 100%;
-    }
-
-    .active-link {
-      background-color: #345db5;
-      border-bottom: 1px solid #ccc;
-      color: #fff;
-      cursor: pointer;
-      margin-bottom: 5px;
-      padding: 15px 10px;
-      text-align: center;
-    }
-
-    #session-date {
-      padding-right: 20px;
-    }
-  </style>
-  <script>
-    function changeIcon(gender){
-           var img = document.getElementById('icon_id');
-           if(gender === "Male" ){
-             img.setAttribute("src", "/apps/core/assets/images/Person_Undefined_Male_Dark.png");
-           }
-           else{
-             img.setAttribute("src", "/apps/core/assets/images/Person_Undefined_Female_Dark.png");
-           }
-         }
-         
-         
+   <head>
+      <title>Baobab Health Trust</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/apps/core/assets/css/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/header.css">
+      <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/footer.css">
+      <link rel="stylesheet" href="/apps/core/assets/css/custom.css">
+      <script src="/apps/core/assets/js/jquery.min.js"></script>
+      <script src="/apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function(){
+              console.log('call the getFunction to retrieve the saved client data');
+         });
       </script>
-  <div id="content">
-    <table style="font: 14px;-moz-user-select: none; border-collapse: collapse;" width="100%" border="0">
-      <tr>
-        <td style="width: 10%; padding: 5px;">
-          <div class="cells">
-            <table style="font-size: 14px;" width="100%">
-              <tr style="width: 5%; vertical-align: middle; text-align: left;">
-                <img id="icon_id" alt="icon">
-              </tr>
-            </table>
-          </div>
-        </td>
-        <td style="width: 35%; padding: 5px 5px 5px 15px;">
-          <div class="headTab" id="tableDiv1">
-            <table width="100%" cellpadding="1">
-              <tr>
-                <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;"
-                  id="patient_name" class="blueText">John Doe</th>
-              </tr>
-              <tr>
-                <th style="text-align: left; font-size: 14px; padding-left: 5px; border-bottom: 1px solid rgb(0, 69, 134);"
-                  class="blueText">Identifiers</th>
-              </tr>
-              <tr></tr>
-        <td>
-          <table style="font-size: 12px;" width="100%">
+   </head>
+   <body>
+<script type="text/javascript">
+  var patientID = "";
+  var selectedEncounterID = "";
+
+  function finish(){
+    window.location = "/";
+  }
+
+  function changeIcon(gender) {
+      var img = document.getElementById('icon_id');
+      if (gender === "Male") {
+          img.setAttribute("src", "/apps/core/assets/images/male24x32.png");
+      } else {
+          img.setAttribute("src", "/apps/core/assets/images/female32x32.png");
+      }
+  }
+  
+</script>
+
+<style type="text/css">
+  .headTab {
+    border: 1px solid #004586;
+  }
+  .headTab {
+    height: 120px;
+  }
+  .headTab {
+    overflow: hidden;
+  }
+  .headTab {
+    box-shadow: 5px 2px 5px 0 rgba(0, 0, 0, 0.75);
+  }
+  .headTab {
+    width: 100%;
+  }
+
+  .active-link{
+    background-color: #345db5;
+    border-bottom: 1px solid #ccc;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding: 15px 10px;
+    text-align: center;
+  }
+
+  #session-date{
+    padding-right: 20px;
+  }
+
+</style>
+<div id="content">
+  <table style="font: 14px;-moz-user-select: none; border-collapse: collapse;" width="100%" border="0">
+    <tr>
+      <td style="width: 43%; padding: 5px 5px 5px 15px;">
+        <div class="headTab" id="tableDiv1">
+          <table width="100%" cellpadding="1">
             <tr>
-              <td style="text-align: left; font-weight: bold;" class="blueText" id="primary_id_label">National id</td>
-              <td style="text-align: left;">:</td>
-              <td id="primary_id">P1700-0000-0013</td>
+              <td style="width: 5%; vertical-align: middle; text-align: left;">
+                <img src= "/apps/core/assets/images/male24x32.png" id="icon_id" alt="person_icon">
+              </td>
+              <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText">John Doe</th>
+            </tr>
+            <tr style="border-top: 1px solid rgb(0, 69, 134);">
+              <td style="text-align: right; padding: 5px; font-weight: bold; width: 12%;" class="blueText" id="primary_id_label">National id</td>
+              <td style="text-align: left; font-weight: bold; width: 3px;">:</td>
+              <td id="primary_id"></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding: 5px; font-weight: bold; width: 100px;" class="blueText">Age</td>
+              <td style="text-align: left; width: 3px;">:</td>
+              <td id="age"></td>
             </tr>
           </table>
-        </td>
-    </table>
-  </div>
-  </td>
-  <td style="width: 35%; padding: 5px;">
-    <div class="headTab">
-      <table style="font-size: 14px;" width="100%">
-        <tr>
-          <td style="text-align: right; font-weight: bold; width: 100px;" class="blueText">Gender</td>
-          <td style="text-align: center; width: 3px;">:</td>
-          <td id="gender"></td>
-        </tr>
-        <tr>
-          <td style="text-align: right; font-weight: bold;" class="blueText">Age</td>
-          <td style="text-align: center; width: 3px;">:</td>
-          <td id="age"></td>
-        </tr>
-        <tr>
-          <td style="text-align: right; font-weight: bold; vertical-align: top;" class="blueText">Address</td>
-          <td style="text-align: center; width: 3px; vertical-align: top;">:</td>
-          <td id="addressl1"></td>
-        </tr>
-        <tr>
-          <td style="text-align: right; font-weight: bold;" class="blueText">&nbsp;</td>
-          <td style="text-align: center; width: 3px;">&nbsp;</td>
-          <td id="addressl2"></td>
-        </tr>
-        <tr>
-          <td style="text-align: right; font-weight: bold;" class="blueText">Phone</td>
-          <td style="text-align: center; width: 3px;">:</td>
-          <td id="phone_number"></td>
-        </tr>
-      </table>
-    </div>
-  </td>
-  <td style="width: 25%; padding: 5px 15px 5px 5px;">
-    <div class="headTab" id="modApp" style="text-align: center; cursor: pointer;">
-      <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
-        <tr>
-          <td style="width: 40px; text-align: right;">
-            <img id="appIcon" />
-          </td>
-        </tr>
-      </table>
-    </div>
-  </td>
-  </tr>
+        </div></td>
+      <td style="width: 48%; padding: 5px;">
+        <div class="headTab">
+          <table style="font-size: 14px;" width="100%">
+            <tr>
+              <td style="text-align: left; padding: 1px; font-weight: bold; width: 100px;" class="blueText">Title1</td>
+              <td style="text-align: center; width: 3px;">:</td>
+              <td id="gender"></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Title2</td>
+              <td style="text-align: center; width: 3px;">:</td>
+              <td id="age"></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding: 1px; font-weight: bold; vertical-align: top;" class="blueText">Address</td>
+              <td style="text-align: center; width: 3px; vertical-align: top;">:</td>
+              <td id="addressl1">,</td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
+              <td style="text-align: center; width: 3px;">&nbsp;</td>
+              <td id="addressl2"></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Phone</td>
+              <td style="text-align: center; width: 3px;">:</td>
+              <td id="phone_number"></td>
+            </tr>
+          </table>
+        </div></td>
+        <td style="width: 20%; padding: 5px 15px 5px 5px;">
+        <div class="headTab" id="modApp" style="text-align: center; cursor: pointer;">
+          <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
+            <tr>
+              <td style="width: 150px; text-align: right;">
+                <img id="appIcon" />
+              </td>
+            </tr>
+          </table>
+        </div></td>
+    </tr>
+    <tr>
+      <td style="width: 100%; padding: 5px 15px;" colspan="3">
+        <div id="main" style="width: 100%; box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75); overflow: hidden; height: 534px; border: 1px solid rgb(52, 93, 181);">
+          <table style="border-collapse: collapse; border: 1px solid rgb(52, 93, 181);" width="100%" cellspacing="0" cellpadding="5" border="1">
+            <tr style="background-color: rgb(52, 93, 181);">
+              <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;">Visit History
+              </td>
+              <td style="border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;" id="header">Date:
+                <!-- if session_date is blank  -->
+                  <span id="session-date"></span>
+                <!-- else -->
+                  <span id="session-date" style="color: red; "></span>
+                <!-- end  -->
+                Next Task: <span id="next-task">&nbsp;</span></td>
+            </tr>
+            <tr>
+              <td rowspan="3">
+                <div id="visits" style="width: 100%; overflow: auto; height: 505px; border: 1px solid rgb(255, 255, 255);">
+                  <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
+
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="background-color: white; color: rgb(255, 255, 255); font-weight: bold; border-right: 1px solid rgb(52, 93, 181); padding: 5px; height: 20px;">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="width: 100%; overflow: auto; height: 100.5px;">
+                  <ul style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
+
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+
   </table>
-  </div>
-  <tr>
-    <td style="width: 100%; padding: 5px 15px;" colspan="2">
-      <div id="main" style="width: 100%; box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75); overflow: hidden; height: 534px; border: 1px solid rgb(52, 93, 181);">
-        <table style="border-collapse: collapse; border: 1px solid rgb(52, 93, 181);" width="100%" cellspacing="0"
-          cellpadding="5" border="1">
-          <tr style="background-color: rgb(52, 93, 181);">
-            <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: left; font-weight: bold; padding-left: 10px;">Visit
-              History
-            </td>
-            <td style="border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;"
-              id="header">Date:
-              <span id="session-date">13 Sept 2018</span>
-              <span id="session-date" style="color: red; "></span>
-              Next Task: <span id="next-task">&nbsp;HIV REGISTRATION</span>
-            </td>
-          <tr>
-            <td>
-              <div id="visits" style="width: 100%; overflow: auto; height: 502px; border: 1px solid rgb(255, 255, 255);">
-                <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
-                </ul>
-              </div>
-            </td>
-          </tr>
-  </tr>
-  </table>
-  </div>
-  </td>
-  </tr>
-  <!-- Modal -->
+
+    <!-- Modal -->
   <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
     <div class="modal-dialog" name="div2">
       <div class="modal-content" style="margin-left:0px;">
@@ -219,17 +220,53 @@
   <!-- Modal -->
   <footer class="footer">
     <div class="container-footer">
-      <button onclick="finish();" class="button green navButton" style="margin-right: 5px; padding: 0px;" id="finishbutton"><span>&nbsp;
-          &nbsp; &nbsp;Finish &nbsp; &nbsp; &nbsp;</span></button>
+      <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+      </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/public/assets/images/launcher.png"></span></button>
+        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/public/assets/images/launcher.png"></span>
+      </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span></button>
+        <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
+      </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span></button>
+        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+      </button>
     </div>
     </div>
   </footer>
+
+<!--   <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
+    <div class="buttons" style="margin-bottom: -200px; padding-bottom: 10px; padding-top: 10px;">
+      <button onclick="cancel();" style="margin: 5px 0px 0px;" class="red left">
+        <span>Cancel</span>
+      </button>
+      <button onclick="finish();" style="margin: 5px 0px 0px; float: right;" onclick="finish();" class="green right" id="btnNext">
+        <span>Finish</span>
+      </button>
+        <button style="margin: 5px 0px 0px; float: right;" onclick="setDate();" class="blue right" id="btnCancel">
+          <span>Set Date</span>
+        </button>
+        <button style="margin: 5px 0px 0px; float: right;" onclick="resetDate();" class="blue right" id="btnCancel">
+          <span>Reset Date</span>
+        </button>
+      <button  onclick="loadActivities();" style="margin: 5px 0px 0px; float: right;" class="blue right">
+        <span>Activities</span>
+      </button>
+    </div>
+  </div> -->
+</div>
+
+<div id="cover">
+
+</div>
+
+<div class="confirm">
+  <h1>Confirm your action</h1>
+  <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+  <button onclick="hidePopup();">Cancel</button>
+  <button autofocus onclick="confirmAction();">Confirm</button>
+</div>
 </body>
 <script src="/apps/core/assets/js/core.js "></script>
 <script>
@@ -285,5 +322,88 @@
   document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
   ajaxRequest();
 </script>
-
 </html>
+
+<style type="text/css">
+  #cover{
+    position: absolute;
+    display: none;
+    background-color: black;
+    width: 100%;
+    height: 102%;
+    left: 0%;
+    top: 0%;
+    z-index: 990;
+    opacity: 0.5;
+  }
+
+
+  @keyframes fade {
+    from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  }
+  .confirm {
+    position: absolute;
+    display: none;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    min-width: 280px;
+    max-width: 500px;
+    height: auto;
+    background: #E2E2E2;
+    border-radius: 10px;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid white;
+    animation: fade 1s ease 1 forwards;
+    z-index: 999;
+  }
+  .confirm h1 {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 1.5rem 1rem 0.5rem;
+  }
+  .confirm p {
+    text-align: center;
+    font-size: 1rem;
+    margin: 0 2rem 4.5rem;
+  }
+  .confirm button {
+    background: transparent;
+    border: none;
+    color: #1678E5;
+    height: 3rem;
+    font-size: 1rem;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+  }
+  .confirm button:nth-of-type(1) {
+    border-top: 1px solid #B4B4B4;
+    border-right: 1px solid #B4B4B4;
+    left: 0;
+    border-radius: 0 0 0 10px;
+  }
+  .confirm button:nth-of-type(2) {
+    border-top: 1px solid #B4B4B4;
+    right: 0;
+    border-radius: 0 0 10px 0;
+  }
+  .confirm button:focus,
+  .confirm button:hover {
+    font-weight: bold;
+    background: #EFEFEF;
+  }
+  .confirm button:active {
+    background: #D6D6D6;
+  }
+</style>

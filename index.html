@@ -35,7 +35,7 @@
                 </div>
                 <template id="barcode">
                     <div class="table-div-cell app-details" style="float: left; width: 24%;" id="barCodeInner">
-                        <div class="barcode" url="" functionName=""></div>
+                        <div class="barcode" url="/apps/core/views/patient_dashboard.html" ></div>
                     </div>
                     <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
                 </template>
@@ -69,7 +69,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12" id="tabs-column">
-                <button class="btn btn-info overview-btns" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
+                <button class="btn btn-info overview-btns active-btn" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
                 <button class="btn btn-info overview-btns" id="report" onmousedown="showOptions(this); loadTabContent(this.id);">Reports</button>
                 <button class="btn btn-info overview-btns" id="admin" onmousedown="showOptions(this); loadTabContent(this.id);">Administration</button>
             </div>
@@ -156,7 +156,7 @@
    <script>
     (document.getElementsByClassName("overview-btns ")[0]);
     changeModule();
-
+    loadTabContent("overview");
     function logout() {
         if (window.confirm("Do you really want to logout?")) {
             window.location = "/apps/core/views/login.html";
