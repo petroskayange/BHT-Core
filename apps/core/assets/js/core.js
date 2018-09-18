@@ -127,6 +127,25 @@ if (document.createElement("template").content) {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
+function _foo(data, resource){
+    
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(){
+        if(this.readyState === 4 && this.status === 200){
+            console.log(JSON.parse(this.responseText));
+        } else {
+            //
+        }
+    }
+
+    xhr.open('GET',url, true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+    xhr.send(null);
+
+}
+
 function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
     $("#modal-div").append($('#card_template').html());
     $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);

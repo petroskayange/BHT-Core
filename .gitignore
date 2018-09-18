@@ -1,6 +1,7 @@
-/apps/*
-!/apps/core/
-!/apps/config/
-/apps/core/application.json
-/apps/config/apps.json
-*.swp
+!apps/*
+!apps/core
+!apps/core/views/patient/*
+!apps/config
+apps/core/application.json
+apps/config/apps.json
+apps/core
