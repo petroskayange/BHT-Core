@@ -9,7 +9,6 @@
     <script language="javascript" defer="true">
         tstUsername = "";
         tstUserKeyboardPref = "abc";
-        sessionStorage.clear();
         var d = new Date();
         d.toDateString();
 
@@ -46,18 +45,9 @@
             return choices;
         }
 
-        function getInput() {
-            key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-            value = $('touchscreenInput' + tstCurrentPage).value;
-            sessionStorage.setItem(key, value);
-        }
-
-        function getPass() {
-            sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
-        }
 
         function getLocation() {
-            var barcode = document.getElementById("touchscreenInput2").value + "$";
+            var barcode = document.getElementById("touchscreenInput0").value + "$";
             sessionStorage.setItem("userLocation", barcode);
         }
     </script>
@@ -76,7 +66,7 @@
             <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
             <script type="text/javascript">
                 var barcode = "";
-                var tt_cancel_destination = "/login.html"
+                var tt_cancel_destination = "login.html"; 
 
                 function inform() {
                     $('infoBar' + tstCurrentPage).innerHTML =
@@ -85,11 +75,12 @@
 
                 function validateLocation() {
                     __$("nextButton").removeAttribute("onmousedown");
-                    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
-                    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+                    document.getElementById('touchscreenInput0').removeEventListener('keyup', checkKey, false);
+                    document.getElementById('cancelButton').removeEventListener('keyup', checkKey, false);
+                    document.getElementById('cancelButton').removeEventListener('mousedown', checkKey, false);
+                    document.getElementById('touchscreenInput0').addEventListener('keyup', function (event) {
                         event.preventDefault();
                         if (event.keyCode === 13) {
-                            getPass();
                             doSignIn();
                         }
                     });
@@ -100,22 +91,15 @@
                 }
 
                 function doSignIn() {
-                    showStatus();
-                    signIn();
-                    getLocation();
+                    window.location.href = "/";
                 }
             </script>
 
             <form id='sessions' action="/" method='post'>
 
-                <label for="login">Username</label>
-                <input field_type="password" helpText="Enter user name" id="login" name="login" textCase="lower"
-                    tt_onLoad="inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();" key="username" /><br>
-
-                <label for="password">Password</label>
-                <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower"
-                    tt_onLoad="validateLocation();inform(); barcodeId = 'touchscreenInput1';" type="password"
-                    tt_onUnload="getPass();" /><br>
+                <label for="location">Location</label>
+                <input field_type="password" helpText="Enter Location" id="location" name="location" textCase="lower"
+                    tt_onLoad="barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getLocation();" /><br>
 
 
                 <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />

@@ -19,7 +19,6 @@
       var apiPort = sessionStorage.getItem("apiPort");
       var apiProtocol = sessionStorage.getItem("apiProtocol");
       var id = url.searchParams.get("user_id");
-      console.log(id);
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
 
@@ -38,26 +37,23 @@
          __$("nextButton").removeAttribute("onmousedown")
          __$("nextButton").onmousedown = function(){
             confirm_password = $('touchscreenInput' + tstCurrentPage).value;
-            if (sessionStorage.getItem("password") === confirm_password){
-              confirm_password = $('touchscreenInput' + tstCurrentPage).value;
-                if (sessionStorage.getItem("password") === confirm_password) {
-                  postEdit(id);
-                } 
-                 }
-               else{
-                 showMessage("Password Mismatch");
-               }
+            
+              role = [$('touchscreenInput' + tstCurrentPage).value];
+                  postEdit(id, role);
+                
+                 
          }
       }
       
 
-    function postEdit(id) {
+    function postEdit(id, role) {
     getInput();
     var http = new XMLHttpRequest();
     let urlfinal = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/users/' + id;
     var params = JSON.stringify({
-      password: confirm_password,
+      roles: role,
     });
+    console.log(role);
     http.open('PUT', urlfinal, true);
     //Send the proper header information along with the request
     http.setRequestHeader('Content-type', 'application/json');
@@ -86,13 +82,9 @@
     <div id="content">
       <form action='' method='POST'>
 
-        <input helpText="New Password" key="password" minlength="4" textCase="lower" validationRule="\w{4}\w*"
-          validationMessage="Password less than FOUR characters" type="password" name="user[new_password]" id="user_new_password"
-          tt_onUnLoad="getInput();" />
+          <select allowFreeText="false" helpText=" Role" id="userRole" name="user_role" tt_onLoad="changeNextButton();setRoles('/roles?page_size=100'); $(keyboard).style.display = none;"
+          key="role" tt_onUnLoad="getInput();"></select>
 
-        <input helpText="Confirm New Password" textCase="lower" tt_onload="changeNextButton();" key="confirm_password"
-          validationRule="\w{4}\w*" validationMessage="Password less than FOUR characters." type="password" name="user[confirm_password]"
-          id="user_confirm_password" />
 
       </form>
 
