@@ -1,0 +1,232 @@
+
+#clearButton {
+  display: none;
+}
+
+.main-table {
+  display: table;
+  width: 100%;
+}
+
+.main-table-row {
+  display: table-row;
+}
+
+.main-table-cell {
+  display: table-cell;
+}
+
+#main-table-cell-left {
+  width: 200px;
+  text-align: center;
+}
+
+#main-table-cell-right {
+  border-style: solid;
+  border-width: 0px 0px 0px 1px;
+  height: 90%;
+  vertical-align: top;
+}
+
+.nav-buttons {
+  padding: 15% 0px 0px 0px;
+  /*float: left;*/
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  /*margin: 5px 5px 0px 10px;*/
+  border: 1px solid #5ca6c4;
+  cursor: pointer;
+  box-shadow: inset 2px -4px 2px 0px;
+  background-color: white;
+  border-radius: 7px;
+  border: solid black 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+  box-shadow: inset 0 0 10px #000000;
+  text-decoration: none;
+  font-weight: bold;
+  width: 150px;
+  height: 110px;
+  background-color: #5ca6c4;
+  color: white;
+}
+
+#nav-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 15px;
+}
+
+#nav-table td {
+  text-align: center;
+}
+
+.icons {
+  width: 30px;
+  height: 30px;
+}
+
+/* .............................................. */
+.results-divs-table {
+  display: table;
+  width: 100%;
+  margin: 10px;
+  
+}
+
+.results-divs-table-row {
+  display: table-row;
+}
+
+.results-divs-table-cell {
+  display: table-cell;
+  border-style: solid;
+  border-width: 1px;
+  height: 200px;
+  overflow: auto;
+}
+
+#results-divs-table-cell-left {
+  float: left;
+  width: 55%;
+}
+
+#results-divs-table-cell-right {
+  float: right;
+  width: 43%;
+  margin-right: 10px;
+}
+/* .............................................. */
+
+.keyboard-buttons {
+  padding: 20% 0px 0px 0px;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin: 5px;
+  border: 1px solid #5ca6c4;
+  cursor: pointer;
+  box-shadow: inset 2px -4px 2px 0px;
+  background-color: white;
+  border-radius: 7px;
+  border: solid black 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+  box-shadow: inset 0 0 10px #000000;
+  text-decoration: none;
+  font-weight: bold;
+  width: 70px;
+  height: 70px;
+  background-color: #5ca6c4;
+  color: white;
+
+}
+
+#keyboard-divs-table-cell {
+  padding: 2% 0% 0% 1%;
+}
+
+.search-results-keyboard-row {
+  display: table-row;
+}
+
+.search-results-keyboard-cell {
+  display: table-cell;
+}
+
+.results-list {
+  font-size: 28px;
+  color: black;
+  list-style: none;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
+}
+
+
+/* .................................................. */
+
+.dosage-table {
+  display: table;
+}
+
+.dosage-table-row {
+  display: table-row;
+}
+
+.dosage-table-cell {
+  display: table-cell;
+}
+
+#dosage-table-cell-right {
+  border-style: solid;
+  border-width: 0px 0px 0px 1px;
+  width: 400px;
+}
+
+#dosage-table-cell-left {
+  width: 70%;
+}
+
+#dosage-keypad-table {
+  width: 100%;
+  margin-left: 25%;
+}
+
+/* ...................................................... */
+.prescription-keypad {
+  width: 400px;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;
+  padding-left: 5%;
+}
+
+.keypad-buttons {
+  padding: 20% 0px 0px 0px;
+  float: left;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin: 5px;
+  border: 1px solid #5ca6c4;
+  cursor: pointer;
+  box-shadow: inset 2px -4px 2px 0px;
+  background-color: white;
+  border-radius: 7px;
+  border: solid black 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+  box-shadow: inset 0 0 10px #000000;
+  text-decoration: none;
+
+  font-weight: bold;
+  width: 90px;
+  height: 60px;
+  background-color: #5ca6c4;
+  color: white;
+
+}
+
+.input-boxes {
+  width: 99%;
+  height: 85px;
+}
+
+
