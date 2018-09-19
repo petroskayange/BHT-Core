@@ -1,5 +1,5 @@
 {
-	"apiURL": "192.168.1.235",
+	"apiURL": "169.254.2.7",
 	"apiPort": "3001",
 	"apiProtocol": "http",
 	"apps": [

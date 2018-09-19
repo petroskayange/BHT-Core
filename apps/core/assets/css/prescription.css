@@ -1,5 +1,5 @@
 
-#clearButton {
+#clearButton, #nextButton {
   display: none;
 }
 
@@ -17,7 +17,7 @@
 }
 
 #main-table-cell-left {
-  width: 200px;
+  width: 132px;
   text-align: center;
 }
 
@@ -50,8 +50,9 @@
   box-shadow: inset 0 0 10px #000000;
   text-decoration: none;
   font-weight: bold;
-  width: 150px;
-  height: 110px;
+  font-size: 14px;
+  width: 100px;
+  height: 100px;
   background-color: #5ca6c4;
   color: white;
 }
@@ -101,6 +102,10 @@
   width: 43%;
   margin-right: 10px;
 }
+
+#results-ul {
+  padding-left: 0px;
+}
 /* .............................................. */
 
 .keyboard-buttons {
@@ -124,8 +129,8 @@
   box-shadow: inset 0 0 10px #000000;
   text-decoration: none;
   font-weight: bold;
-  width: 70px;
-  height: 70px;
+  width: 55px;
+  height: 55px;
   background-color: #5ca6c4;
   color: white;
 
@@ -176,12 +181,12 @@
 }
 
 #dosage-table-cell-left {
-  width: 70%;
+  width: 45%;
 }
 
 #dosage-keypad-table {
   width: 100%;
-  margin-left: 25%;
+  margin-left: 2%;
 }
 
 /* ...................................................... */
@@ -227,6 +232,64 @@
 .input-boxes {
   width: 99%;
   height: 85px;
+  font-size: 2.2em;
+  text-align: center;
 }
+
+
+/* ........................ duration ............... */
+#duration-text {
+  height: 85px;
+  margin-left: 25%;
+  font-size: 2.2em;
+  width: 395px;
+  text-align: center;
+}
+
+#duration-table .prescription-keypad {
+  margin-left: 25%;
+}
+
+#duration-label {
+  margin-left: 50%;
+}
+
+/* ...................... summary .................. */
+#summary-table {
+  width: 99%;
+  margin: 5px 10px 5px 5px;
+  border-collapse: collapse;
+}
+
+#summary-table th {
+  border-style: solid;
+  border-width: 1px;
+  text-align: left;
+  padding-left: 5px;
+}
+
+#summary-table td {
+  border-style: solid;
+  border-width: 1px;
+  text-align: left;
+  padding-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
