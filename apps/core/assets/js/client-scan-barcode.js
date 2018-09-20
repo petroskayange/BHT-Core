@@ -51,7 +51,9 @@ function searchID(e) {
 }
 
 function autoFocus() {
-  document.getElementById("client-identifier").focus();
+  try {
+    document.getElementById("client-identifier").focus();
+  }catch(e) {}
 }
 
 function postID(identifier) {
