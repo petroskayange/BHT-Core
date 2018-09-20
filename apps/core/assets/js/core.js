@@ -242,7 +242,7 @@ function changeModule() {
             $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
             $("#registerButton").css("visibility", "visible");
             if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
-                showBarcodeDiv();
+                // showBarcodeDiv();
                
             }else {
                 
