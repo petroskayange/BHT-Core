@@ -479,10 +479,10 @@ function submitVitals() {
     encounter_datetime: null
   }
 
-  submitEncounter(encounter, "postVitalsObs");
+  submitParameters(encounter, "/encounters", "postVitalsObs");
 }
 
-function postVitalsObs(encounter_id) {
+function postVitalsObs(encounter) {
 
   var vitals_observations = [];
 
@@ -520,12 +520,12 @@ function postVitalsObs(encounter_id) {
   }
 
   var obs = {
-    encounter_id: encounter_id,
+    encounter_id: encounter["encounter_id"],
     observations: vitals_observations
   };
 
   if(vitals_observations.length > 0)
-    createObs(obs, "nextPage")
+    submitParameters(obs, "/observations", "nextPage")
 
   
 }

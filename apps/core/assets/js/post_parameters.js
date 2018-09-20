@@ -1,13 +1,14 @@
-function submitEncounter(encounter, returnToFunction) {
-  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/encounters';
 
-  var parametersPassed = JSON.stringify(encounter);
+function submitParameters(parameters, url, returnToFunction) {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+
+  var parametersPassed = JSON.stringify(parameters);
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
-      eval(returnToFunction)(obj['encounter_id']);
+      eval(returnToFunction)(obj);
     }
   };
   xhttp.open("POST", url, true);
@@ -16,21 +17,3 @@ function submitEncounter(encounter, returnToFunction) {
   xhttp.send(parametersPassed);
 }
 
-
-function createObs(observations, returnToFunction){
-  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/observations';
-
-  var parametersPassed = JSON.stringify(observations);
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 201) {
-      var objs = JSON.parse(this.responseText);
-      eval(returnToFunction)(objs);
-    }
-  };
-  xhttp.open("POST", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send(parametersPassed);
-
-}
