@@ -27,119 +27,117 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="table-div">
-            <div class="table-div-row" id="header">
-                <div class="table-div-cell app-icon" style="width: 24%;">&nbsp;
-                    <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon" style="">
-                </div>
-                <template id="barcode">
-                    <div class="table-div-cell app-details" style="float: left; width: 24%;" id="barCodeInner">
-                        <div class="barcode" url="/apps/core/views/patient_dashboard.html" ></div>
-                    </div>
-                    <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
-                </template>
-                <div class="table-div-cell app-details" style="width: 70%; padding: 1%;" id="details">
-                    <table style="width: 100%; margin: 5px;">
-                        <tr>
-                            <th>Facility name:</th>
-                            <td id="client-name">Kamuzu Central Hospital</td>
-                            <th align="right">Application Name:</th>
-                            <td id="application-name">BHT Core</td>
-                        </tr>
-                        <tr>
-                            <th>Location:</th>
-                            <td id="location-name">&nbsp;</td>
-                            <th align="right">App version:</th>
-                            <td id="application-version">v1.0.0</td>
-                        </tr>
-                        <tr>
-                            <th>Date:</th>
-                            <td id="app-date">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <th>User:</th>
-                            <td id="client-name">&nbsp;</td>
-                        </tr>
-                    </table>
-                </div>
+              
+    <div class="table-div">
+        <div class="table-div-row" id="header">
+            <div class="table-div-cell app-icon" style="width: 21.4%; ">&nbsp;
+                <img src="/apps/core/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+            <h3 style="text-align: center" id="application-name"> ART</h4>
+            <h5 style="text-align: center" > v1.0.0</h5>
             </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12" id="tabs-column">
-                <button class="btn btn-info overview-btns active-btn" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
-                <button class="btn btn-info overview-btns" id="report" onmousedown="showOptions(this); loadTabContent(this.id);">Reports</button>
-                <button class="btn btn-info overview-btns" id="admin" onmousedown="showOptions(this); loadTabContent(this.id);">Administration</button>
-            </div>
-        </div>
-    </div>
-    <div class="container-tab" id="generic_tabs">
-    </div>
-    <div class="container-tab" id="generic_tabs">
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
-        <div class="modal-dialog" name="div2">
-            <div class="modal-content" style="margin-left:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select module</h4>
-                </div>
-                <!-- <button class="previous round">
-               <</button>
-               <button class="next round">></button> -->
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row" id="modal-div">
-                            <template id="card_template">
-                                <!-- <div class="" > -->
-                                <div class="app-btn" id="cardDiv" style="margin: 10px;">
-                                    <a href="#" class="card-block clearfix" id="moduleButton">
-                                        <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
-                                        <div class="middle">
-                                            <div class="text">
-                                                <p id="apptext"></p>
-                                            </div>
-                                        </div>
-                                        <div class="card-container">
-                                            <h4>
-                                                <b id="appName"></b>
-                                            </h4>
-                                            <p id="appDescription"></p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <!-- </div> -->
-                            </template>
+            <!-- <template id="barcode"> -->
+                    <div class="table-div-cell app-details " style="padding: 1%; width: 50%" id="details">
+                            <table class="table-sm table-hover" >
+                                <tr>
+                                    <th class="h4">Facility name:</th>
+                                    <td class="h4 text-muted" id="facility-name">Kamuzu Central Hospital</td>
+                                    <!-- <th align="right">Application Name:</th>
+                                    <td id="application-name">BHT Core </td> -->
+                                </tr>
+                                <tr>
+                                    <th class="h4" class="text-muted">Location:</th>
+                                    <td class="h4 text-muted" id="location-name">&nbsp;</td>
+                                    <!-- <th align="right">App version:</th>
+                                    <td id="application-version">v1.0.0</td> -->
+                                </tr>
+                                <tr>
+                                    <th class="h4">Date:</th>
+                                    <td id="app-date" class="text-muted">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <th class="h4">User:</th>
+                                    <td class="h4 text-muted" id="client-name">&nbsp;</td>
+                                </tr>
+                            </table>
                         </div>
+            
+                <div class="table-div-cell app-details" style="float: left; width: 27%; margin-left: 1%;" id="barCodeInner">
+                <div class="barcode" url="/apps/core/views/patient_dashboard.html"></div>
+            </div>
+            <script src="./apps/core/assets/js/client-scan-barcode.js"></script>
+            <!-- </template> -->
+           
+        </div>
+    </div>
+</div>
+<div class="container-fluid" style="margin-left: 2%; margin-right:1%;width: 97%;">
+    <div class="row">
+        <div class="col-sm-12" id="tabs-column">
+            <button class="btn btn-info overview-btns active-btn" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
+            <button class="btn btn-info overview-btns" id="report" onmousedown="showOptions(this); loadTabContent(this.id);">Reports</button>
+            <button class="btn btn-info overview-btns" id="admin" onmousedown="showOptions(this); loadTabContent(this.id);">Administration</button>
+        </div>
+    </div>
+</div>
+<div class="container-tab" id="generic_tabs" style="margin-left: 2.5%; margin-right:2.5%;width: 95%; border: none;">
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
+    <div class="modal-dialog" name="div2">
+        <div class="modal-content" style="margin-left:0px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Select module</h4>
+            </div>
+           <div class="modal-body">
+                <div class="container">
+                    <div class="row" id="modal-div">
+                        <template id="card_template">
+                            <!-- <div class="" > -->
+                            <div class="app-btn" id="cardDiv" style="margin: 10px;">
+                                <a href="#" class="card-block clearfix" id="moduleButton">
+                                    <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                    <div class="middle">
+                                        <div class="text">
+                                            <p id="apptext"></p>
+                                        </div>
+                                    </div>
+                                    <div class="card-container">
+                                        <h4>
+                                            <b id="appName"></b>
+                                        </h4>
+                                        <p id="appDescription"></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </template>
                     </div>
                 </div>
-                <!--                <div class="modal-footer">
-                  <button class="red" data-dismiss="modal">Close</button>
-               </div> -->
             </div>
-        </div>
+              <button class="red" data-dismiss="modal">Close</button>
+           </div> 
     </div>
-    <!-- Modal -->
-    <!-- <button class="btn btn-default" id="btn-confirm">Confirm</button> -->
+</div>
+<!-- Modal -->
+<!-- <button class="btn btn-default" id="btn-confirm">Confirm</button> -->
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal"
-        style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content" style="margin: 0; ">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h1 class="modal-title" id="myModalLabel">Are you sure you want to log out?</h1>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
-                    <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
-                </div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal"
+    style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="margin: 0; ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Are you sure you want to log out?</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
+                <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
             </div>
         </div>
     </div>
+</div>
+
 
     <div class="alert" role="alert" id="result"></div>
     <footer class="footer">
@@ -185,6 +183,15 @@
             $("#mi-modal").modal('hide');
         }
     });
+
+
+    document.getElementById("client-name").innerHTML =sessionStorage.getItem("username") ;
+    document.getElementById("location-name").innerHTML =sessionStorage.getItem("userLocation");
+    var loc = sessionStorage.getItem("userLocation").slice(0, -1);
+    document.getElementById("location-name").innerHTML = loc;
+    var date = new Date();
+    var finalDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+    document.getElementById("app-date").innerHTML = finalDate;
 </script>
 
 </html>

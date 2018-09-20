@@ -4,7 +4,7 @@
 // window.addEvent('load', function() {
 // var apiURL,apiPort =''; sessionStorage.getItem("apiURL");
 // var apiPort =''; sessionStorage.getItem("apiPort");
-var apiURL,apiPort, apiProtocol;
+var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
@@ -51,8 +51,8 @@ var person_addresses = "person_addresses";
 
 var person_names = "person_names";
 
-function _ajaxUrl(res){
-   var result = [];
+function _ajaxUrl(res) {
+    var result = [];
     $.getJSON({
         url: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + res,
         beforeSend: function (xhr) {
@@ -72,39 +72,36 @@ function _ajaxUrl(res){
 
 function loadDoc() {
 
-    $.post(apiProtocol + "://"+apiURL+":"+ apiPort+"/api/v1/auth/login",
-    {
-        username: "admin",
-        password: "test"
-    },
-    function(data,status){
+    $.post(apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/auth/login", {
+            username: "admin",
+            password: "test"
+        },
+        function (data, status) {
 
-        if(status.toLocaleLowerCase() === "success") {
-          sessionStorage.setItem(auth_token, data.authorization.token);
-          
-        }
-        else {
-        }
-    });
+            if (status.toLocaleLowerCase() === "success") {
+                sessionStorage.setItem(auth_token, data.authorization.token);
+
+            } else {}
+        });
 }
 
-function PersistData(data, res){
-     
+function PersistData(data, res) {
+
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + res;
     var req = new XMLHttpRequest();
-    
-    req.onreadystatechange = function() {
-       
-        if (req.readyState == 4  && req.status == 200) {
-           // window.location.href = '/apps/core/views/patient_dashboard.html';
+
+    req.onreadystatechange = function () {
+
+        if (req.readyState == 4 && req.status == 200) {
+            // window.location.href = '/apps/core/views/patient_dashboard.html';
         } else {
-           console.log("@@@@" + req.responseText);
-       }
-     }
-  
+            console.log("@@@@" + req.responseText);
+        }
+    }
+
     req.open('POST', url, true);
-    req.setRequestHeader('Content-type','application/json');
-    req.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
+    req.setRequestHeader('Content-type', 'application/json');
+    req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
     req.send(JSON.stringify(data));
 
 }
@@ -117,31 +114,31 @@ if (document.createElement("template").content) {
     var applicationFolder = [];
     var applicationJsonUrl = [];
     $.getJSON("/apps/config/apps.json")
-        .done(function(data, status) {
+        .done(function (data, status) {
             parser(data);
         })
-        .fail(function() {
+        .fail(function () {
             console.log("apps.json is missing from the apps/config folder");
         });
 } else {
     /*Alternative code for browsers that do not support the TEMPLATE element*/
 }
 
-function _foo(data, resource){
-    
+function _foo(data, resource) {
+
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
     var xhr = new XMLHttpRequest();
-    xhr.onload = function(){
-        if(this.readyState === 4 && this.status === 200){
+    xhr.onload = function () {
+        if (this.readyState === 4 && this.status === 200) {
             console.log(JSON.parse(this.responseText));
         } else {
             //
         }
     }
 
-    xhr.open('GET',url, true);
+    xhr.open('GET', url, true);
     xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+    xhr.setRequestHeader("Authorization", sessionStorage.getItem("authorization"));
     xhr.send(null);
 
 }
@@ -154,42 +151,45 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     $("#moduleButton").attr('id', "moduleButton" + counter);
     // $("#apptext").text(l("applicationName"));
     $("#cardImage")
-        .on('error', function() {
+        .on('error', function () {
             $(this).attr('src', "/public/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
-    $("#moduleButton" + counter).click(function() {
+    $("#moduleButton" + counter).click(function () {
         sessionStorage.setItem("applicationImage", applicationImage);
         sessionStorage.setItem("applicationName", applicationName);
         changeModule();
     });
 
- }
- function getName(user_id, url, port, protocol) {
-    
+}
+
+function getName(user_id, url, port, protocol) {
+
     jQuery.getJSON({
-        url: protocol+'://'+url+':' + port+ '/api/v1/users/'+user_id,
-        data: { },
+        url: protocol + '://' + url + ':' + port + '/api/v1/users/' + user_id,
+        data: {},
         type: 'GET',
-        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));},
-        success: function(result) {
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        },
+        success: function (result) {
             var username = result.username;
             var allRoles = '';
             var roles_length = result.roles.length;
-                for (let index = 0; index < roles_length; index++) {
-                    allRoles = result.roles[index].role + ", "+ allRoles;
-                }    
-           var role = result.roles.role;
+            for (let index = 0; index < roles_length; index++) {
+                allRoles = result.roles[index].role + ", " + allRoles;
+            }
+            var role = result.roles.role;
             var date_created = result.date_created;
             var given_name = result.person.names[0].given_name;
             var family_name = result.person.names[0].family_name;
-            showUser(username,given_name, family_name, allRoles, date_created);
+            showUser(username, given_name, family_name, allRoles, date_created);
 
         }
-        });
-    }
+    });
+}
 
 function showUser(username, given_name, family_name, role, date_created) {
-    
+
     document.getElementById("first_name").innerHTML = given_name;
     document.getElementById("last_name").innerHTML = family_name;
     document.getElementById("username").innerHTML = username;
@@ -209,10 +209,10 @@ function setUser() {
 
 function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
     $.get(applicationJsonUrl)
-        .done(function() {
-            newModuleCard(applicationName, applicationDescription,  applicationIconUrl, counter);
+        .done(function () {
+            newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter);
         })
-        .fail(function() {
+        .fail(function () {
             console.log("The application " + applicationName + "'s application.json file is not available");
         });
 }
@@ -220,13 +220,13 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
-        
+
         applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
         applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
         if (applicationData.apps[i].applicationFolder) {
-            applicationJsonUrl[i] =  "/apps/" + applicationFolder[i] + "application.json";
+            applicationJsonUrl[i] = "/apps/" + applicationFolder[i] + "application.json";
             checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
@@ -239,25 +239,26 @@ function changeModule() {
     let applicationImage = sessionStorage.getItem("applicationImage");
     let applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
-            $("#application-icon").attr("src",  sessionStorage.getItem("applicationImage") );
-            $("#registerButton").css("visibility", "visible");
-            if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
-                showBarcodeDiv();
-               
-            }else {
-                
-            }
-           
-            $("#myModal").modal("hide");
-            $("#application-name").text(sessionStorage.getItem("applicationName"));
-    }else {
-    }
+        $("#application-icon").attr("src", sessionStorage.getItem("applicationImage"));
+        $("#registerButton").css("visibility", "visible");
+        if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+            // showBarcodeDiv();
+
+        } else {
+
+        }
+
+        $("#myModal").modal("hide");
+        $("#application-name").text(sessionStorage.getItem("applicationName"));
+    } else {}
 }
+
 function showBarcodeDiv() {
     sessionStorage.setItem("displayBarcode", true)
     $("#details").width("47.91%");
     $("#header").append($('#barcode').html());
 }
+
 function redirect(id) {
     if (id === "create-user") {
         window.location.href = './apps/core/views/users/new.html';
@@ -362,37 +363,64 @@ function loadTabContent(id) {
         GenerateTable();
     }
 }
+
 function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
 }
 
 function checkCredentials(username, password) {
-        jQuery.post(apiProtocol + '://' + apiURL + ':' + apiPort +'/api/v1/auth/login', {
-            username: username,
-            password: password
-        })
-        .done(function(msg) {
-            sessionStorage.setItem("authorization", msg.authorization.token);
-            window.location.href = "location.html";
-            sessionStorage.removeItem("userPassword");
-        })
-        .fail(function(xhr, status, error) {
-            // error handling
-            showMessage("Wrong username or password");
-            window.location = "/apps/core/views/login.html";
-        });
+    var http = new XMLHttpRequest();
+    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/auth/login';
+    var params = JSON.stringify({
+        username: username,
+        password: password
+    });
+    http.open('POST', url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+        if (http.readyState == 4) {
+            if (http.status == 200) {
+                var v = JSON.parse(http.responseText);
+                sessionStorage.setItem("authorization", v.authorization.token);
+                sessionStorage.removeItem("userPassword");
+                window.location.href = "location.html";
+                // sessionStorage.removeItem("userPassword");
+                // window.location.href = 'show.html?user_id=' + v.user.user_id;
+            } else if (http.status == 401) {
+                // alert('Username already exists');
+                sleep(2000);
+                alert("Wrong username or password");
+                window.location = "/apps/core/views/login.html";
+                // sleep
+            } else if (http.status == 0){
+                // await sleep(2000);
+                alert("No connection to EMR API");
+                window.location = "/apps/core/views/login.html";
+            }else {
+                alert('error' + http.status);
+            }
+        }
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    http.send(params);
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 function getAPI() {
-jQuery.getJSON("/apps/config/apps.json")
-.done(function(data, status) {
-    sessionStorage.setItem("apiURL", data.apiURL);
-    apiURL =  data.apiURL;
-    sessionStorage.setItem("apiPort", data.apiPort);
-    apiPort = data.apiPort;
-    sessionStorage.setItem("apiProtocol", data.apiProtocol);
-    apiProtocol = data.apiProtocol;
-})
-.fail(function() {
-    console.log("apps.json is missing from the apps/config folder");
-});
+    jQuery.getJSON("/apps/config/apps.json")
+        .done(function (data, status) {
+            sessionStorage.setItem("apiURL", data.apiURL);
+            apiURL = data.apiURL;
+            sessionStorage.setItem("apiPort", data.apiPort);
+            apiPort = data.apiPort;
+            sessionStorage.setItem("apiProtocol", data.apiProtocol);
+            apiProtocol = data.apiProtocol;
+        })
+        .fail(function () {
+            console.log("apps.json is missing from the apps/config folder");
+        });
 }
