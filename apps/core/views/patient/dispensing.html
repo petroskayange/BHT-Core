@@ -1,0 +1,58 @@
+
+<script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+<script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/apps/core/assets/css/dispensing.css" type="text/css">
+<script type="text/javascript" src="/apps/core/assets/js/dispensing.js"></script>
+
+<script type="text/javascript" src="/apps/core/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/apps/core/assets/js/client-scan-barcode.js"></script>
+
+<!--link rel="stylesheet" href="/apps/core/assets/css/datatables/jquery.dataTables.min.css" type="text/css"-->
+<link rel="stylesheet" href="/apps/core/assets/css/datatables/uikit.min.css" type="text/css">
+<link rel="stylesheet" href="/apps/core/assets/css/datatables/dataTables.uikit.min.css" type="text/css">
+
+<link rel="stylesheet" href="/apps/core/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
+<link rel="stylesheet" href="/apps/core/assets/css/datatables/scroller.dataTables.min.css" type="text/css">
+
+<script type="text/javascript" src="/apps/core/assets/js/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/apps/core/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+
+<script>
+  var setDataTable = null;
+
+  function initDataTable() {
+    setDataTable = jQuery('#med-list').DataTable( {
+      fixedHeader: true,
+      searching: false,
+      paging: false,
+      scrollY: 330,
+      scroller: {
+        loadingIndicator: true
+      }
+    } );
+  }
+
+</script>
+
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+
+      <form>
+
+        <input type="text" name="summary"
+          tt_onLoad="__$('keyboard').style.display = 'none';dispensingPage();initDataTable();getPrescriptions();" 
+          tt_pageStyleClass= "NoControls" helpText="Dispensing" optional = "true"/>
+
+
+      </form>
+
+   </div>
+ </div>
+</body>
+
+
