@@ -45,6 +45,7 @@ function buildYesNoUI(concept_name, values) {
 
 
   var inputFrame = document.getElementById("inputFrame" + tstCurrentPage); //.getElementsByClassName('yes_nos');
+  inputFrame.style = "width: 96%;";
   createNewCtrl(inputFrame, concept_name, values);
 }
 
