@@ -155,6 +155,7 @@ function updateSelection(li) {
   selected_meds[li.id] = {
     name: li.innerHTML, am: null, 
     noon: null, pm: null,
+    duration: null,
     dose_strength: li.getAttribute("dose_strength"),
     units: li.getAttribute("units")
   };
@@ -206,16 +207,20 @@ function setDosage(e, container_name) {
   resetDosageContainers();
   
   var drug_id = e.id.replace("row-","");
-  document.getElementById("text-am").value    = selected_meds[drug_id].am;
-  document.getElementById("text-noon").value  = selected_meds[drug_id].noon;
-  document.getElementById("text-pm").value    = selected_meds[drug_id].pm;
-   
+  try {
+    document.getElementById("text-am").value      = selected_meds[drug_id].am;
+    document.getElementById("text-noon").value    = selected_meds[drug_id].noon;
+    document.getElementById("text-pm").value      = selected_meds[drug_id].pm;
+    document.getElementById("text-days").value    = selected_meds[drug_id].duration;
+  }catch(i) {}
+    
 }
 
 function resetDosageContainers() {
   document.getElementById("text-am").value = null;
   document.getElementById("text-noon").value = null;
   document.getElementById("text-pm").value = null;
+  document.getElementById("text-days").value = null;
 }
 
 function deleteFromList(e, container_name) {
@@ -225,6 +230,17 @@ function deleteFromList(e, container_name) {
   if(container_name.match(/dosage-table-cell-left/i)){
     resetDosageContainers();
   }
+
+  var empty = true
+  for(var i in selected_meds){
+    empty = false
+    break
+  }
+
+ if(empty)
+   setPage(document.getElementById("nav-medication"));
+
+
 }
 
 function getMedication(search_str) {
@@ -248,7 +264,6 @@ function buildNavButtons() {
   var navButtons    = [
     ["Medication","medication.png"],
     ["Dosage","dosage.png"],
-    ["Duration","period.png"],
     ["Summary","prescription.png"]
   ];
 
@@ -287,7 +302,51 @@ function buildNavButtons() {
   navContainer.appendChild(navTable)
 }
 
+function validateNext(e){
+  var next = false
+  if(e.id.match(/dosage/i)){
+    for(var drug_id in selected_meds){
+      next = true
+    }
+
+    if(!next)
+      showMessage("Select medication first<br />before clicking Dosage");
+
+  }else if(e.id.match(/summary/i)){
+    
+    next = true; 
+    for(var drug_id in selected_meds){
+      var am    = selected_meds[drug_id].am;
+      var noon  = selected_meds[drug_id].noon;
+      var pm    = selected_meds[drug_id].pm;
+      var days  = selected_meds[drug_id].duration;
+
+      if (!isNumeric(am) && isNumeric(noon) && isNumeric(pm) && isNumeric(days)){
+        next = false
+      }
+
+      if (isEmpty(am) || isEmpty(noon) || isEmpty(pm) || isEmpty(days)){
+        next = false
+      }
+
+    }
+
+    if(!next)
+      showMessage("Set medication dosage first<br />before going to Summary");
+
+  }else{
+    next = true;
+  }
+
+  return next;
+}
+
 function setPage(e) {
+
+  var allow = validateNext(e);
+  if(!allow)
+    return;
+
   var buttons = document.getElementsByClassName("nav-buttons");
 
   for(var i = 0 ; i < buttons.length ; i++){
@@ -299,6 +358,7 @@ function setPage(e) {
 }
 
 function buildPage(e) {
+  document.getElementById("nextButton").style = "display: none;";
   var mainContainer = document.getElementById("main-table-cell-right");
   mainContainer.innerHTML = null;
 
@@ -344,7 +404,7 @@ function buildDosageKeyPad() {
   table.setAttribute("id", "dosage-keypad-table");
   mainContainer.appendChild(table);
 
-  tds = [["Am","morning.png"],["Noon","noon.png"], ["PM","evening.png"]]; 
+  tds = [["Am","morning.png"],["Noon","noon.png"], ["PM","evening.png"],["Days","period.png"]]; 
   var tr = document.createElement("tr");
   table.appendChild(tr);
 
@@ -388,7 +448,7 @@ function buildDosageKeyPad() {
 
   
   td = document.createElement("td");
-  td.setAttribute("colspan", 3);
+  td.setAttribute("colspan", 4);
   td.style = "text-align: center;";
   tr.appendChild(td)
 
@@ -441,6 +501,8 @@ function dosageEntered(key, text_box_id){
       selected_meds[drug_id].noon = inputBox.value;
     }else if(text_box_id.match(/pm/i)){
       selected_meds[drug_id].pm = inputBox.value;
+    }else if(text_box_id.match(/days/i)){
+      selected_meds[drug_id].duration = inputBox.value;
     }
   }catch(x) { }
 
@@ -553,7 +615,7 @@ function buildSummary() {
 
   var tr  = document.createElement("tr");
   table.appendChild(tr);
-  var headers = ["Medication","Duration","Instruction","Total Quantity"];
+  var headers = ["Medication","Duration (days)","Instruction","Total Quantity"];
 
   for(var i = 0 ; i < headers.length ; i++){
     var th = document.createElement("th");
@@ -582,7 +644,7 @@ function buildSummary() {
     tr.appendChild(td);
 */
     td = document.createElement("td");
-    td.innerHTML = setDuration;
+    td.innerHTML = selected_meds[drug_id].duration;
     tr.appendChild(td);
 
     td = document.createElement("td");
@@ -599,6 +661,15 @@ function buildSummary() {
 
   var mainContainer = document.getElementById("main-table-cell-right");
   mainContainer.appendChild(table);
+
+  showPrescribeBTN();  
+}
+
+function showPrescribeBTN() {
+  var btn = document.getElementById("nextButton");
+  btn.style = "display: inline;";
+  btn.innerHTML = "<span>Prescribe</span>";
+  btn.setAttribute("onmousedown", "prescribeMeds();")
 }
 
 function getTotalPillsNeed(drug_id) {
@@ -606,5 +677,77 @@ function getTotalPillsNeed(drug_id) {
   var noon  = parseFloat(selected_meds[drug_id].noon);
   var pm    = parseFloat(selected_meds[drug_id].pm);
 
-  return (parseInt(setDuration)* (am + noon + pm));
+  return (parseInt(selected_meds[drug_id].duration)* (am + noon + pm));
+}
+
+function prescribeMeds() {
+  var encounter = {
+    encounter_type_name: 'Treatment',
+    encounter_type_id:  25,
+    patient_id: 50,
+    encounter_datetime: null
+  }
+
+  submitParameters(encounter, "/encounters", "postDrugOrders");
+}
+
+function postDrugOrders(encounter) {
+ var drug_orders_params = {encounter_id: parseInt(encounter["encounter_id"]), drug_orders: []}
+ var start_date = new Date();
+ 
+  
+ for(var drug_id in selected_meds){
+   var am   = parseFloat(selected_meds[drug_id].am);
+   var noon = parseFloat(selected_meds[drug_id].noon);
+   var pm   = parseFloat(selected_meds[drug_id].pm);
+   var days = parseInt(selected_meds[drug_id].duration) 
+   
+   var start_date = new Date();
+   var start_date_formated = getFormattedDate(start_date);
+   var auto_expire_date = start_date.setDate(start_date.getDate() + days);
+   var auto_expire_date_formated = getFormattedDate(new Date(auto_expire_date));
+    
+   drug_order = {
+     drug_inventory_id: parseInt(drug_id), 
+     dose: selected_meds[drug_id].dose_strength,
+     equivalent_daily_dose: (am + noon + pm),
+     frequency: ("AM: " + am + " Noon: " + noon + " PM: " + pm), 
+     start_date: start_date_formated,
+     auto_expire_date: auto_expire_date_formated,
+     instructions: ("AM: " + am + " Noon: " + noon + " PM: " + pm),
+     units: selected_meds[drug_id].units
+   }
+   drug_orders_params.drug_orders.push(drug_order);
+ }
+
+ submitParameters(drug_orders_params, "/drug_orders", "doneCreating");
+}
+
+function doneCreating() {
+  alert("Done");
+}
+
+function getFormattedDate(set_date) {
+  var month = (set_date.getMonth() + 1);
+  if(month < 10)
+    month = "0" + month;
+
+  var day = (set_date.getDate());
+  if(day < 10)
+    day = "0" + day;
+
+  var year = (set_date.getFullYear());
+  return year + "-" + month + "-" + day;
+}
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function isEmpty(str){
+  try {
+    return (str.replace(/\s+/g, '').length < 1);
+  }catch(e){
+    return true;
+  }
 }

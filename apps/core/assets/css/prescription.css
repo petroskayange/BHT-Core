@@ -196,7 +196,7 @@
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
   user-select: none;
-  padding-left: 5%;
+  padding-left: 10%;
 }
 
 .keypad-buttons {
@@ -230,7 +230,7 @@
 }
 
 .input-boxes {
-  width: 99%;
+  width: 100px;
   height: 85px;
   font-size: 2.2em;
   text-align: center;
@@ -238,7 +238,7 @@
 
 
 /* ........................ duration ............... */
-#duration-text {
+/*#duration-text {
   height: 85px;
   margin-left: 25%;
   font-size: 2.2em;
@@ -253,7 +253,7 @@
 #duration-label {
   margin-left: 50%;
 }
-
+*/
 /* ...................... summary .................. */
 #summary-table {
   width: 99%;
