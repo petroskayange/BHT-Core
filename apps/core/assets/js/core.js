@@ -50,6 +50,11 @@ var people = "people";
 var person_addresses = "person_addresses";
 
 var person_names = "person_names";
+var applicationName = [];
+var applicationDescription = [];
+var applicationIcon = [];
+var applicationFolder = [];
+var applicationJsonUrl = [];
 
 function _ajaxUrl(res) {
     var result = [];
@@ -104,26 +109,24 @@ function PersistData(data, res) {
     req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
     req.send(JSON.stringify(data));
 
-}
+}  
 
-if (document.createElement("template").content) {
-    /*Code for browsers that supports the TEMPLATE element*/
-    var applicationName = [];
-    var applicationDescription = [];
-    var applicationIcon = [];
-    var applicationFolder = [];
-    var applicationJsonUrl = [];
-    $.getJSON("/apps/config/apps.json")
-        .done(function (data, status) {
-            parser(data);
-        })
-        .fail(function () {
-            console.log("apps.json is missing from the apps/config folder");
-        });
-} else {
-    /*Alternative code for browsers that do not support the TEMPLATE element*/
-}
 
+function generateTemplate() {
+    if (document.createElement("template").content) {
+        /*Code for browsers that supports the TEMPLATE element*/
+     
+        $.getJSON("/apps/config/apps.json")
+            .done(function (data, status) {
+                parser(data);
+            })
+            .fail(function () {
+                console.log("apps.json is missing from the apps/config folder");
+            });
+    } else {
+        /*Alternative code for browsers that do not support the TEMPLATE element*/
+    }
+}
 function _foo(data, resource) {
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
@@ -393,11 +396,11 @@ function checkCredentials(username, password) {
                 alert("Wrong username or password");
                 window.location = "/apps/core/views/login.html";
                 // sleep
-            } else if (http.status == 0){
+            } else if (http.status == 0) {
                 // await sleep(2000);
                 alert("No connection to EMR API");
                 window.location = "/apps/core/views/login.html";
-            }else {
+            } else {
                 alert('error' + http.status);
             }
         }
@@ -408,19 +411,41 @@ function checkCredentials(username, password) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
 function getAPI() {
-    jQuery.getJSON("/apps/config/apps.json")
-        .done(function (data, status) {
-            sessionStorage.setItem("apiURL", data.apiURL);
-            apiURL = data.apiURL;
-            sessionStorage.setItem("apiPort", data.apiPort);
-            apiPort = data.apiPort;
-            sessionStorage.setItem("apiProtocol", data.apiProtocol);
-            apiProtocol = data.apiProtocol;
-        })
-        .fail(function () {
-            console.log("apps.json is missing from the apps/config folder");
-        });
+
+        var url = '/apps/config/apps.json';
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4) {
+                
+                if (this.status == 200) {
+                    try {
+                        var data = JSON.parse(this.responseText);
+                        sessionStorage.setItem("apiURL", data.apiURL);
+                        apiURL = data.apiURL;
+                        sessionStorage.setItem("apiPort", data.apiPort);
+                        apiPort = data.apiPort;
+                        sessionStorage.setItem("apiProtocol", data.apiProtocol);
+                        apiProtocol = data.apiProtocol;
+                    } catch(e) {
+                        console.log("invalid json formatting");
+                    }
+                    
+                }else if(this.status == 404) {
+                    console.log("apps.json is missing from the apps/config folder");
+                }else {
+                    console.log("error " + this.status);
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.send(null);
+        } catch (e) {
+            console.log(e);
+        }
+
 }
