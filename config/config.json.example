@@ -1,20 +1,15 @@
 {
 
-	"apiURL": "0.0.0.0",
-	"apiPort": "8000",
+	"apiURL": "127.0.0.1",
+	"apiPort": "3001",
 	"apiProtocol": "http",
 	"apps": [
 		{
 			"applicationName": "ART",
+      "programID": "1",
 			"applicationFolder": "ART/",
 			"applicationIcon": "/assets/images/aids.png",
 			"applicationDescription": "Application for HIV testing",
-			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
-		},{
-			"applicationName": "ANC",
-			"applicationFolder": "ANC/",
-			"applicationIcon": "/assets/images/diabetes.png",
-			"applicationDescription": "Antenatal Care",
 			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
 		}
 		

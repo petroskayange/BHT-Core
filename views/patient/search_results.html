@@ -108,6 +108,7 @@
 
           window.location.href = "/views/patient/new.html" + parameters;
       }else if (search_redirect.length > 0){
+        sessionStorage.setItem("patientID", people[pos]["Person ID"]);
         window.location.href = "/views/patient_dashboard.html?patient_id=" + people[pos]['Person ID'];
       }else{
           showMessage("Select value to continue");

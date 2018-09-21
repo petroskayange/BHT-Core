@@ -64,6 +64,7 @@ var applicationDescription = [];
 var applicationIcon = [];
 var applicationFolder = [];
 var applicationJsonUrl = [];
+var programID = [];
 
 function _ajaxUrl(res) {
     var result = [];
@@ -154,7 +155,7 @@ function _foo(data, resource) {
 
 }
 
-function newModuleCard(applicationName, applicationDescription, applicationImage, counter) {
+function newModuleCard(applicationName, applicationDescription, applicationImage, programID, counter) {
     $("#modal-div").append($('#card_template').html());
     $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);
     $("#apptext").text(applicationName).attr('id', "apptext" + counter);
@@ -168,6 +169,7 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     $("#moduleButton" + counter).click(function () {
         sessionStorage.setItem("applicationImage", applicationImage);
         sessionStorage.setItem("applicationName", applicationName);
+        sessionStorage.setItem("programID", programID);
         changeModule();
     });
 
@@ -218,10 +220,10 @@ function setUser() {
 }
 
 
-function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl) {
+function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID) {
     $.get(applicationJsonUrl)
         .done(function () {
-            newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter);
+            newModuleCard(applicationName, applicationDescription, applicationIconUrl, programID, counter);
         })
         .fail(function () {
             console.log("The application " + applicationName + "'s application.json file is not available");
@@ -236,9 +238,11 @@ function parser(applicationData) {
         applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
+        programID[i]  = applicationData.apps[i].programID;
+
         if (applicationData.apps[i].applicationFolder) {
             applicationJsonUrl[i] = "/apps/" + applicationFolder[i] + "application.json";
-            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i]);
+            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
         }
