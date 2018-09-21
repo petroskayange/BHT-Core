@@ -33,7 +33,7 @@
           img.setAttribute("src", "/assets/images/female32x32.png");
       }
   }
- 
+  
 </script>
 
 <style type="text/css">
@@ -67,6 +67,24 @@
     padding-right: 20px;
   }
 
+  .taskBtns {
+    background-color: #538fbe; 
+    border-radius: 7px; 
+    border-bottom: 1px outset black;
+    border-style: outset; 
+    border-top: 1px outset black; 
+    color: white; 
+    display: block; 
+    padding: 10px 16px 10px 10px; 
+    text-align: center; 
+    text-decoration: none; 
+    width: 100%;
+    height: 60px;;
+  }
+
+  .tasks {
+    padding: 0.5%;
+  }
 </style>
 <div id="content">
   <table style="font: 14px;-moz-user-select: none; border-collapse: collapse;" width="100%" border="0">
@@ -174,13 +192,23 @@
               <td rowspan="3">
                 <div id="visits" style="width: 100%; overflow: auto; height: 505px; border: 1px solid rgb(255, 255, 255);">
                   <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
-
                   </ul>
+                </div>
+              </td> 
+
+              <td style=" ">
+                     <div class="container" style=" margin-left: 10%;">
+                        
+                        <div class="row" id="generic_tabs" style="padding:0;">
+                          
+                        </div>
+                      </div>
                 </div>
               </td>
             </tr>
             <tr>
-              <td style="background-color: white; color: rgb(255, 255, 255); font-weight: bold; border-right: 1px solid rgb(52, 93, 181); padding: 5px; height: 20px;">
+              <td style="background-color: white; color: rgb(255, 255, 255); font-weight: bold; border-right: 1px solid rgb(52, 93, 181); ">
+                
               </td>
             </tr>
             <tr>
@@ -189,7 +217,7 @@
                   <ul style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
 
                   </ul>
-                </div>
+                
               </td>
             </tr>
           </table>
@@ -248,7 +276,7 @@
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
         <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
       </button>
-      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+      <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"  onmousedown="showActivities(this); loadActivitiesContent(this.id);">
         <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
       </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
@@ -298,6 +326,7 @@
   var apiProtocol = sessionStorage.getItem("apiProtocol");
   var id = url.searchParams.get("patient_id");
   (document.getElementsByClassName("overview-btns ")[0]);
+  (document.getElementsByClassName("activities-btns ")[0]);
   changeModule();
   url = new URL(url);
   var d = new Date();

@@ -8,7 +8,7 @@ var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-
+var activities_tab_content = "";
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -16,6 +16,15 @@ report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" "><span>Report 2</span></button>';
 report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
 // alert(window.innerHeight);
+
+var addDiv = "<div class='col-sm-2 tasks'>";
+var endDiv = "</div>"
+                          
+activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
+activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
+activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
+activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
+
 
 // URL formulation logic
 var auth_token = null;
@@ -109,8 +118,7 @@ function PersistData(data, res) {
     req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
     req.send(JSON.stringify(data));
 
-}  
-
+}
 
 function generateTemplate() {
     if (document.createElement("template").content) {
@@ -272,6 +280,14 @@ function redirect(id) {
     if (id === "report-1") {}
     if (id === "report-1") {}
 }
+function activitiesRedirect(id) {
+    if (id === "demographics-edit") {
+        window.location.href = './views/patient/activities.html';
+    }
+    if (id === "national-id") {}
+    if (id === "visit-summary") {}
+    if (id === "demographics-print") {}
+}
 
 function registerPatientRedirect() {
     window.location.href = './views/patient/search.html';
@@ -357,6 +373,15 @@ function showOptions(e) {
 
 }
 
+function showActivities(a) {
+    var btn = document.getElementsByClassName("activities-btns");
+
+    // Loop through the buttons and add the active class to the current/clicked button
+    for (var x = 0; x < btn.length; x++) {
+        btn[x].setAttribute('class', 'btn btn-info activities-btns');
+    }
+}
+
 function loadTabContent(id) {
     if (id === "admin") {
         document.getElementById("generic_tabs").innerHTML = admin_tab_content;
@@ -364,6 +389,12 @@ function loadTabContent(id) {
         document.getElementById("generic_tabs").innerHTML = report_tab_content;
     } else {
         GenerateTable();
+    }
+}
+
+function loadActivitiesContent(id) {
+    if (id === "activities") {
+        document.getElementById("generic_tabs").innerHTML = activities_tab_content;
     }
 }
 
@@ -393,15 +424,15 @@ function checkCredentials(username, password) {
             } else if (http.status == 401) {
                 // alert('Username already exists');
                 sleep(2000);
-                alert("Wrong username or password");
+                showMessage("Wrong username or password");
                 window.location = "/views/login.html";
                 // sleep
-            } else if (http.status == 0) {
+            } else if (http.status == 0){
                 // await sleep(2000);
-                alert("No connection to EMR API");
+                showMessage('No connection to EMR API',null,10000000000);
                 window.location = "/views/login.html";
-            } else {
-                alert('error' + http.status);
+            }else {
+                showMessage('error' + http.status);
             }
         }
     }
@@ -411,41 +442,41 @@ function checkCredentials(username, password) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
+  }
 
-function getAPI() {
+  function getAPI() {
 
-        var url = '/config/config.json';
-        var req = new XMLHttpRequest();
-        req.onreadystatechange = function () {
+    var url = '/config/config.json';
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
 
-            if (this.readyState == 4) {
-                
-                if (this.status == 200) {
-                    try {
-                        var data = JSON.parse(this.responseText);
-                        sessionStorage.setItem("apiURL", data.apiURL);
-                        apiURL = data.apiURL;
-                        sessionStorage.setItem("apiPort", data.apiPort);
-                        apiPort = data.apiPort;
-                        sessionStorage.setItem("apiProtocol", data.apiProtocol);
-                        apiProtocol = data.apiProtocol;
-                    } catch(e) {
-                        console.log("invalid json formatting");
-                    }
-                    
-                }else if(this.status == 404) {
-                    console.log("config.json is missing from the /config folder");
-                }else {
-                    console.log("error " + this.status);
+        if (this.readyState == 4) {
+            
+            if (this.status == 200) {
+                try {
+                    var data = JSON.parse(this.responseText);
+                    sessionStorage.setItem("apiURL", data.apiURL);
+                    apiURL = data.apiURL;
+                    sessionStorage.setItem("apiPort", data.apiPort);
+                    apiPort = data.apiPort;
+                    sessionStorage.setItem("apiProtocol", data.apiProtocol);
+                    apiProtocol = data.apiProtocol;
+                } catch(e) {
+                    console.log("invalid json formatting");
                 }
+                
+            }else if(this.status == 404) {
+                console.log("config.json is missing from the /config folder");
+            }else {
+                console.log("error " + this.status);
             }
-        };
-        try {
-            req.open('GET', url, true);
-            req.send(null);
-        } catch (e) {
-            console.log(e);
         }
+    };
+    try {
+        req.open('GET', url, true);
+        req.send(null);
+    } catch (e) {
+        console.log(e);
+    }
 
 }
