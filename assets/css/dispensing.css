@@ -5,6 +5,9 @@
 
 
 
+.dispense-button {
+  background-color: green !important;
+}
 
 .delete-container {
   width: 60px
