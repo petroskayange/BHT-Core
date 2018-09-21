@@ -161,10 +161,10 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     $("#apptext").text(applicationName).attr('id', "apptext" + counter);
     $("#appName").text(applicationName).attr('id', "appName" + counter);
     $("#moduleButton").attr('id', "moduleButton" + counter);
-    if (url != "") {
+    if (url == "") {
         $("#moduleButton"+counter).attr("href", "#");    
     }else {
-        $("#moduleButton"+counter).attr("href", "/patient.html");
+        $("#moduleButton"+counter).attr("href", url);
     }
    
     
@@ -230,7 +230,7 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
     $.getJSON(applicationJsonUrl)
         .done(function (data) {
         data.activities.url;
-        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, "");
+        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, data.activities.url);
             
         })
         .fail(function () {
