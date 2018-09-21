@@ -155,12 +155,19 @@ function _foo(data, resource) {
 
 }
 
-function newModuleCard(applicationName, applicationDescription, applicationImage, programID, counter) {
+function newModuleCard(applicationName, applicationDescription, applicationImage, counter, url) {
     $("#modal-div").append($('#card_template').html());
     $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);
     $("#apptext").text(applicationName).attr('id', "apptext" + counter);
     $("#appName").text(applicationName).attr('id', "appName" + counter);
     $("#moduleButton").attr('id', "moduleButton" + counter);
+    if (url != "") {
+        $("#moduleButton"+counter).attr("href", "#");    
+    }else {
+        $("#moduleButton"+counter).attr("href", "/patient.html");
+    }
+   
+    
     // $("#apptext").text(l("applicationName"));
     $("#cardImage")
         .on('error', function () {
@@ -219,11 +226,12 @@ function setUser() {
     sessionStorage.setItem("username", username);
 }
 
-
 function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID) {
-    $.get(applicationJsonUrl)
-        .done(function () {
-            newModuleCard(applicationName, applicationDescription, applicationIconUrl, programID, counter);
+    $.getJSON(applicationJsonUrl)
+        .done(function (data) {
+        data.activities.url;
+        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, "");
+            
         })
         .fail(function () {
             console.log("The application " + applicationName + "'s application.json file is not available");
@@ -250,7 +258,7 @@ function parser(applicationData) {
     }
 }
 
-function changeModule() {
+function changeModule(url ) {
     let applicationImage = sessionStorage.getItem("applicationImage");
     let applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
