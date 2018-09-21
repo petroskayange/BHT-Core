@@ -280,7 +280,14 @@ function addPrescriptions(data) {
      
     setDataTable.row.add([addDeleteBTN(order_id), medication, amount_needed, quantity, addDispBTN(order_id)]).node().id = order_id;
     setDataTable.draw();
+    addClassIMGcontainter(order_id);
   }
+}
+
+function addClassIMGcontainter(order_id) {
+  var row = document.getElementById(order_id);
+  var td = row.getElementsByTagName("td")[0];
+  td.setAttribute("class","delete-container");
 }
 
 function addDispBTN(order_id) {
