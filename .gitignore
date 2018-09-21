@@ -1,6 +1,5 @@
 /apps/*
-!/apps/core/
-!/apps/config/
-/apps/core/application.json
-/apps/config/apps.json
+/config/config.json
+/public/touchscreentoolkit/*
 *.swp
+*.json
