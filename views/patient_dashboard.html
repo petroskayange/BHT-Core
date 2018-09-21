@@ -4,12 +4,12 @@
       <title>Baobab Health Trust</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="/apps/core/assets/css/bootstrap/bootstrap.min.css">
-      <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/header.css">
-      <link rel="stylesheet" href="/apps/core/assets/css/maindashboard/footer.css">
-      <link rel="stylesheet" href="/apps/core/assets/css/custom.css">
-      <script src="/apps/core/assets/js/jquery.min.js"></script>
-      <script src="/apps/core/assets/js/bootstrap/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+      <link rel="stylesheet" href="/assets/css/custom.css">
+      <script src="/assets/js/jquery.min.js"></script>
+      <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript">
          $(document).ready(function(){
               console.log('call the getFunction to retrieve the saved client data');
@@ -28,9 +28,9 @@
   function changeIcon(gender) {
       var img = document.getElementById('icon_id');
       if (gender === "Male") {
-          img.setAttribute("src", "/apps/core/assets/images/male24x32.png");
+          img.setAttribute("src", "/assets/images/male24x32.png");
       } else {
-          img.setAttribute("src", "/apps/core/assets/images/female32x32.png");
+          img.setAttribute("src", "/assets/images/female32x32.png");
       }
   }
  
@@ -76,7 +76,7 @@
           <table width="100%" cellpadding="1">
             <tr>
               <td style="width: 5%; vertical-align: middle; text-align: left;">
-                <img src= "/apps/core/assets/images/male24x32.png" id="icon_id" alt="person_icon">
+                <img src= "/assets/images/male24x32.png" id="icon_id" alt="person_icon">
                 <!-- <img id="icon_id" alt="icon"> -->
               </td>
               <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText">John Doe</th>
@@ -246,7 +246,7 @@
         <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
       </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/public/assets/images/launcher.png"></span>
+        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
       </button>
       <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
         <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
@@ -290,7 +290,7 @@
   <button autofocus onclick="confirmAction();">Confirm</button>
 </div>
 </body>
-<script src="/apps/core/assets/js/core.js "></script>
+<script src="/assets/js/core.js "></script>
 <script>
   var url = new URL(url);
   var apiURL = sessionStorage.getItem("apiURL");

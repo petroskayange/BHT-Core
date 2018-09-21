@@ -7,13 +7,13 @@
 		{
 			"applicationName": "ART",
 			"applicationFolder": "ART/",
-			"applicationIcon": "/apps/core/assets/images/aids.png",
+			"applicationIcon": "/assets/images/aids.png",
 			"applicationDescription": "Application for HIV testing",
 			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
 		},{
 			"applicationName": "ANC",
 			"applicationFolder": "ANC/",
-			"applicationIcon": "/apps/core/assets/images/diabetes.png",
+			"applicationIcon": "/assets/images/diabetes.png",
 			"applicationDescription": "Antenatal Care",
 			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
 		}

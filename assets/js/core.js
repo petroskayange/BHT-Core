@@ -98,7 +98,7 @@ function PersistData(data, res) {
     req.onreadystatechange = function () {
 
         if (req.readyState == 4 && req.status == 200) {
-            // window.location.href = '/apps/core/views/patient_dashboard.html';
+            // window.location.href = '/views/patient_dashboard.html';
         } else {
             console.log("@@@@" + req.responseText);
         }
@@ -116,12 +116,12 @@ function generateTemplate() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
      
-        $.getJSON("/apps/config/apps.json")
+        $.getJSON("/config/config.json")
             .done(function (data, status) {
                 parser(data);
             })
             .fail(function () {
-                console.log("apps.json is missing from the apps/config folder");
+                console.log("config.json is missing from the apps/config folder");
             });
     } else {
         /*Alternative code for browsers that do not support the TEMPLATE element*/
@@ -155,7 +155,7 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     // $("#apptext").text(l("applicationName"));
     $("#cardImage")
         .on('error', function () {
-            $(this).attr('src', "/public/assets/images/no_image.png");
+            $(this).attr('src', "/assets/images/no_image.png");
         }).attr('src', applicationImage).attr('id', "cardImage" + counter);
     $("#moduleButton" + counter).click(function () {
         sessionStorage.setItem("applicationImage", applicationImage);
@@ -264,17 +264,17 @@ function showBarcodeDiv() {
 
 function redirect(id) {
     if (id === "create-user") {
-        window.location.href = './apps/core/views/users/new.html';
+        window.location.href = './views/users/new.html';
     }
     if (id === "view-user") {
-        window.location.href = './apps/core/views/users/view_users.html';
+        window.location.href = './views/users/view_users.html';
     }
     if (id === "report-1") {}
     if (id === "report-1") {}
 }
 
 function registerPatientRedirect() {
-    window.location.href = './apps/core/views/patient/search.html';
+    window.location.href = './views/patient/search.html';
 }
 // overview tab work in progress
 function overview() {
@@ -394,12 +394,12 @@ function checkCredentials(username, password) {
                 // alert('Username already exists');
                 sleep(2000);
                 alert("Wrong username or password");
-                window.location = "/apps/core/views/login.html";
+                window.location = "/views/login.html";
                 // sleep
             } else if (http.status == 0) {
                 // await sleep(2000);
                 alert("No connection to EMR API");
-                window.location = "/apps/core/views/login.html";
+                window.location = "/views/login.html";
             } else {
                 alert('error' + http.status);
             }
@@ -415,7 +415,7 @@ function sleep(ms) {
 
 function getAPI() {
 
-        var url = '/apps/config/apps.json';
+        var url = '/config/config.json';
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
 
@@ -435,7 +435,7 @@ function getAPI() {
                     }
                     
                 }else if(this.status == 404) {
-                    console.log("apps.json is missing from the apps/config folder");
+                    console.log("config.json is missing from the /config folder");
                 }else {
                     console.log("error " + this.status);
                 }

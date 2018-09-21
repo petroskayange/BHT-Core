@@ -25,10 +25,10 @@
     }
   </script>
 
-  <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-  <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
-  <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
-  <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+  <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/js/data.js"></script>
+  <script type="text/javascript" src="/assets/js/core.js"></script>
 
 </head>
 
@@ -93,7 +93,7 @@
       if (http.readyState == 4) {
 
         if (http.status == 200) {
-          document.location = '/apps/core/views/users/show.html?user_id=' + id;
+          document.location = '/views/users/show.html?user_id=' + id;
         } else if (http.status == 400) {
           alert("Bad Request");
         } else {

@@ -10,10 +10,10 @@
       var d = new Date();
       d.toDateString();
     </script>
-    <script type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/data.js"></script>
-    <script type="text/javascript" src="/apps/core/assets/js/core.js"></script>
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/data.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
 
   </head>
   <body id="mateme">
@@ -140,12 +140,12 @@
   getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
   var tt_cancel_destination = "/";
   function editUser() {
-    document.location = '/apps/core/views/users/edit_user.html?user_id='+id;
+    document.location = '/views/users/edit_user.html?user_id='+id;
   }
   function editPassword() {
-    document.location = '/apps/core/views/users/change_password.html?user_id='+id;
+    document.location = '/views/users/change_password.html?user_id='+id;
   }
   function editRole() {
-    document.location = '/apps/core/views/users/change_role.html?user_id='+id;
+    document.location = '/views/users/change_role.html?user_id='+id;
   }
 </script>
