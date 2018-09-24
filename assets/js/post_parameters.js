@@ -6,7 +6,7 @@ function submitParameters(parameters, url, returnToFunction) {
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 201) {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
       eval(returnToFunction)(obj);
     }
