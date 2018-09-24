@@ -3,7 +3,7 @@
    <head>
       <title>Baobab Health Trust</title>
       <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
       <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
       <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
       <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
@@ -12,7 +12,7 @@
       <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
       <script type="text/javascript">
          $(document).ready(function(){
-              console.log('call the getFunction to retrieve the saved client data');
+              // console.log('call the getFunction to retrieve the saved client data');
          });
       </script>
    </head>
@@ -33,6 +33,10 @@
           img.setAttribute("src", "/assets/images/female32x32.png");
       }
   }
+
+  function populateData() {
+
+  }
   
 </script>
 
@@ -42,6 +46,8 @@
 </script>
 
 <style type="text/css">
+
+  
   .headTab {
     border: 1px solid #004586;
   }
@@ -68,6 +74,7 @@
     text-align: center;
   }
 
+
   #session-date{
     padding-right: 20px;
   }
@@ -90,147 +97,137 @@
   .tasks {
     padding: 0.5%;
   }
+
+  .container {
+    margin: 0;
+    padding: 0;
+  }
+
+  .shaddows {
+    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.2);
+  }
+
+  td {
+    width: 30%;
+  }
 </style>
-<div id="content">
-  <table style="font: 14px;-moz-user-select: none; border-collapse: collapse;" width="100%" border="0">
-    <tr>
-      <td style="width: 43%; padding: 5px 5px 5px 15px;">
-        <div class="headTab" id="tableDiv1">
-          <table width="100%" cellpadding="1">
-            <tr>
-              <td style="width: 5%; vertical-align: middle; text-align: left;">
-                <img src= "/assets/images/male24x32.png" id="icon_id" alt="person_icon">
-                <!-- <img id="icon_id" alt="icon"> -->
-              </td>
-              <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText">John Doe</th>
-            </tr>
-            <tr style="border-top: 1px solid rgb(0, 69, 134);"></tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;Birthdate</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left;" id="dob"></td>
-            </tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;Age</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left; width: 3px;" id="age"></td>
-            </tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;National&nbsp;ID</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left; width: 3px;" id="npid"></td>
-            </tr>
-        <!--<tr>
-              <td style="text-align: right; padding: 5px; font-weight: bold; width: 12%;" class="blueText" id="primary_id_label">National id</td>
-              <td style="text-align: left; font-weight: bold; width: 3px;">:</td>
-              <td id="primary_id"></td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 5px; font-weight: bold; width: 100px;" class="blueText">Age</td>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td id="age"></td>
-            </tr> -->
-          </table>
-        </div></td>
-      <td style="width: 48%; padding: 5px;">
-        <div class="headTab">
-          <table style="font-size: 14px;" width="100%">
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold; width: 100px;" class="blueText">&nbsp;Home&nbsp;Address</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="addressl3">,</td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
-              <td style="text-align: center; width: 3px;">&nbsp;</td>
-              <td id="addressl4"></td>
-            </tr>
-            <!-- <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Title2</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="age"></td>
-            </tr> -->
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold; vertical-align: top;" class="blueText">&nbsp;Current&nbsp;Address</td>
-              <td style="text-align: center; width: 3px; vertical-align: top;">:</td>
-              <td id="addressl1">,</td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
-              <td style="text-align: center; width: 3px;">&nbsp;</td>
-              <td id="addressl2"></td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;Phone</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="phone_number"></td>
-            </tr>
-          </table>
-        </div></td>
-        <td style="width: 20%; padding: 5px 15px 5px 5px;">
-        <div class="headTab" id="modApp" style="text-align: center; cursor: pointer;">
-          <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
-            <tr>
-              <td style="width: 150px; text-align: right;">
-                <img id="appIcon" />
-              </td>
-            </tr>
-          </table>
-        </div></td>
-    </tr>
-    <tr>
-      <td style="width: 100%; padding: 5px 15px;" colspan="3">
-        <div id="main" style="width: 100%; box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75); overflow: hidden; height: 534px; border: 1px solid rgb(52, 93, 181);">
-          <table style="border-collapse: collapse; border: 1px solid rgb(52, 93, 181);" width="100%" cellspacing="0" cellpadding="5" border="1">
-            <tr style="background-color: rgb(52, 93, 181);">
-              <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;">Visit History
-              </td>
-              <td style="border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;" id="header">Date:
-                <!-- if session_date is blank  -->
-                  <span id="session-date"></span>
-                <!-- else -->
-                  <span id="session-date" style="color: red; "></span>
-                <!-- end  -->
-                Next Task: <span id="next-task">&nbsp;</span></td>
-            </tr>
-            <tr>
-              <td rowspan="3">
-                <div id="visits" style="width: 100%; overflow: auto; height: 505px; border: 1px solid rgb(255, 255, 255);">
-                  <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
-                  </ul>
-                </div>
-              </td> 
+ <!-- <div class="table-div-cell app-details " style="float:left;" id="details">
 
-              <td style=" ">
-                     <div class="container" style=" margin-left: 10%;">
-                        
-                        <div class="row" id="generic_tabs" style="padding:0;">
-                          
-                        </div>
-                      </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="background-color: white; color: rgb(255, 255, 255); font-weight: bold; border-right: 1px solid rgb(52, 93, 181); ">
-                
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div style="width: 100%; overflow: auto; height: 100.5px;">
-                  <ul style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
+</div> -->
 
-                  </ul>
-                
-              </td>
-            </tr>
-          </table>
-        </div>
-      </td>
-    </tr>
+<div class="container" style="width: 100%;">
 
-  </table>
+<div class="col-sm-8 col-lg-8 col-md-8 col-xs-8 shadows" style="border: solid 1px; border-radius: 3%; height: 120px; padding: 0;">
+    <table class="table-sm table-bordered" >
+        <tr>
+            <td class="h4" align="right">  <img src= "/assets/images/male24x32.png" id="icon_id" alt="person_icon"></td>
+            <td class="h4 text-muted" id="patient_name">Name</td>
+            <th class="h4">Home Address</th>
+            <td id="addressl3" class="h4 text-muted">&nbsp;</td>
+            
+        </tr>
+        <tr>
+            <th class="h4" class="text-muted">Date of Birth:</th>
+            <td class="h4 text-muted" id="age">&nbsp;</td>
+            <th class="h4">Current Address </th>
+            <td id="addressl1" class="h4 text-muted">&nbsp;</td>
+            
+        </tr>
+        <tr>
+            <th class="h4">National ID</th>
+            <td id="npid" class="h4 text-muted">&nbsp;</td>
+            
+            <th class="h4">Phone Number</th>
+            <td id="phone_number" class="h4 text-muted">&nbsp;</td>
+           
+            
+        </tr>
+    </table>
+
+</div>
+
+<div class="col-sm-4 col-lg-4 col-md-4 col-xs-4" style="border: solid 1px;border-radius: 3%; height: 120px; padding: 0;"> 
+
+    <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+<h3 style="text-align: center" id="application-name"> ART</h4>
+<h5 style="text-align: center" > v1.0.0</h5>
+</div>
+
+
+<div class="col-sm-2 col-lg-2 col-xl-2" style="height: 100%;border: solid 1px;overflow: scroll; padding: 0; height: 550px;">
+
+<h4>Visit Dates</h4>  
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
+</div>
+
+<div class="col-sm-10 col-lg-10 col-md-10 col-xs-10" style="border: solid 1px;  padding: 0; margin: 0; height: 550px; " id="generic_tabs">
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>    
+    </div>
+<!-- </div>
+<div class="table-div-cell app-icon" style="width: 50%; ">&nbsp;
+
+</div>
+
+<div class="container">
+
+  <div class="col-sm-3" style="border: solid 1px;">
+    assadssa
+  </div>
+
+  <div class="col-sm-9" style="border: solid 1px;">
+ssss
+    </div>
+
+
+</div> -->
+
+
 
     <!-- Modal -->
   <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
@@ -325,6 +322,7 @@
 </body>
 <script src="/assets/js/core.js "></script>
 <script>
+  generateTemplate();
   var url = new URL(url);
   var apiURL = sessionStorage.getItem("apiURL");
   var apiPort = sessionStorage.getItem("apiPort");
@@ -337,14 +335,12 @@
   var d = new Date();
 
   function ajaxRequest() {
-    console.log("here");
     var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
 
       if (this.readyState == 4 && this.status == 200) {
         var results = JSON.parse(this.responseText);
-        console.log(results.person.names[0].given_name);
         var age = results.person.birthdate;
         var gender = results.person.gender;
 
@@ -367,18 +363,19 @@
 
   function setValues(patient_name, gender, age, addressl1, addressl2, phone_number) {
     document.getElementById("patient_name").innerHTML = patient_name;
-    document.getElementById("gender").innerHTML = gender;
+    // document.getElementById("gender").innerHTML = gender;
     document.getElementById("age").innerHTML = age;
     document.getElementById("addressl1").innerHTML = "lilongwe";
-    document.getElementById("addressl2").innerHTML = "blantyre";
+    document.getElementById("addressl3").innerHTML = "blantyre";
     document.getElementById("phone_number").innerHTML = "0884698204";
     changeIcon("Male");
   }
 
-  document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
+  // document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
   ajaxRequest();
 </script>
 </html>
+<script src="/assets/js/generic_ajaxrequest.js"></script>
 
 <style type="text/css">
   #cover{

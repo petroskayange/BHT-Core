@@ -229,8 +229,7 @@ function setUser() {
 function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID) {
     $.getJSON(applicationJsonUrl)
         .done(function (data) {
-        data.activities.url;
-        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, data.activities.url);
+        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, "");
             
         })
         .fail(function () {
