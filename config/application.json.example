@@ -1,18 +1,54 @@
 {
-	"app_attributes": {
-		"app_name": "application name",
-		"icon": "base64",
-		"version": "version number"
-	},
-	"overview": {
-		"link": "link/to/jsonfile/"
-	},
-	"reports": {
-		"report": {
-			"name": "report name",
-			"type": "report type",
-			"icon": "base64",
-			"data": []
-		}
-	}
+  "encounters": {
+   "vitals": {
+      "available": true,
+      "url": "/views/patient/vitals.html"
+    },
+    "hiv reception": {
+      "available": true,
+      "url": "/apps/ART/views/hiv_reception.html"
+    },
+    "treatment": {
+      "available": true,
+      "url": "/views/patient/prescription.html"
+    },
+    "hiv staging": {
+      "available": true,
+      "url": "/apps/ART/views/patient/hiv_staging.html"
+    },
+    "hiv clinic consultation": {
+      "available": true,
+      "url": "/apps/ART/views/patient/hiv_clinic_consultation.html"
+    },
+    "hiv clinic registration": {
+      "available": true,
+      "url": "/apps/ART/views/patient/hiv_clinic_registration.html"
+    },
+    "art adherence": {
+      "available": true,
+      "url": "/apps/ART/views/patient/art_adherence.html"
+    },
+    "appointment": {
+      "available": true,
+      "url": "/views/patient/appointment.html"
+    },
+    "dispensing": {
+      "available": true,
+      "url": "/views/patient/dispensing.html"
+    }
+  },
+  "activities": {
+    "url": "/apps/ART/views/activities.html",
+    "tasks": [
+      ["Manage ART adherence","art adherence"],
+      ["Manage HIV clinic consultations","hiv clinic consultation"],
+      ["Manage HIV first visits","hiv clinic registration"],
+      ["Manage HIV reception visits","hiv reception"],
+      ["Manage HIV staging visits","hiv staging"],
+      ["Manage Appointments","appointment"],
+      ["Manage Drug Dispensations","dispensing"],
+      ["Manage Prescriptions","treatment"],
+      ["Manage Vitals","vitals"]
+    ]
+  }
 }

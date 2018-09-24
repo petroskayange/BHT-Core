@@ -336,39 +336,18 @@ function overview() {
 }
 
 function GenerateTable() {
+  var dvTable = document.getElementById("generic_tabs");
+  dvTable.innerHTML = "";
 
-    //Build an array containing Customer records.
-    var header = new Array();
-    header.push(["", "Today", "This Month", "This Year"]);
-    //Create a HTML Table element.
-    var table = document.createElement("TABLE");
-    table.className = "table table-bordered";
-    var columnCount = header[0].length;
 
-    //Add the header row.
-    var row = table.insertRow(-1);
-    for (var i = 0; i < columnCount; i++) {
-        var headerCell = document.createElement("TH");
-        headerCell.innerHTML = header[0][i];
-        row.appendChild(headerCell);
-    }
+  //<object data="framed.html" type="text/html"><p>This is the fallback code!</p></object>
+  var obj = document.createElement("object");
+  obj.setAttribute("data", "/apps/ART/views/overview.html");
+  obj.setAttribute("type","text/html");
+  obj.setAttribute("style","width: 99%; height: 500px; text-align: left;");
 
-    //Add the data rows.
-    for (var i = 0; i < header.length; i++) {
-
-        row = table.insertRow(-1);
-
-        for (var j = 0; j < columnCount; j++) {
-            var cell = row.insertCell(-1);
-            //cell.innerHTML = header[i][j];
-            if (i === 0 && j === 0) cell.innerHTML = "Total Registered";
-        }
-
-    }
-
-    var dvTable = document.getElementById("generic_tabs");
-    dvTable.innerHTML = "";
-    dvTable.appendChild(table);
+  dvTable.style = "height: 350px; width: 98% !important; margin: 15px;";
+  dvTable.appendChild(obj);
 }
 // overview tab work in progress
 function showOptions(e) {
