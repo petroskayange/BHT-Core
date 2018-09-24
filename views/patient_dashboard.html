@@ -1,184 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <title>Baobab Health Trust</title>
-      <meta charset="utf-8">
-      <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-      <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-      <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
-      <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
-      <link rel="stylesheet" href="/assets/css/custom.css">
-      <script src="/assets/js/jquery.min.js"></script>
-      <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-      <script type="text/javascript">
-         $(document).ready(function(){
-              // console.log('call the getFunction to retrieve the saved client data');
-         });
-      </script>
-   </head>
-   <body>
-<script type="text/javascript">
-  var patientID = "";
-  var selectedEncounterID = "";
 
-  function finish(){
-    window.location = "/";
-  }
+<head>
+  <title>Baobab Health Trust</title>
+  <meta charset="utf-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // console.log('call the getFunction to retrieve the saved client data');
+    });
+  </script>
+</head>
 
-  function changeIcon(gender) {
+<body>
+  <script type="text/javascript">
+    var patientID = "";
+    var selectedEncounterID = "";
+
+    function finish() {
+      window.location = "/";
+    }
+
+    function changeIcon(gender) {
       var img = document.getElementById('icon_id');
-      if (gender === "Male") {
-          img.setAttribute("src", "/assets/images/male24x32.png");
+      if (gender === "M") {
+        img.setAttribute("src", "/assets/images/male24x32.png");
       } else {
-          img.setAttribute("src", "/assets/images/female32x32.png");
+        img.setAttribute("src", "/assets/images/female32x32.png");
       }
-  }
+    }
 
-  function populateData() {
+    function populateData() {
 
-  }
-  
-</script>
+    }
+  </script>
 
-<script src="/assets/js/generic_ajaxrequest.js">
-  checkIfEnconterCaptured("vitals");
+  <script src="/assets/js/generic_ajaxrequest.js">
+    checkIfEnconterCaptured("vitals");
  
 </script>
 
-<style type="text/css">
+  <style type="text/css">
+    .headTab {
+      border: 1px solid #004586;
+    }
 
-  
-  .headTab {
-    border: 1px solid #004586;
-  }
-  .headTab {
-    height: 120px;
-  }
-  .headTab {
-    overflow: hidden;
-  }
-  .headTab {
-    box-shadow: 5px 2px 5px 0 rgba(0, 0, 0, 0.75);
-  }
-  .headTab {
+    .headTab {
+      height: 120px;
+    }
+
+    .headTab {
+      overflow: hidden;
+    }
+
+    .headTab {
+      box-shadow: 5px 2px 5px 0 rgba(0, 0, 0, 0.75);
+    }
+
+    .headTab {
+      width: 100%;
+    }
+
+    .active-link {
+      background-color: #345db5;
+      border-bottom: 1px solid #ccc;
+      color: #fff;
+      cursor: pointer;
+      margin-bottom: 5px;
+      padding: 15px 10px;
+      text-align: center;
+    }
+
+
+    #session-date {
+      padding-right: 20px;
+    }
+
+    .taskBtns {
+      background-color: #538fbe;
+      border-radius: 7px;
+      border-bottom: 1px outset black;
+      border-style: outset;
+      border-top: 1px outset black;
+      color: white;
+      display: block;
+      padding: 10px 16px 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+      height: 60px;
+    }
+
+    .tasks {
+      padding: 0.5%;
+    }
+
+    .container {
+      margin: 0;
+      padding: 0;
+    }
+
+    .shaddows {
+      box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    td {
+      width: 30%;
+    }
+
+    .cards {
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+    #cover {
+    position: absolute;
+    display: none;
+    background-color: black;
     width: 100%;
+    height: 102%;
+    left: 0%;
+    top: 0%;
+    z-index: 990;
+    opacity: 0.5;
   }
 
-  .active-link{
-    background-color: #345db5;
-    border-bottom: 1px solid #ccc;
-    color: #fff;
-    cursor: pointer;
-    margin-bottom: 5px;
-    padding: 15px 10px;
-    text-align: center;
+  @keyframes fade {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
   }
 
-
-  #session-date{
-    padding-right: 20px;
-  }
-
-  .taskBtns {
-    background-color: #538fbe; 
-    border-radius: 7px; 
-    border-bottom: 1px outset black;
-    border-style: outset; 
-    border-top: 1px outset black; 
-    color: white; 
-    display: block; 
-    padding: 10px 16px 10px 10px; 
-    text-align: center; 
-    text-decoration: none; 
-    width: 100%;
-    height: 60px;;
-  }
-
-  .tasks {
-    padding: 0.5%;
-  }
-
-  .container {
-    margin: 0;
+  .confirm {
+    position: absolute;
+    display: none;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    min-width: 280px;
+    max-width: 500px;
+    height: auto;
+    background: #E2E2E2;
+    border-radius: 10px;
     padding: 0;
+    margin: 0;
+    border-top: 1px solid white;
+    animation: fade 1s ease 1 forwards;
+    z-index: 999;
   }
 
-  .shaddows {
-    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.2);
+  .confirm h1 {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 1.5rem 1rem 0.5rem;
   }
 
-  td {
-    width: 30%;
+  .confirm p {
+    text-align: center;
+    font-size: 1rem;
+    margin: 0 2rem 4.5rem;
   }
-</style>
- <!-- <div class="table-div-cell app-details " style="float:left;" id="details">
+
+  .confirm button {
+    background: transparent;
+    border: none;
+    color: #1678E5;
+    height: 3rem;
+    font-size: 1rem;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+  }
+
+  .confirm button:nth-of-type(1) {
+    border-top: 1px solid #B4B4B4;
+    border-right: 1px solid #B4B4B4;
+    left: 0;
+    border-radius: 0 0 0 10px;
+  }
+
+  .confirm button:nth-of-type(2) {
+    border-top: 1px solid #B4B4B4;
+    right: 0;
+    border-radius: 0 0 10px 0;
+  }
+
+  .confirm button:focus,
+  .confirm button:hover {
+    font-weight: bold;
+    background: #EFEFEF;
+  }
+
+  .confirm button:active {
+    background: #D6D6D6;
+  }
+  </style>
+  <!-- <div class="table-div-cell app-details " style="float:left;" id="details">
 
 </div> -->
 
-<div class="container" style="width: 100%;">
+  <div class="container" style="width: 100%; margin-bottom: 1%;">
 
-<div class="col-sm-8 col-lg-8 col-md-8 col-xs-8 shadows" style="border: solid 1px; border-radius: 3%; height: 120px; padding: 0;">
-    <table class="table-sm table-bordered" >
+    <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8  cards" style="border: solid 1px; border-radius: 3%; height: 120px; padding: 0; width: 69%;">
+      <table class="table-sm table-bordered" style="height: 100%;">
         <tr>
-            <td class="h4" align="right">  <img src= "/assets/images/male24x32.png" id="icon_id" alt="person_icon"></td>
-            <td class="h4 text-muted" id="patient_name">Name</td>
-            <th class="h4">Home Address</th>
-            <td id="addressl3" class="h4 text-muted">&nbsp;</td>
-            
+          <td class="h4" align="right"> <img id="icon_id" alt="person_icon"></td>
+          <td class="h4 text-muted" id="patient_name">Name</td>
+          <th class="h4">Home Address</th>
+          <td id="addressl3" class="h4 text-muted">&nbsp;</td>
+
         </tr>
         <tr>
-            <th class="h4" class="text-muted">Date of Birth:</th>
-            <td class="h4 text-muted" id="age">&nbsp;</td>
-            <th class="h4">Current Address </th>
-            <td id="addressl1" class="h4 text-muted">&nbsp;</td>
-            
+          <th class="h4" class="text-muted">Date of Birth:</th>
+          <td class="h4 text-muted" id="age">&nbsp;</td>
+          <th class="h4">Current Address </th>
+          <td id="addressl1" class="h4 text-muted">&nbsp;</td>
+
         </tr>
         <tr>
-            <th class="h4">National ID</th>
-            <td id="npid" class="h4 text-muted">&nbsp;</td>
-            
-            <th class="h4">Phone Number</th>
-            <td id="phone_number" class="h4 text-muted">&nbsp;</td>
-           
-            
+          <th class="h4">National ID</th>
+          <td id="npid" class="h4 text-muted">&nbsp;</td>
+
+          <th class="h4">Phone Number</th>
+          <td id="phone_number" class="h4 text-muted">&nbsp;</td>
+
+
         </tr>
-    </table>
+      </table>
 
-</div>
+    </div>
 
-<div class="col-sm-4 col-lg-4 col-md-4 col-xs-4" style="border: solid 1px;border-radius: 3%; height: 120px; padding: 0;"> 
+    <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="border: solid 1px;border-radius: 3%; height: 120px; padding: 0;margin-left: 1%; width: 30%;">
 
-    <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
-<h3 style="text-align: center" id="application-name"> ART</h4>
-<h5 style="text-align: center" > v1.0.0</h5>
-</div>
+      <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+      <h3 style="text-align: center" id="application-name"> ART</h4>
+        <h5 style="text-align: center"> v1.0.0</h5>
+    </div>
 
 
-<div class="col-sm-2 col-lg-2 col-xl-2" style="height: 100%;border: solid 1px;overflow: scroll; padding: 0; height: 550px;">
+    <div class="col-sm-2 col-lg-2 col-xl-2" style="margin-top: 1%; border: solid 1px;overflow: scroll; padding: 0; height: 550px;">
 
-<h4>Visit Dates</h4>  
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-<button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button> 
-</div>
+      <h4>Visit Dates</h4>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+      <button type="button" class="btn btn-primary btn-lg" style="width: 98%;  margin: 1%; border-radius: 0%;">Primary</button>
+    </div>
 
-<div class="col-sm-10 col-lg-10 col-md-10 col-xs-10" style="border: solid 1px;  padding: 0; margin: 0; height: 550px; " id="generic_tabs">
+    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10" style="border: solid 1px;  padding: 0; margin: 0; height: 550px; margin-top: 1%;"
+      id="generic_tabs">
 
-    <table class="table table-striped">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -207,9 +304,9 @@
             <td>@twitter</td>
           </tr>
         </tbody>
-      </table>    
+      </table>
     </div>
-<!-- </div>
+    <!-- </div>
 <div class="table-div-cell app-icon" style="width: 50%; ">&nbsp;
 
 </div>
@@ -230,65 +327,66 @@ ssss
 
 
     <!-- Modal -->
-  <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
-    <div class="modal-dialog" name="div2">
-      <div class="modal-content" style="margin-left:0px;">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Select module</h4>
-        </div>
-        <!-- <button class="previous round">
+    <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
+      <div class="modal-dialog" name="div2">
+        <div class="modal-content" style="margin-left:0px;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Select module</h4>
+          </div>
+          <!-- <button class="previous round">
                   <</button>
                   <button class="next round">></button> -->
-        <div class="modal-body">
-          <div class="container">
-            <div class="row" id="modal-div">
-              <template id="card_template">
-                <!-- <div class="" > -->
-                <div class="app-btn" id="cardDiv" style="margin: 10px;">
-                  <a href="#" class="card-block clearfix" id="moduleButton">
-                    <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
-                    <div class="middle">
-                      <div class="text">
-                        <p id="apptext"></p>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row" id="modal-div">
+                <template id="card_template">
+                  <!-- <div class="" > -->
+                  <div class="app-btn" id="cardDiv" style="margin: 10px;">
+                    <a href="#" class="card-block clearfix" id="moduleButton">
+                      <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                      <div class="middle">
+                        <div class="text">
+                          <p id="apptext"></p>
+                        </div>
                       </div>
-                    </div>
-                    <div class="card-container">
-                      <h4>
-                        <b id="appName"></b>
-                      </h4>
-                      <p id="appDescription"></p>
-                    </div>
-                  </a>
-                </div>
-                <!-- </div> -->
-              </template>
+                      <div class="card-container">
+                        <h4>
+                          <b id="appName"></b>
+                        </h4>
+                        <p id="appDescription"></p>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- </div> -->
+                </template>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- Modal -->
+    <footer class="footer">
+      <div class="container-footer">
+        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+          <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+        </button>
+        <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+          <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
+        </button>
+        <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+          onmousedown="showActivities(this); loadActivitiesContent(this.id);">
+          <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
+        </button>
+        <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
+          <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+        </button>
+      </div>
   </div>
-  <!-- Modal -->
-  <footer class="footer">
-    <div class="container-footer">
-      <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-      </button>
-      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
-      </button>
-      <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"  onmousedown="showActivities(this); loadActivitiesContent(this.id);">
-        <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
-      </button>
-      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
-      </button>
-    </div>
-    </div>
   </footer>
 
-<!--   <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
+  <!--   <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
     <div class="buttons" style="margin-bottom: -200px; padding-bottom: 10px; padding-top: 10px;">
       <button onclick="cancel();" style="margin: 5px 0px 0px;" class="red left">
         <span>Cancel</span>
@@ -307,18 +405,18 @@ ssss
       </button>
     </div>
   </div> -->
-</div>
+  </div>
 
-<div id="cover">
+  <div id="cover">
 
-</div>
+  </div>
 
-<div class="confirm">
-  <h1>Confirm your action</h1>
-  <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
-  <button onclick="hidePopup();">Cancel</button>
-  <button autofocus onclick="confirmAction();">Confirm</button>
-</div>
+  <div class="confirm">
+    <h1>Confirm your action</h1>
+    <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+    <button onclick="hidePopup();">Cancel</button>
+    <button autofocus onclick="confirmAction();">Confirm</button>
+  </div>
 </body>
 <script src="/assets/js/core.js "></script>
 <script>
@@ -343,11 +441,18 @@ ssss
         var results = JSON.parse(this.responseText);
         var age = results.person.birthdate;
         var gender = results.person.gender;
-
+        var identifier = "";
         var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
         var addressl1 = results.person.addresses[0].address1;
         var addressl2 = results.person.addresses[0].address2;
-        setValues(patient_name, gender, age, addressl1, addressl2, null);
+        var phone_number = results.person.person_attributes[1].value;
+        try {
+          identifier = results.patient_identifiers[0].identifier || "no value available";
+        } catch(e) {
+
+        }
+        
+        setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
       }
     };
     try {
@@ -361,102 +466,20 @@ ssss
     window.location = "/";
   }
 
-  function setValues(patient_name, gender, age, addressl1, addressl2, phone_number) {
+  function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier ) {
     document.getElementById("patient_name").innerHTML = patient_name;
     // document.getElementById("gender").innerHTML = gender;
     document.getElementById("age").innerHTML = age;
-    document.getElementById("addressl1").innerHTML = "lilongwe";
-    document.getElementById("addressl3").innerHTML = "blantyre";
-    document.getElementById("phone_number").innerHTML = "0884698204";
-    changeIcon("Male");
+    document.getElementById("npid").innerHTML = identifier;
+    document.getElementById("addressl1").innerHTML = addressl1;
+    document.getElementById("addressl3").innerHTML = addressl2;
+    document.getElementById("phone_number").innerHTML = phone_number;
+    changeIcon(gender);
   }
 
   // document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
   ajaxRequest();
 </script>
+
 </html>
 <script src="/assets/js/generic_ajaxrequest.js"></script>
-
-<style type="text/css">
-  #cover{
-    position: absolute;
-    display: none;
-    background-color: black;
-    width: 100%;
-    height: 102%;
-    left: 0%;
-    top: 0%;
-    z-index: 990;
-    opacity: 0.5;
-  }
-
-
-  @keyframes fade {
-    from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  }
-  .confirm {
-    position: absolute;
-    display: none;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    min-width: 280px;
-    max-width: 500px;
-    height: auto;
-    background: #E2E2E2;
-    border-radius: 10px;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid white;
-    animation: fade 1s ease 1 forwards;
-    z-index: 999;
-  }
-  .confirm h1 {
-    text-align: center;
-    font-size: 1.2rem;
-    margin: 1.5rem 1rem 0.5rem;
-  }
-  .confirm p {
-    text-align: center;
-    font-size: 1rem;
-    margin: 0 2rem 4.5rem;
-  }
-  .confirm button {
-    background: transparent;
-    border: none;
-    color: #1678E5;
-    height: 3rem;
-    font-size: 1rem;
-    width: 50%;
-    position: absolute;
-    bottom: 0;
-    cursor: pointer;
-  }
-  .confirm button:nth-of-type(1) {
-    border-top: 1px solid #B4B4B4;
-    border-right: 1px solid #B4B4B4;
-    left: 0;
-    border-radius: 0 0 0 10px;
-  }
-  .confirm button:nth-of-type(2) {
-    border-top: 1px solid #B4B4B4;
-    right: 0;
-    border-radius: 0 0 10px 0;
-  }
-  .confirm button:focus,
-  .confirm button:hover {
-    font-weight: bold;
-    background: #EFEFEF;
-  }
-  .confirm button:active {
-    background: #D6D6D6;
-  }
-</style>
