@@ -22,7 +22,11 @@ function checkIfEncounterCaptured(encounter_name) {
         if (available == false) {
           window.location.href = '/';
         }else if (available == true){
-          window.location.href = url;
+          if(sessionStorage.userActivities.length < 1){
+            window.location.href = url;
+          }else{
+            checkIfActivitySelected(encounter_name, url);
+          }
         }
 
 
@@ -52,3 +56,41 @@ function nextEncounter(patient_id, program_id, session_date) {
   xhttp.send();
 
 }
+            
+function checkIfActivitySelected(encounter_name, url) {
+  var selected_activities = sessionStorage.userActivities;
+
+  if(parseInt(sessionStorage.programID) == 1){
+    if(encounter_name == "art adherence" && !selected_activities.match(/Manage ART adherence/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "hiv clinic consultation" && !selected_activities.match(/Manage HIV clinic consultations/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "hiv reception" && !selected_activities.match(/Manage HIV reception visits/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "hiv staging" && !selected_activities.match(/Manage HIV staging visits/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "appointment" && !selected_activities.match(/Manage Appointments/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "dispensing" && !selected_activities.match(/Manage Drug Dispensations/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "treatment" && !selected_activities.match(/Manage Prescriptions/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "vitals" && !selected_activities.match(/Manage Vitals/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }else if(encounter_name == "hiv clinic registration" && !selected_activities.match(/Manage HIV first visits/i)){
+      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      return;
+    }
+  }
+  
+  window.location.href = url;
+}
+
