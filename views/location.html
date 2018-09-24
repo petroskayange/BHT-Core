@@ -1,121 +1,45 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
-<head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
-    <script src="/assets/js/jquery.min.js"> </script>
-    <script language="javascript" defer="true">
-        tstUsername = "";
-        tstUserKeyboardPref = "abc";
-        var d = new Date();
-        d.toDateString();
-
-        function addHereButton() {
-            var button = document.createElement("button");
-            button.id = "addHere";
-            button.innerHTML = "<span>Here</span>";
-            button.style.cssFloat = "right";
-
-            button.onclick = function () {
-                __$("touchscreenInput" + tstCurrentPage).value = "Martin Preuss Centre"
-            }
-
-            if (__$("buttons")) {
-                __$("buttons").appendChild(button);
-            }
-        }
-
-        function removeHereButton() {
-            if (__$("addHere")) {
-                __$("buttons").removeChild(__$("addHere"));
-            }
-        }
-
-        function getSelected() {
-            var choices = "";
-
-            for (var o = 0; o < __$('choice').options.length; o++) {
-                if (__$('choice').options[o].selected == true) {
-                    choices += __$('choice').options[o].innerHTML + " ";
-                }
-            }
-
-            return choices;
-        }
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
 
-        function getLocation() {
-            var barcode = document.getElementById("touchscreenInput0").value + "$";
-            sessionStorage.setItem("userLocation", barcode);
-        }
-    </script>
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/client-scan-barcode.js"></script>
+<script>
 
-    <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
-        defer="true"></script>
-    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
-    <script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
+function addBarcode() {
+  var iFrame = document.getElementById("inputFrame0");
+  var barcodeDiv = document.createElement("div");
+  barcodeDiv.setAttribute("class","barcode");
+  barcodeDiv.setAttribute("functionName","scannedBarcode");
+  iFrame.appendChild(barcodeDiv);
 
-    <style>
-    
-    #keyboard {
-      display: none !important;
-    }
+  iFrame.style = "width: 96%;";
+  inserBarcodeScan();
+}
 
-    </style>
-</head>
+function scannedBarcode(barcode) {
+  sessionStorage.setItem("userLocation", barcode);
+  document.location = "/";
+}
+
+</script>
 
 <body id="mateme">
-    <div id="container">
-        <div id="content">
-            <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
-            </div>
-            <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
-            <script type="text/javascript">
-                var barcode = "";
-                var tt_cancel_destination = "login.html"; 
-
-                function inform() {
-                    $('infoBar' + tstCurrentPage).innerHTML =
-                        "Muli bwanji, enter your user information or scan your id card";
-                }
-
-                function validateLocation() {
-                    __$("nextButton").removeAttribute("onmousedown");
-                    document.getElementById('touchscreenInput0').removeEventListener('keyup', checkKey, false);
-                    document.getElementById('cancelButton').removeEventListener('keyup', checkKey, false);
-                    document.getElementById('cancelButton').removeEventListener('mousedown', checkKey, false);
-                    document.getElementById('touchscreenInput0').addEventListener('keyup', function (event) {
-                        event.preventDefault();
-                        if (event.keyCode === 13) {
-                            doSignIn();
-                        }
-                    });
-                    __$("nextButton").onmousedown = function () {
-                        doSignIn();
-                    }
-
-                }
-
-                function doSignIn() {
-                    window.location.href = "/";
-                }
-            </script>
-
-            <form id='sessions' action="/" method='post'>
-
-                <label for="location">Location</label>
-                <input field_type="password" helpText="Enter Location" id="location" name="location" textCase="lower"
-                    tt_onLoad="barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getLocation();" /><br>
+  <div id="container">
+    <div id="content">
 
 
-                <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />
-            </form>
-            <div id="footer">
-            </div>
-        </div>
-    </div>
+      <form onsubmit="submitEncounter();">
+
+        <input type="text" name="location" tt_onLoad="__$('keyboard').style.display = 'none';addBarcode();" 
+          tt_pageStyleClass= "NoControls" helpText="Work-station location" optional = "true"/>
+
+
+      </form>
+
+   </div>
+ </div>
 </body>
 
-</html>
