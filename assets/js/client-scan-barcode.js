@@ -64,3 +64,5 @@ inserBarcodeScan();
 setInterval(function() {
   autoFocus();
 }, 100);
+
+
