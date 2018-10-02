@@ -195,7 +195,7 @@ function getName(user_id, url, port, protocol) {
             var username = result.username;
             var allRoles = '';
             var roles_length = result.roles.length;
-            for (let index = 0; index < roles_length; index++) {
+            for (var index = 0; index < roles_length; index++) {
                 allRoles = result.roles[index].role + ", " + allRoles;
             }
             var role = result.roles.role;
@@ -258,8 +258,8 @@ function parser(applicationData) {
 }
 
 function changeModule(url ) {
-    let applicationImage = sessionStorage.getItem("applicationImage");
-    let applicationName = sessionStorage.getItem("applicationName");
+    var applicationImage = sessionStorage.getItem("applicationImage");
+    var applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
         $("#application-icon").attr("src", sessionStorage.getItem("applicationImage"));
         $("#registerButton").css("visibility", "visible");

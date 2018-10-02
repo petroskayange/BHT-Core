@@ -503,10 +503,14 @@
               div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
                 '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 2%; margin-bottom: 2%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034;encounters&#034;, &#034;h4&#034;, &#034;table&#034;); getPrograms(' + patient_id +');">' +
                 moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
+                if (x == 4) {
+                    break;
+                  }
                 if (x == 0) {
                 // console.log(results[0]);
                   getValue(results[0], patient_id, "encounters", "h4", "table");
                   getPrograms(patient_id);
+                  
               }
             }
           }
@@ -569,7 +573,7 @@
       
       }
       function populateModal() {
-        let location = document.getElementById("encounterLocation");
+        var location = document.getElementById("encounterLocation");
         // location.innerHTML = "aaa";
         getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
       }
