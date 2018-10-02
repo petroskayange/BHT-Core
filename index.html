@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="./assets/css/maindashboard/footer.css">
     <link rel="stylesheet" href="./assets/css/custom.css">
     <script src="./assets/js/jquery.min.js"></script>
+    <script src="./assets/js/moment.js"></script>
     <script src="./assets/js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -52,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <th class="h4">Date:</th>
-                                    <td id="app-date" class="text-muted">&nbsp;</td>
+                                    <td id="app-date" class="h4 text-muted">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <th class="h4">User:</th>
@@ -188,11 +189,11 @@
 
     document.getElementById("client-name").innerHTML =sessionStorage.getItem("username") ;
     document.getElementById("location-name").innerHTML =sessionStorage.getItem("userLocation");
-    var loc = sessionStorage.getItem("userLocation").slice(0, -1);
+    var loc = sessionStorage.getItem("userLocation");
+    loc = loc.slice(0, loc.length);
     document.getElementById("location-name").innerHTML = loc;
-    var date = new Date();
-    var finalDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-    document.getElementById("app-date").innerHTML = finalDate;
+    var date = moment().format("DD/MMM/YY");
+    document.getElementById("app-date").innerHTML = date;
 </script>
 
 </html>
