@@ -44,6 +44,14 @@
             return choices;
         }
 
+
+
+        function resetFinishBtn() {
+            var finishButton =  __$("nextButton");
+            finishButton.setAttribute('onmousedown',"updateProgramState();");
+            finishButton.setAttribute('onclick',"");
+       }
+
     </script>
 
     <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -57,6 +65,13 @@
         
         <link href="/stylesheets/set_date.css?1531829709" media="screen" rel="stylesheet" type="text/css" />
     <script>
+
+        function updateProgramState(){
+
+            console.log('Program id ' + __$('program_name').value);
+            console.log('State ' + __$('program_states').value);
+            console.log('date ' + __$('set_date').value);
+        }
 
         function getInput(){
         }
@@ -160,7 +175,9 @@
         <input field_type="date"
             helpText="Initial state Date" 
             id="set_date" name="set_date" 
-            type="text" 
+            type="text"
+            tt_onUnLoad="updateProgramState();"
+
         />
 
         <input name="commit" type="submit" value="Set visit date" />
