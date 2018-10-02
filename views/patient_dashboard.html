@@ -211,9 +211,9 @@
          </div> -->
       <div class="container" style="width: 100%; margin-bottom: 1%;">
          <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8  cards" style="margin-top: 0.7%; border: solid 1px; border-radius: 3%; height: 115px; padding: 0; width: 65%; margin-left: 1%;">
-          <div class="col-md-12" style="display: flex;"><span style="width: 50%; display: flex;"><img id="icon_id" alt="person_icon" ></img><h4 id="patient_name"></h4> <h4 style="margin-left: 40px;">(34)</h4></span><h4 id="npid" style="margin-left: 40px;"></h4></div>
-          <div class="col-md-12 h4" style="display: flex;" ><span style="width: 50%; display: flex;">Date of Birth: &nbsp;&nbsp;&nbsp;<span id="age" style="margin-left: 40px; "></span> </span><span style="margin-left: 40px;">Phone Number:</span> <span id="phone_number" style="margin-left: 40px;"></span></div>
-          <div class="col-md-12 h4" style="display: flex;"> Current Address <span id="addressl1" style="margin-left: 40px;"></span>, <span id="addressl3" style="margin-left: 40px;"></span></div>
+          <div class="col-md-12" style="display: flex;"><span style="width: 50%; display: flex;"><img id="icon_id" alt="person_icon" ></img><h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id="age"></h4></span><h4 id="npid" style="margin-left: 40px;"></h4></div>
+          <div class="col-md-12 h4" style="display: flex;" ><span style="width: 50%; display: flex;">Date of Birth: &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; "></span> </span><span style="margin-left: 40px;">Phone Number:</span> <span id="phone_number" style="margin-left: 40px;"></span></div>
+          <div class="col-md-12 h4" style="display: flex;"> Current Address <span id="addressl1" style="margin-left: 40px;"></span> <span id="addressl3" style="margin-left: 40px;"></span></div>
             <!-- <table class="table-sm table-bordered" style="height: 100%;">
                <tr>
                   <td class="h4" align="right"> </td>
@@ -326,9 +326,9 @@
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#appModal">
             <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
             </button>
-            <!-- <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+            <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                onmousedown="showActivities(this); loadActivitiesContent(this.id);">
-            <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span> -->
+            <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
             </button>
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#appModal">
             <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
@@ -481,8 +481,11 @@
       function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
         document.getElementById("patient_name").innerHTML = patient_name;
         // document.getElementById("gender").innerHTML = gender;
-        document.getElementById("age").innerHTML = moment(age).format("DD/MMM/YYYY");;
+        var roundedAge = Math.floor(moment().diff(age, 'years', true));
+        console.log(roundedAge);
+        document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
         document.getElementById("npid").innerHTML = identifier;
+        document.getElementById("age").innerHTML = "("+roundedAge+")";
         document.getElementById("addressl1").innerHTML = addressl1;
         document.getElementById("addressl3").innerHTML = addressl2;
         document.getElementById("phone_number").innerHTML = phone_number;
@@ -552,9 +555,14 @@
               encounters.innerHTML += '<tr><td id="' + x +
                 '" class="h4" name="" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;"><li>' +
                 results[x].type.name + '</li></td> <td class="h4" style="border-top-width: 0px;">'+ f +'</td> </tr>';
+                if (x == 1) {
+                  encounters.innerHTML += '<li class ="h4" style="list-style: none;">...... click to view more </li>';
+                  break;
+                  
+                }
               }else if (itemType == "button") {
                 encounters.innerHTML +=
-                '<button type="button" id="' + results[x].encounter_id + '" value="' + results[x] +
+                '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
                 '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter('+results[x].encounter_id+')">' +
                 '<span class="h5">'+ results[x].type.name + '</span></button>';
               }
