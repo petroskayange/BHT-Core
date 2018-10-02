@@ -6,7 +6,7 @@
 	"apps": [
 		{
 			"applicationName": "ART",
-	      		"programID": "1",
+	      	"programID": "1",
 			"applicationFolder": "ART/",
 			"applicationIcon": "/assets/images/aids.png",
 			"applicationDescription": "Application for HIV testing",

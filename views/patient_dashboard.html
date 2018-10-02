@@ -29,9 +29,9 @@
          function changeIcon(gender) {
            var img = document.getElementById('icon_id');
            if (gender === "M") {
-             img.setAttribute("src", "/assets/images/male24x32.png");
+             img.setAttribute("src", "/assets/images/male.gif");
            } else {
-             img.setAttribute("src", "/assets/images/female32x32.png");
+             img.setAttribute("src", "/assets/images/female.gif");
            }
          }
          
@@ -211,9 +211,9 @@
          </div> -->
       <div class="container" style="width: 100%; margin-bottom: 1%;">
          <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8  cards" style="margin-top: 0.7%; border: solid 1px; border-radius: 1%; height: 115px; padding: 0; width: 65%; margin-left: 1%;">
-          <div class="col-md-12" style="display: flex;"><span style="width: 50%; display: flex;"><img id="icon_id" alt="person_icon" ></img><h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id="age"></h4></span><h4 id="npid" style="margin-left: 40px;"></h4></div>
-          <div class="col-md-12 h4" style="display: flex;" ><span style="width: 50%; display: flex;">Date of Birth: &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; "></span> </span><span style="margin-left: 40px;">Phone Number:</span> <span id="phone_number" style="margin-left: 40px;"></span></div>
-          <div class="col-md-12 h4" style="display: flex;"> Current Address <span id="addressl1" style="margin-left: 40px;"></span> <span id="addressl3" style="margin-left: 40px;"></span></div>
+          <div class="col-md-12" style="display: flex;"><span style="width: 50%; display: flex;"><img style="height: 28px; width:28px; margin-top: 2px" id="icon_id" alt="person_icon" ></img><h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id=""></h4></span><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>National ID:</strong></h4><h4 id="npid" style="margin-left: 40px;"></h4></div>
+          <div class="col-md-12 h4" style="display: flex;" ><span style="width: 50%; display: flex;"><strong>Date of Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; "></span><span style="margin-left: 20px;" id="age"></span> </span><span style="margin-left: 40px;"><strong>Phone Number:</strong></span> <span id="phone_number" style="margin-left: 40px;"></span></div>
+          <div class="col-md-12 h4" style="display: flex;"> <strong>Current Address</strong> <span id="addressl1" style="margin-left: 40px;"></span> <span id="addressl3" style="margin-left: 40px;"></span></div>
             <!-- <table class="table-sm table-bordered" style="height: 100%;">
                <tr>
                   <td class="h4" align="right"> </td>
