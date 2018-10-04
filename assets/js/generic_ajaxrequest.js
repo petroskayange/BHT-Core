@@ -36,7 +36,7 @@ function checkIfEncounterCaptured(encounter_name, id) {
             confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
         }
       } else if (this.status == 404) {
-        showMessage("Can not selec4t Patient. Reason: Patient Record is incomplete");
+        showMessage("application.json missing from application configuration");
       }
 
     } else {
@@ -76,7 +76,7 @@ function nextEncounter(patient_id, program_id, session_date) {
         checkIfEncounterCaptured(obj["name"].toLowerCase(), patient_id);
       }
       else if (this.status == 400) {
-        showMessage("Can not select Patient. Reason: Patient Record is incomplete", null, 3000);
+        showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
       }
 
     }
