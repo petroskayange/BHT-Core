@@ -15,7 +15,7 @@
 </head>
 <body>
   <script src="/assets/js/generic_ajaxrequest.js">
-      checkIfEnconterCaptured("vitals");   
+      // checkIfEnconterCaptured("vitals");   
   </script>    
 
   <style>
@@ -44,7 +44,7 @@
           
       <div class="col-md-12 h4" style="display: flex;">
         <span style="width: 50%; display: flex;">
-          <strong>Date of Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; ">
+          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; ">
           </span>
           <span style="margin-left: 20px;" id="age"></span> 
         </span>
@@ -161,9 +161,10 @@
             
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-           </div>  
+            <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
+          </div>
 
-          <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: scroll;">
+          <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: auto;">
             <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2" style="border-right: solid 1px;"></div>
             
             
@@ -400,7 +401,6 @@
 
               var next = index + counter + 1;
               var nextPage = pageNumber + 1;
-              console.log(next);
 
               div.innerHTML += '<button class="btn" style="width: 90%; margin-left: 5%; height: 50px;" id="down" onclick="getDates(' + patient_id + ',' + next + ');"> <img src="/assets/images/down-arrow.svg" /></button>';
               if ((results.length - (index + counter) == 1)) {
@@ -474,7 +474,8 @@
     }
 
     function populateModal() {
-      var location = document.getElementById("encounterLocation");
+      var location = document.getElementById("encounterDate");
+      location.innerHTML = moment().format("DD/MMM/YYYY",sessionStorage.value);
       getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
 
