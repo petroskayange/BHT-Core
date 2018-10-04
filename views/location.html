@@ -19,10 +19,32 @@ function addBarcode() {
   inserBarcodeScan();
 }
 
-function scannedBarcode(barcode) {
-  sessionStorage.setItem("userLocation", barcode);
-  document.location = "/";
-}
+  function scannedBarcode(barcode) {
+    barcode = barcode.slice(0, barcode.length);
+    
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/locations/' + barcode;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+
+      if (this.readyState == 4) {
+        if (this.status == 200) {
+          var results = JSON.parse(this.responseText);
+          sessionStorage.setItem("userLocation", barcode);
+          document.location = "/";
+        } else if (this.status == 404) {
+          showMessage("invalid location");
+        }
+
+      }
+    };
+    try {
+      req.open('GET', url, true);
+      req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+      req.send(null);
+    } catch (e) {
+    }
+  }
+
 
 </script>
 
