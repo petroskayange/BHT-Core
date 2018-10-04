@@ -304,12 +304,12 @@ function parser(applicationData) {
 
 function getActivities(activitiesData) {
 
-    for (var i = 0; i < activitiesData.activities.length; i++) {
+    for (var i = 0; i < activitiesData.others.length; i++) {
 
-        activitiesName[i] = activitiesData.activities[i].activitiesName || "Activities Name Not Defined!!";
-        activitiesDescription[i] = activitiesData.activities[i].activitiesDescription || "No Description Available";
-        activitiesIcon[i] = activitiesData.activities[i].activitiesIcon;
-        applicationFolder[i] = activitiesData.activities[i].applicationFolder;
+        activitiesName[i] = activitiesData.others[i].activitiesName || "Activities Name Not Defined!!";
+        activitiesDescription[i] = activitiesData.others[i].activitiesDescription || "No Description Available";
+        activitiesIcon[i] = activitiesData.others[i].activitiesIcon;
+        applicationFolder[i] = activitiesData.others[i].applicationFolder;
         checkActivities(applicationJsonUrl[i], activitiesName[i], activitiesDescription[i], i, activitiesIcon[i]);
 
     }

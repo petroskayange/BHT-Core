@@ -52,7 +52,7 @@
     ]
   },
     
-  "activities": [
+  "others": [
     {
       "activitiesName": "National ID(Print)",
       "available": false,
