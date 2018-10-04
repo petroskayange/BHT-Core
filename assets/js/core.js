@@ -8,7 +8,7 @@ var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-var activities_tab_content = "";
+// var activities_tab_content = "";
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -20,10 +20,10 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 var addDiv = "<div class='col-sm-2 tasks'>";
 var endDiv = "</div>"
                           
-activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
-activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
-activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
-activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
+// activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
+// activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
+// activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
+// activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
 
 
 // URL formulation logic
@@ -59,6 +59,9 @@ var people = "people";
 var person_addresses = "person_addresses";
 
 var person_names = "person_names";
+var activitiesName = [];
+var activitiesDescription = [];
+var activitiesIcon = [];
 var applicationName = [];
 var applicationDescription = [];
 var applicationIcon = [];
@@ -136,6 +139,21 @@ function generateTemplate() {
         /*Alternative code for browsers that do not support the TEMPLATE element*/
     }
 }
+function generateActivities() {
+    if (document.createElement("template").content) {
+        /*Code for browsers that supports the TEMPLATE element*/
+     
+        $.getJSON("/apps/BHT-Core-Apps-ART/application.json")
+            .done(function (data, status) {
+                getActivities(data);
+            })
+            .fail(function () {
+                console.log("application.json is missing from the /apps/BHT-Core-Apps-ART folder");
+            });
+    } else {
+        /*Alternative code for browsers that do not support the TEMPLATE element*/
+    }
+}
 function _foo(data, resource) {
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
@@ -178,6 +196,25 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
         sessionStorage.setItem("applicationName", applicationName);
         sessionStorage.setItem("programID", programID);
         changeModule();
+    });
+
+}
+
+function newActivitiesCard(activitiesName, activitiesDescription, activitiesImage, counter, url) {
+    $("#activities-modal-div").append($('#activities_template').html());
+    $("#activityDescription").text(activitiesDescription).attr('id', "activityDescription" + counter);
+    $("#activitytext").text(activitiesName).attr('id', "activitytext" + counter);
+    $("#activityName").text(activitiesName).attr('id', "activityName" + counter);
+    $("#moduleButton").attr('id', "moduleButton" + counter);
+    
+    $("#cardImage")
+        .on('error', function () {
+            $(this).attr('src', "/assets/images/no_image.png");
+        }).attr('src', activitiesImage).attr('id', "cardImage" + counter);
+    $("#moduleButton" + counter).click(function () {
+        sessionStorage.setItem("activitiesName", activitiesName);
+        sessionStorage.setItem("activitiesImage", activitiesImage);
+        changeActivities();
     });
 
 }
@@ -237,6 +274,14 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
         });
 }
 
+function checkActivities(applicationJsonUrl, activitiesName, activitiesDescription, counter, activitiesIconUrl) {
+    // $.getJSON(applicationJsonUrl)
+    //     .done(function (data) {
+        newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, "");
+            
+       
+}
+
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
@@ -257,6 +302,19 @@ function parser(applicationData) {
     }
 }
 
+function getActivities(activitiesData) {
+
+    for (var i = 0; i < activitiesData.activities.length; i++) {
+
+        activitiesName[i] = activitiesData.activities[i].activitiesName || "Activities Name Not Defined!!";
+        activitiesDescription[i] = activitiesData.activities[i].activitiesDescription || "No Description Available";
+        activitiesIcon[i] = activitiesData.activities[i].activitiesIcon;
+        applicationFolder[i] = activitiesData.activities[i].applicationFolder;
+        checkActivities(applicationJsonUrl[i], activitiesName[i], activitiesDescription[i], i, activitiesIcon[i]);
+
+    }
+}
+
 function changeModule(url ) {
     var applicationImage = sessionStorage.getItem("applicationImage");
     var applicationName = sessionStorage.getItem("applicationName");
@@ -272,6 +330,23 @@ function changeModule(url ) {
 
         $("#myModal").modal("hide");
         $("#application-name").text(sessionStorage.getItem("applicationName"));
+    } else {}
+}
+
+function changeActivities(url ) {
+    var activitiesImage = sessionStorage.getItem("activitiesImage");
+    var activitiesName = sessionStorage.getItem("activitiesName");
+    if (activitiesName != null && activitiesImage != null) {
+        $("#activities-icon").attr("src", sessionStorage.getItem("activitiesImage"));
+        if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+            // showBarcodeDiv();
+
+        } else {
+
+        }
+
+        $("#myModal").modal("hide");
+        $("#activities-name").text(sessionStorage.getItem("activitiesName"));
     } else {}
 }
 
@@ -382,11 +457,11 @@ function loadTabContent(id) {
     }
 }
 
-function loadActivitiesContent(id) {
-    if (id === "activities") {
-        document.getElementById("generic_tabs").innerHTML = activities_tab_content;
-    }
-}
+// function loadActivitiesContent(id) {
+//     if (id === "activities") {
+//         document.getElementById("generic_tabs").innerHTML = activities_tab_content;
+//     }
+// }
 
 function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
