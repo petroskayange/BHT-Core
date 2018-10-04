@@ -33,6 +33,9 @@ function addBarcode() {
           document.location = "/";
         } else if (this.status == 404) {
           showMessage("invalid location");
+        } else if (this.status == 401) {
+          showMessage("authentication has expired, logging out");
+          document.location = "login.html";
         }
 
       }
