@@ -75,9 +75,9 @@
     <!-- visits div -->
     <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 2%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
         <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" > <img src="/assets/images/drop-up-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
         <div id="dates" style="height: 70%; margin-top: 5%;"> </div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" > <img src="/assets/images/drop-down-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
      </div>
     <!-- /visits div-->
 
@@ -454,6 +454,7 @@
       var encounters = document.getElementById(div);
       var selectedDate = document.getElementById("selectedDate");
       selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
+      document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
       sessionStorage.setItem("value", value);
       if (encounters.innerHTML != null) {
         encounters.innerHTML = "";
@@ -500,8 +501,6 @@
     }
 
     function populateModal() {
-      var location = document.getElementById("encounterDate");
-      location.innerHTML = moment().format("DD/MMM/YYYY",sessionStorage.value);
       getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
 
