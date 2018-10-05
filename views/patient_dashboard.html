@@ -39,12 +39,12 @@
         <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <strong>National ID:</strong>
         </h4>
-        <h4 id="npid" style="margin-left: 40px;"></h4>   
+        <h4 id="npid" style="margin-left: 10px;"></h4>   
       </div>
           
       <div class="col-md-12 h4" style="display: flex;">
         <span style="width: 50%; display: flex;">
-          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; ">
+          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 20px; ">
           </span>
           <span style="margin-left: 20px;" id="age"></span> 
         </span>
@@ -73,9 +73,11 @@
 
 
     <!-- visits div -->
-    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 2%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden; ">
-        <h4 class="headers">Visit Dates</h4>
-        <div id="dates"> </div>
+    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 2%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
+        <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" > <img src="/assets/images/drop-up-arrow.svg" /></button>
+        <div id="dates" style="height: 70%; margin-top: 5%;"> </div>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" > <img src="/assets/images/drop-down-arrow.svg" /></button>
      </div>
     <!-- /visits div-->
 
@@ -397,19 +399,21 @@
 
         if (this.readyState == 4 && this.status == 200) {
           var results = JSON.parse(this.responseText);
+          document.getElementById("numberOfVisits").innerHTML = results.length;
           var lastPage = (results.length % 5);
           for (var x = index; x < results.length; x++) {
             if (counter == 0) {
               var prev = index - 5;
-              div.innerHTML += '<button class="btn" style="width: 90%; margin-left: 5%; height: 50px;" id="up"onclick="getDates(' + patient_id + ',' + prev + ')"> <img src="/assets/images/up-arrow.svg" /></button>';
+              document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
               getValue(results[0], patient_id, "encounters", "h4", "table");
               getPrograms(patient_id);
-              if (index == 0) {
+              if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
+                document.getElementById("down").removeAttribute("disabled", "");
               }
               if (counter == results.length) {
                 document.getElementById("down").setAttribute("disabled", "");
-              }
+              } 
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
@@ -421,9 +425,12 @@
               var next = index + counter + 1;
               var nextPage = pageNumber + 1;
 
-              div.innerHTML += '<button class="btn" style="width: 90%; margin-left: 5%; height: 50px;" id="down" onclick="getDates(' + patient_id + ',' + next + ');"> <img src="/assets/images/down-arrow.svg" /></button>';
+              document.getElementById("down").setAttribute('onClick', 'getDates('+patient_id +',' + next +');');
               if ((results.length - (index + counter) == 1)) {
                 document.getElementById("down").setAttribute("disabled", "");
+              }if (index != 0)  {
+                document.getElementById("up").removeAttribute("disabled", "");
+                
               }
 
               break;
