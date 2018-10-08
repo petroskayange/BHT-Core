@@ -49,7 +49,7 @@
     function postEdit(id, role) {
     getInput();
     var http = new XMLHttpRequest();
-    let urlfinal = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/users/' + id;
+    var urlfinal = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/users/' + id;
     var params = JSON.stringify({
       roles: role,
     });
