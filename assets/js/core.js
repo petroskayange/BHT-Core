@@ -421,7 +421,7 @@ function GenerateTable() {
   obj.setAttribute("type","text/html");
   obj.setAttribute("style","width: 99%; height: 500px; text-align: left;");
 
-  dvTable.style = "height: 350px; width: 98% !important; margin: 15px;";
+  dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
   dvTable.appendChild(obj);
 }
 // overview tab work in progress
