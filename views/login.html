@@ -56,10 +56,6 @@
             sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
         }
 
-        function getLocation() {
-            var barcode = document.getElementById("touchscreenInput2").value + "$";
-            sessionStorage.setItem("userLocation", barcode);
-        }
     </script>
 
     <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
@@ -103,7 +99,6 @@
                 function doSignIn() {
                     showStatus();
                     signIn();
-                    getLocation();
                 }
             </script>
 
