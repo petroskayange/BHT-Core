@@ -63,7 +63,8 @@
 <script type="text/javascript">
 
   function  submitSearchResults(){
-
+     var gender = __$('gender').value;
+     sessionStorage.setItem('gender', gender);
      document.location = "search_results.html"; 
   }
 
