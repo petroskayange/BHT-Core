@@ -25,7 +25,7 @@ function checkIfEncounterCaptured(encounter_name, id) {
 
           } else if (available == true) {
             window.location.href = url;
-            // checkIfActivitySelected(encounter_name, url);
+            checkIfActivitySelected(encounter_name, url);
           }
         } catch (error) {
           // showMessage("selected encounter " + encounter_name + " is not available, continue to patient dashboard?", null, 3000);
