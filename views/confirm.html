@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Baobab Health Trust</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/assets/js/moment.js"></script>
+</head>
+<body>
+  <script src="/assets/js/generic_ajaxrequest.js">
+      // checkIfEnconterCaptured("vitals");   
+  </script>    
+
+  <style>
+  .modal-body {
+   
+    overflow-y: auto;
+}
+  </style>
+  
+  <!-- container -->
+  <div class="container" style="width: 100%; margin-bottom: 1%;">
+
+    <!-- left card -->
+    <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8 cards" style="margin-top: 0.7%; border: solid 1px; border-radius: 1%; height: 115px; padding: 0; width: 65%; margin-left: 1%;">
+    
+      <div class="col-md-12" style="display: flex;">
+        <span style="width: 50%; display: flex;">
+          <img style="height: 28px; width:28px; margin-top: 2px" id="icon_id" alt="person_icon">
+          <h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id=""></h4>
+        </span>
+        <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <strong>National ID:</strong>
+        </h4>
+        <h4 id="npid" style="margin-left: 10px;"></h4>   
+      </div>
+          
+      <div class="col-md-12 h4" style="display: flex;">
+        <span style="width: 50%; display: flex;">
+          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 20px; ">
+          </span>
+          <span style="margin-left: 20px;" id="age"></span> 
+        </span>
+        <span style="margin-left: 40px;">
+          <strong>Phone Number:</strong>
+        </span> 
+        <span id="phone_number" style="margin-left: 40px;"></span>
+      </div>
+        
+      <div class="col-md-12 h4" style="display: flex;"> 
+          <strong>Current Address</strong> 
+          <span id="addressl1" style="margin-left: 40px;"></span> 
+          <span id="addressl3" style="margin-left: 40px;"></span>
+      </div>
+  
+    </div>
+    <!-- /left card -->
+  
+    <!-- right card-->
+    <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
+        <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+        <h3 style="text-align: center" id="application-name"></h3>
+        <h5 style="text-align: center"> V1.0.0</h5>
+    </div>
+    <!-- /right card-->
+
+    <!-- visit details div-->
+    <div class="col-sm-12 col-lg-12 col-md-12 col-xs-12 cards" style="border: solid 2px; padding: 0; margin-left: 1%; height: 520px; margin-top: 2%;margin-right: 3%; margin-left: 3%;width: 94%;" id="generic_tabs">
+       
+     </div>
+    <!-- /visit details div-->
+    
+    <!-- footer -->
+    <footer class="footer">
+      <div class="container-footer">
+        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Next &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+        </button>
+        <button id="btnCancel" class="red left" style="margin: 5px 0px 0px; padding: 0px; float: left;" onclick="window.location.href = '/'">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Cancel &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+        </button>
+      </div>
+    </footer>   
+    <!-- /footer -->
+  
+
+  <!-- /container -->
+  </div>
+<!-- /body -->
+</body>
+
+<script src="/assets/js/core.js "></script>
+
+<script>
+  var patientID = "";
+  var selectedEncounterID = "";  
+  function finish() {
+    window.location = "/";
+  }
+  var nextEnc = "";
+    
+  function changeIcon(gender) {
+    var img = document.getElementById('icon_id');
+    if (gender === "M") {
+      img.setAttribute("src", "/assets/images/male.gif");
+    } else {
+      img.setAttribute("src", "/assets/images/female.gif");
+    }
+  }
+  
+  generateTemplate();
+
+  var url = new URL(url);
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
+  var id = url.searchParams.get("patient_id");
+  sessionStorage.setItem("patientID", id);
+  changeModule();
+  url = new URL(url);
+  var d = new Date();
+
+  function ajaxRequest() {
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+
+      if (this.readyState == 4 && this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        var age = results.person.birthdate;
+        var gender = results.person.gender;
+        var identifier = "";
+        var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+        
+        try {
+          var addressl1 = results.person.addresses[0].address1 ;
+        var addressl2 = results.person.addresses[0].address2;
+        var phone_number = results.person.person_attributes[1].value;
+        }
+        catch (e){
+          var addressl1 = "";
+        var addressl2 = "";
+        var phone_number = "";
+        }
+        try {
+          identifier = results.patient_identifiers[0].identifier || "no value available";
+        } catch (e) {
+
+        }
+
+        setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
+      }
+    };
+    try {
+      req.open('GET', url, true);
+      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+      req.send(null);
+    } catch (e) {}
+  }
+
+    function finish() {
+      nextEncounter(sessionStorage.patientID , 1, sessionStorage.programID);
+      // window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
+    }
+
+    function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
+      document.getElementById("patient_name").innerHTML = patient_name;
+      var roundedAge = Math.floor(moment().diff(age, 'years', true));
+      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
+      document.getElementById("npid").innerHTML = identifier;
+      document.getElementById("age").innerHTML = "(" + roundedAge + ")";
+      document.getElementById("addressl1").innerHTML = addressl1;
+      document.getElementById("addressl3").innerHTML = addressl2;
+      document.getElementById("phone_number").innerHTML = phone_number;
+      changeIcon(gender);
+    }
+
+    ajaxRequest();
+
+    function GetApplicationReports() {
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = null;
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/ART/views/demographics.html");
+    obj.setAttribute("type","text/html");
+    obj.setAttribute("style","width: 97%; height: 520px; text-align: left;");
+
+    dvTable.appendChild(obj);
+
+    }
+    GetApplicationReports();
+      
+   </script>
+   
+</html>
+<script src="/assets/js/generic_ajaxrequest.js"></script> 

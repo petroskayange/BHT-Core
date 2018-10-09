@@ -142,8 +142,8 @@ function generateTemplate() {
 function generateActivities() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
-     
-        $.getJSON("/apps/ART/application.json")
+        
+        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
             .done(function (data, status) {
                 getActivities(data);
             })

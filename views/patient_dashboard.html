@@ -62,7 +62,6 @@
 
       <div class="demo-header-cell demo-right">
       </div>
-
     </div>
    </div>
    <!-- .............................................................................................................. -->
@@ -415,19 +414,21 @@
 
         if (this.readyState == 4 && this.status == 200) {
           var results = JSON.parse(this.responseText);
+          document.getElementById("numberOfVisits").innerHTML = results.length;
           var lastPage = (results.length % 5);
           for (var x = index; x < results.length; x++) {
             if (counter == 0) {
               var prev = index - 5;
-              div.innerHTML += '<button class="btn" style="width: 90%; margin-left: 5%; height: 50px;" id="up"onclick="getDates(' + patient_id + ',' + prev + ')"> <img src="/assets/images/up-arrow.svg" /></button>';
+              document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
               getValue(results[0], patient_id, "encounters", "h4", "table");
               getPrograms(patient_id);
-              if (index == 0) {
+              if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
+                document.getElementById("down").removeAttribute("disabled", "");
               }
               if (counter == results.length) {
                 document.getElementById("down").setAttribute("disabled", "");
-              }
+              } 
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
@@ -439,9 +440,12 @@
               var next = index + counter + 1;
               var nextPage = pageNumber + 1;
 
-              div.innerHTML += '<button class="btn" style="width: 90%; margin-left: 5%; height: 50px;" id="down" onclick="getDates(' + patient_id + ',' + next + ');"> <img src="/assets/images/down-arrow.svg" /></button>';
+              document.getElementById("down").setAttribute('onClick', 'getDates('+patient_id +',' + next +');');
               if ((results.length - (index + counter) == 1)) {
                 document.getElementById("down").setAttribute("disabled", "");
+              }if (index != 0)  {
+                document.getElementById("up").removeAttribute("disabled", "");
+                
               }
 
               break;
@@ -465,6 +469,7 @@
       var encounters = document.getElementById(div);
       var selectedDate = document.getElementById("selectedDate");
       selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
+      document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
       sessionStorage.setItem("value", value);
       if (encounters.innerHTML != null) {
         encounters.innerHTML = "";
@@ -544,8 +549,6 @@
     }
 
     function populateModal() {
-      var location = document.getElementById("encounterDate");
-      location.innerHTML = moment().format("DD/MMM/YYYY",sessionStorage.value);
       getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
 

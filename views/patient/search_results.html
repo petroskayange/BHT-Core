@@ -170,7 +170,7 @@
   }
 
   function search_remote(){
-    return
+    // return
     var url = "/people/dde_search?given_name=John" +
       "&family_name=Does&gender=M";
 
@@ -185,8 +185,8 @@ function loadPatient(){
     remote_people = JSON.parse(ajaxGeneralRequestResult);
      */
     //people = [{}];
-
-    var targetElement = tstFormElements[__$("touchscreenInput"+tstCurrentPage).getAttribute("refersToTouchscreenInputID")];
+    if (__$("touchscreenInput"+tstCurrentPage)) {
+      var targetElement = tstFormElements[__$("touchscreenInput"+tstCurrentPage).getAttribute("refersToTouchscreenInputID")];
 
     var opts = __$("tt_currentUnorderedListOptions").getElementsByTagName("li");
 
@@ -284,12 +284,16 @@ function loadPatient(){
 
       pos++;
 
-		}
+    }
+    
+    }
+
+    
 
   }
 </script>
 
-<body onload = "setTimeout('setAttributes();findClients();', 300);">
+<body onload = "setTimeout('setAttributes();findClients();', 500);">
   <form action="" method="POST">
         <label for="person">No patients were found:</label>
     <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "setItems();">
@@ -451,15 +455,24 @@ function searchResults(results){
 
     people[pos]["Ancestral Traditional Authority(T/A)"] = found_clients[i].home_ta;
     people[pos]["Current Residence"] = found_clients[i].current_village;
-    
     people[pos]["Person ID"]            = found_clients[i].person_id;
     pos++;
   }
 
   
- loadPatient();
+  // loadPatient();
 }
 
+var interval = setInterval(function(){ 
+  // console.log("interval set");
+  var lists = document.getElementsByTagName("li");
+
+  loadPatient(); 
+  if (lists.length > 1){
+    clearInterval(interval);
+
+  }
+}, 600);
 </script>
 
 
