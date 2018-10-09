@@ -166,7 +166,8 @@
   }
 
     function finish() {
-      window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
+      nextEncounter(sessionStorage.patientID , 1, sessionStorage.programID);
+      // window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
     }
 
     function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {

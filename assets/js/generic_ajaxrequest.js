@@ -31,7 +31,12 @@ function checkIfEncounterCaptured(encounter_name, id) {
           // showMessage("selected encounter " + encounter_name + " is not available, continue to patient dashboard?", null, 3000);
           // tstConfirmCancel =
             sessionStorage.setItem("nextEncounter", encounter_name);
-            // confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
+            try {
+              confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
+            }catch(e) {
+              window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
+            }
+            
         }
       } else if (this.status == 404) {
         showMessage("application.json missing from application configuration");
