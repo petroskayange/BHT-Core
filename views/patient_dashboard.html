@@ -27,7 +27,7 @@
 
 
   .list-group-links {
-    width: 96%;
+    width: 94%;
     margin-left: 10px;
     /*background-color: transparent !important;
     color: white !important; */
@@ -61,17 +61,19 @@
       </div>
 
       <div class="demo-header-cell demo-right">
+          <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 10%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+          <h3 style="text-align: center" id="application-name"></h3>
+          <h5 style="text-align: center"> </h5>
       </div>
+      <!-- <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
+       
+    </div> -->
   
     </div>
     <!-- /left card -->
   
     <!-- right card-->
-    <!-- <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
-        <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
-        <h3 style="text-align: center" id="application-name"></h3>
-        <h5 style="text-align: center"> </h5>
-    </div> -->
+    
    </div>
    <!-- .............................................................................................................. -->
 
@@ -81,7 +83,7 @@
 
 
     <!-- visits div -->
-    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 2%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
+    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
         <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
         <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
         <div id="dates" style="height: 65%; margin-top: 20%;"> </div>
@@ -94,7 +96,7 @@
         <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
         <div class="row">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 200px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
+              <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
                  <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
                  
                  <div class="list-group" id="encounters">
@@ -112,7 +114,7 @@
            </div>
            
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
-              <div class="card text-white bg-primary mb-3 btn-success cards" style="width: 98%; height: 200px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+              <div class="card text-white bg-primary mb-3 btn-success cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
                  <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Programs</div>
 
                  <table class="table ">
@@ -126,7 +128,7 @@
         </div>
         <div class="row" style="margin-top:10px;">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 btn-danger cards" style="width: 98%; height: 200px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+              <div class="card text-white bg-primary mb-3 btn-danger cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
                  <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Alerts</div>
                  <table class="table ">
                     <tbody id="alerts">
@@ -137,7 +139,7 @@
               </div>
            </div>
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white bg-primary mb-3 btn-warning cards" style="width: 98%; height: 200px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+              <div class="card text-white bg-primary mb-3 btn-warning cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
                  <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Latest Medication</div>
                  <table class="table ">
                     <tbody id="medication">
@@ -517,8 +519,8 @@
               s.innerHTML = f;
               a.appendChild(s);
               listGroup.appendChild(a);
-              
-              if (x == 1) {
+              if (x == 2 || (results.length == 2 && x == 1)) {
+                console.log(results.length);
                 var a = document.createElement("a");
                 var aclass = "list-group-item d-flex justify-content-between";
                 aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
