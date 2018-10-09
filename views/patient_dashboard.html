@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
   <link rel="stylesheet" href="/assets/css/custom.css">
   <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+  <link rel="stylesheet" href="/assets/css/demographics-header.css">
   <script src="/assets/js/jquery.min.js"></script>
   <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="/assets/js/moment.js"></script>
@@ -23,73 +24,74 @@
    
     overflow-y: auto;
 }
+
+
+  .list-group-links {
+    width: 96%;
+    margin-left: 10px;
+    /*background-color: transparent !important;
+    color: white !important; */
+  }
+
   </style>
   
   <!-- container -->
   <div class="container" style="width: 100%; margin-bottom: 1%;">
 
-    <!-- left card -->
-    <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8 cards" style="margin-top: 0.7%; border: solid 1px; border-radius: 1%; height: 115px; padding: 0; width: 65%; margin-left: 1%;">
-    
-      <div class="col-md-12" style="display: flex;">
-        <span style="width: 50%; display: flex;">
-          <img style="height: 28px; width:28px; margin-top: 2px" id="icon_id" alt="person_icon">
-          <h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id=""></h4>
-        </span>
-        <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <strong>National ID:</strong>
-        </h4>
-        <h4 id="npid" style="margin-left: 40px;"></h4>   
+   <!-- .............................................................................................................. -->
+   <div class="demo-header">
+      <div class="demo-header-row">
+
+      <div class="demo-header-cell demo-left">
+        <div id="name-title"><img src="" class="gender-icon" id="gender" /><span id="patient_name"></span></div>
+        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
+        <span id="DOB"></span>&nbsp;<span id="age"></span>
+        &nbsp;(<span id="npid"></span>)
+        </div>
+        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="addressl1"></span></div>
+        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="phone_number"></span></div>
+        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="addressl3"></span></div>
       </div>
-          
-      <div class="col-md-12 h4" style="display: flex;">
-        <span style="width: 50%; display: flex;">
-          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 40px; ">
-          </span>
-          <span style="margin-left: 20px;" id="age"></span> 
-        </span>
-        <span style="margin-left: 40px;">
-          <strong>Phone Number:</strong>
-        </span> 
-        <span id="phone_number" style="margin-left: 40px;"></span>
+
+      <div class="demo-header-cell demo-middle">
       </div>
-        
-      <div class="col-md-12 h4" style="display: flex;"> 
-          <strong>Current Address</strong> 
-          <span id="addressl1" style="margin-left: 40px;"></span> 
-          <span id="addressl3" style="margin-left: 40px;"></span>
+
+      <div class="demo-header-cell demo-right">
       </div>
-  
+
     </div>
-    <!-- /left card -->
-  
-    <!-- right card-->
-    <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
-        <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
-        <h3 style="text-align: center" id="application-name">ART</h3>
-        <h5 style="text-align: center"> v1.0.0</h5>
-    </div>
+   </div>
+   <!-- .............................................................................................................. -->
+
+
+
     <!-- /right card-->
 
 
     <!-- visits div -->
-    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 2%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden; ">
+    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden; ">
         <h4 class="headers">Visit Dates</h4>
         <div id="dates"> </div>
      </div>
     <!-- /visits div-->
 
     <!-- visit details div-->
-    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 2%;margin-right: 2%; width: 78%;" id="generic_tabs">
+    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 78%;" id="generic_tabs">
         <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
         <div class="row">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
               <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 200px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
                  <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
-                 <table class="table" style="border: 0;">
+                 
+                 <div class="list-group" id="encounters">
+                 </div> 
+
+                 <!--table class="table" style="border: 0;">
                     <tbody id="encounters">
                     </tbody>
-                 </table>
+                 </table-->
+
+
                  <div class="card-footer" style="margin: 1%;">
                  </div>
               </div>
@@ -307,7 +309,7 @@
   document.getElementById("nextEncounter").innerHTML = nextEnc;
     
   function changeIcon(gender) {
-    var img = document.getElementById('icon_id');
+    var img = document.getElementById('gender');
     if (gender === "M") {
       img.setAttribute("src", "/assets/images/male.gif");
     } else {
@@ -375,7 +377,7 @@
       document.getElementById("patient_name").innerHTML = patient_name;
       var roundedAge = Math.floor(moment().diff(age, 'years', true));
       document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
-      document.getElementById("npid").innerHTML = identifier;
+      document.getElementById("npid").innerHTML = formatNIPD(identifier);
       document.getElementById("age").innerHTML = "(" + roundedAge + ")";
       document.getElementById("addressl1").innerHTML = addressl1;
       document.getElementById("addressl3").innerHTML = addressl2;
@@ -383,6 +385,18 @@
       changeIcon(gender);
     }
 
+    function formatNIPD(identifier) {
+      if(identifier.length < 1)
+        return identifier;
+
+      if(identifier.length == 6){
+        return (identifier.substring(0,3) + "-" + identifier.substring(3,6));
+      }else if(identifier.length == 13){
+        return (identifier.substring(0,5) + "-" + identifier.substring(5,9) + "-" + identifier.substring(9, 13));
+      }else{
+        return identifier;
+      }
+    }
     function getDates(patient_id, index, pageNumber) {
       var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits';
       var div = document.getElementById("dates");
@@ -460,12 +474,42 @@
 
           var results = JSON.parse(this.responseText);
           document.getElementById("encounterHeader").innerHTML = results.length + " Encounters";
+
+          var listGroup = document.createElement("div");
+          listGroup.setAttribute("class","list-group");
+          encounters.appendChild(listGroup);
+
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].encounter_datetime);
             var f = moment(d).format("hh:mm:ss");
 
             if (itemType == "table") {
+              var a = document.createElement("a");
+              var aclass = "list-group-item d-flex justify-content-between";
+              aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+              a.setAttribute("class", aclass);
+              a.setAttribute("href","#");
+              //a.setAttribute("onmousedown","getEncounter('" + results[x].encounter_id + "')");
+              a.innerHTML = results[x].type.name;
 
+              var s = document.createElement("span");
+              s.setAttribute("class","badge badge-primary badge-pill");
+              s.innerHTML = f;
+              a.appendChild(s);
+              listGroup.appendChild(a);
+              
+              if (x == 1) {
+                var a = document.createElement("a");
+                var aclass = "list-group-item d-flex justify-content-between";
+                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                a.setAttribute("class", aclass);
+                a.setAttribute("href","#");
+                a.innerHTML = "Click to show more ..."
+                listGroup.appendChild(a);
+                break;
+              }
+
+              /*
               encounters.innerHTML += '<tr><td id="' + x +
                 '" class="h4" name="" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;"><li>' +
                 results[x].type.name + '</li></td> <td class="h4" style="border-top-width: 0px;">' + f + '</td> </tr>';
@@ -474,6 +518,9 @@
                 break;
 
               }
+
+              */
+
             } else if (itemType == "button") {
               encounters.innerHTML +=
                 '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
