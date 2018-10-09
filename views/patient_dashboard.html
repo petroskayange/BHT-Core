@@ -57,7 +57,7 @@
         <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="addressl3"></span></div>
       </div>
 
-      <div class="demo-header-cell demo-middle">
+      <div class="demo-header-cell demo-middle" id="appInfo">
       </div>
 
       <div class="demo-header-cell demo-right">
@@ -657,6 +657,19 @@
       } catch (e) {}
 
     }
+    function GetApplicationInfo() {
+    var dvTable = document.getElementById("appInfo");
+    dvTable.innerHTML = null;
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/ART/views/identifiers.html");
+    obj.setAttribute("type","text/html");
+    obj.setAttribute("style","width: 97%; height: 100%; padding: 1%;");
+
+    dvTable.appendChild(obj);
+
+    }
+    GetApplicationInfo();
+
     ajaxRequest();
       
    </script>
