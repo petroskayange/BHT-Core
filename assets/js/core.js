@@ -142,13 +142,13 @@ function generateTemplate() {
 function generateActivities() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
-     
-        $.getJSON("/apps/BHT-Core-Apps-ART/application.json")
+        
+        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
             .done(function (data, status) {
                 getActivities(data);
             })
             .fail(function () {
-                console.log("application.json is missing from the /apps/BHT-Core-Apps-ART folder");
+                console.log("application.json is missing from the /apps/ART folder");
             });
     } else {
         /*Alternative code for browsers that do not support the TEMPLATE element*/
@@ -419,9 +419,9 @@ function GenerateTable() {
   var obj = document.createElement("object");
   obj.setAttribute("data", "/apps/ART/views/overview.html");
   obj.setAttribute("type","text/html");
-  obj.setAttribute("style","width: 99%; height: 500px; text-align: left;");
+  obj.setAttribute("style","width: 99%; height: 430px; text-align: left;");
 
-  dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
+  dvTable.style = "height: 430px; width: 97% !important; margin: 15px;";
   dvTable.appendChild(obj);
 }
 // overview tab work in progress
@@ -451,7 +451,7 @@ function loadTabContent(id) {
     if (id === "admin") {
         document.getElementById("generic_tabs").innerHTML = admin_tab_content;
     } else if (id === "report") {
-        document.getElementById("generic_tabs").innerHTML = report_tab_content;
+        GetApplicationReports();
     } else {
         GenerateTable();
     }
@@ -544,4 +544,20 @@ function sleep(ms) {
         console.log(e);
     }
 
+}
+
+function GetApplicationReports() {
+  var dvTable = document.getElementById("generic_tabs");
+  dvTable.innerHTML = null;
+  dvTable.style = "width: 97% !important;";
+
+  var obj = document.createElement("object");
+  obj.setAttribute("data", "/apps/ART/views/reports.html");
+  obj.setAttribute("type","text/html");
+  obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+
+  //dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
+  dvTable.appendChild(obj);
+
+  
 }

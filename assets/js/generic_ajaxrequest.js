@@ -24,11 +24,7 @@ function checkIfEncounterCaptured(encounter_name, id) {
           if (available == false) {
 
           } else if (available == true) {
-            if (sessionStorage.userActivities.length < 1) {
-              window.location.href = url;
-            } else {
-              checkIfActivitySelected(encounter_name, url);
-            }
+            checkIfActivitySelected(encounter_name, url);
           }
         } catch (error) {
           // showMessage("selected encounter " + encounter_name + " is not available, continue to patient dashboard?", null, 3000);
