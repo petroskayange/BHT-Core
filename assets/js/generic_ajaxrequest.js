@@ -26,7 +26,7 @@ function checkIfEncounterCaptured(encounter_name, id, redirect) {
               sessionStorage.setItem("nextEncounter", encounter_name);
               sessionStorage.setItem("nextEncounterAvailable", "Available");
             } else {
-              window.location.href = url;
+              // window.location.href = url;
               checkIfActivitySelected(encounter_name, url);
             } 
             
@@ -103,6 +103,7 @@ function nextEncounter(patient_id, program_id, redirect) {
 
 function checkIfActivitySelected(encounter_name, url) {
   var selected_activities = sessionStorage.userActivities;
+  alert(sessionStorage.programID);
 
   if  (parseInt(sessionStorage.programID) == 1 ){
     if (encounter_name == "art adherence" && !selected_activities.match(/Manage ART adherence/i)) {

@@ -68,6 +68,7 @@ var applicationIcon = [];
 var applicationFolder = [];
 var applicationJsonUrl = [];
 var programID = [];
+var redirectUrl = [];
 
 function _ajaxUrl(res) {
     var result = [];
@@ -263,10 +264,10 @@ function setUser() {
     sessionStorage.setItem("username", username);
 }
 
-function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID) {
+function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID, redirectUrl) {
     $.getJSON(applicationJsonUrl)
         .done(function (data) {
-        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, "");
+        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, redirectUrl);
             
         })
         .fail(function () {
@@ -291,10 +292,11 @@ function parser(applicationData) {
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
         programID[i]  = applicationData.apps[i].programID;
+        redirectUrl[i]  = applicationData.apps[i].url;
 
         if (applicationData.apps[i].applicationFolder) {
             applicationJsonUrl[i] = "/apps/" + applicationFolder[i] + "application.json";
-            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i]);
+            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i], redirectUrl[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
         }
