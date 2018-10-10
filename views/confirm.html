@@ -166,7 +166,7 @@
   }
 
     function finish() {
-      nextEncounter(sessionStorage.patientID , 1, sessionStorage.programID);
+      nextEncounter(sessionStorage.patientID , 1);
       // window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
     }
 
@@ -185,6 +185,7 @@
     ajaxRequest();
 
     function GetApplicationReports() {
+    nextEncounter(sessionStorage.patientID , 1, false);
     var dvTable = document.getElementById("generic_tabs");
     dvTable.innerHTML = null;
     var obj = document.createElement("object");
