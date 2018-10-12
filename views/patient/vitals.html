@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="/assets/css/vitals-keypad.css" type="text/css">
 <script type="text/javascript" src="/assets/js/vitals-keypad.js"></script>
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 
 <style>
 
@@ -475,7 +476,7 @@ function submitVitals() {
   var encounter = {
     encounter_type_name: 'Vitals',
     encounter_type_id:  6,
-    patient_id: 50,
+    patient_id: sessionStorage.patientID,
     encounter_datetime: null
   }
 
@@ -531,7 +532,7 @@ function postVitalsObs(encounter) {
 }
 
 function nextPage() {
-  alert("Done");
+  nextEncounter(sessionStorage.patientID, 1);
 }
 
 function changeNextBtnToSubmit() {
