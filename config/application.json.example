@@ -14,7 +14,7 @@
     },
     "hiv staging": {
       "available": true,
-      "url": "/apps/ART/views/encounters/patient/hiv_staging.html"
+      "url": "/apps/ART/views/encounters/hiv_staging.html"
     },
     "hiv clinic consultation": {
       "available": true,
