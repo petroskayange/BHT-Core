@@ -6,7 +6,7 @@
     },
     "hiv reception": {
       "available": true,
-      "url": "/apps/ART/views/hiv_reception.html"
+      "url": "/apps/ART/views/encounters/hiv_reception.html"
     },
     "treatment": {
       "available": true,
@@ -14,19 +14,19 @@
     },
     "hiv staging": {
       "available": true,
-      "url": "/apps/ART/views/patient/hiv_staging.html"
+      "url": "/apps/ART/views/encounters/patient/hiv_staging.html"
     },
     "hiv clinic consultation": {
       "available": true,
-      "url": "/apps/ART/views/patient/hiv_clinic_consultation.html"
+      "url": "/apps/ART/views/encounters/hiv_clinic_consultation.html"
     },
     "hiv clinic registration": {
       "available": true,
-      "url": "/apps/ART/views/patient/hiv_clinic_registration.html"
+      "url": "/apps/ART/views/encounters/hiv_clinic_registration.html"
     },
     "art adherence": {
       "available": true,
-      "url": "/apps/ART/views/patient/art_adherence.html"
+      "url": "/apps/ART/views/encounters/adherence.html"
     },
     "appointment": {
       "available": true,

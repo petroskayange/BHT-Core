@@ -8,7 +8,7 @@ var apiProtocol = sessionStorage.getItem("apiProtocol");
 var id = url.searchParams.get("user_id");
 
 
-function checkIfEncounterCaptured(encounter_name, id) {
+function checkIfEncounterCaptured(encounter_name, id, redirect) {
   var applicationName = sessionStorage.getItem("applicationName");
   var url = '/apps/' + applicationName + '/application.json';
   var req = new XMLHttpRequest();
@@ -16,27 +16,37 @@ function checkIfEncounterCaptured(encounter_name, id) {
     if (this.readyState == 4) {
       if (this.status == 200) {
         var results = JSON.parse(this.responseText);
-        console.log(encounter_name);
-        console.log(results.encounters[encounter_name]);
         try {
           var available = results.encounters[encounter_name].available;
           var url = results.encounters[encounter_name].url;
           if (available == false) {
 
           } else if (available == true) {
-            window.location.href = url;
-            checkIfActivitySelected(encounter_name, url);
+            if (redirect == false ) {
+              sessionStorage.setItem("nextEncounter", encounter_name);
+              sessionStorage.setItem("nextEncounterAvailable", "Available");
+            } else {
+              // window.location.href = url;
+              checkIfActivitySelected(encounter_name, url);
+            } 
+            
           }
         } catch (error) {
           // showMessage("selected encounter " + encounter_name + " is not available, continue to patient dashboard?", null, 3000);
           // tstConfirmCancel =
-            sessionStorage.setItem("nextEncounter", encounter_name);
-            try {
-              confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
-            }catch(e) {
-              window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
+            if (redirect == false ) {
+              sessionStorage.setItem("nextEncounter", encounter_name);
+              sessionStorage.setItem("nextEncounterAvailable", "Not Configured");
+            } else {
+              sessionStorage.setItem("nextEncounter", encounter_name);
+              sessionStorage.setItem("nextEncounterAvailable", "Not Configured");
+                try {
+                  confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
+                }catch(e) {
+                  window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
+                }  
             }
-            
+   
         }
       } else if (this.status == 404) {
         showMessage("application.json missing from application configuration");
@@ -68,7 +78,7 @@ function confirmCancelEntryWithMessage(save, message = "Are you sure you want to
 
 }
 
-function nextEncounter(patient_id, program_id, session_date) {
+function nextEncounter(patient_id, program_id, redirect) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/workflows";
 
   var xhttp = new XMLHttpRequest();
@@ -76,7 +86,7 @@ function nextEncounter(patient_id, program_id, session_date) {
     if (this.readyState == 4) {
       if (this.status == 200) {
         var obj = JSON.parse(this.responseText);
-        checkIfEncounterCaptured(obj["name"].toLowerCase(), patient_id);
+        checkIfEncounterCaptured(obj["name"].toLowerCase(), patient_id, redirect);
       }
       else if (this.status == 400) {
         showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
@@ -93,6 +103,7 @@ function nextEncounter(patient_id, program_id, session_date) {
 
 function checkIfActivitySelected(encounter_name, url) {
   var selected_activities = sessionStorage.userActivities;
+  // alert(sessionStorage.programID);
 
   if  (parseInt(sessionStorage.programID) == 1 ){
     if (encounter_name == "art adherence" && !selected_activities.match(/Manage ART adherence/i)) {
