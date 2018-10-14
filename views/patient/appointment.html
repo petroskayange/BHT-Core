@@ -23,7 +23,7 @@
 #calendar-table-cell-right {
   width: 300px;
   background-color: darkblue;
-  height: 74vh;
+  height: 54vh;
   /*float: right;*/
   vertical-align: top;
 }
@@ -39,7 +39,7 @@
   display: table;
   width: 100%;
   border-collapse: collapse;
-  line-height: 70px;
+  line-height: 60px;
   margin: 5px;
 }
 
@@ -88,26 +88,27 @@
   font-weight: bold;
 }
 
+.controller {
+  display: table;
+  width: 99%;
+  border-style: solid;
+  border-width: 1px;
+  margin: 5px;
+}
+
+.controller-row {
+  display: table-row;
+}
+
+.controller-cell {
+  display: table-cell;
+}
+
 </style>
 
 
 
 <script>
-
-function addNavBtns() {
-  var btns = [[">|","forward"],["|<","previous"]];
-  var container = document.getElementById("buttons");
-
-  for(var i = 0 ; i < btns.length ; i++){
-    var btn = document.createElement("button");
-    btn.setAttribute("class","button blue navButton");
-    btn.innerHTML = "<span>" + btns[i][0] + "</span>";
-    btn.setAttribute("id", btns[i][1]);
-    btn.setAttribute("onmousedown", "changeMonth(this);");
-
-    container.appendChild(btn);
-  }
-}
 
 function changeMonth(e) {
   if(e.id == "forward"){
@@ -130,12 +131,119 @@ function changeMonth(e) {
   
   var currentDate = document.getElementById("currentDate");
   currentDate.innerHTML = getFullMonthName(currentSetDate.getMonth());
-  currentDate.innerHTML += " " + currentSetDate.getFullYear();
+  var currentYear = document.getElementById("currentYear");
+  currentYear.innerHTML = currentSetDate.getFullYear();
 }
 
+function changeYear(e) {
+  if(e.id == "forward-year"){
+     currentSetDate = new Date(currentSetDate.setFullYear(currentSetDate.getFullYear() + 1));
+  }else{
+     currentSetDate = new Date(currentSetDate.setFullYear(currentSetDate.getFullYear() - 1));
+  }
 
+  var cell = document.getElementById("calendar-table-cell-left");
+  cell.innerHTML = null;
+  buildCalendarCells(currentSetDate);
+  
+  var currentYear = document.getElementById("currentYear");
+  currentYear.innerHTML = currentSetDate.getFullYear();
+}
 
+function buildControls() {
+  var frame = document.getElementById("inputFrame" + tstCurrentPage);
+  var controller = document.createElement("div");
+  controller.setAttribute("class","controller")
+  frame.appendChild(controller);
 
+  var controllerRow = document.createElement("div");
+  controllerRow.setAttribute("class","controller-row")
+  controller.appendChild(controllerRow);
+
+  var cells = ["left","right"];
+
+  for(var i = 0 ; i < cells.length ; i++){
+    var controllerCell = document.createElement("div");
+    controllerCell.setAttribute("class","controller-cell");
+    controllerCell.setAttribute("id","controller-cell-" + cells[i]);
+    controllerRow.appendChild(controllerCell);
+  }
+
+  monthController();
+  yearController();
+}
+
+function yearController() {
+  var table = document.createElement("table");
+  table.style = "float: right;";
+  tr = document.createElement("tr");
+  table.appendChild(tr);
+
+  var td = document.createElement("td");
+  var btn = document.createElement("button");
+  btn.setAttribute("class","btn btn-primary");
+  btn.innerHTML = "-";
+  btn.setAttribute("id","previous-year");
+  btn.setAttribute("onmousedown", "changeYear(this);");
+  td.appendChild(btn);
+  tr.appendChild(td);
+
+  var td    = document.createElement("td");
+  td.style = "width: 130px; text-align: center; font-weight: bold;";
+  var label = document.createElement("label");
+  label.setAttribute("id","currentYear");
+  label.innerHTML = currentSetDate.getFullYear();
+  td.appendChild(label);
+  tr.appendChild(td);
+
+  var td = document.createElement("td");
+  var btn = document.createElement("button");
+  btn.setAttribute("class","btn btn-primary");
+  btn.setAttribute("id","forward-year");
+  btn.innerHTML = "+";
+  btn.setAttribute("onmousedown", "changeYear(this);");
+  td.appendChild(btn);
+  tr.appendChild(td);
+
+  var container = document.getElementById("controller-cell-right");
+  container.appendChild(table);
+}
+
+function monthController() {
+  var table = document.createElement("table");
+  table.style = "float: left;";
+  tr = document.createElement("tr");
+  table.appendChild(tr);
+
+  var td = document.createElement("td");
+  var btn = document.createElement("button");
+  btn.setAttribute("class","btn btn-primary");
+  btn.innerHTML = "-";
+  btn.setAttribute("id","previous");
+  btn.setAttribute("onmousedown", "changeMonth(this);");
+  td.appendChild(btn);
+  tr.appendChild(td);
+
+  var td    = document.createElement("td");
+  td.style = "width: 130px; text-align: center; font-weight: bold;";
+  var label = document.createElement("label");
+  label.setAttribute("id","currentDate");
+  label.innerHTML = getFullMonthName(currentSetDate.getMonth());
+  td.appendChild(label);
+  tr.appendChild(td);
+
+  var td = document.createElement("td");
+  var btn = document.createElement("button");
+  btn.setAttribute("class","btn btn-primary");
+  btn.setAttribute("id","forward");
+  btn.innerHTML = "+";
+  btn.setAttribute("onmousedown", "changeMonth(this);");
+  td.appendChild(btn);
+  tr.appendChild(td);
+
+  var container = document.getElementById("controller-cell-left");
+  container.appendChild(table);
+}
 
 var currentSetDate = new Date("2018-10-01");
 
@@ -143,15 +251,6 @@ function buildCalendar() {
   var frame = document.getElementById("inputFrame" + tstCurrentPage);
   frame.setAttribute("style","height: 90%; width: 96%;");
   document.getElementById("clearButton").style = "display: none;";
-
-  var currentDate = document.createElement("div");
-  currentDate.setAttribute("id","currentDate");
-  currentDate.innerHTML = getFullMonthName(currentSetDate.getMonth());
-  currentDate.innerHTML += " " + currentSetDate.getFullYear();
-  frame.appendChild(currentDate);
-
-  addNavBtns();
-
 
   var calendar = document.createElement("div");
   calendar.setAttribute("class","calendar-table");
@@ -172,6 +271,7 @@ function buildCalendar() {
   buildDisplayArea();
   buildCalendarCells(currentSetDate);
 
+  buildControls();
 }
 
 function buildDisplayArea() {
