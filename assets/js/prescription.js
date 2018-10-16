@@ -684,7 +684,7 @@ function prescribeMeds() {
   var encounter = {
     encounter_type_name: 'Treatment',
     encounter_type_id:  25,
-    patient_id: 50,
+    patient_id: sessionStorage.patientID,
     encounter_datetime: null
   }
 
@@ -725,6 +725,11 @@ function postDrugOrders(encounter) {
 
 function doneCreating() {
   alert("Done");
+}
+
+function nextPage(){
+  nextEncounter(sessionStorage.patientID, 1);
+
 }
 
 function getFormattedDate(set_date) {
