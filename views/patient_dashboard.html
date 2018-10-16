@@ -613,6 +613,10 @@
             var d = new Date(results.observations[x].obs_datetime);
             var f = moment(d).format("hh:mm:ss");
             var value = "";
+            var modifier = results.observations[x].value_modifier;
+            if (modifier !== "%") {
+              modifier = "";
+            }
             if (results.observations[x].value_text != null) {
               value = results.observations[x].value_text;
             }else if (results.observations[x].value_numeric != null) {
@@ -646,7 +650,7 @@
             }else {
 
             }
-            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + '</td>  <td>' + f + '</td> </tr>'
+            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + modifier + '</td>  <td>' + f + '</td> </tr>'
           }
         }
       };
