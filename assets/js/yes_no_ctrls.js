@@ -47,6 +47,8 @@ function buildYesNoUI(concept_name, values, targetElement) {
   var inputFrame = document.getElementById("inputFrame" + tstCurrentPage); //.getElementsByClassName('yes_nos');
   inputFrame.style = "width: 96%;";
   createNewCtrl(targetElement, concept_name, values);
+
+  preSelectYesNo();
 }
 
 function createNewCtrl(e, concept_name, values) {
@@ -56,7 +58,9 @@ function createNewCtrl(e, concept_name, values) {
 		if(!yesNo_Hash[concept_name])
 		  yesNo_Hash[concept_name] = {};
 
-		yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()] = null;
+		if(!yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()])
+		  yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()] = null;
+
 	}
  
   var yesNoTable = document.createElement("table");
@@ -144,3 +148,31 @@ function buttonClicked(btn, concept_name, concept) {
 	yesNo_Hash[concept_name][concept] = value;
 }
 
+function preSelectYesNo() {
+  var yes_no_btns = document.getElementsByClassName("yes_no_btns");
+
+  for(var i = 0 ; i < yes_no_btns.length ; i++){
+    for(var cn in yesNo_Hash){
+      for(var q in yesNo_Hash[cn]){
+        if(yesNo_Hash[cn][q]){
+          var string_to_match = q;
+          var regex = new RegExp(string_to_match, 'g' );
+
+          if(yes_no_btns[i].getAttribute("onclick").match(regex)){
+            var ans = (yesNo_Hash[cn][q]);
+            var btns = yes_no_btns[i].getElementsByClassName("yes_no_text");
+            for(var x = 0 ; x < btns.length ; x++){
+              var regex = new RegExp(ans, 'g' );
+
+              if(btns[x].innerHTML.match(regex)){
+                yes_no_btns[i].setAttribute("class","yes_no_btns clicked");
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+}
