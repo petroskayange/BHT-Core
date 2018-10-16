@@ -41,8 +41,9 @@ function checkIfEncounterCaptured(encounter_name, id, redirect) {
               sessionStorage.setItem("nextEncounter", encounter_name);
               sessionStorage.setItem("nextEncounterAvailable", "Not Configured");
                 try {
-                  confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
+                  confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '/views/patient_dashboard.html?patient_id=' + id);
                 }catch(e) {
+                  alert("not available");
                   window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
                 }  
             }
