@@ -329,7 +329,7 @@ function getPrescriptions() {
       addPrescriptions(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id=50&date=2018-09-20" ), true);
+  xhttp.open("GET", (url + "?patient_id="+sessionStorage.patientID+"&date="+ moment().format('YYYY-MM-DD') ), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
@@ -493,7 +493,7 @@ function loadHostory() {
       addRows(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id=50" ), true);
+  xhttp.open("GET", (url + "?patient_id="+sessionStorage.patientID ), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
@@ -516,26 +516,5 @@ function addRows(data){
 
 function formatDate(date_str) {
   var passed_date = new Date(date_str);
-  var full_year   = passed_date.getFullYear();
-  var full_month  = passed_date.getMonth();
-  var full_day    = passed_date.getDay();
-
-  var months  = new Array();
-  months[0]   = "Jan";
-  months[1]   = "Feb";
-  months[2]   = "Mar";
-  months[3]   = "Apr";
-  months[4]   = "May";
-  months[5]   = "Jun";
-  months[6]   = "Jul";
-  months[7]   = "Aug";
-  months[8]   = "Sep";
-  months[9]   = "Oct";
-  months[10]  = "Nov";
-  months[11]  = "Dec";
-
-  if(parseInt(full_day) < 10)
-    full_day = "0" + full_day;
-
-  return (full_day + "/" + months[full_month] + "/" + full_year);
+  return moment(passed_date).format("DD/MMM/YYYY");
 }

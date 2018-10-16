@@ -720,11 +720,7 @@ function postDrugOrders(encounter) {
    drug_orders_params.drug_orders.push(drug_order);
  }
 
- submitParameters(drug_orders_params, "/drug_orders", "doneCreating");
-}
-
-function doneCreating() {
-  alert("Done");
+ submitParameters(drug_orders_params, "/drug_orders", "nextPage");
 }
 
 function nextPage(){
