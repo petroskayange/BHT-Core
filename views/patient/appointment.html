@@ -286,7 +286,7 @@ function buildDisplayArea() {
   container.appendChild(table);
 
   var tds = [
-    ["Selected Date","selected-date"],
+    ["Next appointment date","selected-date"],
     ["Appointment(s)","appointments"],
     ["Appointment Limit (per/day)","appointment-limit"]
   ];
@@ -421,8 +421,8 @@ function selectDate(e) {
   if(selected_date.length < 2)
     selected_date = "0" + selected_date;
 
-  selected_date += "-" + getFullMonthName(e.getAttribute("date").split("-")[1] - 1);
-  selected_date += "-" + e.getAttribute("date").split("-")[0];
+  selected_date += "/" + getFullMonthName(e.getAttribute("date").split("-")[1] - 1);
+  selected_date += "/" + e.getAttribute("date").split("-")[0];
 
   document.getElementById("selected-date").innerHTML = selected_date;
   document.getElementById("appointments").innerHTML = 20;
@@ -450,7 +450,7 @@ function getFullMonthName(index) {
   months[10] = "November";
   months[11] = "December";
 
-  return months[index];
+  return months[index].substring(0,3);
 }
 
 
