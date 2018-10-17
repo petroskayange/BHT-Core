@@ -173,7 +173,11 @@
     function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
       document.getElementById("patient_name").innerHTML = patient_name;
       var roundedAge = Math.floor(moment().diff(age, 'years', true));
-      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
+      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = gender;
+      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
       document.getElementById("npid").innerHTML = identifier;
       document.getElementById("age").innerHTML = "(" + roundedAge + ")";
       document.getElementById("addressl1").innerHTML = addressl1;
