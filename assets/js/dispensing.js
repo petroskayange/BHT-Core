@@ -1,3 +1,5 @@
+var fetchedPrescriptions;
+var ordersToPost;
 
 function addModalDiv() {
   var iFrame    = document.getElementById("inputFrame" + tstCurrentPage);
@@ -153,7 +155,7 @@ function displayKeyPad(order_id) {
 
       var span = document.createElement('span');
       span.setAttribute("class","keypad-buttons");
-      span.setAttribute("onmousedown","enterKeypadValue(this);");
+      span.setAttribute("onmousedown","enterKeypadValue(this," + order_id + ");");
       span.innerHTML = keypad_attributes[i][j];
       if(keypad_attributes[i][j] == "&nbsp;"){
         span.setAttribute("class","keypad-buttons keypad-buttons-hide");
@@ -219,7 +221,7 @@ function addPopDescription(order_id) {
 
 }
 
-function enterKeypadValue(e) {
+function enterKeypadValue(e, order_id) {
   var inputBox = document.getElementById('prescription-input');
 
   try{
@@ -229,7 +231,8 @@ function enterKeypadValue(e) {
     }else if(e.innerHTML.match(/Clear/i)){
       inputBox.value = null;
     }else if(e.innerHTML.match(/Dispense/i)){
-      //post();
+      var amount_dispensed = document.getElementById("prescription-input").value;
+      manualDispensation(order_id, amount_dispensed);
       document.getElementById("prescription-modal").style = "display: none;";
     }else{
       inputBox.value += e.innerHTML;
@@ -266,7 +269,37 @@ function buildMainControllers() {
   buildDispensingPage();
 }
 
-function postDispensation() {
+function manualDispensation(order_id, amount_dispensed) {
+  postDispensation(order_id, amount_dispensed);
+}
+
+function scannedMedicationBarcode(barcode) {
+  var drug_id   = barcode.split(" ")[0];
+  var quantity  = barcode.split(" ")[1];
+
+  var order_id = fetchedPrescriptions[drug_id];
+  postDispensation(order_id, quantity);
+}
+
+
+function postDispensation(order_id , amount_dispensed) {
+  if(isNaN(parseInt(order_id))) {
+    return
+  }
+
+  if(isNaN(parseFloat(amount_dispensed))) {
+    return
+  }
+
+  var drug_order = {
+    dispensations: [{drug_order_id: order_id, quantity: amount_dispensed}]
+  }
+  submitParameters(drug_order, "/dispensations", "doneDispensing"); 
+}
+
+function doneDispensing(orders){
+  var e = document.getElementById("nav-prescribed");
+  setPage(e);
 }
 
 function addPrescriptions(data) {
@@ -276,7 +309,8 @@ function addPrescriptions(data) {
     var medication    = data[i].drug.name;
     var amount_needed = 0;
     var quantity      = data[i].quantity;
-    
+   
+    fetchedPrescriptions[drug_id] = order_id;
      
     setDataTable.row.add([addDeleteBTN(order_id), medication, amount_needed, quantity, addDispBTN(order_id)]).node().id = order_id;
     setDataTable.draw();
@@ -319,17 +353,19 @@ function addDeleteBTN(order_id) {
 }
 
 function getPrescriptions() {
-//  /api/v1/drug_orders?patient_id=1000&date=2018-12-31
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/drug_orders";
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var obj = JSON.parse(this.responseText);
+      fetchedPrescriptions = {} 
       addPrescriptions(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id="+sessionStorage.patientID+"&date="+ moment().format('YYYY-MM-DD') ), true);
+
+  var prescription_date = moment().format("YYYY-MM-DD");
+  xhttp.open("GET", (url + "?patient_id=" + sessionStorage.patientID + "&date=" + prescription_date), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
@@ -373,8 +409,7 @@ function buildDispensingPage() {
   var barcodeDiv = document.createElement("div");
   barcodeDiv.setAttribute("id","barcode-container");
   barcodeDiv.setAttribute("class","barcode");
-  barcodeDiv.setAttribute("url","/");
-  barcodeDiv.setAttribute("functionName","postDispensation");
+  barcodeDiv.setAttribute("functionName","scannedMedicationBarcode");
 
 
   rightContainer.appendChild(barcodeDiv);
@@ -493,7 +528,7 @@ function loadHostory() {
       addRows(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id="+sessionStorage.patientID ), true);
+  xhttp.open("GET", (url + "?patient_id=" + sessionStorage.patientID), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();

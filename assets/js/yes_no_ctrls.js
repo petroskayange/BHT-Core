@@ -37,7 +37,7 @@ function validateYesNo(concept_name, values) {
 	eval(nextButton.getAttribute("onmousedown"));
 }
 
-function buildYesNoUI(concept_name, values) {
+function buildYesNoUI(concept_name, values, targetElement) {
   var nextButton =  document.getElementById('nextButton');
 	previousNextButton = nextButton.getAttribute("onmousedown");
   nextButton.setAttribute('onmousedown',"validateYesNo('" + concept_name + "','" + values + "');");
@@ -46,15 +46,21 @@ function buildYesNoUI(concept_name, values) {
 
   var inputFrame = document.getElementById("inputFrame" + tstCurrentPage); //.getElementsByClassName('yes_nos');
   inputFrame.style = "width: 96%;";
-  createNewCtrl(inputFrame, concept_name, values);
+  createNewCtrl(targetElement, concept_name, values);
+
+  preSelectYesNo();
 }
 
 function createNewCtrl(e, concept_name, values) {
   var attributes = values.split("#");
  
 	for(var i = 0 ; i < attributes.length; i++){
-		yesNo_Hash[concept_name] = {};
-		yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()] = null;
+		if(!yesNo_Hash[concept_name])
+		  yesNo_Hash[concept_name] = {};
+
+		if(!yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()])
+		  yesNo_Hash[concept_name][attributes[i].split(',')[0].trim()] = null;
+
 	}
  
   var yesNoTable = document.createElement("table");
@@ -81,7 +87,9 @@ function createNewCtrl(e, concept_name, values) {
       td = document.createElement('td');
       td.setAttribute("class", "yes_no_container");
       button = document.createElement("a");
-      button.setAttribute("id", "btn_" + yes_no[x].toLowerCase() + "_" + i);
+      //button.setAttribute("id", "btn_" + yes_no[x].toLowerCase() + "_" + i);
+      button.setAttribute("id", concept_id + "_" + yes_no[x].toLowerCase());
+      button.setAttribute("whichone", yes_no[x]);
 
       if(setFunctionName != undefined){
         setFunctions = "buttonClicked(this,'" + concept_name + "','" + concept + "');"  + setFunctionName + "(this);";
@@ -92,7 +100,12 @@ function createNewCtrl(e, concept_name, values) {
 
       button.setAttribute("value", concept_id);
       button.setAttribute("class", "yes_no_btns not-clicked");
-      button.innerHTML = "<span class='yes_no_text'>" + yes_no[x] + "</span>";
+      
+      var span = document.createElement("span")
+      span.setAttribute("class", "yes_no_text " + yes_no[x].toLowerCase() + "_texts");
+      span.innerHTML = yes_no[x];
+      button.appendChild(span);
+
       td.appendChild(button);
       r.appendChild(td);
     }
@@ -104,19 +117,62 @@ function createNewCtrl(e, concept_name, values) {
 }
 
 function buttonClicked(btn, concept_name, concept) {
-  var idIdenx = btn.getAttribute("id").split("_")[2];
+  var concept_id = btn.getAttribute("id").split("_")[0];
 
-  document.getElementById("btn_yes_" + idIdenx).setAttribute("class","yes_no_btns not-clicked");
-  document.getElementById("btn_no_" + idIdenx).setAttribute("class","yes_no_btns not-clicked");
+  var yesBTN  = document.getElementById(concept_id + "_yes");
+  var noBTN   = document.getElementById(concept_id + "_no");
     
+  if(btn.innerHTML == yesBTN.innerHTML) {
+    if(btn.getAttribute("class").match(/not-clicked/i)){
+      btn.setAttribute("class","yes_no_btns clicked");
+    }
+    noBTN.setAttribute("class","yes_no_btns not-clicked")
+  }else if(btn.innerHTML == noBTN.innerHTML) {
+    if(btn.getAttribute("class").match(/not-clicked/i)){
+      btn.setAttribute("class","yes_no_btns clicked");
+    }
+    yesBTN.setAttribute("class","yes_no_btns not-clicked")
+  }
+
+/*
+
   if(btn.getAttribute("class").match(/not-clicked/i)){
     btn.setAttribute("class","yes_no_btns clicked");
   }else{
     btn.setAttribute("class","yes_no_btns not-clicked");
   }
+*/
 	
-	var value = btn.id;
+	var value = btn.getAttribute("whichone");
 	value = (value.match(/no/i) ? "No" : "Yes");
 	yesNo_Hash[concept_name][concept] = value;
 }
 
+function preSelectYesNo() {
+  var yes_no_btns = document.getElementsByClassName("yes_no_btns");
+
+  for(var i = 0 ; i < yes_no_btns.length ; i++){
+    for(var cn in yesNo_Hash){
+      for(var q in yesNo_Hash[cn]){
+        if(yesNo_Hash[cn][q]){
+          var string_to_match = q;
+          var regex = new RegExp(string_to_match, 'g' );
+
+          if(yes_no_btns[i].getAttribute("onclick").match(regex)){
+            var ans = (yesNo_Hash[cn][q]);
+            var btns = yes_no_btns[i].getElementsByClassName("yes_no_text");
+            for(var x = 0 ; x < btns.length ; x++){
+              var regex = new RegExp(ans, 'g' );
+
+              if(btns[x].innerHTML.match(regex)){
+                yes_no_btns[i].setAttribute("class","yes_no_btns clicked");
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+}

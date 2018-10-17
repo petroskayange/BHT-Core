@@ -187,7 +187,7 @@
     </script>    
 
     <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+    <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
 
@@ -563,8 +563,9 @@
     helpText="Region of origin"
     ajaxURL = "/regions"
     setvalue = ""
-    tt_onLoad="clearInput();"
-    requireNextClick = "false" 
+    tt_onLoad="clearInput(); jQuery('#nextButton').hide();"
+    tt_onUnload ="jQuery('#nextButton').show(); "
+    tt_requireNextClick = 'false'
     tt_pageStyleClass = "NoKeyboard"
     objectType="region" />
   
@@ -575,23 +576,29 @@
     helpText="Home District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
+    tt_onUnload =" jQuery('#nextButton').show();"
     objectType="districts" />
 
   <input type="text" name="home_ta" 
   id="home_ta" field_type="alpha" 
   helpText="Home TA" 
   ajaxURL=""
-  condition="$('home_region').value != '4'" 
-  tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
+  condition="$('home_region').value != '4'"
+  tt_requireNextClick = 'false'
+  tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
+  tt_onUnLoad =" jQuery('#nextButton').show();"
   objectType="traditional_authority" />
 
   <input type="text" name="home_village" 
   id="home_village" field_type="alpha" 
   helpText="Home Village" 
   ajaxURL="" 
-  condition="$('home_region').value != '4'" 
-  tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
+  condition="$('home_region').value != '4'"
+  tt_requireNextClick = 'false'
+  tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
+  tt_onUnload ="jQuery('#nextButton').show();"
   objectType="village" />
 
   <!-- Home Address ............................................. -->
@@ -604,9 +611,10 @@
     helpText="Current Region"
     ajaxURL = "/regions"
     setvalue = ""
-    requireNextClick = "false" 
+    tt_requireNextClick = 'false'
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput();"
+    tt_onLoad="clearInput(); jQuery('#nextButton').hide();"
+    tt_onUnload ="jQuery('#nextButton').show();"
     objectType="region" />
   
   <input type="text" name="current_district" 
@@ -616,23 +624,29 @@
     helpText="Current District"
     setvalue = "" 
     tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);"
+    tt_onUnload ="jQuery('#nextButton').show();"
     objectType="districts" />
 
   <input type="text" name="current_ta" 
     id="current_ta" field_type="alpha" 
     helpText="Current TA" 
     ajaxURL="" 
-    condition="$('current_region').value != '4'" 
-    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
+    condition="$('current_region').value != '4'"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
+    tt_onUnload ="jQuery('#nextButton').show();"
     objectType="traditional_authority" />
 
   <input type="text" name="current_village" 
     id="current_village" field_type="alpha" 
     helpText="Current Village" 
     ajaxURL="" 
-    condition="$('current_region').value != '4'" 
-    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
+    condition="$('current_region').value != '4'"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
+    tt_onUnload ="jQuery('#nextButton').show();"
     objectType="village" />
 
     <!-- ................... Current Address ends ........................... -->
@@ -650,7 +664,7 @@
     helpText="Cell phone number"
     tt_pageStyleClass="azButton" 
     field_type="number"
-    validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" 
+    validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available"
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
   
