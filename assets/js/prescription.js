@@ -684,7 +684,7 @@ function prescribeMeds() {
   var encounter = {
     encounter_type_name: 'Treatment',
     encounter_type_id:  25,
-    patient_id: 50,
+    patient_id: sessionStorage.patientID,
     encounter_datetime: null
   }
 

@@ -298,7 +298,8 @@ function postDispensation(order_id , amount_dispensed) {
 }
 
 function doneDispensing(orders){
-  getPrescriptions();
+  var e = document.getElementById("nav-prescribed");
+  setPage(e);
 }
 
 function addPrescriptions(data) {
@@ -352,7 +353,6 @@ function addDeleteBTN(order_id) {
 }
 
 function getPrescriptions() {
-//  /api/v1/drug_orders?patient_id=1000&date=2018-12-31
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/drug_orders";
 
   var xhttp = new XMLHttpRequest();
@@ -363,7 +363,9 @@ function getPrescriptions() {
       addPrescriptions(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id=50&date=2018-09-20" ), true);
+
+  var prescription_date = moment().format("YYYY-MM-DD");
+  xhttp.open("GET", (url + "?patient_id=" + sessionStorage.patientID + "&date=" + prescription_date), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
@@ -526,7 +528,7 @@ function loadHostory() {
       addRows(obj);
     }
   };
-  xhttp.open("GET", (url + "?patient_id=50" ), true);
+  xhttp.open("GET", (url + "?patient_id=" + sessionStorage.patientID), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
