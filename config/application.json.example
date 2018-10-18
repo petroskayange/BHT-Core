@@ -10,7 +10,7 @@
     },
     "treatment": {
       "available": true,
-      "url": "/views/patient/prescription.html"
+      "url": "/apps/ART/views/encounters/prescription.html"
     },
     "hiv staging": {
       "available": true,
