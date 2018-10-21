@@ -95,9 +95,9 @@ function createNewCtrl(e, concept_name, values) {
 
       if(setFunctionName != undefined){
         setFunctions = "buttonClicked(this,'" + concept_name + "','" + concept + "');"  + setFunctionName + "(this);";
-        button.setAttribute("onclick", setFunctions);
+        button.setAttribute("onmousedown", setFunctions);
       }else{
-        button.setAttribute("onclick","buttonClicked(this,'" + concept_name + "','" + concept + "');");
+        button.setAttribute("onmousedown","buttonClicked(this,'" + concept_name + "','" + concept + "');");
       }
 
       /* ............................................ */
