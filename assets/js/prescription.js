@@ -720,11 +720,12 @@ function postDrugOrders(encounter) {
    drug_orders_params.drug_orders.push(drug_order);
  }
 
- submitParameters(drug_orders_params, "/drug_orders", "doneCreating");
+ submitParameters(drug_orders_params, "/drug_orders", "nextPage");
 }
 
-function doneCreating() {
-  alert("Done");
+function nextPage(){
+  nextEncounter(sessionStorage.patientID, 1);
+
 }
 
 function getFormattedDate(set_date) {

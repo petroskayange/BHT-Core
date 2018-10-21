@@ -1,5 +1,5 @@
 
-#clearButton, #nextButton {
+#clearButton {
   display: none;
 }
 
@@ -155,7 +155,7 @@
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  font-size: 23px;
+  font-size: 15pt;
   font-family: arial, helvetica, sans-serif;
   padding: 10px 10px 10px 10px;
   text-decoration: none;
@@ -171,7 +171,7 @@
   background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
   background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
-  width: 75px;
+  width: 70px;
   height: 65px;
   text-align: center;
     

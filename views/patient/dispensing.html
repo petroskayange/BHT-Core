@@ -1,6 +1,6 @@
 
 <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/assets/css/dispensing.css" type="text/css">
@@ -18,8 +18,8 @@
 
 <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
-
 <script type="text/javascript" src="/assets/js/moment.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script>
   var setDataTable = null;
 
@@ -35,6 +35,14 @@
     } );
   }
 
+function changeNextButton() {
+  var bnt = document.getElementById("nextButton")
+  bnt.setAttribute("onmousedown", "doneDispensation();")
+}
+
+function doneDispensation() {
+  nextEncounter(sessionStorage.patientID, 1);
+}
 </script>
 
 
@@ -46,7 +54,7 @@
       <form>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none';dispensingPage();initDataTable();getPrescriptions();" 
+          tt_onLoad="__$('keyboard').style.display = 'none';dispensingPage();initDataTable();getPrescriptions();changeNextButton();" 
           tt_pageStyleClass= "NoControls" helpText="Dispensing" optional = "true"/>
 
 

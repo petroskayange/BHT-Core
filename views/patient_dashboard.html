@@ -395,6 +395,10 @@
       document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
       document.getElementById("npid").innerHTML = formatNIPD(identifier);
       document.getElementById("age").innerHTML = "(" + roundedAge + ")";
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = gender;
+      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
       document.getElementById("addressl1").innerHTML = addressl1;
       document.getElementById("addressl3").innerHTML = addressl2;
       document.getElementById("phone_number").innerHTML = phone_number;
@@ -613,6 +617,10 @@
             var d = new Date(results.observations[x].obs_datetime);
             var f = moment(d).format("hh:mm:ss");
             var value = "";
+            var modifier = results.observations[x].value_modifier;
+            if (modifier !== "%") {
+              modifier = "";
+            }
             if (results.observations[x].value_text != null) {
               value = results.observations[x].value_text;
             }else if (results.observations[x].value_numeric != null) {
@@ -646,7 +654,7 @@
             }else {
 
             }
-            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + '</td>  <td>' + f + '</td> </tr>'
+            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + modifier + '</td>  <td>' + f + '</td> </tr>'
           }
         }
       };

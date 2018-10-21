@@ -110,8 +110,8 @@
           window.location.href = "/views/patient/new.html" + parameters;
       }else if (search_redirect.length > 0){
         sessionStorage.setItem("patientID", people[pos]["Person ID"]);
-        //window.location.href = "/views/patient_dashboard.html?patient_id=" + people[pos]['Person ID'];
-        nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
+        window.location.href = "/views/confirm.html?patient_id=" + people[pos]['Person ID'];
+        // nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
       }else{
           showMessage("Select value to continue");
       }
@@ -407,6 +407,7 @@ function findClients() {
 
    document.getElementById('cover').style="display: inline;"; 
    showStatus();
+   document.getElementById("innerPop").style.display = "none";
    getParameters(url);
 }
 
@@ -418,21 +419,23 @@ function searchResults(results){
   
   for(var x in data){
     if(data.hasOwnProperty(x)){
+      null_or_empty = function(value) {
+        return value ? value : ""; 
+      }
+
 			found_clients[x] = {
-				given_name: 							data[x].names[0].given_name,
-				middle_name: 							data[x].names[0].middle_name,
-				family_name: 							data[x].names[0].family_name,
-				gender: 									data[x].gender,
-				birthdate: 								data[x].birthdate,
-				birthdate_estimated: 			data[x].birthdate_estimated,
-
-				home_district:						data[x].addresses[0].address2,
-				home_ta:									data[x].addresses[0].county_district,
-				home_village:							data[x].addresses[0].neighborhood_cell,
-
-				current_district:					data[x].addresses[0].state_province,
-				current_ta:								data[x].addresses[0].township_division,
-				current_village:					data[x].addresses[0].city_village,
+				given_name: 							null_or_empty(data[x].names[0].given_name),
+				middle_name: 							null_or_empty(data[x].names[0].middle_name),
+				family_name: 							null_or_empty(data[x].names[0].family_name),
+				gender: 									null_or_empty(data[x].gender),
+				birthdate: 								null_or_empty(data[x].birthdate),
+				birthdate_estimated: 			null_or_empty(data[x].birthdate_estimated),
+				home_district:						null_or_empty((data[x].addresses[0] || {}).address2),
+				home_ta:									null_or_empty((data[x].addresses[0] || {}).county_district),
+				home_village:							null_or_empty((data[x].addresses[0] || {}).neighborhood_cell),
+				current_district:					null_or_empty((data[x].addresses[0] || {}).state_province),
+				current_ta:								null_or_empty((data[x].addresses[0] || {}).township_division),
+				current_village:					null_or_empty((data[x].addresses[0] || {}).city_village),
 
 				person_id:								data[x].person_id
 			}

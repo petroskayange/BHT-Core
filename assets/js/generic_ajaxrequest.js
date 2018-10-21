@@ -41,8 +41,9 @@ function checkIfEncounterCaptured(encounter_name, id, redirect) {
               sessionStorage.setItem("nextEncounter", encounter_name);
               sessionStorage.setItem("nextEncounterAvailable", "Not Configured");
                 try {
-                  confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '../patient_dashboard.html?patient_id=' + id);
+                  confirmCancelEntryWithMessage(null, "selected encounter " + encounter_name + " is not available, continue to patient dashboard?", '/views/patient_dashboard.html?patient_id=' + id);
                 }catch(e) {
+                  alert("not available");
                   window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
                 }  
             }
@@ -89,7 +90,13 @@ function nextEncounter(patient_id, program_id, redirect) {
         checkIfEncounterCaptured(obj["name"].toLowerCase(), patient_id, redirect);
       }
       else if (this.status == 400) {
-        showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
+        try {
+          showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
+        }catch(e) {
+          alert("patient record is damaged");
+            window.history.back();
+        }
+        
       }
 
     }
