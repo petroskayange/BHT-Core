@@ -2,38 +2,56 @@
   "encounters": {
    "vitals": {
       "available": true,
+      "encountersName": "Vitals",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/views/patient/vitals.html"
     },
     "hiv reception": {
       "available": true,
+      "encountersName": "hiv reception",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/hiv_reception.html"
     },
     "treatment": {
       "available": true,
+      "encountersName": "treatment",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/prescription.html"
     },
     "hiv staging": {
       "available": true,
+      "encountersName": "hiv staging",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/hiv_staging.html"
     },
     "hiv clinic consultation": {
       "available": true,
+      "encountersName": "hiv clinic consultation",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/hiv_clinic_consultation.html"
     },
     "hiv clinic registration": {
       "available": true,
+      "encountersName": "hiv clinic registration",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/hiv_clinic_registration.html"
     },
     "art adherence": {
       "available": true,
+      "encountersName": "art adherence",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/apps/ART/views/encounters/adherence.html"
     },
     "appointment": {
       "available": true,
+      "encountersName": "appointment",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/views/patient/appointment.html"
     },
     "dispensing": {
       "available": true,
+      "encountersName": "Vitals",
+      "encountersIcon": "/assets/images/aids.png",
       "url": "/views/patient/dispensing.html"
     }
   },
