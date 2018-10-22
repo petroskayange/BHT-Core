@@ -69,6 +69,7 @@ var applicationFolder = [];
 var applicationJsonUrl = [];
 var programID = [];
 var redirectUrl = [];
+var encounter_name = [];
 
 function _ajaxUrl(res) {
     var result = [];
@@ -155,6 +156,24 @@ function generateActivities() {
         /*Alternative code for browsers that do not support the TEMPLATE element*/
     }
 }
+
+function generateTasks() {
+
+    if (document.createElement("template").content) {
+
+        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+            .done(function (data, status) {
+
+                getTasks(data);
+
+            })
+            .fail(function () {
+                console.log("application.json is missing from /apps/ART folder");
+            });
+    } else {
+
+    }
+}
 function _foo(data, resource) {
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
@@ -220,6 +239,26 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
 
 }
 
+function newTasksCard(encounter_name, tasksImage, counter, url) {
+    $("#tasks-modal-div").append($('#tasks_template').html());
+    $("#taskstext").text(encounter_name).attr('id', "taskstext" + counter);
+    $("#encounter_name").text(encounter_name).attr('id', "encounterName" + counter);
+    $("#encounterButton").attr('id', "encounterButton" + counter);
+    $("#encounterButton"+counter).attr("href", url);
+
+    $("#cardImage")
+        .on('error', function () {
+            $(this).attr('src', "/assets/images/no_image.png");
+        }).attr('src', tasksImage).attr('id', "cardImage" + counter);
+    $("#encounterButton" + counter).click(function () {
+        sessionStorage.setItem("encounter_name", encounter_name);
+        sessionStorage.setItem("tasksImage", tasksImage);
+
+        changeTasks();
+    });
+
+}
+
 function getName(user_id, url, port, protocol) {
 
     jQuery.getJSON({
@@ -278,9 +317,16 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
 function checkActivities(applicationJsonUrl, activitiesName, activitiesDescription, counter, activitiesIconUrl) {
     // $.getJSON(applicationJsonUrl)
     //     .done(function (data) {
-        newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, "");
+        newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
             
        
+}
+
+function checkTasks(applicationJsonUrl, encounter_name, encountersIconUrl, counter) {
+
+
+        newTasksCard(encounter_name, encountersIconUrl, counter, applicationJsonUrl);
+
 }
 
 function parser(applicationData) {
@@ -317,6 +363,35 @@ function getActivities(activitiesData) {
     }
 }
 
+function getTasks(encountersData) {
+
+    // alert("here");
+    var j = Object.keys(encountersData.encounters);
+    var i = 0;
+    j.forEach ( function(j) {
+        var values = encountersData.encounters[j]
+        var url = values.url;
+        checkTasks(values.url, j, values.encountersIcon, i);
+        console.log(values);
+        i++;
+    });
+    // for (var i = 0; i < j.length; i++) {
+        // alert("here");    
+        // var j = encountersData.encounters;
+        // console.log(j);
+        // // encounter_name = encountersData[i];
+        // var j = Object.keys(encountersData.encounters);
+        // for (var i = j.length - 1; i >= 0; i--) {
+        //     // console.log(j[i]);
+        // }
+
+        // encountersIcon[i] = encountersData[i].encountersIcon;
+        // applicationFolder = encountersData[i].applicationFolder;
+        // checkTasks(applicationJsonUrl[i], encounter_name[i], encountersIcon[i]);
+        
+    // }
+}
+
 function changeModule(url ) {
     var applicationImage = sessionStorage.getItem("applicationImage");
     var applicationName = sessionStorage.getItem("applicationName");
@@ -350,6 +425,22 @@ function changeActivities(url ) {
         $("#myModal").modal("hide");
         $("#activities-name").text(sessionStorage.getItem("activitiesName"));
     } else {}
+}
+ 
+function changeTasks(url ) {
+    var tasksImage = sessionStorage.getItem("tasksImage");
+    var encounter_name = sessionStorage.getItem("encounter_name");
+    if (encounter_name != null && tasksImage != null) {
+        $("tasks-icon").attr("src", sessionStorage.getItem("tasksImage"));
+        if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+            // showBarcodeDiv();
+
+        } else {
+
+        }
+        $("myModal").modal("hide");
+        $("#tasks-name").text(sessionStorage.getItem("encounter_name"));
+    } else{}
 }
 
 function showBarcodeDiv() {
@@ -447,6 +538,14 @@ function showActivities(a) {
     for (var x = 0; x < btn.length; x++) {
         btn[x].setAttribute('class', 'btn btn-info activities-btns');
     }
+}
+
+function showTasks(t) {
+    // var btn = document.getElementsByClassName("tasks-btns");
+
+    // for (var x = 0; x < btn.length; x++) {
+    //     btn[x].setAttribute('class', 'btn btn-info tasks-btns');
+    // }
 }
 
 function loadTabContent(id) {
