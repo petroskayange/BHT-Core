@@ -110,8 +110,8 @@
           window.location.href = "/views/patient/new.html" + parameters;
       }else if (search_redirect.length > 0){
         sessionStorage.setItem("patientID", people[pos]["Person ID"]);
-        //window.location.href = "/views/patient_dashboard.html?patient_id=" + people[pos]['Person ID'];
-        nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
+        window.location.href = "/views/confirm.html?patient_id=" + people[pos]['Person ID'];
+        // nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
       }else{
           showMessage("Select value to continue");
       }
@@ -170,7 +170,7 @@
   }
 
   function search_remote(){
-    return
+    // return
     var url = "/people/dde_search?given_name=John" +
       "&family_name=Does&gender=M";
 
@@ -185,8 +185,8 @@ function loadPatient(){
     remote_people = JSON.parse(ajaxGeneralRequestResult);
      */
     //people = [{}];
-
-    var targetElement = tstFormElements[__$("touchscreenInput"+tstCurrentPage).getAttribute("refersToTouchscreenInputID")];
+    if (__$("touchscreenInput"+tstCurrentPage)) {
+      var targetElement = tstFormElements[__$("touchscreenInput"+tstCurrentPage).getAttribute("refersToTouchscreenInputID")];
 
     var opts = __$("tt_currentUnorderedListOptions").getElementsByTagName("li");
 
@@ -284,12 +284,16 @@ function loadPatient(){
 
       pos++;
 
-		}
+    }
+    
+    }
+
+    
 
   }
 </script>
 
-<body onload = "setTimeout('setAttributes();findClients();', 300);">
+<body onload = "setTimeout('setAttributes();findClients();', 500);">
   <form action="" method="POST">
         <label for="person">No patients were found:</label>
     <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "setItems();">
@@ -403,6 +407,7 @@ function findClients() {
 
    document.getElementById('cover').style="display: inline;"; 
    showStatus();
+   document.getElementById("cover").style.display = "none";
    getParameters(url);
 }
 
@@ -414,21 +419,23 @@ function searchResults(results){
   
   for(var x in data){
     if(data.hasOwnProperty(x)){
+      null_or_empty = function(value) {
+        return value ? value : ""; 
+      }
+
 			found_clients[x] = {
-				given_name: 							data[x].names[0].given_name,
-				middle_name: 							data[x].names[0].middle_name,
-				family_name: 							data[x].names[0].family_name,
-				gender: 									data[x].gender,
-				birthdate: 								data[x].birthdate,
-				birthdate_estimated: 			data[x].birthdate_estimated,
-
-				home_district:						data[x].addresses[0].address2,
-				home_ta:									data[x].addresses[0].county_district,
-				home_village:							data[x].addresses[0].neighborhood_cell,
-
-				current_district:					data[x].addresses[0].state_province,
-				current_ta:								data[x].addresses[0].township_division,
-				current_village:					data[x].addresses[0].city_village,
+				given_name: 							null_or_empty(data[x].names[0].given_name),
+				middle_name: 							null_or_empty(data[x].names[0].middle_name),
+				family_name: 							null_or_empty(data[x].names[0].family_name),
+				gender: 									null_or_empty(data[x].gender),
+				birthdate: 								null_or_empty(data[x].birthdate),
+				birthdate_estimated: 			null_or_empty(data[x].birthdate_estimated),
+				home_district:						null_or_empty((data[x].addresses[0] || {}).address2),
+				home_ta:									null_or_empty((data[x].addresses[0] || {}).county_district),
+				home_village:							null_or_empty((data[x].addresses[0] || {}).neighborhood_cell),
+				current_district:					null_or_empty((data[x].addresses[0] || {}).state_province),
+				current_ta:								null_or_empty((data[x].addresses[0] || {}).township_division),
+				current_village:					null_or_empty((data[x].addresses[0] || {}).city_village),
 
 				person_id:								data[x].person_id
 			}
@@ -451,15 +458,24 @@ function searchResults(results){
 
     people[pos]["Ancestral Traditional Authority(T/A)"] = found_clients[i].home_ta;
     people[pos]["Current Residence"] = found_clients[i].current_village;
-    
     people[pos]["Person ID"]            = found_clients[i].person_id;
     pos++;
   }
 
-  
- loadPatient();
+  document.getElementById("innerPop").style.display = "none";  
+  // loadPatient();
 }
 
+var interval = setInterval(function(){ 
+  // console.log("interval set");
+  var lists = document.getElementsByTagName("li");
+
+  loadPatient(); 
+  if (lists.length > 1){
+    clearInterval(interval);
+
+  }
+}, 600);
 </script>
 
 

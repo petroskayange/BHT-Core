@@ -8,7 +8,7 @@ var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-var activities_tab_content = "";
+// var activities_tab_content = "";
 // })
 admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
 admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
@@ -20,10 +20,10 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 var addDiv = "<div class='col-sm-2 tasks'>";
 var endDiv = "</div>"
                           
-activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
-activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
-activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
-activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
+// activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
+// activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
+// activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
+// activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
 
 
 // URL formulation logic
@@ -59,12 +59,17 @@ var people = "people";
 var person_addresses = "person_addresses";
 
 var person_names = "person_names";
+var activitiesName = [];
+var activitiesDescription = [];
+var activitiesIcon = [];
 var applicationName = [];
 var applicationDescription = [];
 var applicationIcon = [];
 var applicationFolder = [];
 var applicationJsonUrl = [];
 var programID = [];
+var redirectUrl = [];
+var encounter_name = [];
 
 function _ajaxUrl(res) {
     var result = [];
@@ -136,6 +141,39 @@ function generateTemplate() {
         /*Alternative code for browsers that do not support the TEMPLATE element*/
     }
 }
+function generateActivities() {
+    if (document.createElement("template").content) {
+        /*Code for browsers that supports the TEMPLATE element*/
+        
+        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+            .done(function (data, status) {
+                getActivities(data);
+            })
+            .fail(function () {
+                console.log("application.json is missing from the /apps/ART folder");
+            });
+    } else {
+        /*Alternative code for browsers that do not support the TEMPLATE element*/
+    }
+}
+
+function generateTasks() {
+
+    if (document.createElement("template").content) {
+
+        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+            .done(function (data, status) {
+
+                getTasks(data);
+
+            })
+            .fail(function () {
+                console.log("application.json is missing from /apps/ART folder");
+            });
+    } else {
+
+    }
+}
 function _foo(data, resource) {
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
@@ -182,6 +220,45 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
 
 }
 
+function newActivitiesCard(activitiesName, activitiesDescription, activitiesImage, counter, url) {
+    $("#activities-modal-div").append($('#activities_template').html());
+    $("#activityDescription").text(activitiesDescription).attr('id', "activityDescription" + counter);
+    $("#activitytext").text(activitiesName).attr('id', "activitytext" + counter);
+    $("#activityName").text(activitiesName).attr('id', "activityName" + counter);
+    $("#moduleButton").attr('id', "moduleButton" + counter);
+    
+    $("#cardImage")
+        .on('error', function () {
+            $(this).attr('src', "/assets/images/no_image.png");
+        }).attr('src', activitiesImage).attr('id', "cardImage" + counter);
+    $("#moduleButton" + counter).click(function () {
+        sessionStorage.setItem("activitiesName", activitiesName);
+        sessionStorage.setItem("activitiesImage", activitiesImage);
+        changeActivities();
+    });
+
+}
+
+function newTasksCard(encounter_name, tasksImage, counter, url) {
+    $("#tasks-modal-div").append($('#tasks_template').html());
+    $("#taskstext").text(encounter_name).attr('id', "taskstext" + counter);
+    $("#encounter_name").text(encounter_name).attr('id', "encounterName" + counter);
+    $("#encounterButton").attr('id', "encounterButton" + counter);
+    $("#encounterButton"+counter).attr("href", url);
+
+    $("#cardImage")
+        .on('error', function () {
+            $(this).attr('src', "/assets/images/no_image.png");
+        }).attr('src', tasksImage).attr('id', "cardImage" + counter);
+    $("#encounterButton" + counter).click(function () {
+        sessionStorage.setItem("encounter_name", encounter_name);
+        sessionStorage.setItem("tasksImage", tasksImage);
+
+        changeTasks();
+    });
+
+}
+
 function getName(user_id, url, port, protocol) {
 
     jQuery.getJSON({
@@ -195,7 +272,7 @@ function getName(user_id, url, port, protocol) {
             var username = result.username;
             var allRoles = '';
             var roles_length = result.roles.length;
-            for (let index = 0; index < roles_length; index++) {
+            for (var index = 0; index < roles_length; index++) {
                 allRoles = result.roles[index].role + ", " + allRoles;
             }
             var role = result.roles.role;
@@ -226,16 +303,30 @@ function setUser() {
     sessionStorage.setItem("username", username);
 }
 
-function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID) {
+function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID, redirectUrl) {
     $.getJSON(applicationJsonUrl)
         .done(function (data) {
-        data.activities.url;
-        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, data.activities.url);
+        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, redirectUrl);
             
         })
         .fail(function () {
             console.log("The application " + applicationName + "'s application.json file is not available");
         });
+}
+
+function checkActivities(applicationJsonUrl, activitiesName, activitiesDescription, counter, activitiesIconUrl) {
+    // $.getJSON(applicationJsonUrl)
+    //     .done(function (data) {
+        newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
+            
+       
+}
+
+function checkTasks(applicationJsonUrl, encounter_name, encountersIconUrl, counter) {
+
+
+        newTasksCard(encounter_name, encountersIconUrl, counter, applicationJsonUrl);
+
 }
 
 function parser(applicationData) {
@@ -247,10 +338,11 @@ function parser(applicationData) {
         applicationIcon[i] = applicationData.apps[i].applicationIcon;
         applicationFolder[i] = applicationData.apps[i].applicationFolder;
         programID[i]  = applicationData.apps[i].programID;
+        redirectUrl[i]  = applicationData.apps[i].url;
 
         if (applicationData.apps[i].applicationFolder) {
             applicationJsonUrl[i] = "/apps/" + applicationFolder[i] + "application.json";
-            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i]);
+            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i], redirectUrl[i]);
         } else {
             console.log("no Application folder specified for " + applicationName[i]);
         }
@@ -258,9 +350,51 @@ function parser(applicationData) {
     }
 }
 
+function getActivities(activitiesData) {
+
+    for (var i = 0; i < activitiesData.others.length; i++) {
+
+        activitiesName[i] = activitiesData.others[i].activitiesName || "Activities Name Not Defined!!";
+        activitiesDescription[i] = activitiesData.others[i].activitiesDescription || "No Description Available";
+        activitiesIcon[i] = activitiesData.others[i].activitiesIcon;
+        applicationFolder[i] = activitiesData.others[i].applicationFolder;
+        checkActivities(applicationJsonUrl[i], activitiesName[i], activitiesDescription[i], i, activitiesIcon[i]);
+
+    }
+}
+
+function getTasks(encountersData) {
+
+    // alert("here");
+    var j = Object.keys(encountersData.encounters);
+    var i = 0;
+    j.forEach ( function(j) {
+        var values = encountersData.encounters[j]
+        var url = values.url;
+        checkTasks(values.url, j, values.encountersIcon, i);
+        console.log(values);
+        i++;
+    });
+    // for (var i = 0; i < j.length; i++) {
+        // alert("here");    
+        // var j = encountersData.encounters;
+        // console.log(j);
+        // // encounter_name = encountersData[i];
+        // var j = Object.keys(encountersData.encounters);
+        // for (var i = j.length - 1; i >= 0; i--) {
+        //     // console.log(j[i]);
+        // }
+
+        // encountersIcon[i] = encountersData[i].encountersIcon;
+        // applicationFolder = encountersData[i].applicationFolder;
+        // checkTasks(applicationJsonUrl[i], encounter_name[i], encountersIcon[i]);
+        
+    // }
+}
+
 function changeModule(url ) {
-    let applicationImage = sessionStorage.getItem("applicationImage");
-    let applicationName = sessionStorage.getItem("applicationName");
+    var applicationImage = sessionStorage.getItem("applicationImage");
+    var applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
         $("#application-icon").attr("src", sessionStorage.getItem("applicationImage"));
         $("#registerButton").css("visibility", "visible");
@@ -274,6 +408,39 @@ function changeModule(url ) {
         $("#myModal").modal("hide");
         $("#application-name").text(sessionStorage.getItem("applicationName"));
     } else {}
+}
+
+function changeActivities(url ) {
+    var activitiesImage = sessionStorage.getItem("activitiesImage");
+    var activitiesName = sessionStorage.getItem("activitiesName");
+    if (activitiesName != null && activitiesImage != null) {
+        $("#activities-icon").attr("src", sessionStorage.getItem("activitiesImage"));
+        if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+            // showBarcodeDiv();
+
+        } else {
+
+        }
+
+        $("#myModal").modal("hide");
+        $("#activities-name").text(sessionStorage.getItem("activitiesName"));
+    } else {}
+}
+ 
+function changeTasks(url ) {
+    var tasksImage = sessionStorage.getItem("tasksImage");
+    var encounter_name = sessionStorage.getItem("encounter_name");
+    if (encounter_name != null && tasksImage != null) {
+        $("tasks-icon").attr("src", sessionStorage.getItem("tasksImage"));
+        if (sessionStorage.getItem("displayBarcode") == false || sessionStorage.getItem("displayBarcode") == null) {
+            // showBarcodeDiv();
+
+        } else {
+
+        }
+        $("myModal").modal("hide");
+        $("#tasks-name").text(sessionStorage.getItem("encounter_name"));
+    } else{}
 }
 
 function showBarcodeDiv() {
@@ -345,9 +512,9 @@ function GenerateTable() {
   var obj = document.createElement("object");
   obj.setAttribute("data", "/apps/ART/views/overview.html");
   obj.setAttribute("type","text/html");
-  obj.setAttribute("style","width: 99%; height: 500px; text-align: left;");
+  obj.setAttribute("style","width: 99%; height: 430px; text-align: left;");
 
-  dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
+  dvTable.style = "height: 430px; width: 97% !important; margin: 15px;";
   dvTable.appendChild(obj);
 }
 // overview tab work in progress
@@ -373,21 +540,29 @@ function showActivities(a) {
     }
 }
 
+function showTasks(t) {
+    // var btn = document.getElementsByClassName("tasks-btns");
+
+    // for (var x = 0; x < btn.length; x++) {
+    //     btn[x].setAttribute('class', 'btn btn-info tasks-btns');
+    // }
+}
+
 function loadTabContent(id) {
     if (id === "admin") {
         document.getElementById("generic_tabs").innerHTML = admin_tab_content;
     } else if (id === "report") {
-        document.getElementById("generic_tabs").innerHTML = report_tab_content;
+        GetApplicationReports();
     } else {
         GenerateTable();
     }
 }
 
-function loadActivitiesContent(id) {
-    if (id === "activities") {
-        document.getElementById("generic_tabs").innerHTML = activities_tab_content;
-    }
-}
+// function loadActivitiesContent(id) {
+//     if (id === "activities") {
+//         document.getElementById("generic_tabs").innerHTML = activities_tab_content;
+//     }
+// }
 
 function signIn() {
     checkCredentials(sessionStorage.getItem("username"), sessionStorage.getItem("userPassword"));
@@ -421,7 +596,7 @@ function checkCredentials(username, password) {
             } else if (http.status == 0){
                 // await sleep(2000);
                 showMessage('No connection to EMR API',null,10000000000);
-                window.location = "/views/login.html";
+                window.location = "/views/config.html";
             }else {
                 showMessage('error' + http.status);
             }
@@ -439,35 +614,61 @@ function sleep(ms) {
 
     var url = '/config/config.json';
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
+    if (localStorage.useLocalStorage) {
+        sessionStorage.setItem("apiURL", localStorage.getItem("ip-address"));
+        apiURL = localStorage.getItem("ip-address");
+        sessionStorage.setItem("apiPort", localStorage.port);
+        apiPort = localStorage.getItem("port");
+        sessionStorage.setItem("apiProtocol", "http");
+        apiProtocol = "http";
+    }else {
+        req.onreadystatechange = function () {
 
-        if (this.readyState == 4) {
-            
-            if (this.status == 200) {
-                try {
-                    var data = JSON.parse(this.responseText);
-                    sessionStorage.setItem("apiURL", data.apiURL);
-                    apiURL = data.apiURL;
-                    sessionStorage.setItem("apiPort", data.apiPort);
-                    apiPort = data.apiPort;
-                    sessionStorage.setItem("apiProtocol", data.apiProtocol);
-                    apiProtocol = data.apiProtocol;
-                } catch(e) {
-                    console.log("invalid json formatting");
-                }
+            if (this.readyState == 4) {
                 
-            }else if(this.status == 404) {
-                console.log("config.json is missing from the /config folder");
-            }else {
-                console.log("error " + this.status);
+                if (this.status == 200) {
+                    try {
+                        var data = JSON.parse(this.responseText);
+                        sessionStorage.setItem("apiURL", data.apiURL);
+                        apiURL = data.apiURL;
+                        sessionStorage.setItem("apiPort", data.apiPort);
+                        apiPort = data.apiPort;
+                        sessionStorage.setItem("apiProtocol", data.apiProtocol);
+                        apiProtocol = data.apiProtocol;
+                    } catch(e) {
+                        console.log("invalid json formatting");
+                    }
+                    
+                }else if(this.status == 404) {
+                    console.log("config.json is missing from the /config folder");
+                }else {
+                    console.log("error " + this.status);
+                }
             }
+        };
+        try {
+            req.open('GET', url, true);
+            req.send(null);
+        } catch (e) {
+            console.log(e);
         }
-    };
-    try {
-        req.open('GET', url, true);
-        req.send(null);
-    } catch (e) {
-        console.log(e);
     }
 
+
+}
+
+function GetApplicationReports() {
+  var dvTable = document.getElementById("generic_tabs");
+  dvTable.innerHTML = null;
+  dvTable.style = "width: 97% !important;";
+
+  var obj = document.createElement("object");
+  obj.setAttribute("data", "/apps/ART/views/reports.html");
+  obj.setAttribute("type","text/html");
+  obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+
+  //dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
+  dvTable.appendChild(obj);
+
+  
 }

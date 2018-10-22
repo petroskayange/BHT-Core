@@ -1,357 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <title>Baobab Health Trust</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-      <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
-      <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
-      <link rel="stylesheet" href="/assets/css/custom.css">
-      <script src="/assets/js/jquery.min.js"></script>
-      <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-      <script type="text/javascript">
-         $(document).ready(function(){
-              console.log('call the getFunction to retrieve the saved client data');
-         });
-      </script>
-   </head>
-   <body>
-<script type="text/javascript">
-  var patientID = "";
-  var selectedEncounterID = "";
+<head>
+  <title>Baobab Health Trust</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+  <link rel="stylesheet" href="/assets/css/demographics-header.css">
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/assets/js/moment.js"></script>
+</head>
+<body>
+  <script src="/assets/js/generic_ajaxrequest.js">
+      // checkIfEnconterCaptured("vitals");   
+  </script>    
 
-  function finish(){
-    window.location = "/";
+  <style>
+  .modal-body {
+   
+    overflow-y: auto;
+}
+
+
+  .list-group-links {
+    width: 94%;
+    margin-left: 10px;
+    /*background-color: transparent !important;
+    color: white !important; */
   }
 
-  function changeIcon(gender) {
-      var img = document.getElementById('icon_id');
-      if (gender === "Male") {
-          img.setAttribute("src", "/assets/images/male24x32.png");
-      } else {
-          img.setAttribute("src", "/assets/images/female32x32.png");
-      }
+  .badge {
+    background-color: #007bff;
   }
+
+  </style>
   
-</script>
+  <!-- container -->
+  <div class="container" style="width: 100%; margin-bottom: 1%;">
 
-<script src="/assets/js/generic_ajaxrequest.js">
-  checkIfEnconterCaptured("vitals");
- 
-</script>
+   <!-- .............................................................................................................. -->
+   <div class="demo-header">
+      <div class="demo-header-row">
 
-<style type="text/css">
-  .headTab {
-    border: 1px solid #004586;
-  }
-  .headTab {
-    height: 120px;
-  }
-  .headTab {
-    overflow: hidden;
-  }
-  .headTab {
-    box-shadow: 5px 2px 5px 0 rgba(0, 0, 0, 0.75);
-  }
-  .headTab {
-    width: 100%;
-  }
-
-  .active-link{
-    background-color: #345db5;
-    border-bottom: 1px solid #ccc;
-    color: #fff;
-    cursor: pointer;
-    margin-bottom: 5px;
-    padding: 15px 10px;
-    text-align: center;
-  }
-
-  #session-date{
-    padding-right: 20px;
-  }
-
-  .taskBtns {
-    background-color: #538fbe; 
-    border-radius: 7px; 
-    border-bottom: 1px outset black;
-    border-style: outset; 
-    border-top: 1px outset black; 
-    color: white; 
-    display: block; 
-    padding: 10px 16px 10px 10px; 
-    text-align: center; 
-    text-decoration: none; 
-    width: 100%;
-    height: 60px;;
-  }
-
-  .tasks {
-    padding: 0.5%;
-  }
-</style>
-<div id="content">
-  <table style="font: 14px;-moz-user-select: none; border-collapse: collapse;" width="100%" border="0">
-    <tr>
-      <td style="width: 43%; padding: 5px 5px 5px 15px;">
-        <div class="headTab" id="tableDiv1">
-          <table width="100%" cellpadding="1">
-            <tr>
-              <td style="width: 5%; vertical-align: middle; text-align: left;">
-                <img src= "/assets/images/male24x32.png" id="icon_id" alt="person_icon">
-                <!-- <img id="icon_id" alt="icon"> -->
-              </td>
-              <th style="font-size: 24px; text-align: left; width: 100%; overflow: hidden; font-weight: normal; padding: 5px;" id="patient_name" class="blueText">John Doe</th>
-            </tr>
-            <tr style="border-top: 1px solid rgb(0, 69, 134);"></tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;Birthdate</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left;" id="dob"></td>
-            </tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;Age</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left; width: 3px;" id="age"></td>
-            </tr>
-            <tr>
-              <th style="width:100px;">&nbsp;&nbsp;National&nbsp;ID</th>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td style="text-align: left; width: 3px;" id="npid"></td>
-            </tr>
-        <!--<tr>
-              <td style="text-align: right; padding: 5px; font-weight: bold; width: 12%;" class="blueText" id="primary_id_label">National id</td>
-              <td style="text-align: left; font-weight: bold; width: 3px;">:</td>
-              <td id="primary_id"></td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 5px; font-weight: bold; width: 100px;" class="blueText">Age</td>
-              <td style="text-align: left; width: 3px;">:</td>
-              <td id="age"></td>
-            </tr> -->
-          </table>
-        </div></td>
-      <td style="width: 48%; padding: 5px;">
-        <div class="headTab">
-          <table style="font-size: 14px;" width="100%">
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold; width: 100px;" class="blueText">&nbsp;Home&nbsp;Address</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="addressl3">,</td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
-              <td style="text-align: center; width: 3px;">&nbsp;</td>
-              <td id="addressl4"></td>
-            </tr>
-            <!-- <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">Title2</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="age"></td>
-            </tr> -->
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold; vertical-align: top;" class="blueText">&nbsp;Current&nbsp;Address</td>
-              <td style="text-align: center; width: 3px; vertical-align: top;">:</td>
-              <td id="addressl1">,</td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;</td>
-              <td style="text-align: center; width: 3px;">&nbsp;</td>
-              <td id="addressl2"></td>
-            </tr>
-            <tr>
-              <td style="text-align: left; padding: 1px; font-weight: bold;" class="blueText">&nbsp;Phone</td>
-              <td style="text-align: center; width: 3px;">:</td>
-              <td id="phone_number"></td>
-            </tr>
-          </table>
-        </div></td>
-        <td style="width: 20%; padding: 5px 15px 5px 5px;">
-        <div class="headTab" id="modApp" style="text-align: center; cursor: pointer;">
-          <table style="margin: auto; border-collapse: collapse;" cellpadding="5" border="0">
-            <tr>
-              <td style="width: 150px; text-align: right;">
-                <img id="appIcon" />
-              </td>
-            </tr>
-          </table>
-        </div></td>
-    </tr>
-    <tr>
-      <td style="width: 100%; padding: 5px 15px;" colspan="3">
-        <div id="main" style="width: 100%; box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75); overflow: hidden; height: 534px; border: 1px solid rgb(52, 93, 181);">
-          <table style="border-collapse: collapse; border: 1px solid rgb(52, 93, 181);" width="100%" cellspacing="0" cellpadding="5" border="1">
-            <tr style="background-color: rgb(52, 93, 181);">
-              <td style="width: 200px; border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;">Visit History
-              </td>
-              <td style="border-right: 1px solid rgb(255, 255, 255); color: rgb(255, 255, 255); text-align: center; font-weight: bold;" id="header">Date:
-                <!-- if session_date is blank  -->
-                  <span id="session-date"></span>
-                <!-- else -->
-                  <span id="session-date" style="color: red; "></span>
-                <!-- end  -->
-                Next Task: <span id="next-task">&nbsp;</span></td>
-            </tr>
-            <tr>
-              <td rowspan="3">
-                <div id="visits" style="width: 100%; overflow: auto; height: 505px; border: 1px solid rgb(255, 255, 255);">
-                  <ul id="ulVisits" style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
-                  </ul>
-                </div>
-              </td> 
-
-              <td style=" ">
-                     <div class="container" style=" margin-left: 10%;">
-                        
-                        <div class="row" id="generic_tabs" style="padding:0;">
-                          
-                        </div>
-                      </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="background-color: white; color: rgb(255, 255, 255); font-weight: bold; border-right: 1px solid rgb(52, 93, 181); ">
-                
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div style="width: 100%; overflow: auto; height: 100.5px;">
-                  <ul style="list-style: outside none none; width: 100%; padding: 0px; margin: 0px;">
-
-                  </ul>
-                
-              </td>
-            </tr>
-          </table>
+      <div class="demo-header-cell demo-left">
+        <div id="name-title"><img src="" class="gender-icon" id="gender" /><span id="patient_name"></span></div>
+        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
+        <span id="DOB"></span>&nbsp;<span id="age"></span>
+        &nbsp;(<span id="npid"></span>)
         </div>
-      </td>
-    </tr>
+        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="addressl1"></span></div>
+        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="phone_number"></span></div>
+        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="addressl3"></span></div>
+      </div>
 
-  </table>
+      <div class="demo-header-cell demo-middle" id="appInfo">
+      </div>
 
-    <!-- Modal -->
-  <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" role="dialog">
-    <div class="modal-dialog" name="div2">
-      <div class="modal-content" style="margin-left:0px;">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Select module</h4>
+      <div class="demo-header-cell demo-right">
+          <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 10%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+          <h3 style="text-align: center" id="application-name"></h3>
+          <h5 style="text-align: center"> </h5>
+      </div>
+      <!-- <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
+       
+    </div> -->
+  
+    </div>
+    <!-- /left card -->
+  
+    <!-- right card-->
+    
+   </div>
+   <!-- .............................................................................................................. -->
+
+
+
+    <!-- /right card-->
+
+
+    <!-- visits div -->
+    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
+        <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
+        <div id="dates" style="height: 65%; margin-top: 20%;"> </div>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
+     </div>
+    <!-- /visits div-->
+
+    <!-- visit details div-->
+    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 78%;" id="generic_tabs">
+        <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
+        <div class="row">
+           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
+              <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
+                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
+                 
+                 <div class="list-group" id="encounters">
+                 </div> 
+
+                 <!--table class="table" style="border: 0;">
+                    <tbody id="encounters">
+                    </tbody>
+                 </table-->
+
+
+                 <div class="card-footer" style="margin: 1%;">
+                 </div>
+              </div>
+           </div>
+           
+           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
+              <div class="card text-white bg-primary mb-3 btn-success cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Programs</div>
+
+                 <table class="table ">
+                    <tbody id="programs">
+                    </tbody>
+                 </table>
+                 <div class="card-footer" style="margin: 1%;">
+                 </div>
+              </div>
+           </div>  
         </div>
-        <!-- <button class="previous round">
-                  <</button>
-                  <button class="next round">></button> -->
-        <div class="modal-body">
-          <div class="container">
-            <div class="row" id="modal-div">
-              <template id="card_template">
-                <!-- <div class="" > -->
-                <div class="app-btn" id="cardDiv" style="margin: 10px;">
-                  <a href="#" class="card-block clearfix" id="moduleButton">
-                    <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
-                    <div class="middle">
-                      <div class="text">
-                        <p id="apptext"></p>
-                      </div>
-                    </div>
-                    <div class="card-container">
-                      <h4>
-                        <b id="appName"></b>
-                      </h4>
-                      <p id="appDescription"></p>
-                    </div>
-                  </a>
-                </div>
-                <!-- </div> -->
-              </template>
+        <div class="row" style="margin-top:10px;">
+           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
+              <div class="card text-white bg-primary mb-3 btn-danger cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Alerts</div>
+                 <table class="table ">
+                    <tbody id="alerts">
+                    </tbody>
+                 </table>
+                 <div class="card-footer" style="margin: 1%;">
+                 </div>
+              </div>
+           </div>
+           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
+              <div class="card text-white bg-primary mb-3 btn-warning cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Latest Medication</div>
+                 <table class="table ">
+                    <tbody id="medication">
+                    </tbody>
+                 </table>
+                 <div class="card-footer" style="margin: 1%;">
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+    <!-- /visit details div-->
+    
+    <!-- footer -->
+    <footer class="footer">
+      <div class="container-footer">
+        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+        </button>
+        <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#appModal">
+        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
+        </button>
+        <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#activitiesModal" onmousedown="showActivities(this);" >
+        <span>&nbsp; &nbsp; &nbsp; Printouts/Other &nbsp; &nbsp; &nbsp;</span>
+        </button>
+        <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#tasksModal" onmousedown="showTasks(this);">
+        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+        </button>
+      </div>
+    </footer>   
+    <!-- /footer -->
+  
+    <!-- encounters details modal -->
+    <div id="myModal" class="modal fade" role="dialog" style="height: 100%;">
+        <div class="modal-dialog" >     
+          <div class="modal-content" style="margin: 0; max-height: 100%;">
+              
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
+            </div>  
+  
+            <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: auto;">
+              <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2" style="border-right: solid 1px;"></div>
+              
+              <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Observation</th>
+                      <th>Value</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody id="observationsTable">
+                  </tbody>
+                </table>
+              </div>
+              
             </div>
+                
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            
           </div>
         </div>
       </div>
+    <!-- /encounters details modal -->
+
+    <!-- applications modal-->
+    <div class="modal fade" id="appModal" data-backdrop="static" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" name="div2">
+            <div class="modal-content" style="margin-left:0px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select module</h4>
+                 </div>
+                 <div class="modal-body">
+                    <div class="container">
+                       <div class="row" id="modal-div">
+                          <template id="card_template">
+                             <!-- <div class="" > -->
+                             <a href="#" class="card-block clearfix" id="moduleButton" onclick="$('#appModal').modal('hide');">
+                                <div class="app-btn" id="cardDiv" style="margin: 10px;" >
+                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                   <div class="middle">
+                                      <div class="text">
+                                         <p id="apptext"></p>
+                                      </div>
+                                   </div>
+                                   <div class="card-container">
+                                      <h4>
+                                         <b id="appName"></b>
+                                      </h4>
+                                      <p id="appDescription"></p>
+                                   </div>
+                                </div>
+                             </a>
+                          </template>
+                       </div>
+                    </div>
+                 </div>
+                 <!-- <div id="cover">
+                  </div>
+                  <div class="confirm">
+                     <h1>Confirm your action</h1>
+                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                     <button onclick="hidePopup();">Cancel</button>
+                     <button autofocus onclick="confirmAction();">Confirm</button>
+                  </div> -->
+            </div>
+        </div>
     </div>
+    <!-- /applications modal-->
+
+        <!-- activities modal-->
+    <div class="modal fade" id="activitiesModal" data-backdrop="static" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" name="div2">
+            <div class="modal-content" style="margin-left:0px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select activity</h4>
+                 </div>
+                 <div class="modal-body" id="activities-body">
+                    <div class="container">
+                       <div class="row" id="activities-modal-div">
+                          <template id="activities_template">
+                             <!-- <div class="" > -->
+                             <div class="app-btn" id="cardDiv" style="margin: 10px;" >
+                             <a href="#" class="card-block clearfix" id="moduleButton" onclick="$('#activitiesModal').modal('hide');">
+                                <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
+                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                   <div class="middle">
+                                      <div class="text">
+                                         <p id="activitytext"></p>
+                                      </div>
+                                   </div>
+                                   <div class="card-container">
+                                      <h4>
+                                         <b id="activityName"></b>
+                                      </h4>
+                                      <p id="activityDescription"></p>
+                                   </div>
+                             </a>
+                             </div>
+                          </template>
+                       </div>
+                    </div>
+                 </div>
+                 <!-- <div id="cover">
+                  </div>
+                  <div class="confirm">
+                     <h1>Confirm your action</h1>
+                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                     <button onclick="hidePopup();">Cancel</button>
+                     <button autofocus onclick="confirmAction();">Confirm</button>
+                  </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- /activities modal-->
+
+<!-- tasks modal-->
+    <div class="modal fade" id="tasksModal" data-backdrop="static" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" name="div2">
+            <div class="modal-content" style="margin-left:0px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select Task</h4>
+                 </div>
+                 <div class="modal-body" id="tasks-body">
+                    <div class="container">
+                       <div class="row" id="tasks-modal-div">
+                          <template id="tasks_template">
+                             <!-- <div class="" > -->
+                             <div class="app-btn" id="cardDiv" style="margin: 10px;" >
+                             <a href="#" class="card-block clearfix" id="encounterButton" onclick="$('#tasksModal').modal('hide');">
+                                <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
+                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                   <div class="middle">
+                                      <div class="text">
+                                         <p id="taskstext"></p>
+                                      </div>
+                                   </div>
+                                   <div class="card-container">
+                                      <h4>
+                                         <b id="encounter_name"></b>
+                                      </h4>
+                                   </div>
+                             </a>
+                             </div>
+                          </template>
+                       </div>
+                    </div>
+                 </div>
+                 <!-- <div id="cover">
+                  </div>
+                  <div class="confirm">
+                     <h1>Confirm your action</h1>
+                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                     <button onclick="hidePopup();">Cancel</button>
+                     <button autofocus onclick="confirmAction();">Confirm</button>
+                  </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- /tasks modal-->
+
+  <!-- /container -->
   </div>
-  <!-- Modal -->
-  <footer class="footer">
-    <div class="container-footer">
-      <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-      </button>
-      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
-      </button>
-      <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"  onmousedown="showActivities(this); loadActivitiesContent(this.id);">
-        <span>&nbsp; &nbsp; &nbsp; Activities &nbsp; &nbsp; &nbsp;</span>
-      </button>
-      <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
-        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
-      </button>
-    </div>
-    </div>
-  </footer>
-
-<!--   <div id="footer" style="background-color: rgb(51, 51, 51); bottom: -13px; position: relative;">
-    <div class="buttons" style="margin-bottom: -200px; padding-bottom: 10px; padding-top: 10px;">
-      <button onclick="cancel();" style="margin: 5px 0px 0px;" class="red left">
-        <span>Cancel</span>
-      </button>
-      <button onclick="finish();" style="margin: 5px 0px 0px; float: right;" onclick="finish();" class="green right" id="btnNext">
-        <span>Finish</span>
-      </button>
-        <button style="margin: 5px 0px 0px; float: right;" onclick="setDate();" class="blue right" id="btnCancel">
-          <span>Set Date</span>
-        </button>
-        <button style="margin: 5px 0px 0px; float: right;" onclick="resetDate();" class="blue right" id="btnCancel">
-          <span>Reset Date</span>
-        </button>
-      <button  onclick="loadActivities();" style="margin: 5px 0px 0px; float: right;" class="blue right">
-        <span>Activities</span>
-      </button>
-    </div>
-  </div> -->
-</div>
-
-<div id="cover">
-
-</div>
-
-<div class="confirm">
-  <h1>Confirm your action</h1>
-  <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
-  <button onclick="hidePopup();">Cancel</button>
-  <button autofocus onclick="confirmAction();">Confirm</button>
-</div>
+<!-- /body -->
 </body>
+
 <script src="/assets/js/core.js "></script>
+
 <script>
+  var patientID = "";
+  var selectedEncounterID = "";  
+  function finish() {
+    window.location = "/";
+  }
+  var nextEnc = "";
+  if (sessionStorage.nextEncounter != null) {
+    nextEnc = sessionStorage.nextEncounter;
+  }else {
+    nextEnc = "None"
+  }
+  document.getElementById("nextEncounter").innerHTML = nextEnc;
+    
+  function changeIcon(gender) {
+    var img = document.getElementById('gender');
+    if (gender === "M") {
+      img.setAttribute("src", "/assets/images/male.gif");
+    } else {
+      img.setAttribute("src", "/assets/images/female.gif");
+    }
+  }
+  
+  generateTemplate();
+
   var url = new URL(url);
   var apiURL = sessionStorage.getItem("apiURL");
   var apiPort = sessionStorage.getItem("apiPort");
   var apiProtocol = sessionStorage.getItem("apiProtocol");
   var id = url.searchParams.get("patient_id");
+  sessionStorage.setItem("patientID", id);
   (document.getElementsByClassName("overview-btns ")[0]);
   (document.getElementsByClassName("activities-btns ")[0]);
+  (document.getElementsByClassName("tasks-btns ")[0]);
   changeModule();
   url = new URL(url);
   var d = new Date();
 
   function ajaxRequest() {
-    console.log("here");
     var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
 
       if (this.readyState == 4 && this.status == 200) {
         var results = JSON.parse(this.responseText);
-        console.log(results.person.names[0].given_name);
         var age = results.person.birthdate;
         var gender = results.person.gender;
-
+        var identifier = "";
         var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
-        var addressl1 = results.person.addresses[0].address1;
+        
+        try {
+          var addressl1 = results.person.addresses[0].address1 ;
         var addressl2 = results.person.addresses[0].address2;
-        setValues(patient_name, gender, age, addressl1, addressl2, null);
+        var phone_number = results.person.person_attributes[1].value;
+        }
+        catch (e){
+          var addressl1 = "";
+        var addressl2 = "";
+        var phone_number = "";
+        }
+        try {
+          identifier = results.patient_identifiers[0].identifier || "no value available";
+        } catch (e) {
+
+        }
+
+        setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
       }
     };
     try {
@@ -361,105 +432,305 @@
     } catch (e) {}
   }
 
-  function finish() {
-    window.location = "/";
-  }
+    function finish() {
+      window.location = "/";
+    }
 
-  function setValues(patient_name, gender, age, addressl1, addressl2, phone_number) {
-    document.getElementById("patient_name").innerHTML = patient_name;
-    document.getElementById("gender").innerHTML = gender;
-    document.getElementById("age").innerHTML = age;
-    document.getElementById("addressl1").innerHTML = "lilongwe";
-    document.getElementById("addressl2").innerHTML = "blantyre";
-    document.getElementById("phone_number").innerHTML = "0884698204";
-    changeIcon("Male");
-  }
+    function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
+      document.getElementById("patient_name").innerHTML = patient_name;
+      var roundedAge = Math.floor(moment().diff(age, 'years', true));
+      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
+      document.getElementById("npid").innerHTML = formatNIPD(identifier);
+      document.getElementById("age").innerHTML = "(" + roundedAge + ")";
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = gender;
+      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+      document.getElementById("addressl1").innerHTML = addressl1;
+      document.getElementById("addressl3").innerHTML = addressl2;
+      document.getElementById("phone_number").innerHTML = phone_number;
+      changeIcon(gender);
+    }
 
-  document.getElementById('appIcon').setAttribute("src", sessionStorage.getItem('applicationImage'));
-  ajaxRequest();
-</script>
+    function formatNIPD(identifier) {
+      if(identifier.length < 1)
+        return identifier;
+
+      if(identifier.length == 6){
+        return (identifier.substring(0,3) + "-" + identifier.substring(3,6));
+      }else if(identifier.length == 13){
+        return (identifier.substring(0,5) + "-" + identifier.substring(5,9) + "-" + identifier.substring(9, 13));
+      }else{
+        return identifier;
+      }
+    }
+    function getDates(patient_id, index, pageNumber) {
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits';
+      var div = document.getElementById("dates");
+      div.innerHTML = "";
+      var req = new XMLHttpRequest();
+      var counter = 0;
+      id = patient_id;
+      if (index < 0) {
+        index = 0;
+      }
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+          var results = JSON.parse(this.responseText);
+          document.getElementById("numberOfVisits").innerHTML = results.length;
+          var lastPage = (results.length % 5);
+          for (var x = index; x < results.length; x++) {
+            if (counter == 0) {
+              var prev = index - 5;
+              document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
+              getValue(results[0], patient_id, "encounters", "h4", "table");
+              getPrograms(patient_id);
+              if (index == 0 || index % 5 == 0) {
+                document.getElementById("up").setAttribute("disabled", "");
+                document.getElementById("down").removeAttribute("disabled", "");
+              }
+              if (counter == results.length) {
+                document.getElementById("down").setAttribute("disabled", "");
+              } 
+
+            }
+            div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ');">' +
+              moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
+
+            if (counter == 4 || (results.length - (index + counter) == 1)) {
+
+              var next = index + counter + 1;
+              var nextPage = pageNumber + 1;
+
+              document.getElementById("down").setAttribute('onClick', 'getDates('+patient_id +',' + next +');');
+              if ((results.length - (index + counter) == 1)) {
+                document.getElementById("down").setAttribute("disabled", "");
+              }if (index != 0)  {
+                document.getElementById("up").removeAttribute("disabled", "");
+                
+              }
+
+              break;
+
+            }
+
+            counter = ++counter;
+          }
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+    }
+
+    getDates(id, 0);
+
+    function getValue(value, id, div, className, itemType) {
+      var encounters = document.getElementById(div);
+      var selectedDate = document.getElementById("selectedDate");
+      selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
+      document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
+      sessionStorage.setItem("value", value);
+      if (encounters.innerHTML != null) {
+        encounters.innerHTML = "";
+      } else {}
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?patient_id=' + id + '&date=' + value;
+      var req = new XMLHttpRequest();
+      var counter = 0;
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+          var results = JSON.parse(this.responseText);
+          document.getElementById("encounterHeader").innerHTML = results.length + " Encounters";
+
+          var listGroup = document.createElement("div");
+          listGroup.setAttribute("class","list-group");
+          encounters.appendChild(listGroup);
+
+          for (var x = 0; x < results.length; x++) {
+            var d = new Date(results[x].encounter_datetime);
+            var f = moment(d).format("hh:mm:ss");
+
+            if (itemType == "table") {
+              var a = document.createElement("a");
+              var aclass = "list-group-item d-flex justify-content-between";
+              aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+              a.setAttribute("class", aclass);
+              a.setAttribute("href","#");
+              //a.setAttribute("onmousedown","getEncounter('" + results[x].encounter_id + "')");
+              a.innerHTML = results[x].type.name;
+
+              var s = document.createElement("span");
+              s.setAttribute("class","badge badge-primary badge-pill");
+              s.innerHTML = f;
+              a.appendChild(s);
+              listGroup.appendChild(a);
+              if (x == 2 || (results.length == 2 && x == 1)) {
+                var a = document.createElement("a");
+                var aclass = "list-group-item d-flex justify-content-between";
+                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                a.setAttribute("class", aclass);
+                a.setAttribute("href","#");
+                a.innerHTML = "Click to show more ..."
+                listGroup.appendChild(a);
+                break;
+              }
+
+              /*
+              encounters.innerHTML += '<tr><td id="' + x +
+                '" class="h4" name="" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;"><li>' +
+                results[x].type.name + '</li></td> <td class="h4" style="border-top-width: 0px;">' + f + '</td> </tr>';
+              if (x == 1) {
+                encounters.innerHTML += '<li class ="h4" style="list-style: none;">...... click to view more </li>';
+                break;
+
+              }
+
+              */
+
+            } else if (itemType == "button") {
+              encounters.innerHTML +=
+                '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
+                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
+                '<span class="h5">' + results[x].type.name + '</span></button>';
+            }
+
+          }
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+
+    }
+
+    function populateModal() {
+      getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
+    }
+
+    function getPrograms(id) {
+
+      var programs = document.getElementById("programs");
+      if (programs.innerHTML != null) {
+        programs.innerHTML = "";
+      } else {}
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id + '/programs/';
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+          var results = JSON.parse(this.responseText);
+          for (var x = 0; x < results.length; x++) {
+            var d = new Date(results[x].date_enrolled);
+            var f = moment(d).format("hh:mm:ss");
+            var name = results[x].program.concept.concept_names[0].name;
+            programs.innerHTML += '<tr><td  id="' + x +
+              '" class="h4" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;" onclick="">' +
+              name.toUpperCase() + '</td> <td style="border-top-width: 0px;" class="h4">' + f + '</td></tr>';
+          }
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+
+    }
+
+    function getEncounter(id) {
+
+      var obsDiv = document.getElementById("observationsTable");
+      if (obsDiv.innerHTML != null) {
+        obsDiv.innerHTML = "";
+      } else {}
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+          var results = JSON.parse(this.responseText);
+
+          for (var x = 0; x < results.observations.length; x++) {
+            var d = new Date(results.observations[x].obs_datetime);
+            var f = moment(d).format("hh:mm:ss");
+            var value = "";
+            var modifier = results.observations[x].value_modifier;
+            if (modifier !== "%") {
+              modifier = "";
+            }
+            if (results.observations[x].value_text != null) {
+              value = results.observations[x].value_text;
+            }else if (results.observations[x].value_numeric != null) {
+              value = results.observations[x].value_numeric;
+            }else if (results.observations[x].value_coded != null) {
+               value = results.observations[x].value_coded;
+              sessionStorage.removeItem("value_coded");
+                var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/concepts/' + results.observations[x].value_coded;
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function () {
+
+                  if (this.readyState == 4) {
+                    if (this.status == 200) {
+                      var results = JSON.parse(this.responseText);  
+                      value  = results.concept_names[0].name;
+                      sessionStorage.setItem("value_coded", value);
+                    }
+                  }
+                };
+                try {
+                  req.open('GET', url, false);
+                  req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+                  req.send(null);
+                } catch (e) {
+                }
+                value = sessionStorage.getItem("value_coded");
+                sessionStorage.removeItem("value_coded");
+              
+            }else if (results.observations[x].value_datetime != null){ 
+              value = results.observations[x].value_datetime;
+            }else {
+
+            }
+            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + modifier + '</td>  <td>' + f + '</td> </tr>'
+          }
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+
+    }
+    function GetApplicationInfo() {
+    var dvTable = document.getElementById("appInfo");
+    dvTable.innerHTML = null;
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/ART/views/identifiers.html");
+    obj.setAttribute("type","text/html");
+    obj.setAttribute("style","width: 97%; height: 100%; padding: 1%;");
+
+    dvTable.appendChild(obj);
+
+    }
+    GetApplicationInfo();
+
+    ajaxRequest();
+      
+   </script>
+   <script>
+      generateActivities();
+      changeActivities();
+      generateTasks();
+    </script>
 </html>
-
-<style type="text/css">
-  #cover{
-    position: absolute;
-    display: none;
-    background-color: black;
-    width: 100%;
-    height: 102%;
-    left: 0%;
-    top: 0%;
-    z-index: 990;
-    opacity: 0.5;
-  }
-
-
-  @keyframes fade {
-    from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  }
-  .confirm {
-    position: absolute;
-    display: none;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    min-width: 280px;
-    max-width: 500px;
-    height: auto;
-    background: #E2E2E2;
-    border-radius: 10px;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid white;
-    animation: fade 1s ease 1 forwards;
-    z-index: 999;
-  }
-  .confirm h1 {
-    text-align: center;
-    font-size: 1.2rem;
-    margin: 1.5rem 1rem 0.5rem;
-  }
-  .confirm p {
-    text-align: center;
-    font-size: 1rem;
-    margin: 0 2rem 4.5rem;
-  }
-  .confirm button {
-    background: transparent;
-    border: none;
-    color: #1678E5;
-    height: 3rem;
-    font-size: 1rem;
-    width: 50%;
-    position: absolute;
-    bottom: 0;
-    cursor: pointer;
-  }
-  .confirm button:nth-of-type(1) {
-    border-top: 1px solid #B4B4B4;
-    border-right: 1px solid #B4B4B4;
-    left: 0;
-    border-radius: 0 0 0 10px;
-  }
-  .confirm button:nth-of-type(2) {
-    border-top: 1px solid #B4B4B4;
-    right: 0;
-    border-radius: 0 0 10px 0;
-  }
-  .confirm button:focus,
-  .confirm button:hover {
-    font-weight: bold;
-    background: #EFEFEF;
-  }
-  .confirm button:active {
-    background: #D6D6D6;
-  }
-</style>
+<script src="/assets/js/generic_ajaxrequest.js"></script> 

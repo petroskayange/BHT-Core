@@ -1,11 +1,12 @@
 
 <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/assets/css/vitals-keypad.css" type="text/css">
 <script type="text/javascript" src="/assets/js/vitals-keypad.js"></script>
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 
 <style>
 
@@ -112,6 +113,10 @@ img {
 }
 
 </style>
+<script type="text/javascript">
+  var patientID = sessionStorage.getItem("patientID");
+  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patientID;
+</script>
 
 
 <script>
@@ -475,7 +480,7 @@ function submitVitals() {
   var encounter = {
     encounter_type_name: 'Vitals',
     encounter_type_id:  6,
-    patient_id: 50,
+    patient_id: sessionStorage.patientID,
     encounter_datetime: null
   }
 
@@ -531,7 +536,7 @@ function postVitalsObs(encounter) {
 }
 
 function nextPage() {
-  alert("Done");
+  nextEncounter(sessionStorage.patientID, 1);
 }
 
 function changeNextBtnToSubmit() {

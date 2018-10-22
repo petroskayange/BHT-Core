@@ -23,51 +23,131 @@ The application is built using
 ## Folder Structure
 <pre><font color="#729FCF"><b>.</b></font>
 ├── <font color="#729FCF"><b>apps</b></font>
-│   ├── <font color="#729FCF"><b>Example Application</b></font>
+│   ├── <font color="#729FCF"><b>anc</b></font>
+│   ├── <font color="#729FCF"><b>ANC</b></font>
 │   │   ├── application.json
 │   │   ├── <font color="#729FCF"><b>assets</b></font>
-│   │   │   ├── <font color="#729FCF"><b>css</b></font>
-│   │   │   ├── <font color="#729FCF"><b>images</b></font>
-│   │   │   └── <font color="#729FCF"><b>js</b></font>
-│   │   └── index.html
-│   ├── <font color="#729FCF"><b>config</b></font>
-│   │   ├── apps.json
-│   └── <font color="#729FCF"><b>core</b></font>
-│       ├── <font color="#8AE234"><b>administration.json.example</b></font>
+│   │   │   └── <font color="#729FCF"><b>images</b></font>
+│   │   │       └── <font color="#AD7FA8"><b>pregnant.png</b></font>
+│   │   └── <font color="#AD7FA8"><b>pregnant.png</b></font>
+│   └── <font color="#729FCF"><b>ARTa</b></font>
 │       ├── application.json
-│       ├── <font color="#8AE234"><b>application.json.example</b></font>
 │       ├── <font color="#729FCF"><b>assets</b></font>
 │       │   ├── <font color="#729FCF"><b>css</b></font>
-│       │   ├── <font color="#729FCF"><b>docs</b></font>
+│       │   │   └── <font color="#8AE234"><b>touch-fancy.css</b></font>
 │       │   ├── <font color="#729FCF"><b>images</b></font>
+│       │   │   └── <font color="#AD7FA8"><b>aids.png</b></font>
 │       │   └── <font color="#729FCF"><b>js</b></font>
-│       ├── <font color="#8AE234"><b>index.html</b></font>
-│       └── <font color="#729FCF"><b>views</b></font>
-│           ├── location.html
-│           ├── <font color="#8AE234"><b>login.html</b></font>
-│           ├── <font color="#729FCF"><b>patient</b></font>
-│           │   ├── <font color="#8AE234"><b>new.html</b></font>
-│           │   ├── <font color="#8AE234"><b>search.html</b></font>
-│           │   ├── <font color="#8AE234"><b>search_results.html</b></font>
-│           │   └── <font color="#8AE234"><b>vitals.html</b></font>
-│           ├── <font color="#8AE234"><b>patient_dashboard.html</b></font>
-│           └── <font color="#729FCF"><b>users</b></font>
-│               ├── <font color="#8AE234"><b>change_password.html</b></font>
-│               ├── change_role.html
-│               ├── <font color="#8AE234"><b>edit_user.html</b></font>
-│               ├── <font color="#8AE234"><b>new.html</b></font>
-│               ├── <font color="#8AE234"><b>show.html</b></font>
-│               └── <font color="#8AE234"><b>view_users.html</b></font>
-├── index.html
+│       │       ├── <font color="#8AE234"><b>dateselector.js</b></font>
+│       │       └── <font color="#8AE234"><b>multi_column_controls.js</b></font>
+│       └── index.html
+├── <font color="#729FCF"><b>assets</b></font>
+│   ├── <font color="#729FCF"><b>css</b></font>
+│   │   ├── <font color="#8AE234"><b>application.css</b></font>
+│   │   ├── <font color="#729FCF"><b>bootstrap</b></font>
+│   │   │   └── <font color="#8AE234"><b>bootstrap.min.css</b></font>
+│   │   ├── <font color="#8AE234"><b>custom.css</b></font>
+│   │   ├── <font color="#729FCF"><b>datatables</b></font>
+│   │   │   ├── dataTables.uikit.min.css
+│   │   │   ├── fixedHeader.dataTables.min.css
+│   │   │   ├── jquery.dataTables.min.css
+│   │   │   ├── scroller.dataTables.min.css
+│   │   │   └── uikit.min.css
+│   │   ├── dispensing.css
+│   │   ├── <font color="#729FCF"><b>maindashboard</b></font>
+│   │   │   ├── <font color="#8AE234"><b>footer.css</b></font>
+│   │   │   └── <font color="#8AE234"><b>header.css</b></font>
+│   │   ├── patientdashboard.css
+│   │   ├── <font color="#8AE234"><b>prescription.css</b></font>
+│   │   ├── vitals-keypad.css
+│   │   └── <font color="#8AE234"><b>yes_no_ctrls.css</b></font>
+│   ├── <font color="#729FCF"><b>docs</b></font>
+│   ├── <font color="#729FCF"><b>images</b></font>
+│   │   ├── <font color="#8AE234"><b>aids.png</b></font>
+│   │   ├── <font color="#8AE234"><b>BaobabHealth.png</b></font>
+│   │   ├── <font color="#8AE234"><b>barcode.png</b></font>
+│   │   ├── <font color="#8AE234"><b>delete.png</b></font>
+│   │   ├── <font color="#8AE234"><b>diabetes.png</b></font>
+│   │   ├── <font color="#AD7FA8"><b>down-arrow.svg</b></font>
+│   │   ├── <font color="#AD7FA8"><b>female32x32.png</b></font>
+│   │   ├── <font color="#AD7FA8"><b>female48x48.png</b></font>
+│   │   ├── <font color="#8AE234"><b>female.gif</b></font>
+│   │   ├── <font color="#AD7FA8"><b>launcher.png</b></font>
+│   │   ├── <font color="#AD7FA8"><b>male16x24.png</b></font>
+│   │   ├── <font color="#AD7FA8"><b>male24x32.png</b></font>
+│   │   ├── <font color="#8AE234"><b>male.gif</b></font>
+│   │   ├── <font color="#AD7FA8"><b>no_image.png</b></font>
+│   │   ├── <font color="#8AE234"><b>opd.png</b></font>
+│   │   ├── <font color="#8AE234"><b>Person_Undefined_Female_Dark.png</b></font>
+│   │   ├── <font color="#8AE234"><b>Person_Undefined_Male_Dark.png</b></font>
+│   │   ├── <font color="#729FCF"><b>prescription</b></font>
+│   │   │   ├── <font color="#8AE234"><b>dosage.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>evening.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>history.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>medication.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>morning.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>noon.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>period.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>prescription.png</b></font>
+│   │   │   └── <font color="#AD7FA8"><b>rx.png</b></font>
+│   │   ├── <font color="#AD7FA8"><b>up-arrow.svg</b></font>
+│   │   ├── <font color="#729FCF"><b>vitals</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>bp.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>height.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>pulse-rate.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>spo2.png</b></font>
+│   │   │   ├── <font color="#AD7FA8"><b>temp.png</b></font>
+│   │   │   └── <font color="#AD7FA8"><b>weight.png</b></font>
+│   │   └── <font color="#AD7FA8"><b>woman32x32.png</b></font>
+│   └── <font color="#729FCF"><b>js</b></font>
+│       ├── <font color="#8AE234"><b>application.js</b></font>
+│       ├── <font color="#8AE234"><b>birthdate_functions.js</b></font>
+│       ├── <font color="#729FCF"><b>bootstrap</b></font>
+│       │   └── <font color="#8AE234"><b>bootstrap.min.js</b></font>
+│       ├── <font color="#8AE234"><b>client-scan-barcode.js</b></font>
+│       ├── <font color="#8AE234"><b>core.js</b></font>
+│       ├── <font color="#8AE234"><b>data.js</b></font>
+│       ├── <font color="#729FCF"><b>datatables</b></font>
+│       │   ├── dataTables.fixedHeader.min.js
+│       │   ├── jquery-1.12.4.js
+│       │   └── jquery.dataTables.min.js
+│       ├── dispensing.js
+│       ├── generic_ajaxrequest.js
+│       ├── <font color="#8AE234"><b>jquery.min.js</b></font>
+│       ├── moment.js
+│       ├── post_parameters.js
+│       ├── <font color="#8AE234"><b>prescription.js</b></font>
+│       ├── <font color="#8AE234"><b>submitparameters.js</b></font>
+│       ├── vitals-keypad.js
+│       └── <font color="#8AE234"><b>yes_no_ctrls.js</b></font>
+├───<font color="#729FCF"><b>config</b></font>
+│   ├── <font color="#8AE234"><b>administration.json.example</b></font>
+│   ├── <font color="#8AE234"><b>application.json.example</b></font>
+│   ├── <font color="#8AE234"><b>config.json</b></font>
+│   └── <font color="#8AE234"><b>config.json.example</b></font>
+├───<font color="#729FCF"><b>Public</b></font>
+│   ├── <font color="#8AE234"><b>touchscreentoolkit</b></font>
 ├── <font color="#729FCF"><b>public</b></font>
-│   ├── application.json.example
-│   └── <font color="#729FCF"><b>assets</b></font>
-│       └── <font color="#729FCF"><b>images</b></font>
-│           ├── <font color="#AD7FA8"><b>launcher.png</b></font>
-│           └── <font color="#AD7FA8"><b>no_image.png</b></font>
-├── README.md
-└── <font color="#729FCF"><b>touchscreentoolkit</b></font>
-    
+│   ├── <font color="#8AE234"><b>application.json.example</b></font>
+└── <font color="#729FCF"><b>views</b></font>
+    ├── location.html
+    ├── <font color="#8AE234"><b>login.html</b></font>
+    ├── <font color="#729FCF"><b>patient</b></font>
+    │   ├── dispensing.html
+    │   ├── <font color="#8AE234"><b>new.html</b></font>
+    │   ├── patient_program.html
+    │   ├── <font color="#8AE234"><b>prescription.html</b></font>
+    │   ├── <font color="#8AE234"><b>search.html</b></font>
+    │   ├── <font color="#8AE234"><b>search_results.html</b></font>
+    │   └── <font color="#8AE234"><b>vitals.html</b></font>
+    ├── <font color="#8AE234"><b>patient_dashboard.html</b></font>
+    └── <font color="#729FCF"><b>users</b></font>
+        ├── <font color="#8AE234"><b>change_password.html</b></font>
+        ├── change_role.html
+        ├── <font color="#8AE234"><b>edit_user.html</b></font>
+        ├── <font color="#8AE234"><b>new.html</b></font>
+        ├── <font color="#8AE234"><b>show.html</b></font>
+        └── <font color="#8AE234"><b>view_users.html</b></font>
 
 </pre>
 ## Core Application Setup

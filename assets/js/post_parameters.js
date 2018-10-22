@@ -1,5 +1,11 @@
 
 function submitParameters(parameters, url, returnToFunction) {
+  try {
+    showStatus();
+  } catch (e) {
+
+  }
+  
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
 
   var parametersPassed = JSON.stringify(parameters);
@@ -9,6 +15,7 @@ function submitParameters(parameters, url, returnToFunction) {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
       eval(returnToFunction)(obj);
+      document.getElementById("innerPop").style.display = "none";
     }
   };
   xhttp.open("POST", url, true);

@@ -1,5 +1,5 @@
 
-#clearButton, #nextButton {
+#clearButton {
   display: none;
 }
 
@@ -109,6 +109,7 @@
 /* .............................................. */
 
 .keyboard-buttons {
+/*  
   padding: 20% 0px 0px 0px;
   text-align: center;
   margin-right: auto;
@@ -133,7 +134,47 @@
   height: 70px;
   background-color: #5ca6c4;
   color: white;
-
+*/
+  padding: 20% 0px 0px 0px;
+  float: left;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin: 5px;
+  border: 1px solid #5ca6c4;
+  cursor: pointer;
+  /*box-shadow: inset 2px -4px 2px 0px;*/
+  background-color: white;
+  border-radius: 7px;
+  border: solid black 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #7eb9d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 15pt;
+  font-family: arial, helvetica, sans-serif;
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #a7cfdf;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+  background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  width: 70px;
+  height: 65px;
+  text-align: center;
+    
 }
 
 #keyboard-divs-table-cell {
@@ -181,7 +222,7 @@
 }
 
 #dosage-table-cell-left {
-  width: 45%;
+  width: 55%;
 }
 
 #dosage-keypad-table {
@@ -191,7 +232,6 @@
 
 /* ...................................................... */
 .prescription-keypad {
-  width: 400px;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
@@ -200,7 +240,7 @@
 }
 
 .keypad-buttons {
-  padding: 20% 0px 0px 0px;
+*/padding: 20% 0px 0px 0px;
   float: left;
   text-align: center;
   margin-right: auto;
@@ -226,8 +266,50 @@
   height: 60px;
   background-color: #5ca6c4;
   color: white;
+*/
+  padding: 20% 0px 0px 0px;
+  float: left;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin: 5px;
+  border: 1px solid #5ca6c4;
+  cursor: pointer;
+  /*box-shadow: inset 2px -4px 2px 0px;*/
+  background-color: white;
+  border-radius: 7px;
+  border: solid black 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #7eb9d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 23px;
+  font-family: arial, helvetica, sans-serif;
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #a7cfdf;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+  background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  text-align: center;
+    
 
+  width: 75px;
+  height: 65px;
 }
+
 
 .input-boxes {
   width: 100px;
