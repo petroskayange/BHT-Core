@@ -407,7 +407,7 @@ function findClients() {
 
    document.getElementById('cover').style="display: inline;"; 
    showStatus();
-   document.getElementById("innerPop").style.display = "none";
+   document.getElementById("cover").style.display = "none";
    getParameters(url);
 }
 
@@ -462,7 +462,7 @@ function searchResults(results){
     pos++;
   }
 
-  
+  document.getElementById("innerPop").style.display = "none";  
   // loadPatient();
 }
 
