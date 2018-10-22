@@ -497,7 +497,7 @@ function checkCredentials(username, password) {
             } else if (http.status == 0){
                 // await sleep(2000);
                 showMessage('No connection to EMR API',null,10000000000);
-                window.location = "/views/login.html";
+                window.location = "/views/config.html";
             }else {
                 showMessage('error' + http.status);
             }
@@ -515,36 +515,46 @@ function sleep(ms) {
 
     var url = '/config/config.json';
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
+    if (localStorage.useLocalStorage) {
+        sessionStorage.setItem("apiURL", localStorage.getItem("ip-address"));
+        apiURL = localStorage.getItem("ip-address");
+        sessionStorage.setItem("apiPort", localStorage.port);
+        apiPort = localStorage.getItem("port");
+        sessionStorage.setItem("apiProtocol", "http");
+        apiProtocol = "http";
+    }else {
+        req.onreadystatechange = function () {
 
-        if (this.readyState == 4) {
-            
-            if (this.status == 200) {
-                try {
-                    var data = JSON.parse(this.responseText);
-                    sessionStorage.setItem("apiURL", data.apiURL);
-                    apiURL = data.apiURL;
-                    sessionStorage.setItem("apiPort", data.apiPort);
-                    apiPort = data.apiPort;
-                    sessionStorage.setItem("apiProtocol", data.apiProtocol);
-                    apiProtocol = data.apiProtocol;
-                } catch(e) {
-                    console.log("invalid json formatting");
-                }
+            if (this.readyState == 4) {
                 
-            }else if(this.status == 404) {
-                console.log("config.json is missing from the /config folder");
-            }else {
-                console.log("error " + this.status);
+                if (this.status == 200) {
+                    try {
+                        var data = JSON.parse(this.responseText);
+                        sessionStorage.setItem("apiURL", data.apiURL);
+                        apiURL = data.apiURL;
+                        sessionStorage.setItem("apiPort", data.apiPort);
+                        apiPort = data.apiPort;
+                        sessionStorage.setItem("apiProtocol", data.apiProtocol);
+                        apiProtocol = data.apiProtocol;
+                    } catch(e) {
+                        console.log("invalid json formatting");
+                    }
+                    
+                }else if(this.status == 404) {
+                    console.log("config.json is missing from the /config folder");
+                }else {
+                    console.log("error " + this.status);
+                }
             }
+        };
+        try {
+            req.open('GET', url, true);
+            req.send(null);
+        } catch (e) {
+            console.log(e);
         }
-    };
-    try {
-        req.open('GET', url, true);
-        req.send(null);
-    } catch (e) {
-        console.log(e);
     }
+
 
 }
 
