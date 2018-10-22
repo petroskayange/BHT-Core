@@ -90,7 +90,13 @@ function nextEncounter(patient_id, program_id, redirect) {
         checkIfEncounterCaptured(obj["name"].toLowerCase(), patient_id, redirect);
       }
       else if (this.status == 400) {
-        showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
+        try {
+          showMessage("Can not select Patient. Reason: Patient Record is incomplete. Create new patient record instead", null, 3000);
+        }catch(e) {
+          alert("patient record is damaged");
+            window.history.back();
+        }
+        
       }
 
     }

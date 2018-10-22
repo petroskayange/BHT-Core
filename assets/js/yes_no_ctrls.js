@@ -39,7 +39,9 @@ function validateYesNo(concept_name, values) {
 
 function buildYesNoUI(concept_name, values, targetElement) {
   var nextButton =  document.getElementById('nextButton');
-	previousNextButton = nextButton.getAttribute("onmousedown");
+  if(!previousNextButton)
+	  previousNextButton = nextButton.getAttribute("onmousedown");
+
   nextButton.setAttribute('onmousedown',"validateYesNo('" + concept_name + "','" + values + "');");
   nextButton.setAttribute('onclick',"");
 
@@ -98,6 +100,11 @@ function createNewCtrl(e, concept_name, values) {
         button.setAttribute("onclick","buttonClicked(this,'" + concept_name + "','" + concept + "');");
       }
 
+      /* ............................................ */
+      button.setAttribute("concept_name", concept_name);
+      button.setAttribute("question", concept);
+      /* ............................................ */
+
       button.setAttribute("value", concept_id);
       button.setAttribute("class", "yes_no_btns not-clicked");
       
@@ -151,28 +158,19 @@ function buttonClicked(btn, concept_name, concept) {
 function preSelectYesNo() {
   var yes_no_btns = document.getElementsByClassName("yes_no_btns");
 
-  for(var i = 0 ; i < yes_no_btns.length ; i++){
-    for(var cn in yesNo_Hash){
-      for(var q in yesNo_Hash[cn]){
-        if(yesNo_Hash[cn][q]){
-          var string_to_match = q;
-          var regex = new RegExp(string_to_match, 'g' );
+  for(var b = 0 ; b < yes_no_btns.length ; b++){
+    var concept_name  = yes_no_btns[b].getAttribute("concept_name");
+    var question      = yes_no_btns[b].getAttribute("question");
+    var YesNo         = yes_no_btns[b].getAttribute("whichone").toLowerCase();
 
-          if(yes_no_btns[i].getAttribute("onclick").match(regex)){
-            var ans = (yesNo_Hash[cn][q]);
-            var btns = yes_no_btns[i].getElementsByClassName("yes_no_text");
-            for(var x = 0 ; x < btns.length ; x++){
-              var regex = new RegExp(ans, 'g' );
-
-              if(btns[x].innerHTML.match(regex)){
-                yes_no_btns[i].setAttribute("class","yes_no_btns clicked");
-              }
-            }
-          }
-
-        }
+    try {
+      if(yesNo_Hash[concept_name][question].toLowerCase() == YesNo){
+        yes_no_btns[b].setAttribute("class","yes_no_btns clicked");
       }
+    }catch(e){
     }
+
+
   }
 
 }
