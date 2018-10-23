@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
+    <script src="/assets/js/jquery.min.js"> </script>
+    <script language="javascript" defer="true">
+        tstUsername = "";
+        tstUserKeyboardPref = "abc";
+        var d = new Date();
+        d.toDateString();
+
+        function addHereButton() {
+            var button = document.createElement("button");
+            button.id = "addHere";
+            button.innerHTML = "<span>Here</span>";
+            button.style.cssFloat = "right";
+
+            button.onclick = function () {
+                __$("touchscreenInput" + tstCurrentPage).value = "Martin Preuss Centre"
+            }
+
+            if (__$("buttons")) {
+                __$("buttons").appendChild(button);
+            }
+        }
+
+        function removeHereButton() {
+            if (__$("addHere")) {
+                __$("buttons").removeChild(__$("addHere"));
+            }
+        }
+
+        function getSelected() {
+            var choices = "";
+
+            for (var o = 0; o < __$('choice').options.length; o++) {
+                if (__$('choice').options[o].selected == true) {
+                    choices += __$('choice').options[o].innerHTML + " ";
+                }
+            }
+
+            return choices;
+        }
+
+        function getInput() {
+            key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+            value = $('touchscreenInput' + tstCurrentPage).value;
+            localStorage.setItem(key, value);
+        }
+
+        function getPass() {
+            localStorage.setItem("port", document.getElementById("touchscreenInput1").value);
+        }
+
+    </script>
+
+    <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+        defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
+</head>
+
+<body id="mateme">
+    <div id="container">
+        <div id="content">
+            <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
+            </div>
+            <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
+            <script type="text/javascript">
+                var barcode = "";
+                // var tt_cancel_destination = window.history.back();
+
+                function inform() {
+                    $('infoBar' + tstCurrentPage).innerHTML =
+                        "Muli bwanji, enter your server information";
+                }
+
+                function validateLocation() {
+                    __$("nextButton").removeAttribute("onmousedown");
+                    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
+                    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+                        event.preventDefault();
+                        if (event.keyCode === 13) {
+                            getPass();
+                            doSignIn();
+                        }
+                    });
+                    __$("nextButton").onmousedown = function () {
+                        getPass();
+                        doSignIn();
+                    }
+
+                }
+
+                function doSignIn() {
+                    localStorage.setItem("useLocalStorage", true);
+                    window.history.back();
+                }
+            </script>
+
+            <form id='sessions' action="/" method='post'>
+
+                <label for="ip-address">ip address</label>
+                <input field_type="number" tt_pageStyleClass="numeric NumbersOnlyWithDecimal" helpText="Enter API IP address" id="ip-address" name="ip-address" textCase="lower"
+                    tt_onLoad="numericNumbersOnly inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();" key="ip-address" /><br>
+
+                <label for="port">port</label>
+                <input field_type="number" tt_pageStyleClass="numeric NumbersOnlyWithDecimal" helpText="Enter port" id="port" name="port" textCase="lower"
+                    tt_onLoad="validateLocation();inform(); barcodeId = 'touchscreenInput1';" type="text"
+                    tt_onUnload="getPass();" /><br>
+
+
+                <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />
+            </form>
+            <div id="footer">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

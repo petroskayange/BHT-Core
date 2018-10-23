@@ -165,7 +165,7 @@
         <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#activitiesModal" onmousedown="showActivities(this);" >
         <span>&nbsp; &nbsp; &nbsp; Printouts/Other &nbsp; &nbsp; &nbsp;</span>
         </button>
-        <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#appModal">
+        <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#tasksModal" onmousedown="showTasks(this);">
         <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
         </button>
       </div>
@@ -269,8 +269,8 @@
                        <div class="row" id="activities-modal-div">
                           <template id="activities_template">
                              <!-- <div class="" > -->
-                             <div class="app-btn" id="cardDiv" style="margin: 10px;" >
-                             <a href="#" class="card-block clearfix" id="moduleButton" onclick="$('#activitiesModal').modal('hide');">
+                             <div class="app-btn" id="activitiesCard" style="margin: 10px;" >
+                             <a class="card-block clearfix" id="activitiesButton" onclick="$('#activitiesModal').modal('hide');">
                                 <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
                                    <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
                                    <div class="middle">
@@ -302,6 +302,52 @@
         </div>
     </div>
     <!-- /activities modal-->
+
+<!-- tasks modal-->
+    <div class="modal fade" id="tasksModal" data-backdrop="static" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" name="div2">
+            <div class="modal-content" style="margin-left:0px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select Task</h4>
+                 </div>
+                 <div class="modal-body" id="tasks-body">
+                    <div class="container">
+                       <div class="row" id="tasks-modal-div">
+                          <template id="tasks_template">
+                             <!-- <div class="" > -->
+                             <div class="app-btn" id="tasksCard" style="margin: 10px;" >
+                             <a href="#" class="card-block clearfix" id="encounterButton" onclick="$('#tasksModal').modal('hide');">
+                                <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
+                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                   <div class="middle">
+                                      <div class="text">
+                                         <p id="taskstext"></p>
+                                      </div>
+                                   </div>
+                                   <div class="card-container">
+                                      <h4>
+                                         <b id="encounter_name"></b>
+                                      </h4>
+                                   </div>
+                             </a>
+                             </div>
+                          </template>
+                       </div>
+                    </div>
+                 </div>
+                 <!-- <div id="cover">
+                  </div>
+                  <div class="confirm">
+                     <h1>Confirm your action</h1>
+                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                     <button onclick="hidePopup();">Cancel</button>
+                     <button autofocus onclick="confirmAction();">Confirm</button>
+                  </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- /tasks modal-->
 
   <!-- /container -->
   </div>
@@ -343,6 +389,7 @@
   sessionStorage.setItem("patientID", id);
   (document.getElementsByClassName("overview-btns ")[0]);
   (document.getElementsByClassName("activities-btns ")[0]);
+  (document.getElementsByClassName("tasks-btns ")[0]);
   changeModule();
   url = new URL(url);
   var d = new Date();
@@ -524,7 +571,6 @@
               a.appendChild(s);
               listGroup.appendChild(a);
               if (x == 2 || (results.length == 2 && x == 1)) {
-                console.log(results.length);
                 var a = document.createElement("a");
                 var aclass = "list-group-item d-flex justify-content-between";
                 aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
@@ -684,6 +730,7 @@
    <script>
       generateActivities();
       changeActivities();
+      generateTasks();
     </script>
 </html>
 <script src="/assets/js/generic_ajaxrequest.js"></script> 
