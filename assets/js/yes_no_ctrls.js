@@ -34,7 +34,8 @@ function validateYesNo(concept_name, values) {
   nextButton.setAttribute('onmousedown', previousNextButton);
 	//gotoNextPage();
 
-	eval(nextButton.getAttribute("onmousedown"));
+	eval(previousNextButton);
+  previousNextButton = null;
 }
 
 function buildYesNoUI(concept_name, values, targetElement) {
