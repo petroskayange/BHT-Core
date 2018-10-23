@@ -36,7 +36,7 @@
         var rows  = summary_table.getElementsByTagName('tr');
   
         var parametersPassed = {
-          given_name: null, middle_name: null, family_name: null,
+          given_name: null, family_name: null,
           gender: null, birthdate: null, birthdate_estimated: null,
           home_district: null, home_traditional_authority: null, home_village: null,
           current_district: null, current_traditional_authority: null, current_village: null,
@@ -49,8 +49,6 @@
 
 					if(title.match(/Given name/i)){
 						parametersPassed.given_name = data; 
-					}else if(title.match(/Middle name/i)){
-						parametersPassed.middle_name = data; 
 					}else if(title.match(/Family name/i)){
 						parametersPassed.family_name = data; 
 					}else if(title.match(/Gender/i)){
@@ -107,7 +105,6 @@
 
         parameter = {
               given_name:                     __$('given_name').value,
-              middle_name:                    __$("middle_name").value,
               family_name:                    __$('family_name').value,
               gender:                         __$('gender').value,
               birthdate:                      birth_date,
@@ -130,7 +127,6 @@
 
         var attributes = [
           ["Given name", parameter.given_name],
-          ["Middle name", parameter.middle_name],
           ["Family name", parameter.family_name],
           ["Gender", parameter.gender],
           ["Birthdate", parameter.birthdate],
@@ -206,7 +202,6 @@
   .tt_controls_year_of_birth #Unknown { display:block; }
   .tt_controls_age_estimate #Unknown { display:none; }
 
-  .tt_controls_middle_name  #na { display: block; }
   .tt_controls_ground_phone_number #Unknown { display:block; }
 
   .tt_controls_region_of_origin .keyboard{display:none;}
@@ -512,14 +507,6 @@
   ajaxURL="/search/family_name?search_string=" 
   allowFreeText="true" 
 	condition="$(&quot;family_name&quot;).value == &quot;&quot;" /> 
-
-  <input type="text" name="person[names][middle_name]" 
-  id="middle_name" field_type="alpha" 
-  helpText="Middle name" 
-  ajaxURL="/search/middle_name?search_string=" 
-  allowFreeText="true" optional="true" 
-  condition="$('middle_name').value == ''" 
-  tt_pageStyleClass="azButton" />
 
   <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth" field_type="number" 
     absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxBirthYear()" 
