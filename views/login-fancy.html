@@ -61,6 +61,14 @@ body {
   font-size: 60px;
 }
 
+#emr-title-one {
+  color: #8B4513;
+}
+
+#emr-title-two {
+  color: #D2691E;
+}
+
 #version-desc {
   font-size: 15px;
   margin-left: 5px;
@@ -298,7 +306,16 @@ body {
           <table id="form-table">
             <tr>
               <td>
-                <h1><span id="emr-title">National<br />EMR<span id="version-desc">1.0.0</span></span></h1>
+                <h1>
+                  <span id="emr-title">
+                    <span id="emr-title-one">National</span>
+                    <br />
+                    <span id="emr-title-two">EMR</span>
+                    <span id="version-desc">
+                      1.0.0
+                    </span>
+                  </span>
+                </h1>
               </td>
             </tr>
             <tr>
@@ -321,7 +338,7 @@ body {
         <span class="logos"><img src="/assets/images/login-logos/LIN.png" /></span>
         <span class="logos"><img src="/assets/images/login-logos/PEPFAR.png" /></span>
 
-        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onclick="attemptLogin();">
+        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onmousedown="attemptLogin();">
           Login
         </button>
       </div>
