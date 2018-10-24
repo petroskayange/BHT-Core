@@ -43,7 +43,6 @@ body {
   text-align: center;
 }
 
-
 .footer {
   height: 15vh;
   text-align: right;
@@ -52,8 +51,8 @@ body {
 }
 
 .logos img {
-  width: 167px;
-  height: 75px;
+  width: 120px;
+  height: 70px;
   margin-left: 10px;
   float: left;
 }
@@ -70,40 +69,44 @@ body {
 #keyboard {
   height: 350px;
   width: 910px;
-  background-color: #fff;
-  position: fixed;
-  border-width: 1px;
-  border-style: solid;
+  bottom: 10px;
+  left: calc(50vw - 350px);
+  background-color: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px !important;
+  z-index: 100;
+  text-align: center;
+  display: block;
 }
 
 .keyboard-table {
   display: table;
   width: 100%;
   margin: 15px;
-  border-collapse: separate;
 }
 
 .keyboard-table-row {
-  display: table-row;
+  display: block;
 }
 
 .keyboard-table-cell {
-  display: table-cell;
+  display: inline-block;
 }
 
 .keyboard-span {
   border: 1px solid #7eb9d0;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  border-radius: 3px;
-  font-size: 20px;
+  border-radius: 5px !important;
+  font-size: 25px !important;
   font-family: arial, helvetica, sans-serif;
-  padding: 25px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
   text-decoration: none;
   display: inline-block;
   text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
-  font-weight: bold;
-  color: #FFFFFF;
+  font-weight: 700;
+  color: #fff;
   background-color: #a7cfdf;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
   background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
@@ -112,10 +115,24 @@ body {
   background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
   background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  min-width: 60px;
+  min-height: 55px;
+  cursor: pointer;
   width: 45px;
   height: 35px;
   text-align: center;
-  margin-top: 5px;
+  margin: 3px;
+}
+
+.login_input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: calc(100% - 30px);
+  font-family: Nimbus Sans L,Arial Narrow,sans-serif;
+  font-size: 2.2em;
+  background-color: #dcdcdc;
+  color: #000;
+  padding: 8px;
 }
 
 #login-btn {
@@ -145,123 +162,129 @@ body {
   background-image: -ms-linear-gradient(top, #4ba614, #008c00);
   background-image: -o-linear-gradient(top, #4ba614, #008c00);
   background-image: linear-gradient(to bottom, #4ba614, #008c00);
-
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
-
   margin-right: 10px;
 }
 
 </style>
 
-<!--
-<link href="/assets/js/keyboard/bootstrap.min.css" rel="stylesheet">
-<script src="/assets/js/keyboard/bootstrap.min.js"></script>
--->
-
-
+<script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
 
 <script>
+  sessionStorage.clear();
 
-function hideKeyboard() {
-  try {
-    var keyboard = document.getElementById("keyboard");
+  function hideKeyboard() {
+    try {
+      var keyboard = document.getElementById("keyboard");
+      var main = document.getElementsByClassName("main")[0];
+      main.removeChild(keyboard);
+    }catch(i) {
+      return;
+    }
+  }
+
+  var focusInput;
+
+  function showKeyboard(e) {
+    /*var keyboard = document.getElementById("keyboard");
+    if(keyboard){
+      hideKeyboard();
+      return;
+    }
+  */
+    var keyboard = document.createElement("div");
+    keyboard.setAttribute("id","keyboard");
+
     var main = document.getElementsByClassName("main")[0];
-    main.removeChild(keyboard);
-  }catch(i) {
-    return;
+    var width = main.getBoundingClientRect().width;
+    var divPos = ((50 / width)*100);
+    var inputPos = e.getBoundingClientRect().top;
+    inputPos = parseInt(inputPos);
+
+    var styles = "left: " + ((width / 2) - 450) + "px;top: " + (inputPos + 65) + "px;";
+    styles += "z-index: 40; border-radius: 25px;"
+    keyboard.setAttribute("style", styles);
+    main.appendChild(keyboard);
+
+    focusInput = e;
+    keyboardKeys();
   }
-}
-
-var focusInput;
-
-function showKeyboard(e) {
-  /*var keyboard = document.getElementById("keyboard");
-  if(keyboard){ 
-    hideKeyboard();
-    return;
-  }
-*/
-  var keyboard = document.createElement("div");
-  keyboard.setAttribute("id","keyboard");
-
-  var main = document.getElementsByClassName("main")[0];
-  var width = main.getBoundingClientRect().width;
-  var divPos = ((50 / width)*100);
-  var inputPos = e.getBoundingClientRect().top;
-  inputPos = parseInt(inputPos);
-
-  var styles = "left: " + ((width / 2) - 450) + "px;top: " + (inputPos + 65) + "px;";
-  styles += "z-index: 40; border-radius: 25px;"
-  keyboard.setAttribute("style", styles);
-  main.appendChild(keyboard);
-  
-  focusInput = e;
-  keyboardKeys();
-}
 
 
-function keyboardKeys() {
-  var keypress = [
-    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-    ["q","w","e","r","t","y","u","i","o","p"],
-    ["a","s","d","f","g","h","j","k","l","Del."],
-    ["z","x","c","v","b","n","m", "Hide","Caps"]
-  ];
+  function keyboardKeys() {
+    var keypress = [
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+      ["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l","Del."],
+      ["z","x","c","v","b","n","m", "Hide","Caps"]
+    ];
 
-  var table = document.createElement("div");
-  table.setAttribute("class","keyboard-table");
+    var table = document.createElement("div");
+    table.setAttribute("class","keyboard-table");
 
-  for(var i = 0 ; i < keypress.length ; i++){
-    var row = document.createElement("div")
-    row.setAttribute("class","keyboard-table-row");
-    table.appendChild(row);
+    for(var i = 0 ; i < keypress.length ; i++){
+      var row = document.createElement("div")
+      row.setAttribute("class","keyboard-table-row");
+      table.appendChild(row);
 
-    for(var x = 0 ; x < keypress[i].length ; x++){
-      var cell = document.createElement("div")
-      cell.setAttribute("class","keyboard-table-cell");
-      row.appendChild(cell);
+      for(var x = 0 ; x < keypress[i].length ; x++){
+        var cell = document.createElement("div")
+        cell.setAttribute("class","keyboard-table-cell");
+        row.appendChild(cell);
 
-      var span = document.createElement("span")
-      span.setAttribute("class","keyboard-span");
-      span.setAttribute("onmousedown","keyPressed(this);");
-      if(keypress[i][x] == "Hide")
-        span.setAttribute("onmousedown","hideKeyboard();");
+        var span = document.createElement("span")
+        span.setAttribute("class","keyboard-span");
+        span.setAttribute("onmousedown","keyPressed(this);");
+        if(keypress[i][x] == "Hide")
+          span.setAttribute("onmousedown","hideKeyboard();");
 
-      span.innerHTML = keypress[i][x];
-      cell.appendChild(span);
+        span.innerHTML = keypress[i][x];
+        cell.appendChild(span);
 
 
+      }
     }
+
+    var keyboard = document.getElementById("keyboard");
+    keyboard.appendChild(table);
   }
 
-  var keyboard = document.getElementById("keyboard");
-  keyboard.appendChild(table);
-}
+  function keyPressed(e) {
+    var inputBox = focusInput;
 
-function keyPressed(e) {
-  var inputBox = focusInput;
+    try{
 
-  try{
+      if(e.innerHTML.match(/Del/i)){
+        inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);
+      }else if(e.innerHTML.match(/Caps/i)){
+      }else{
+        inputBox.value += e.innerHTML;
+      }
 
-    if(e.innerHTML.match(/Del/i)){
-      inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);
-    }else if(e.innerHTML.match(/Caps/i)){
+    }catch(x) { }
+
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    var btn      = document.getElementById("login-btn");
+
+    if(username.value.length > 0 && password.value.length > 0){
+      btn.style = "visibility: inline;";
     }else{
-      inputBox.value += e.innerHTML;
+      btn.style = "visibility: hidden;";
     }
-
-  }catch(x) { }
-
-  var username = document.getElementById("username");
-  var password = document.getElementById("password");
-  var btn      = document.getElementById("login-btn");
-
-  if(username.value.length > 0 && password.value.length > 0){
-    btn.style = "visibility: inline;";
-  }else{
-    btn.style = "visibility: hidden;";
   }
-}
+
+  // attempt to login
+  function attemptLogin() {
+
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+
+    sessionStorage.setItem('username', username);
+    sessionStorage.setItem('userPassword', password);
+
+    signIn();
+  }
 
 </script>
 
@@ -271,17 +294,25 @@ function keyPressed(e) {
 
     <div class="main-row">
       <div class="main-cell inputs">
-        <table id="form-table">
-          <tr>
-            <td><span id="emr-title">National<br />EMR<span id="version-desc">1.0.0</span></span></td>
-          </tr>
-          <tr>
-            <td><input type="username" id="username" onfocus="hideKeyboard();showKeyboard(this);"/></td>
-          </tr>
-          <tr>
-            <td><input type="password" id="password" onfocus="hideKeyboard();showKeyboard(this);" /></td>
-          </tr>
-        </table>
+        <form id='sessions' action="/" method='post'>
+          <table id="form-table">
+            <tr>
+              <td>
+                <h1><span id="emr-title">National<br />EMR<span id="version-desc">1.0.0</span></span></h1>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="login_input" type="username" id="username" onmousedown="hideKeyboard();showKeyboard(this);" placeholder="username" style=""/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="login_input" type="password" id="password" onmousedown="hideKeyboard();showKeyboard(this);" placeholder="password"/>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
 
@@ -289,8 +320,10 @@ function keyPressed(e) {
       <div class="main-cell footer">
         <span class="logos"><img src="/assets/images/login-logos/LIN.png" /></span>
         <span class="logos"><img src="/assets/images/login-logos/PEPFAR.png" /></span>
-        
-        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn">Login</button>
+
+        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onclick="attemptLogin();">
+          Login
+        </button>
       </div>
     </div>
 
