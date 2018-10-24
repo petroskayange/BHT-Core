@@ -1,125 +1,386 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
-<head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
-    <script src="/assets/js/jquery.min.js"> </script>
-    <script language="javascript" defer="true">
-        tstUsername = "";
-        tstUserKeyboardPref = "abc";
-        sessionStorage.clear();
-        var d = new Date();
-        d.toDateString();
+<style>
+body {
+  height: 100hv;
+  background-color: #fff !important;
+}
 
-        function addHereButton() {
-            var button = document.createElement("button");
-            button.id = "addHere";
-            button.innerHTML = "<span>Here</span>";
-            button.style.cssFloat = "right";
+.main {
+  display: table;
+  width: 100%;
+  border: 1px solid #EBE6E2;
+  height: 96vh;
+}
 
-            button.onclick = function () {
-                __$("touchscreenInput" + tstCurrentPage).value = "Martin Preuss Centre"
-            }
+.main-row {
+  display: table-row;
+}
 
-            if (__$("buttons")) {
-                __$("buttons").appendChild(button);
-            }
+.main-cell {
+  display: table-cell;
+}
+
+.inputs {
+  height: 75vh;
+}
+
+#form-table {
+  width: 100%;
+  margin-top: 5%;
+  height: 175px;
+}
+
+#form-table input {
+  width: 400px;
+  height: 60px;
+  /*background-color: #fff !important;*/
+  font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
+  font-size: 2.3em;
+}
+
+#form-table td {
+  text-align: center;
+}
+
+.footer {
+  height: 15vh;
+  text-align: right;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+.logos img {
+  width: 120px;
+  height: 70px;
+  margin-left: 10px;
+  float: left;
+}
+
+#emr-title {
+  font-size: 60px;
+  font-weight: bold;
+  color: #bdb5aa;
+  padding-bottom: 8px;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.8);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.8);
+  text-transform: uppercase;
+}
+
+#emr-title-one {
+  color: #8B4513;
+}
+
+#emr-title-two {
+  color: #CD853F;
+}
+
+#version-desc {
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+#keyboard {
+  height: 350px;
+  width: 910px;
+  bottom: 10px;
+  left: calc(50vw - 350px);
+  background-color: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px !important;
+  z-index: 100;
+  text-align: center;
+  display: block;
+}
+
+.keyboard-table {
+  display: table;
+  width: 100%;
+  margin: 15px;
+}
+
+.keyboard-table-row {
+  display: block;
+}
+
+.keyboard-table-cell {
+  display: inline-block;
+}
+
+.keyboard-span {
+  border: 1px solid #7eb9d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 5px !important;
+  font-size: 25px !important;
+  font-family: arial, helvetica, sans-serif;
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  color: #fff;
+  background-color: #a7cfdf;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+  background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  min-width: 60px;
+  min-height: 55px;
+  cursor: pointer;
+  width: 45px;
+  height: 35px;
+  text-align: center;
+  margin: 3px;
+}
+
+.green_btn {
+  color: #FFFFFF;
+  background-color: #36780f;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#36780f), to(#005900));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4ba614), to(#008c00));
+  background-image: -webkit-linear-gradient(top, #4ba614, #008c00);
+  background-image: -moz-linear-gradient(top, #4ba614, #008c00);
+  background-image: -ms-linear-gradient(top, #4ba614, #008c00);
+  background-image: -o-linear-gradient(top, #4ba614, #008c00);
+  background-image: linear-gradient(to bottom, #4ba614, #008c00);
+  width: auto;
+}
+
+.login_input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: calc(100% - 30px);
+  font-family: Nimbus Sans L,Arial Narrow,sans-serif;
+  font-size: 2.2em;
+  background-color: lightgrey;
+  color: #000;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #8B4513;
+  border-radius: 5px;
+}
+
+#login-btn {
+  margin: 5px 0px 0px;
+  margin-right: 0px;
+  height: 60px;
+  float: right;
+  font-size: 2rem;
+  border: 1px solid #7eb9d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 28px;
+  font-family: arial, helvetica, sans-serif;
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #36780f;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#36780f), to(#005900));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4ba614), to(#008c00));
+  background-image: -webkit-linear-gradient(top, #4ba614, #008c00);
+  background-image: -moz-linear-gradient(top, #4ba614, #008c00);
+  background-image: -ms-linear-gradient(top, #4ba614, #008c00);
+  background-image: -o-linear-gradient(top, #4ba614, #008c00);
+  background-image: linear-gradient(to bottom, #4ba614, #008c00);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  margin-right: 10px;
+}
+
+</style>
+
+<script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
+
+<script>
+  sessionStorage.clear();
+
+  function hideKeyboard() {
+    try {
+      var keyboard = document.getElementById("keyboard");
+      var main = document.getElementsByClassName("main")[0];
+      main.removeChild(keyboard);
+    }catch(i) {
+      return;
+    }
+  }
+
+  var focusInput;
+
+  function showKeyboard(e, navigation_button) {
+    /*var keyboard = document.getElementById("keyboard");
+    if(keyboard){
+      hideKeyboard();
+      return;
+    }
+  */
+    var keyboard = document.createElement("div");
+    keyboard.setAttribute("id","keyboard");
+
+    var main = document.getElementsByClassName("main")[0];
+    var width = main.getBoundingClientRect().width;
+    var divPos = ((50 / width)*100);
+    var inputPos = e.getBoundingClientRect().top;
+    inputPos = parseInt(inputPos);
+
+    var styles = "left: " + ((width / 2) - 450) + "px;top: " + (inputPos + 65) + "px;";
+    styles += "z-index: 40; border-radius: 25px;"
+    keyboard.setAttribute("style", styles);
+    main.appendChild(keyboard);
+
+    focusInput = e;
+    keyboardKeys(navigation_button);
+  }
+
+  function keyboardKeys(navigation_button) {
+
+    var keypress = [
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+      ["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l","Del."],
+      ["z","x","c","v","b","n","m","Caps",navigation_button]
+    ];
+
+    var table = document.createElement("div");
+    table.setAttribute("class","keyboard-table");
+
+    for(var i = 0 ; i < keypress.length ; i++){
+      var row = document.createElement("div")
+      row.setAttribute("class","keyboard-table-row");
+      table.appendChild(row);
+
+      for(var x = 0 ; x < keypress[i].length ; x++){
+        var cell = document.createElement("div")
+        cell.setAttribute("class","keyboard-table-cell");
+        row.appendChild(cell);
+
+        var span = document.createElement("span")
+        span.setAttribute("onmousedown","keyPressed(this);");
+        if(keypress[i][x] == 'NEXT' || keypress[i][x] == 'LOGIN') {
+          span.setAttribute("class","keyboard-span green_btn");
+          span.setAttribute("onmousedown","hideKeyboard();keyPressed(this)");
+        } else {
+          span.setAttribute("class","keyboard-span");
         }
 
-        function removeHereButton() {
-            if (__$("addHere")) {
-                __$("buttons").removeChild(__$("addHere"));
-            }
+        span.innerHTML = keypress[i][x];
+        cell.appendChild(span);
+
+      }
+    }
+
+    var keyboard = document.getElementById("keyboard");
+    keyboard.appendChild(table);
+  }
+
+  function keyPressed(e) {
+    var inputBox = focusInput;
+
+    try{
+
+      if(e.innerHTML.match(/Del/i)){
+        inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);
+      }else if(e.innerHTML.match(/Caps/i)){
+      }else if(e.innerHTML == 'NEXT'){
+        if(focusInput.id == document.getElementById('username').id){
+          focusInput = document.getElementById('password');
+        } else if(focusInput.id == document.getElementById('password').id){
+          focusInput = document.getElementById('username');
         }
+        showKeyboard(focusInput, 'NEXT');
+      }else if(e.innerHTML == 'LOGIN'){
+        attemptLogin();
+      }else{
+        inputBox.value += e.innerHTML;
+      }
 
-        function getSelected() {
-            var choices = "";
+    }catch(x) { }
 
-            for (var o = 0; o < __$('choice').options.length; o++) {
-                if (__$('choice').options[o].selected == true) {
-                    choices += __$('choice').options[o].innerHTML + " ";
-                }
-            }
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    var btn      = document.getElementById("login-btn");
 
-            return choices;
-        }
+    if(username.value.length > 0 && password.value.length > 0){
+      //btn.style = "visibility: inline;";
+      hideKeyboard();
+      showKeyboard(focusInput, 'LOGIN');
+    }else{
+      btn.style = "visibility: hidden;";
+    }
+  }
 
-        function getInput() {
-            key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-            value = $('touchscreenInput' + tstCurrentPage).value;
-            sessionStorage.setItem(key, value);
-        }
+  // attempt to login
+  function attemptLogin() {
 
-        function getPass() {
-            sessionStorage.setItem("userPassword", document.getElementById("touchscreenInput1").value);
-        }
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
 
-    </script>
+    sessionStorage.setItem('username', username);
+    sessionStorage.setItem('userPassword', password);
 
-    <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
-        defer="true"></script>
-    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
-    <script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
-</head>
+    signIn();
+  }
 
-<body id="mateme">
-    <div id="container">
-        <div id="content">
-            <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
-            </div>
-            <script src="/javascripts/barcode.js?1503047298" type="text/javascript"></script>
-            <script type="text/javascript">
-                var barcode = "";
-                var tt_cancel_destination = "/views/login.html"
+</script>
 
-                function inform() {
-                    $('infoBar' + tstCurrentPage).innerHTML =
-                        "Muli bwanji, enter your user information or scan your id card";
-                }
+<body>
 
-                function validateLocation() {
-                    __$("nextButton").removeAttribute("onmousedown");
-                    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
-                    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
-                        event.preventDefault();
-                        if (event.keyCode === 13) {
-                            getPass();
-                            doSignIn();
-                        }
-                    });
-                    __$("nextButton").onmousedown = function () {
-                        getPass();
-                        doSignIn();
-                    }
+  <div class="main">
 
-                }
-
-                function doSignIn() {
-                    showStatus();
-                    signIn();
-                }
-            </script>
-
-            <form id='sessions' action="/" method='post'>
-
-                <label for="login">Username</label>
-                <input field_type="password" helpText="Enter user name" id="login" name="login" textCase="lower"
-                    tt_onLoad="inform(); barcodeId = 'touchscreenInput0';" type="text" tt_onUnload="getInput();" key="username" /><br>
-
-                <label for="password">Password</label>
-                <input field_type="password" helpText="Enter password" id="password" name="password" textCase="lower"
-                    tt_onLoad="validateLocation();inform(); barcodeId = 'touchscreenInput1';" type="password"
-                    tt_onUnload="getPass();" /><br>
-
-
-                <input name="commit" onclick="myfunction(); " type="submit" value="Submit" tt_onUnload="" />
-            </form>
-            <div id="footer">
-            </div>
-        </div>
+    <div class="main-row">
+      <div class="main-cell inputs">
+        <form id='sessions' action="/" method='post'>
+          <table id="form-table">
+            <tr>
+              <td>
+                <h1 style="border-bottom: 1px solid #EBE6E2;">
+                  <span id="emr-title">
+                    <span id="emr-title-one">
+                      National
+                    </span>
+                    <br />
+                    <span id="emr-title-two">
+                      EMR
+                    </span>
+                    <span id="version-desc">
+                      1.0.0
+                    </span>
+                  </span>
+                </h1>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="login_input" type="username" id="username" onmousedown="hideKeyboard();showKeyboard(this,'NEXT');" placeholder="username" style=""/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="login_input" type="password" id="password" onmousedown="hideKeyboard();showKeyboard(this,'NEXT');" placeholder="password"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
     </div>
-</body>
 
-</html>
+    <div class="main-row" style="90px;">
+      <div class="main-cell footer">
+        <span class="logos"><img src="/assets/images/login-logos/LIN.png" /></span>
+        <span class="logos"><img src="/assets/images/login-logos/PEPFAR.png" /></span>
+
+        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onmousedown="attemptLogin();">
+          Login
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</body>
