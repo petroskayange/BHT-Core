@@ -1,5 +1,6 @@
 /apps/*
 /config/config.json
+/public/touchscreentoolkit
 /public/touchscreentoolkit/*
 *.swp
 *.json

@@ -225,13 +225,16 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
     $("#activityDescription").text(activitiesDescription).attr('id', "activityDescription" + counter);
     $("#activitytext").text(activitiesName).attr('id', "activitytext" + counter);
     $("#activityName").text(activitiesName).attr('id', "activityName" + counter);
-    $("#moduleButton").attr('id', "moduleButton" + counter);
+    $("#activitiesButton").attr('id', "activitiesButton" + counter);
+    $("#activitiesCard").attr('id', "activitiesCard" + counter);
+    $("#activitiesButton"+counter).attr("href", url);
+    // $("activitiesCard"+counter).attr("onclick", "window.location.href='"+url+"';");
     
     $("#cardImage")
         .on('error', function () {
             $(this).attr('src', "/assets/images/no_image.png");
         }).attr('src', activitiesImage).attr('id', "cardImage" + counter);
-    $("#moduleButton" + counter).click(function () {
+    $("#activitiesButton" + counter).click(function () {
         sessionStorage.setItem("activitiesName", activitiesName);
         sessionStorage.setItem("activitiesImage", activitiesImage);
         changeActivities();
@@ -244,7 +247,9 @@ function newTasksCard(encounter_name, tasksImage, counter, url) {
     $("#taskstext").text(encounter_name).attr('id', "taskstext" + counter);
     $("#encounter_name").text(encounter_name).attr('id', "encounterName" + counter);
     $("#encounterButton").attr('id', "encounterButton" + counter);
+    $("#tasksCard").attr('id', "tasksCard" + counter);
     $("#encounterButton"+counter).attr("href", url);
+    $("#tasksCard"+counter).attr("onclick", "window.location.href='"+url+"';");
 
     $("#cardImage")
         .on('error', function () {
@@ -358,6 +363,7 @@ function getActivities(activitiesData) {
         activitiesDescription[i] = activitiesData.others[i].activitiesDescription || "No Description Available";
         activitiesIcon[i] = activitiesData.others[i].activitiesIcon;
         applicationFolder[i] = activitiesData.others[i].applicationFolder;
+        applicationJsonUrl[i] = activitiesData.others[i].url;
         checkActivities(applicationJsonUrl[i], activitiesName[i], activitiesDescription[i], i, activitiesIcon[i]);
 
     }
@@ -532,12 +538,12 @@ function showOptions(e) {
 }
 
 function showActivities(a) {
-    var btn = document.getElementsByClassName("activities-btns");
+    // var btn = document.getElementsByClassName("activities-btns");
 
-    // Loop through the buttons and add the active class to the current/clicked button
-    for (var x = 0; x < btn.length; x++) {
-        btn[x].setAttribute('class', 'btn btn-info activities-btns');
-    }
+    // // Loop through the buttons and add the active class to the current/clicked button
+    // for (var x = 0; x < btn.length; x++) {
+    //     btn[x].setAttribute('class', 'btn btn-info activities-btns');
+    // }
 }
 
 function showTasks(t) {
