@@ -356,6 +356,7 @@ function getTasks(encountersData) {
 }
 
 function buildDashboardButtons(tasks, container) {
+  container.innerHTML = null;
   var count = 0;
 
   var containerTable = document.createElement("div");
