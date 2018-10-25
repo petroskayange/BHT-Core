@@ -355,6 +355,44 @@ function getTasks(encountersData) {
   buildDashboardButtons(tasks, container);
 }
 
+function printNPID() {
+  try {
+    showStatus();
+  } catch (e) {
+
+  }
+  
+  var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
+  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = this.responseText;
+      console.log(obj)
+      download("label.lbl", obj)
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+
+}
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 function buildDashboardButtons(tasks, container) {
   container.innerHTML = null;
   var count = 0;
@@ -382,7 +420,11 @@ function buildDashboardButtons(tasks, container) {
     containerTableCell = document.createElement("div");
     containerTableCell.setAttribute("class","tasks-table-cell");
     containerTableCell.setAttribute("style","display: table-cell;");
-    containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
+    if(tasks[i][0].match(/National ID/i)){
+      containerTableCell.setAttribute("onmousedown","printNPID();");
+    }else{
+      containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
+    }
 
     var infoTable = document.createElement("table");
     infoTable.setAttribute("class","info-table");
