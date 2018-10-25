@@ -242,28 +242,6 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
 
 }
 
-function newTasksCard(encounter_name, tasksImage, counter, url) {
-    $("#tasks-modal-div").append($('#tasks_template').html());
-    $("#taskstext").text(encounter_name).attr('id', "taskstext" + counter);
-    $("#encounter_name").text(encounter_name).attr('id', "encounterName" + counter);
-    $("#encounterButton").attr('id', "encounterButton" + counter);
-    $("#tasksCard").attr('id', "tasksCard" + counter);
-    $("#encounterButton"+counter).attr("href", url);
-    $("#tasksCard"+counter).attr("onclick", "window.location.href='"+url+"';");
-
-    $("#cardImage")
-        .on('error', function () {
-            $(this).attr('src', "/assets/images/no_image.png");
-        }).attr('src', tasksImage).attr('id', "cardImage" + counter);
-    $("#encounterButton" + counter).click(function () {
-        sessionStorage.setItem("encounter_name", encounter_name);
-        sessionStorage.setItem("tasksImage", tasksImage);
-
-        changeTasks();
-    });
-
-}
-
 function getName(user_id, url, port, protocol) {
 
     jQuery.getJSON({
@@ -327,13 +305,6 @@ function checkActivities(applicationJsonUrl, activitiesName, activitiesDescripti
 
 }
 
-function checkTasks(applicationJsonUrl, encounter_name, encountersIconUrl, counter) {
-
-
-        newTasksCard(encounter_name, encountersIconUrl, counter, applicationJsonUrl);
-
-}
-
 function parser(applicationData) {
 
     for (var i = 0; i < applicationData.apps.length; i++) {
@@ -370,32 +341,77 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
+  var j = Object.keys(encountersData.encounters);
+  var i = 0;
+  var tasks = [];
+  j.forEach ( function(j) {
+    var values = encountersData.encounters[j]
+    var url = values.url;
+    var icon = values.activitiesIcon;
+    tasks.push([j, icon, url])
+  });
 
-    // alert("here");
-    var j = Object.keys(encountersData.encounters);
-    var i = 0;
-    j.forEach ( function(j) {
-        var values = encountersData.encounters[j]
-        var url = values.url;
-        checkTasks(values.url, j, values.encountersIcon, i);
-        console.log(values);
-        i++;
-    });
-    // for (var i = 0; i < j.length; i++) {
-        // alert("here");
-        // var j = encountersData.encounters;
-        // console.log(j);
-        // // encounter_name = encountersData[i];
-        // var j = Object.keys(encountersData.encounters);
-        // for (var i = j.length - 1; i >= 0; i--) {
-        //     // console.log(j[i]);
-        // }
+  var container = document.getElementById('tasks-container');
+  buildDashboardButtons(tasks, container);
+}
 
-        // encountersIcon[i] = encountersData[i].encountersIcon;
-        // applicationFolder = encountersData[i].applicationFolder;
-        // checkTasks(applicationJsonUrl[i], encounter_name[i], encountersIcon[i]);
+function buildDashboardButtons(tasks, container) {
+  var count = 0;
 
-    // }
+  var containerTable = document.createElement("div");
+  containerTable.setAttribute("class","tasks-table");
+  containerTable.setAttribute("style","display: table; width: 100%;");
+  container.appendChild(containerTable);
+
+  var containerTableRow = document.createElement("div");
+  containerTableRow.setAttribute("class","tasks-table-row");
+  containerTableRow.setAttribute("style","display: table-row;");
+  containerTable.appendChild(containerTableRow);
+
+
+  for(var i = 0 ; i < tasks.length ; i++){
+    if(count == 3){
+      containerTableRow = document.createElement("div");
+      containerTableRow.setAttribute("class","tasks-table-row");
+      containerTableRow.setAttribute("style","display: table-row;");
+      containerTable.appendChild(containerTableRow);
+      count = 0;
+    }
+
+    containerTableCell = document.createElement("div");
+    containerTableCell.setAttribute("class","tasks-table-cell");
+    containerTableCell.setAttribute("style","display: table-cell;");
+    containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
+
+    var infoTable = document.createElement("table");
+    infoTable.setAttribute("class","info-table");
+    infoTable.setAttribute("style","width: 100%; padding: 8px; color: black;");
+
+    var tr = document.createElement("tr");
+    infoTable.appendChild(tr);
+
+    var td = document.createElement("td");
+    td.setAttribute("style","width: 52px;");
+    var img = document.createElement("img");
+    img.setAttribute("src", tasks[i][1]);
+    img.setAttribute("style","width: 50px; height: 50px;");
+    td.appendChild(img);
+    tr.appendChild(td);
+
+    td = document.createElement("td");
+    td.setAttribute("style","color: #fff; font-weight: bold; width: 80%; text-align: left;");
+    td.setAttribute("id","task-button-" + (i + 1));
+    td.innerHTML = tasks[i][0].toUpperCase();
+    tr.appendChild(td);
+
+    containerTableCell.appendChild(infoTable);
+
+
+    containerTableRow.appendChild(containerTableCell);
+
+    count++;
+  }
+
 }
 
 function changeModule(url ) {
@@ -544,6 +560,29 @@ function showActivities(a) {
     // for (var x = 0; x < btn.length; x++) {
     //     btn[x].setAttribute('class', 'btn btn-info activities-btns');
     // }
+    $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+      .done(function (data, status) {
+          buildPrintOutandOthers(data);
+      })
+      .fail(function () {
+          console.log("application.json is missing from /apps/ART folder");
+      });
+}
+
+function buildPrintOutandOthers(data) {
+  var j = Object.keys(data.others);
+  var i = 0;
+  var tasks = [];
+  j.forEach ( function(j) {
+    var values = data.others[j]
+    var name = values.activitiesName;
+    var icon = values.activitiesIcon;
+    tasks.push([name, icon, "#"]);
+  });
+
+  var container = document.getElementById("activities-body");
+  
+  buildDashboardButtons(tasks, container); 
 }
 
 function showTasks(t) {
