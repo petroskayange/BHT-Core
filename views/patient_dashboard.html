@@ -37,6 +37,30 @@
     background-color: #007bff;
   }
 
+  .tasks-table {
+    border-collapse: separate;
+    border-spacing: 10px;
+  }
+
+  .tasks-table-cell {
+    border-style: solid;
+
+    border-style: solid;
+    border: 1px solid #5ca6c4;
+    cursor: pointer;
+    box-shadow: inset 2px -4px 2px 0px;
+    background-color: #5480a8;
+    border-radius: 7px;
+    border: solid black 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-box-shadow: inset 0 0 10px #000000;
+    -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+    box-shadow: inset 0 0 10px #000000;
+    width: 300px;
+    color: #fff;
+  }
   </style>
   
   <!-- container -->
@@ -306,20 +330,19 @@
 <!-- tasks modal-->
     <div class="modal fade" id="tasksModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
-            <div class="modal-content" style="margin-left:0px;">
+            <div class="modal-content" style="margin-left:0px; height: 85vh !important;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select Task</h4>
                  </div>
                  <div class="modal-body" id="tasks-body">
-                    <div class="container">
-                       <div class="row" id="tasks-modal-div">
+                    <div class="container" id="tasks-container" style="width: 100% !important;">
+                      <!-- <div class="row" id="tasks-modal-div">
                           <template id="tasks_template">
-                             <!-- <div class="" > -->
                              <div class="app-btn" id="tasksCard" style="margin: 10px;" >
                              <a href="#" class="card-block clearfix" id="encounterButton" onclick="$('#tasksModal').modal('hide');">
                                 <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
-                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                                 <!--  <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
                                    <div class="middle">
                                       <div class="text">
                                          <p id="taskstext"></p>
@@ -333,7 +356,7 @@
                              </a>
                              </div>
                           </template>
-                       </div>
+                       </div> -->
                     </div>
                  </div>
                  <!-- <div id="cover">
