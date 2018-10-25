@@ -1,11 +1,11 @@
 
 .vitals-keypad {
-  width: 400px;
+  width: 300px;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
   user-select: none;
-  padding-left: 25%;
+  padding-left: 5%;
 }
 
 .keypad-buttons {
@@ -68,8 +68,11 @@
   display: inline;
   text-align: center;
   border-style: solid;
-  border-width: 3px;
-  border-color: black;
+  border-width: 1px;
+  border-color: silver;
+
+  font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
+  font-size: 2.2em;
 }
 
 .summary-table {
