@@ -347,10 +347,15 @@ function getTasks(encountersData) {
   j.forEach ( function(j) {
     var values = encountersData.encounters[j]
     var url = values.url;
-    tasks.push([j, values, url])
+    var icon = values.activitiesIcon;
+    tasks.push([j, icon, url])
   });
 
   var container = document.getElementById('tasks-container');
+  buildDashboardButtons(tasks, container);
+}
+
+function buildDashboardButtons(tasks, container) {
   var count = 0;
 
   var containerTable = document.createElement("div");
@@ -388,7 +393,7 @@ function getTasks(encountersData) {
     var td = document.createElement("td");
     td.setAttribute("style","width: 52px;");
     var img = document.createElement("img");
-    img.setAttribute("src", "/assets/images/task.png");
+    img.setAttribute("src", tasks[i][1]);
     img.setAttribute("style","width: 50px; height: 50px;");
     td.appendChild(img);
     tr.appendChild(td);
@@ -555,6 +560,29 @@ function showActivities(a) {
     // for (var x = 0; x < btn.length; x++) {
     //     btn[x].setAttribute('class', 'btn btn-info activities-btns');
     // }
+    $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+      .done(function (data, status) {
+          buildPrintOutandOthers(data);
+      })
+      .fail(function () {
+          console.log("application.json is missing from /apps/ART folder");
+      });
+}
+
+function buildPrintOutandOthers(data) {
+  var j = Object.keys(data.others);
+  var i = 0;
+  var tasks = [];
+  j.forEach ( function(j) {
+    var values = data.others[j]
+    var name = values.activitiesName;
+    var icon = values.activitiesIcon;
+    tasks.push([name, icon, "#"]);
+  });
+
+  var container = document.getElementById("activities-body");
+  
+  buildDashboardButtons(tasks, container); 
 }
 
 function showTasks(t) {
