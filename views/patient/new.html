@@ -40,7 +40,7 @@
           gender: null, birthdate: null, birthdate_estimated: null,
           home_district: null, home_traditional_authority: null, home_village: null,
           current_district: null, current_traditional_authority: null, current_village: null,
-					landmark: null, cell_phone_number: null
+					landmark: null, cell_phone_number: null, relationship: null
         }
 
         for(var i = 0 ; i < rows.length ; i++){
@@ -73,7 +73,9 @@
 						parametersPassed.landmark = data; 
 					}else if(title.match(/Cell phone/i)){
 						parametersPassed.cell_phone_number = data; 
-					}
+					}else if(title.match(/Guardian/i)){
+            parametersPassed.relationship = data;
+          }
         }
 
         postClientParamaters(parametersPassed);
@@ -119,7 +121,8 @@
               home_village:                    __$('home_village').value,
 
               landmark:                        __$('landmark').value,
-              cell_phone_number:               __$('cellphone').value
+              cell_phone_number:               __$('cellphone').value,
+              relationship:                    __$('guardian_present').value,
             }
 
         var table = document.createElement('table');
@@ -138,7 +141,8 @@
           ["Current TA", parameter.current_traditional_authority],
           ["Current Village", parameter.current_village],
           ["Landmark", parameter.landmark],
-          ["Cell phone", parameter.cell_phone_number]
+          ["Cell phone", parameter.cell_phone_number],
+          ["Guardian", parameter.relationship]
         ];
 
         for(var i = 0 ; i < attributes.length; i++){
@@ -654,13 +658,26 @@
     validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available"
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
+
+  <select allowFreeText="false" helpText="Guardian Present" id="guardian_present" name="guardian_present" ttMatchFromBeginning="true" ><option value="YES">Yes</option>
+    <option value="NO">No</option></select>
+  
+  <!-- Make sure patient is created
+
+  <! <input id="person_patient" name="person[patient]" type="hidden" value="" />
+
+  <input id="relation" name="relation" type="hidden" value="" />
+
+  <input id="identifier" name="identifier" type="hidden" value="" />
+
+  <input name="commit" type="submit" value="Create person" /> -->
   
   <input type="text" name="summary" id="summary"
     tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
-    tt_onUnLoad="resetFinishBtn();"
-    optional = "true" tt_pageStyleClass = "NoControls" /> 
+    tt_onUnLoad ="resetFinishBtn();" optional = "true" tt_pageStyleClass = "NoControls" /> 
 
-  <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
+
+  <!-- <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
 
   <input type="hidden" name="person[gender]" id="gender" value="" />
   <input type="hidden" name="person[patient]" id="person_patient" value="" />
@@ -679,6 +696,7 @@
 </html>
 
 <script type="text/javascript">
+var patientID = sessionStorage.getItem("patientID");
 var tt_cancel_destination = "/views/patient/search_results.html";
 
 function getObjects(td, attribute, element_name, aUrl) {
@@ -723,7 +741,6 @@ function getObjects(td, attribute, element_name, aUrl) {
 function setUrl(e, name) {
   __$(e).setAttribute('ajaxURL', "/districts?region_id=2");
 }
-
 
 function QueryString(URL) {
     // This function is anonymous, is executed immediately and 
@@ -832,7 +849,11 @@ function createPatient(person_id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
-			document.location = "../patient_dashboard.html?patient_id=" + person_id;
+      if (__$('guardian_present').value == 'YES'){
+        document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
+      } else {
+        document.location = "../patient_dashboard.html?patient_id=" + person_id;
+      }
     }
   };
   xhttp.open("POST", url, true);

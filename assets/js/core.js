@@ -475,7 +475,7 @@ function activitiesRedirect(id) {
 }
 
 function registerPatientRedirect() {
-    window.location.href = './views/patient/search.html';
+    window.location.href = '/views/patient/search.html';
 }
 // overview tab work in progress
 function overview() {
