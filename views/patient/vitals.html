@@ -23,16 +23,19 @@
   display: table-cell;
 }
 
+.cell-summary {
+  width: 45%;
+  background-color:lightyellow;
+}
+
 .cell-left {
-  float: left;
-  width: 12%;
-  padding-left: 10%;
+  width: 155px;
 }
 
 .cell-right {
 	border-style: solid !important;
-	border-width: 0px 0px 0px 1px;
-	width: 85%;
+	border-width: 0px 1px 0px 1px;
+	width: 340px;
   vertical-align: top;
 }
 
@@ -67,23 +70,21 @@
 
 .app-btn {
 	padding-bottom: 5px;
-	float: left;
 	text-align: center;
 	margin-right: auto;
 	margin-left: auto;
 	display: block;
-	margin: 5px;
-	border: 1px solid #2e6da4;
+	margin-top: 5px;
+	border: 1px solid #5480a8;
 	cursor: pointer;
-	box-shadow: inset 2px -4px 2px 0px;
 	background-color: white;
 	border-radius: 7px;
-	border: solid black 3px;
+	border: solid black 1px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	-moz-box-shadow: inset 0 0 10px #000000;
-	-webkit-box-shadow: inset 0 0 10px #000000;
+	-moz-box-shadow: inset 0 0 1px #000000;
+	-webkit-box-shadow: inset 0 0 1px #000000;
 	box-shadow: inset 0 0 10px #000000;
 	text-decoration: none;
 
@@ -108,8 +109,24 @@ img {
 .button-diabled {
   color: currentColor;
   cursor: not-allowed;
-  opacity: 0.2;
   text-decoration: none;
+  background-color: #5480a8;
+  color: white;
+  font-weight: bold;
+}
+
+#dy-summary-table {
+  width: 90%;
+  font-size: 1.5em;
+  border-collapse: collapse;
+  margin: 0px 0px 0px 20px;
+}
+
+#dy-summary-table td {
+  text-align: right;
+  padding-right: 10px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
 }
 
 </style>
@@ -122,6 +139,15 @@ img {
 <script>
 
 var vitalsEntered = {};
+  
+var vitalsAssigned = [
+  ["Weight","weight.png"],
+  ["Height","height.png"],
+  ["BP","bp.png"],
+  ["Temp","temp.png"],
+  ["SPO2","spo2.png"],
+  ["Pulse","pulse-rate.png"]
+];
 
 function removeFromHash() {
   var allButtons = document.getElementsByClassName('app-btn');
@@ -163,6 +189,7 @@ function setEnterVital() {
 
 function buildVitalsPage() {
   var inputFrame = document.getElementById("inputFrame" + tstCurrentPage);
+  inputFrame.style = "width: 96%;";
 
   var mainContainer = document.createElement('div');
   mainContainer.setAttribute("class", "main-table-div");
@@ -171,7 +198,7 @@ function buildVitalsPage() {
   mainContainerRow.setAttribute("class", "main-table-div-row");
   mainContainer.appendChild(mainContainerRow);
 
-  var cells = ['left','right'];
+  var cells = ['left','right','summary'];
   for(var i = 0 ; i < cells.length; i++){
     var mainContainerCell = document.createElement('div');
     mainContainerCell.setAttribute("class", "main-table-div-cell cell-" + cells[i]);
@@ -187,14 +214,7 @@ function buildVitalsPage() {
 }
 
 function buildVitalsButtons(element) {
-  var buttons = [
-		["Weight","weight.png"],
-		["Height","height.png"],
-		["BP","bp.png"],
-		["Temp","temp.png"],
-		["SPO2","spo2.png"],
-		["Pulse","pulse-rate.png"]
- 	];
+  var buttons = vitalsAssigned;
  
   var btnCont = document.createElement('div')
   btnCont.setAttribute('class',"table-main");  
@@ -360,6 +380,25 @@ function validateWeight(weight){
     return false;
   }
 
+  if(weight < 2 || weight > 220){
+    showMessage("Weight readings are outside the parameters.");
+    return false;
+  }
+
+  var afterDecimal = [];
+  afterDecimal.push(weight);
+  afterDecimal = afterDecimal.join(",").split(".")[1];
+  
+  if(afterDecimal == undefined){
+    showMessage('Please include a valid number<br />after the "."');
+    return false;
+  }
+
+  if(!isNumeric(afterDecimal)){
+    showMessage('Please include a valid number<br />after the "."');
+    return false;
+  }
+
   return true;
 }
 
@@ -449,11 +488,10 @@ function isNumeric(n) {
 function changeNextBtn() {
   var nextBtn = document.getElementById('nextButton');
   nextBtn.setAttribute("onmousedown","validateEntries();");
-  nextBtn.setAttribute("onclick","");
 }
 
 function validateEntries() {
-
+/*
   confirmIfWeightIsEntered();
 
   try {
@@ -465,10 +503,19 @@ function validateEntries() {
     showMessage("Weight readings are a requirement");
     return;
   }
+*/
+  
+  var validationANS = validateUserInput();
+  if(!validationANS)
+    return;
 
-  var nextBtn = document.getElementById('nextButton');
-  nextBtn.setAttribute("onmousedown","gotoNextPage();");
-  gotoNextPage();
+  if(document.getElementById("td-Weight").innerHTML.length < 1) {
+    showMessage("Weight can not be empty");
+    return;
+  }
+
+
+  submitVitals();
 }
 
 function confirmIfWeightIsEntered() {
@@ -545,11 +592,6 @@ function changeNextBtnToSubmit() {
   nextBtn.setAttribute("onclick","");
 }
 
-function resetNextButton() {
-  var nextBtn = document.getElementById('nextButton');
-  nextBtn.setAttribute("onmousedown","gotoNextPage();");
-}
-
 </script>
 
 <body id="mateme">
@@ -560,13 +602,13 @@ function resetNextButton() {
       <form onsubmit="submitEncounter();">
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtn();buildVitalsPage();buildKeyPad();" 
+          tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtn();buildVitalsPage();buildKeyPad();buildTable();" 
           tt_pageStyleClass= "NoControls" helpText="Vitals" optional = "true"/>
 
-        <input type="text" name="summary"
+        <!-- <input type="text" name="summary"
           tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtnToSubmit();buildVitalSummary();" 
           tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"
-          tt_onUnLoad="resetNextButton();" />
+          tt_onUnLoad="resetNextButton();" /> -->
 
       
 
