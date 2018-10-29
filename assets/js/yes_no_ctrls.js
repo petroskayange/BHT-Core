@@ -1,7 +1,7 @@
 var previousNextButton = null;
 var yesNo_Hash = {};
 
-function isEmpty(obj) {
+function isHashEmpty(obj) {
 	for(var key in obj) {
 		if(obj.hasOwnProperty(key))
 			return false;
@@ -10,7 +10,8 @@ function isEmpty(obj) {
 }
 
 function validateYesNo(concept_name, values) {
-  if(isEmpty(yesNo_Hash)){
+
+  if(isHashEmpty(yesNo_Hash)){
     showMessage('Please complete selection by clicking Yes / No');
     return;
   }
@@ -34,7 +35,8 @@ function validateYesNo(concept_name, values) {
   nextButton.setAttribute('onmousedown', previousNextButton);
 	//gotoNextPage();
 
-	eval(nextButton.getAttribute("onmousedown"));
+	eval(previousNextButton);
+  previousNextButton = null;
 }
 
 function buildYesNoUI(concept_name, values, targetElement) {
@@ -95,9 +97,9 @@ function createNewCtrl(e, concept_name, values) {
 
       if(setFunctionName != undefined){
         setFunctions = "buttonClicked(this,'" + concept_name + "','" + concept + "');"  + setFunctionName + "(this);";
-        button.setAttribute("onclick", setFunctions);
+        button.setAttribute("onmousedown", setFunctions);
       }else{
-        button.setAttribute("onclick","buttonClicked(this,'" + concept_name + "','" + concept + "');");
+        button.setAttribute("onmousedown","buttonClicked(this,'" + concept_name + "','" + concept + "');");
       }
 
       /* ............................................ */

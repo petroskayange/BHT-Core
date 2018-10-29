@@ -73,45 +73,44 @@ function enterKeypadValue(e){
     }
   
   }catch(x) { }   
+
+  var allButtons = document.getElementsByClassName("app-btn");
+  var activeBTN;
+  
+  for(var i = 0 ; i < allButtons.length ; i++){
+    if(allButtons[i].getAttribute("class").trim() == "app-btn"){
+      activeBTN = allButtons[i];
+      break;
+    }
+  }
    
+  var id = activeBTN.id.replace("vitals-",""); 
+  var targetTD = document.getElementById("td-" + id);
+  targetTD.innerHTML = inputBox.value; 
+  vitalsEntered["vitals-" + id] = inputBox.value;
+  if(targetTD.innerHTML.length < 1)
+    vitalsEntered["vitals-" + id] = null;
+
 }
 
+function buildTable() {
+  var container = document.getElementsByClassName("cell-summary")[0];
+  var table = document.createElement("table");
+  table.setAttribute("id","dy-summary-table");
+  container.appendChild(table);
 
-
-
-
-function buildVitalSummary() {
-  var summaryTable = document.createElement("table");
-  summaryTable.setAttribute("class","summary-table");
-
-  for(var k in vitalsEntered){
+  for(var i = 0 ; i < vitalsAssigned.length ; i++){
     var tr = document.createElement("tr");
-    tr.setAttribute("class","summary-table-tr");
-    summaryTable.appendChild(tr);
+    table.appendChild(tr);
 
     var th = document.createElement("th");
-    th.setAttribute("class","summary-table-th");
-    th.innerHTML  = k.replace("vitals-","");
+    th.innerHTML = vitalsAssigned[i][0];
     tr.appendChild(th);
 
     var td = document.createElement("td");
-    td.setAttribute("class","summary-table-td");
-    td.innerHTML  = vitalsEntered[k];
+    td.setAttribute("id", "td-" + vitalsAssigned[i][0]);
     tr.appendChild(td);
 
-
   }
-
-  document.getElementById("inputFrame" + tstCurrentPage).appendChild(summaryTable);
-
 }
-
-
-
-
-
-
-
-
-
 

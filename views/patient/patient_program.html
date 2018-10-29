@@ -44,6 +44,14 @@
             return choices;
         }
 
+
+
+        function resetFinishBtn() {
+            var finishButton =  __$("nextButton");
+            finishButton.setAttribute('onmousedown',"updateProgramState();");
+            finishButton.setAttribute('onclick',"");
+       }
+
     </script>
 
     <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -58,6 +66,13 @@
         <link href="/stylesheets/set_date.css?1531829709" media="screen" rel="stylesheet" type="text/css" />
     <script>
 
+        function updateProgramState(){
+
+            console.log('Program id ' + __$('program_name').value);
+            console.log('State ' + __$('program_states').value);
+            console.log('date ' + __$('set_date').value);
+        }
+
         function getInput(){
         }
 
@@ -66,6 +81,12 @@
             month = parseFloat(document.getElementsByName('set_month')[0].value)
             day = parseFloat(document.getElementsByName('set_day')[0].value)
             return dateDiff(year,month,day);
+        }
+
+        function set_program_for_workflows() {
+            var program_id = encodeURIComponent($('program_id').value); 
+            $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/programs/" + program_id + "/workflows");
+            listSuggestions(tstCurrentPage); 
         }
 
         function dateDiff(year,month,day){
@@ -83,6 +104,22 @@
             listSuggestions(tstCurrentPage);
         }
 
+        function validProgram(){
+
+          if(enrolled_program_names == ''){
+            return true;
+          }
+
+          selected_location = ($('tt_page_location').getElementsByTagName("input")[0].value);
+            alert("");
+           for (var i = 0 ; i < enrolled_program_names.length ; i++ ){
+            if(enrolled_program_names[i][0] == selected_program && enrolled_program_names[i][1] == selected_location){
+                return false;
+            }
+          }
+            return true;
+        }
+
     var tt_cancel_destination = "/clinic"
     </script>
        <form action = "" method = "post">
@@ -97,21 +134,50 @@
             ajaxURL="/programs?page_size=10&name="
             tt_pageStyleClass= "NoKeyboard" 
          />
-
-        <select name="program_states" 
-            id="program_states" 
-            field_type="alpha"
-            helpText="Program states"
-            key="program_states"
-            tt_onLoad="set_ajaxURL_for_suggestions('/programs/' + document.getElementById('program_name').value + '/workflows');"  
-            tt_pageStyleClass = "NoKeyboard"
-            objectType="states" 
+        <select ajaxURL="/locations" 
+                allowFreeText="false"
+                objectType="locations"
+                field_type="alpha"
+                helpText="Location"
+                id="location_id"
+                name="location_id"
+                validationJS="validProgram()" 
+                validationMessage="Patient already enrolled in program"
+                tt_pageStyleClass= "NoKeyboard"  
         />
 
+        <input type="text" name="program_workflow_id"
+                id="program_workflow_id"
+                field_type="alpha" 
+                helpText="Program workflow"
+                key="program_workflow_id"
+                tt_onUnload="getInput();"
+                ajaxURL="/programs/" + document.getElementById('program_name').value + "/workflows"
+                tt_onLoad="set_ajaxURL_for_suggestions('/programs/' + document.getElementById('program_name').value + '/workflows');"
+                tt_pageStyleClass= "NoKeyboard" 
+                objectType="workflow" 
+        />
+
+        <input type="text" name="program_states"
+                id="program_states"
+                field_type="alpha" 
+                helpText="Program states"
+                key="program_states"
+                tt_onUnload=""
+                ajaxURL="/programs/" + document.getElementById('program_name').value + "/workflows"
+                tt_onLoad="set_ajaxURL_for_suggestions('/programs/' + document.getElementById('program_name').value + '/workflows');"
+                tt_pageStyleClass= "NoKeyboard" 
+                objectType="states" 
+        />
+
+
+
         <input field_type="date"
-            helpText="Set Date" 
+            helpText="Initial state Date" 
             id="set_date" name="set_date" 
-            type="text" 
+            type="text"
+            tt_onUnLoad="updateProgramState();"
+
         />
 
         <input name="commit" type="submit" value="Set visit date" />
