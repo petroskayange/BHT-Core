@@ -19,10 +19,10 @@ report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" 
 
 var addDiv = "<div class='col-sm-2 tasks'>";
 var endDiv = "</div>"
-                          
+
 // activities_tab_content += addDiv +'<button id="national-id" class="taskBtns"><span>National ID(Print)</span></button>';
-// activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';  
-// activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';    
+// activities_tab_content += endDiv +addDiv+ '<button  id="visit-summary" class="taskBtns"><span>Visit Summary(Print)</span></button>';
+// activities_tab_content += endDiv + addDiv+'<button  id="demographics-print" class="taskBtns"><span>Demographics(Print)</span></button>';
 // activities_tab_content += endDiv + addDiv+'<button id="demographics-edit" onclick="activitiesRedirect(this.id);" class="taskBtns"><span>Demographics(Edit)</span></button>' + endDiv;
 
 
@@ -129,7 +129,7 @@ function PersistData(data, res) {
 function generateTemplate() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
-     
+
         $.getJSON("/config/config.json")
             .done(function (data, status) {
                 parser(data);
@@ -144,7 +144,7 @@ function generateTemplate() {
 function generateActivities() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
-        
+
         $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
             .done(function (data, status) {
                 getActivities(data);
@@ -200,12 +200,12 @@ function newModuleCard(applicationName, applicationDescription, applicationImage
     $("#appName").text(applicationName).attr('id', "appName" + counter);
     $("#moduleButton").attr('id', "moduleButton" + counter);
     if (url == "") {
-        $("#moduleButton"+counter).attr("href", "#");    
+        $("#moduleButton"+counter).attr("href", "#");
     }else {
         $("#moduleButton"+counter).attr("href", url);
     }
-   
-    
+
+
     // $("#apptext").text(l("applicationName"));
     $("#cardImage")
         .on('error', function () {
@@ -229,7 +229,7 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
     $("#activitiesCard").attr('id', "activitiesCard" + counter);
     $("#activitiesButton"+counter).attr("href", url);
     // $("activitiesCard"+counter).attr("onclick", "window.location.href='"+url+"';");
-    
+
     $("#cardImage")
         .on('error', function () {
             $(this).attr('src', "/assets/images/no_image.png");
@@ -238,28 +238,6 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
         sessionStorage.setItem("activitiesName", activitiesName);
         sessionStorage.setItem("activitiesImage", activitiesImage);
         changeActivities();
-    });
-
-}
-
-function newTasksCard(encounter_name, tasksImage, counter, url) {
-    $("#tasks-modal-div").append($('#tasks_template').html());
-    $("#taskstext").text(encounter_name).attr('id', "taskstext" + counter);
-    $("#encounter_name").text(encounter_name).attr('id', "encounterName" + counter);
-    $("#encounterButton").attr('id', "encounterButton" + counter);
-    $("#tasksCard").attr('id', "tasksCard" + counter);
-    $("#encounterButton"+counter).attr("href", url);
-    $("#tasksCard"+counter).attr("onclick", "window.location.href='"+url+"';");
-
-    $("#cardImage")
-        .on('error', function () {
-            $(this).attr('src', "/assets/images/no_image.png");
-        }).attr('src', tasksImage).attr('id', "cardImage" + counter);
-    $("#encounterButton" + counter).click(function () {
-        sessionStorage.setItem("encounter_name", encounter_name);
-        sessionStorage.setItem("tasksImage", tasksImage);
-
-        changeTasks();
     });
 
 }
@@ -312,7 +290,7 @@ function checkJson(applicationJsonUrl, applicationName, applicationDescription, 
     $.getJSON(applicationJsonUrl)
         .done(function (data) {
         newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, redirectUrl);
-            
+
         })
         .fail(function () {
             console.log("The application " + applicationName + "'s application.json file is not available");
@@ -323,14 +301,7 @@ function checkActivities(applicationJsonUrl, activitiesName, activitiesDescripti
     // $.getJSON(applicationJsonUrl)
     //     .done(function (data) {
         newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
-            
-       
-}
 
-function checkTasks(applicationJsonUrl, encounter_name, encountersIconUrl, counter) {
-
-
-        newTasksCard(encounter_name, encountersIconUrl, counter, applicationJsonUrl);
 
 }
 
@@ -370,32 +341,120 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
+  var j = Object.keys(encountersData.encounters);
+  var i = 0;
+  var tasks = [];
+  j.forEach ( function(j) {
+    var values = encountersData.encounters[j]
+    var url = values.url;
+    var icon = values.activitiesIcon;
+    tasks.push([j, icon, url])
+  });
 
-    // alert("here");
-    var j = Object.keys(encountersData.encounters);
-    var i = 0;
-    j.forEach ( function(j) {
-        var values = encountersData.encounters[j]
-        var url = values.url;
-        checkTasks(values.url, j, values.encountersIcon, i);
-        console.log(values);
-        i++;
-    });
-    // for (var i = 0; i < j.length; i++) {
-        // alert("here");    
-        // var j = encountersData.encounters;
-        // console.log(j);
-        // // encounter_name = encountersData[i];
-        // var j = Object.keys(encountersData.encounters);
-        // for (var i = j.length - 1; i >= 0; i--) {
-        //     // console.log(j[i]);
-        // }
+  var container = document.getElementById('tasks-container');
+  buildDashboardButtons(tasks, container);
+}
 
-        // encountersIcon[i] = encountersData[i].encountersIcon;
-        // applicationFolder = encountersData[i].applicationFolder;
-        // checkTasks(applicationJsonUrl[i], encounter_name[i], encountersIcon[i]);
-        
-    // }
+function printNPID() {
+  try {
+    showStatus();
+  } catch (e) {
+
+  }
+  
+  var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
+  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = this.responseText;
+      console.log(obj)
+      download("label.lbl", obj)
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+
+}
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function buildDashboardButtons(tasks, container) {
+  container.innerHTML = null;
+  var count = 0;
+
+  var containerTable = document.createElement("div");
+  containerTable.setAttribute("class","tasks-table");
+  containerTable.setAttribute("style","display: table; width: 100%;");
+  container.appendChild(containerTable);
+
+  var containerTableRow = document.createElement("div");
+  containerTableRow.setAttribute("class","tasks-table-row");
+  containerTableRow.setAttribute("style","display: table-row;");
+  containerTable.appendChild(containerTableRow);
+
+
+  for(var i = 0 ; i < tasks.length ; i++){
+    if(count == 3){
+      containerTableRow = document.createElement("div");
+      containerTableRow.setAttribute("class","tasks-table-row");
+      containerTableRow.setAttribute("style","display: table-row;");
+      containerTable.appendChild(containerTableRow);
+      count = 0;
+    }
+
+    containerTableCell = document.createElement("div");
+    containerTableCell.setAttribute("class","tasks-table-cell");
+    containerTableCell.setAttribute("style","display: table-cell;");
+    if(tasks[i][0].match(/National ID/i)){
+      containerTableCell.setAttribute("onmousedown","printNPID();");
+    }else{
+      containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
+    }
+
+    var infoTable = document.createElement("table");
+    infoTable.setAttribute("class","info-table");
+    infoTable.setAttribute("style","width: 100%; padding: 8px; color: black;");
+
+    var tr = document.createElement("tr");
+    infoTable.appendChild(tr);
+
+    var td = document.createElement("td");
+    td.setAttribute("style","width: 52px;");
+    var img = document.createElement("img");
+    img.setAttribute("src", tasks[i][1]);
+    img.setAttribute("style","width: 50px; height: 50px;");
+    td.appendChild(img);
+    tr.appendChild(td);
+
+    td = document.createElement("td");
+    td.setAttribute("style","color: #fff; font-weight: bold; width: 80%; text-align: left;");
+    td.setAttribute("id","task-button-" + (i + 1));
+    td.innerHTML = tasks[i][0].toUpperCase();
+    tr.appendChild(td);
+
+    containerTableCell.appendChild(infoTable);
+
+
+    containerTableRow.appendChild(containerTableCell);
+
+    count++;
+  }
+
 }
 
 function changeModule(url ) {
@@ -432,7 +491,7 @@ function changeActivities(url ) {
         $("#activities-name").text(sessionStorage.getItem("activitiesName"));
     } else {}
 }
- 
+
 function changeTasks(url ) {
     var tasksImage = sessionStorage.getItem("tasksImage");
     var encounter_name = sessionStorage.getItem("encounter_name");
@@ -544,6 +603,29 @@ function showActivities(a) {
     // for (var x = 0; x < btn.length; x++) {
     //     btn[x].setAttribute('class', 'btn btn-info activities-btns');
     // }
+    $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+      .done(function (data, status) {
+          buildPrintOutandOthers(data);
+      })
+      .fail(function () {
+          console.log("application.json is missing from /apps/ART folder");
+      });
+}
+
+function buildPrintOutandOthers(data) {
+  var j = Object.keys(data.others);
+  var i = 0;
+  var tasks = [];
+  j.forEach ( function(j) {
+    var values = data.others[j]
+    var name = values.activitiesName;
+    var icon = values.activitiesIcon;
+    tasks.push([name, icon, "#"]);
+  });
+
+  var container = document.getElementById("activities-body");
+  
+  buildDashboardButtons(tasks, container); 
 }
 
 function showTasks(t) {
@@ -631,7 +713,7 @@ function sleep(ms) {
         req.onreadystatechange = function () {
 
             if (this.readyState == 4) {
-                
+
                 if (this.status == 200) {
                     try {
                         var data = JSON.parse(this.responseText);
@@ -644,7 +726,7 @@ function sleep(ms) {
                     } catch(e) {
                         console.log("invalid json formatting");
                     }
-                    
+
                 }else if(this.status == 404) {
                     console.log("config.json is missing from the /config folder");
                 }else {
@@ -676,5 +758,5 @@ function GetApplicationReports() {
   //dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
   dvTable.appendChild(obj);
 
-  
+
 }
