@@ -678,12 +678,14 @@ function checkCredentials(username, password) {
             } else if (http.status == 401) {
                 // alert('Username already exists');
                 sleep(2000);
-                showMessage("Wrong username or password");
+                // showMessage("Wrong username or password");
+                alert('wrong password');
                 window.location = "/views/login.html";
                 // sleep
             } else if (http.status == 0){
                 // await sleep(2000);
-                showMessage('No connection to EMR API',null,10000000000);
+                // showMessage('No connection to EMR API',null,10000000000);
+                alert('no connection to EMR API');
                 window.location = "/views/config.html";
             }else {
                 showMessage('error' + http.status);
