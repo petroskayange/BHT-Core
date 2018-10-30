@@ -1,7 +1,7 @@
 var previousNextButton = null;
 var yesNo_Hash = {};
 
-function isEmpty(obj) {
+function isHashEmpty(obj) {
 	for(var key in obj) {
 		if(obj.hasOwnProperty(key))
 			return false;
@@ -10,7 +10,8 @@ function isEmpty(obj) {
 }
 
 function validateYesNo(concept_name, values) {
-  if(isEmpty(yesNo_Hash)){
+
+  if(isHashEmpty(yesNo_Hash)){
     showMessage('Please complete selection by clicking Yes / No');
     return;
   }
