@@ -143,7 +143,7 @@ function displayKeyPad(order_id) {
   keypad_attributes.push([4,5,6]);
   keypad_attributes.push([7,8,9]);
   keypad_attributes.push(["Del.",0,"Clear"]);
-  keypad_attributes.push(["&nbsp;","Dispense","&nbsp;"]);
+  keypad_attributes.push(["Close","Dispense","&nbsp;"]);
 
   for(var i = 0 ; i < keypad_attributes.length ; i++) {
     var tr = document.createElement("tr");
@@ -234,7 +234,10 @@ function enterKeypadValue(e, order_id) {
       var amount_dispensed = document.getElementById("prescription-input").value;
       manualDispensation(order_id, amount_dispensed);
       document.getElementById("prescription-modal").style = "display: none;";
-    }else{
+    }else if(e.innerHTML.match(/Close/i)){
+      document.getElementById("prescription-modal").style = "display: none;";
+    }
+    else{
       inputBox.value += e.innerHTML;
     }
   
