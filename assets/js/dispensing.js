@@ -312,7 +312,7 @@ function addPrescriptions(data) {
    
     fetchedPrescriptions[drug_id] = order_id;
      
-    setDataTable.row.add([addDeleteBTN(order_id), medication, amount_needed, quantity, addDispBTN(order_id)]).node().id = order_id;
+    setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id,amount_needed), addValue(order_id, quantity), '']).node().id = order_id;
     setDataTable.draw();
     addClassIMGcontainter(order_id);
   }
@@ -332,6 +332,19 @@ function addDispBTN(order_id) {
   btn.setAttribute("class","dispense-button btn btn-primary");
   btn.setAttribute("onmousedown","displayKeyPad('" + order_id + "');");
   btn.innerHTML = "Dispense";
+  span.appendChild(btn); 
+  return span.innerHTML;
+}
+
+
+function addValue(order_id, value) {
+  //var row = document.getElementById(order_id);
+  //row.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
+  var span = document.createElement("span");
+  var btn  = document.createElement("p");
+  // btn.setAttribute("class","dispense-button btn btn-primary");
+  btn.setAttribute("onmousedown","displayKeyPad('" + order_id + "');");
+  btn.innerHTML = value;
   span.appendChild(btn); 
   return span.innerHTML;
 }
@@ -545,6 +558,12 @@ function addRows(data){
     start_date        = formatDate(start_date);
      
     setDataTable.row.add([medication, start_date, quantity]).node().id = order_id;
+    var table = $('#example').DataTable();
+     
+    $('#example tbody').on('click', 'tr', function () {
+        var data = table.row( this ).data();
+        alert( 'You clicked on '+data[0]+'\'s row' );
+    } );
     setDataTable.draw();
   }
 }
