@@ -117,6 +117,10 @@
 
 
 <script>
+var apiPort = sessionStorage.apiPort;
+var apiURL = sessionStorage.apiURL;
+var patientID = sessionStorage.patientID;
+
 
 function changeMonth(e) {
   if(e.id == "forward"){
@@ -304,6 +308,9 @@ function buildDisplayArea() {
     tr.appendChild(th);
 
     var tr = document.createElement("tr");
+    tr.id = tds[i][1];
+    tr.style.textAlign = "center";
+    tr.style.fontWeight= "bold";
     table.appendChild(tr);
 
     var td = document.createElement("td")
@@ -322,8 +329,33 @@ function buildDisplayArea() {
 
   } 
 
-
+  getNextAppointment();
 }
+
+function getNextAppointment(){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/'+sessionStorage.patientID+'/next_appointment_date';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+
+  if (this.readyState == 4) {
+  if (this.status == 200) {
+  var results = JSON.parse(this.responseText);
+  document.getElementById('selected-date').innerHTML = results;
+  for(var x = 0; x < results.length; x ++){
+   
+  }
+  }
+  }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+
+  }
+}
+
 
 function buildCalendarCells(current_date) {
   var container = document.getElementById("calendar-table-cell-left");
@@ -370,6 +402,10 @@ function buildCalendarCells(current_date) {
   var dates = getMonthDates(current_date);
 
   setDates(dates);
+}
+function changeNextButton() {
+  var bnt = document.getElementById("nextButton")
+  bnt.setAttribute("onmousedown", "window.location='/views/patient_dashboard.html?patient_id="+sessionStorage.patientID+"'");
 }
 
 function setDates(dates) {
@@ -470,7 +506,7 @@ function getFullMonthName(index) {
       <form>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none'; buildCalendar();" 
+          tt_onLoad="__$('keyboard').style.display = 'none'; buildCalendar();changeNextButton();" 
           tt_pageStyleClass= "NoControls" helpText="Appointment booking" optional = "true"/>
 
 
