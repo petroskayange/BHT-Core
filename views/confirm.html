@@ -226,7 +226,7 @@ function getClient(patient_id) {
       var ancestry_village  = document.getElementById("ancestry-village");
       ancestry_district.innerHTML = obj["addresses"][0]["address2"];
       ancestry_ta.innerHTML = obj["addresses"][0]["county_district"];
-      ancestry_district.innerHTML = obj["addresses"][0]["neighborhood_cell"];
+      ancestry_village.innerHTML = obj["addresses"][0]["neighborhood_cell"];
 
       var current_district = document.getElementById("current-district");
       var current_ta       = document.getElementById("current-ta");
