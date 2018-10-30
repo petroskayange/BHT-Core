@@ -350,12 +350,11 @@ function buildIdentifiers(identifiers) {
 <script>
 buildInfoBoxes();
 
-//var nextEnc = nextEncounter(sessionStorage.patientID, 1, false);
-
 function finish() {
+  var url = new URL(url);
+  var id = url.searchParams.get("patient_id");
+  sessionStorage.patientID = id;
   nextEncounter(sessionStorage.patientID , 1);
-  // window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
 }
-
 
 </script>
