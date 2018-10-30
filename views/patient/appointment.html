@@ -341,9 +341,7 @@ function getNextAppointment(){
   if (this.status == 200) {
   var results = JSON.parse(this.responseText);
   document.getElementById('selected-date').innerHTML = results;
-  for(var x = 0; x < results.length; x ++){
-   
-  }
+  console.log()
   }
   }
   };
