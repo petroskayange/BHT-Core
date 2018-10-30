@@ -235,6 +235,15 @@ function getClient(patient_id) {
       current_ta.innerHTML        = obj["addresses"][0]["township_division"];
       current_village.innerHTML  = obj["addresses"][0]["city_village"];
 
+
+      var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = obj["gender"];
+      sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+
+
+
       buildIdentifiers(patient["patient_identifiers"]);
     }
   };
