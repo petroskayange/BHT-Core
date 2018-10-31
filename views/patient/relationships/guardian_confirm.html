@@ -31,7 +31,7 @@
       <div class="demo-header-row">
 
       <div class="demo-header-cell demo-left">
-        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name">Chimwemwe Guardian </span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
+        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name"></span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
         <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
         <span id="guardian_DOB"></span>&nbsp;<span id="guardian_age"></span>
         &nbsp;(<span id="guardian_npid"></span>)
@@ -67,7 +67,7 @@
          <button id="btnNext" class="green right" style="width: 200px; font-size: 2rem; margin: 5px 0px 0px; padding: 0px; float: right;" onclick="dashboard_redirect()">
         <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
         </button>
-         <button id="tasks" class="btn btn-success buttons blue" style="width: 200px; font-size: 2rem;margin-right: 5px;" onmousedown="cancel_redirect();">
+         <button id="tasks" class="btn btn-success buttons blue" style="width: 200px; font-size: 2rem;margin-right: 5px;" onmousedown="newSearchRedirect();">
         <span>&nbsp; &nbsp; &nbsp; New search &nbsp; &nbsp; &nbsp;</span>
         </button>
       </div>
@@ -76,8 +76,13 @@
 <script src="/assets/js/core.js "></script>
 
 <script>
-  var patientID = "";
+  var url = new URL(url);
+  var guardianID = url.searchParams.get("guardian_identifier");
+  sessionStorage.setItem("gurdianID", id);
+  // var p = sessionStorage.;
   var selectedEncounterID = ""; 
+  var elementId = "";
+  sessionStorage.guardian_options = elementId;
 
   function finish() {
     window.location = "/";
@@ -87,8 +92,12 @@
     window.location = "/views/patient_dashboard.html?patient_id=" + backupPatientID;
   }
 
+  function newSearchRedirect() {
+    window.location = "/views/patient/relationships/guardian_search.html?patient_id=" + backupPatientID;
+  }
+
   function dashboard_redirect() {
-    window.location = "/views/patient_dashboard.html?patient_id=" + patientID + backupPatientID;
+    window.location = "/views/patient_dashboard.html?patient_id=" + backupPatientID + "&guardian_identifier="+guardianID;
   }
     
   function changeIcon(gender,person_type) {
@@ -248,8 +257,10 @@
             } else {
               list_option.className = 'odd';
             }     
-            list_option.id = i;         
-            list_option.innerHTML = guardian_options[i]['a_is_to_b'];
+            list_option.id = 'guardian_option_'+i;   
+            list_option.innerHTML = guardian_options[i]['a_is_to_b'];    
+            list_option.setAttribute("onclick", 'selectGuardian(this.innerHTML, sessionStorage.guardian_options = this.id)');  
+
             options_ul.appendChild(list_option);
           }
         }
@@ -276,6 +287,23 @@
 
     ajaxRequest(ajaxUrls);
 
+    function selectGuardian(value, elementId) {
+      //alert(value + ' - ' + elementId);
+      const selected_option = document.getElementById(elementId);
+      selected_option.style.backgroundColor = 'lightblue';
+
+      resetBackGroundColor(elementId)
+
+    }
+
+function resetBackGroundColor(elementId){
+  // console.log(elementId)
+  liElements = document.getElementsByTagName("li");
+  for (var i=0; i<= liElements.length -1; i++){
+    liElements[i].style = "";
+  }
+  document.getElementById(elementId).style.backgroundColor = "lightblue";
+}
    </script>
 
 </html>

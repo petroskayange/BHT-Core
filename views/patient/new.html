@@ -659,8 +659,8 @@
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
 
-  <select allowFreeText="false" helpText="Guardian Present" id="guardian_present" name="guardian_present" ttMatchFromBeginning="true" ><option value="YES">Yes</option>
-    <option value="NO">No</option></select>
+  <select allowFreeText="false" helpText="Guardian Present" id="guardian_present" name="guardian_present" ttMatchFromBeginning="true" ><option value="Yes">Yes</option>
+    <option value="No">No</option></select>
   
   <!-- Make sure patient is created
 
@@ -849,7 +849,7 @@ function createPatient(person_id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
-      if (__$('guardian_present').value == 'YES'){
+      if (__$('guardian_present').value == 'Yes'){
         document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
       } else {
         document.location = "../patient_dashboard.html?patient_id=" + person_id;
