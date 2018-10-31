@@ -56,7 +56,12 @@ function buildDemographicsTable(){
   td.setAttribute("class","names");
   td.setAttribute("id","gender-icon-td");
   var img = document.createElement("img");
-  img.setAttribute("src","../../assets/images/male24x32.png");
+  if (sessionStorage.patientGender == "F") {
+    img.setAttribute("src","/assets/images/female.gif");
+  }else if (sessionStorage.patientGender == "M") {
+    img.setAttribute("src","/assets/images/male.gif");
+  }
+  
   img.setAttribute("id","gender-icon");
   td.appendChild(img);
   tr.appendChild(td);
@@ -64,7 +69,7 @@ function buildDemographicsTable(){
   var td = document.createElement("td");
   td.setAttribute("class","names");
   var span = document.createElement("span");
-  span.innerHTML = "<b>Name:</b>";
+  span.innerHTML = "<b>Name: " +sessionStorage.given_name +" "+ sessionStorage.family_name+ "</b>";
   td.appendChild(span);
   tr.appendChild(td)
   
@@ -83,7 +88,7 @@ function buildDemographicsTable(){
   th.setAttribute("class","data-header");
   
   var span = document.createElement("span");
-  span.innerHTML = "<b>Birthdate:</b>";
+  span.innerHTML = "<b>Birthdate: " +sessionStorage.patientDOB + "</b>";
   th.appendChild(span);
 
 
@@ -143,7 +148,8 @@ function displayKeyPad(order_id) {
   keypad_attributes.push([4,5,6]);
   keypad_attributes.push([7,8,9]);
   keypad_attributes.push(["Del.",0,"Clear"]);
-  keypad_attributes.push(["Close","Dispense","&nbsp;"]);
+  keypad_attributes.push(["&nbsp;","Close","&nbsp;"]);
+  keypad_attributes.push(["Dispense"]);
 
   for(var i = 0 ; i < keypad_attributes.length ; i++) {
     var tr = document.createElement("tr");
@@ -151,6 +157,9 @@ function displayKeyPad(order_id) {
 
     for(var j = 0 ; j < keypad_attributes[i].length ; j++){
       var td = document.createElement('td');
+      // td.setAttribute("colspan", "3");
+       
+      
       tr.appendChild(td);
 
       var span = document.createElement('span');
@@ -161,6 +170,17 @@ function displayKeyPad(order_id) {
         span.setAttribute("class","keypad-buttons keypad-buttons-hide");
       }else{
         span.setAttribute("class","keypad-buttons");
+      }
+
+      if(keypad_attributes[i][j] == "Dispense") {
+        td.setAttribute("colspan", "3");
+        span.style.width = "100%";
+        span.style.textAlign = "center";
+        span.style.paddingTop = "20px";
+        span.style.backgroundColor = "green";
+      }
+      else if(keypad_attributes[i][j] == "Close") {
+        span.style.backgroundColor = "#c91c11";
       }
       td.appendChild(span);
     }
