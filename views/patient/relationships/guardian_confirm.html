@@ -31,9 +31,9 @@
       <div class="demo-header-row">
 
       <div class="demo-header-cell demo-left">
-        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name"></span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
+        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name">&nbsp;</span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
         <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
-        <span id="guardian_DOB"></span>&nbsp;<span id="guardian_age"></span>
+        <span id="guardian_DOB"></span>&nbsp;<span id="guardian_age">&nbsp;</span>
         &nbsp;(<span id="guardian_npid"></span>)
         </div>
         <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="guardian_addressl1"></span></div>
@@ -115,15 +115,15 @@
   var apiURL = sessionStorage.getItem("apiURL");
   var apiPort = sessionStorage.getItem("apiPort");
   var apiProtocol = sessionStorage.getItem("apiProtocol");
-  //var id = url.searchParams.get("patient_id");
-  var id = sessionStorage.getItem('patientID');
+  var id = url.searchParams.get("guardian_identifier");
+  // var id = sessionStorage.getItem('patientID');
   //sessionStorage.setItem("patientID", id);
   var backupPatientID = sessionStorage.getItem("backupPatientID");
   url = new URL(url);
   var d = new Date();
 
   function ajaxGuardianRequest() {
-    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + backupPatientID;
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
 
@@ -173,6 +173,7 @@
     ajaxUrlsParams.forEach(function (key) {
         const person_type = key;
         const person_url = ajaxUrls[key];
+        // alert(person_url);
         console.log(person_type,person_url);
 
         const req = new XMLHttpRequest();

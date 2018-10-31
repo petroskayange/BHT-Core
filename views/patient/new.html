@@ -853,9 +853,10 @@ function createPatient(person_id) {
       if (__$('guardian_present').value == 'Yes'){
         document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
       } else {
-        document.location = "../patient_dashboard.html?patient_id=" + person_id;
+        // document.location = "../patient_dashboard.html?patient_id=" + person_id;
+        enrollPatient(person_id);
       }
-      enrollPatient(person_id);
+      // enrollPatient(person_id);
 			// document.location = "../patient_dashboard.html?patient_id=" + person_id;
     }
   };
