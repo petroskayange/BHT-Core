@@ -1,5 +1,4 @@
 function getBMIResult(gender, age, bmindex) {
-
     var url = '/public/bmi.json';
     if (age < 5 && age > 0) {
         sessionStorage.bmiResult = 'Use MUAC to calculate nutrition status';
