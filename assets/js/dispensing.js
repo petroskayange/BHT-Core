@@ -323,6 +323,26 @@ function postDispensation(order_id , amount_dispensed) {
 function doneDispensing(orders){
   var e = document.getElementById("nav-prescribed");
   setPage(e);
+  checkIfDoneDispensing = true;
+}
+
+var checkIfDoneDispensing = false;
+
+function dispensationDone() {
+  var done = true;
+  var amount_needed = document.getElementsByClassName("medication-amount-needed");
+  console.log(amount_needed)
+
+  for(var i = 0 ; i < amount_needed.length ; i++){
+    var amount = amount_needed[i].children[0].innerHTML
+    if(parseFloat(amount) > 0) {
+      done = false;
+    }
+  }
+
+  if(done == true) {
+    document.location = "/views/patient/appointment.html?patient_id=" + sessionStorage.patientID;
+  }
 }
 
 function addPrescriptions(data) {
@@ -330,12 +350,12 @@ function addPrescriptions(data) {
     var order_id      = data[i].order_id;
     var drug_id       = data[i].drug_inventory_id;
     var medication    = data[i].drug.name;
-    var amount_needed = 0;
+    var amount_needed = data[i].amount_needed;
     var quantity      = data[i].quantity;
    
     fetchedPrescriptions[drug_id] = order_id;
      
-    setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id,amount_needed), addValue(order_id, quantity), '']).node().id = order_id;
+    setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id, amount_needed), addValue(order_id, quantity), '']).node().id = order_id;
     setDataTable.draw();
     addClassIMGcontainter(order_id);
   }
@@ -345,6 +365,9 @@ function addClassIMGcontainter(order_id) {
   var row = document.getElementById(order_id);
   var td = row.getElementsByTagName("td")[0];
   td.setAttribute("class","delete-container");
+  
+  var td = row.getElementsByTagName("td")[2];
+  td.setAttribute("class", "medication-amount-needed");
 }
 
 function addDispBTN(order_id) {
@@ -397,6 +420,10 @@ function getPrescriptions() {
       var obj = JSON.parse(this.responseText);
       fetchedPrescriptions = {} 
       addPrescriptions(obj);
+      if(checkIfDoneDispensing == true) {
+        dispensationDone();
+        checkIfDoneDispensing = false;
+      }
     }
   };
 
