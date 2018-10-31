@@ -349,10 +349,11 @@ function buildIdentifiers(identifiers) {
 
 <script>
 buildInfoBoxes();
+var url = new URL(url);
+var id = url.searchParams.get("patient_id");
 
 function finish() {
-  var url = new URL(url);
-  var id = url.searchParams.get("patient_id");
+  
   sessionStorage.patientID = id;
   nextEncounter(sessionStorage.patientID , 1);
 }
