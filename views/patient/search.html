@@ -48,7 +48,7 @@
 
     <input type="text" name="family_name" id="family_name" field_type="alpha"  ajaxURL="/search/family_name?search_string=" helpText="Last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
 
-    <select allowFreeText="false" helpText=" Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+    <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
       <option value="M">Male</option>
       <option value="F">Female</option></select>
 
@@ -71,7 +71,15 @@
   function changeNextButton(){
     __$("nextButton").removeAttribute("onmousedown")
     __$("nextButton").onmousedown = function(){
+
+  value = $('touchscreenInput' + tstCurrentPage).value;
+ if (value.length  > 0) {
+
            submitSearchResults();
+ }else {
+   showMessage("You must enter a value to continue");
+ }
+
     }
   }
 
