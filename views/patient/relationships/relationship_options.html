@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script language="javascript" defer="true">
+      <!--
+      tstUsername = "";
+      tstUserKeyboardPref = "abc";
+
+  tstCurrentDate = "2018-10-24";
+
+  function addHereButton(){
+    var button = document.createElement("button");
+    button.id = "addHere";
+    button.innerHTML = "<span>Here</span>";
+    button.style.cssFloat = "right";
+
+    button.onclick = function(){
+      __$("touchscreenInput" + tstCurrentPage).value = "Martin Preuss Centre"
+    }
+
+    if(__$("buttons")){
+      __$("buttons").appendChild(button);
+    }
+  }
+
+  function removeHereButton(){
+    if(__$("addHere")){
+      __$("buttons").removeChild(__$("addHere"));
+    }
+  }
+
+  function getSelected(){
+    var choices = "";
+
+    for(var o = 0; o < __$('choice').options.length; o++){
+      if(__$('choice').options[o].selected == true){
+        choices += __$('choice').options[o].innerHTML + " ";
+      }
+    }
+
+    return choices;
+  }
+
+  //-->
+    </script>
+
+    <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+
+    
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
+          
+        </div>
+        
+        
+        <style type="text/css">
+  /* TEMP, move out of here! */
+  .options {
+    height:500px;
+  }
+  .keyboard{display:none;}
+</style>
+<script>
+  
+  var tt_cancel_destination = "/people/redirections?person_id=38"  
+  
+</script>
+<form id='relationship' action="/relationships/create" method=''> 
+  <input id="patient_id" name="patient_id" type="hidden" value="" />
+  <input id="relation" name="relation" type="hidden" value="" />
+
+  <select  id="relationship" name="relationship" tt_onLoad="__$('keyboard').style.display = 'none';">
+    <option value="3">Child</option>
+    <option value="6">Guardian</option>
+    <option value="4">Niece/Nephew</option>
+    <option value="11">Parent</option>
+    <option value="1">Patient</option>
+    <option value="2">Sibling</option>
+    <option value="12">Spouse/Partner</option>
+    <option value="8">treatment suportee</option>
+    <option value="13">Other</option></select>
+
+</form>
+
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

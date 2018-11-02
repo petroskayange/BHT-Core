@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Guardian confirm</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+  <link rel="stylesheet" href="/assets/css/demographics-header.css">
+  <link rel="stylesheet" href="./assets/css/custom.css">
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/assets/js/moment.js"></script>
+</head>
+<body>  
+  <script src="/assets/js/generic_ajaxrequest.js">
+
+  </script>   
+
+  <style>
+
+  </style>
+  
+  <!-- container -->
+  <div class="container" style="width: 100%; margin-bottom: 1%;">
+
+   <div class="demo-header">
+      <div class="demo-header-row">
+
+      <div class="demo-header-cell demo-left">
+        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name">&nbsp;</span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
+        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
+        <span id="guardian_DOB"></span>&nbsp;<span id="guardian_age">&nbsp;</span>
+        &nbsp;(<span id="guardian_npid"></span>)
+        </div>
+        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="guardian_addressl1"></span></div>
+        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="guardian_phone_number"></span></div>
+        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="guardian_addressl3"></span></div>
+      </div>
+
+      <div class="demo-header-cell demo-left">
+        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="patient_gender" /><span class="h3" id="patient_name"></span><span class="h3"><font color="#006699">&nbsp;&nbsp;&nbsp;Patient</font></span></div>
+        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
+        <span id="patient_DOB"></span>&nbsp;<span id="patient_age"></span>
+        &nbsp;(<span id="patient_npid"></span>)
+        </div>
+        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="patient_addressl1"></span></div>
+        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="patient_phone_number"></span></div>
+        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="patient_addressl3"></span></div>
+      </div>  
+    </div> 
+
+   </div>
+   <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 98%;" id="generic_tabs">
+        <div class="row" style="display: flex;"> <h2 class="headers" style="margin-left: 40px; "> Select Guardian Relationship: </h2></div>
+        <div class="options">
+          <ul id="options_ul"></ul>
+        </div>
+    </div>
+    </div>
+    <footer class="footer">
+      <div class="container-footer">
+        <button class="btn btn-danger buttons red " style="width: 200px; font-size: 2rem;" onmousedown="finish();" id="logout">Cancel</button>
+         <button id="btnNext" class="green right" style="width: 200px; font-size: 2rem; margin: 5px 0px 0px; padding: 0px; float: right;" onclick="dashboard_redirect()">
+        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+        </button>
+         <button id="tasks" class="btn btn-success buttons blue" style="width: 200px; font-size: 2rem;margin-right: 5px;" onmousedown="newSearchRedirect();">
+        <span>&nbsp; &nbsp; &nbsp; New search &nbsp; &nbsp; &nbsp;</span>
+        </button>
+      </div>
+    </footer> 
+  </body>
+<script src="/assets/js/core.js "></script>
+
+<script>
+  var url = new URL(url);
+  var guardianID = url.searchParams.get("guardian_identifier");
+  sessionStorage.setItem("gurdianID", id);
+  // var p = sessionStorage.;
+  var selectedEncounterID = ""; 
+  var elementId = "";
+  sessionStorage.guardian_options = elementId;
+
+  function finish() {
+    window.location = "/";
+  }
+
+  function cancel_redirect() {
+    window.location = "/views/patient_dashboard.html?patient_id=" + backupPatientID;
+  }
+
+  function newSearchRedirect() {
+    window.location = "/views/patient/relationships/guardian_search.html?patient_id=" + backupPatientID;
+  }
+
+  function dashboard_redirect() {
+    window.location = "/views/patient_dashboard.html?patient_id=" + backupPatientID + "&guardian_identifier="+guardianID;
+  }
+    
+  function changeIcon(gender,person_type) {
+    var img = document.getElementById(person_type+'_gender');
+    if (gender === "M") {
+      img.setAttribute("src", "/assets/images/male.gif");
+    } else {
+      img.setAttribute("src", "/assets/images/female.gif");
+    }
+  }
+  
+  generateTemplate();
+
+  var url = new URL(url);
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
+  var id = url.searchParams.get("guardian_identifier");
+  // var id = sessionStorage.getItem('patientID');
+  //sessionStorage.setItem("patientID", id);
+  var backupPatientID = sessionStorage.getItem("backupPatientID");
+  url = new URL(url);
+  var d = new Date();
+
+  function ajaxGuardianRequest() {
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+
+      console.log(backupPatientID);
+      if (this.readyState == 4 && this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        var guardian_age = results.person.birthdate;
+        var gender = results.person.gender;
+        var guardian_identifier = "";
+        var guardian_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+        
+        try {
+          var guardian_addressl1 = results.person.addresses[0].address1 ;
+        var addressl2 = results.person.addresses[0].address2;
+        var guardian_phone_number = results.person.person_attributes[1].value;
+        }
+        catch (e){
+          var guardian_addressl1 = "";
+        var addressl2 = "";
+        var guardian_phone_number = "";
+        }
+        try {
+          guardian_identifier = results.patient_identifiers[0].identifier || "no value available";
+        } catch (e) {
+
+        }
+
+        setGuardianValues(guardian_name, gender, guardian_age, guardian_addressl1, addressl2, guardian_phone_number, guardian_identifier);
+      }
+    };
+    try {
+      req.open('GET', url, true);
+      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+      req.send(null);
+    } catch (e) {}
+  }
+
+  function ajaxRequest(ajaxUrls) {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var patient_id = url.searchParams.get("patient_id");
+    var guardian_id = url.searchParams.get("guardian_identifier");
+
+    // ---- Dynamic ajax for multiple calls
+    const ajaxUrlsParams = Object.keys(ajaxUrls)
+
+    ajaxUrlsParams.forEach(function (key) {
+        const person_type = key;
+        const person_url = ajaxUrls[key];
+        // alert(person_url);
+        console.log(person_type,person_url);
+
+        const req = new XMLHttpRequest();
+
+        req.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            const results = JSON.parse(this.responseText);
+            const age = results.person.birthdate;
+            const gender = results.person.gender;
+            const identifier = "";
+            const patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+
+            try {
+              var addressl1 = results.person.addresses[0].address1;
+              var addressl2 = results.person.addresses[0].address2;
+              var phone_number = results.person.person_attributes[1].value;
+            }
+            catch (e){
+              var addressl1 = "";
+              var addressl2 = "";
+              var phone_number = "";
+            }
+            try {
+              identifier = results.patient_identifiers[0].identifier || "no value available";
+            } catch (e) {
+
+            }
+
+            setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier, person_type);
+          }
+        };
+        try {
+          req.open('GET', person_url, true);
+          req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+          req.send(null);
+        } catch (e) {}         
+      }
+    );
+  }
+
+    function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier, person_type) {
+      document.getElementById(person_type+"_name").innerHTML = patient_name;
+      var roundedAge = Math.floor(moment().diff(age, 'years', true));
+      document.getElementById(person_type+"_DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
+      document.getElementById(person_type+"_npid").innerHTML = formatNIPD(identifier);
+      document.getElementById(person_type+"_age").innerHTML = "(" + roundedAge + ")";
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = gender;
+      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+      document.getElementById(person_type+"_addressl1").innerHTML = addressl1;
+      document.getElementById(person_type+"_addressl3").innerHTML = addressl2;
+      document.getElementById(person_type+"_phone_number").innerHTML = phone_number;
+      changeIcon(gender,person_type);
+    }
+
+    function formatNIPD(identifier) {
+      if(identifier.length < 1)
+        return identifier;
+
+      if(identifier.length == 6){
+        return (identifier.substring(0,3) + "-" + identifier.substring(3,6));
+      }else if(identifier.length == 13){
+        return (identifier.substring(0,5) + "-" + identifier.substring(5,9) + "-" + identifier.substring(9, 13));
+      }else{
+        return identifier;
+      }
+    }
+
+    function build_guardian_options() {
+
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/types/relationships';
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var guardian_options = JSON.parse(this.responseText);
+          for (var i = 0; i < guardian_options.length; i++) {
+            var options_ul = document.getElementById('options_ul');
+            var list_option = document.createElement('li');
+            if(i%2 == 0){
+              list_option.className = 'even';
+            } else {
+              list_option.className = 'odd';
+            }     
+            list_option.id = 'guardian_option_'+i;   
+            list_option.innerHTML = guardian_options[i]['a_is_to_b'];    
+            list_option.setAttribute("onclick", 'selectGuardian(this.innerHTML, sessionStorage.guardian_options = this.id)');  
+
+            options_ul.appendChild(list_option);
+          }
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+        req.send(null);
+      } catch (e) {}
+
+    }
+
+    const patient_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + backupPatientID
+    const guardian_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+    
+    // var ajaxUrls = [patient_url,guardian_url]
+
+    const ajaxUrls = {
+      patient: patient_url, 
+      guardian: guardian_url
+    }
+
+    build_guardian_options();
+
+    ajaxRequest(ajaxUrls);
+
+    function selectGuardian(value, elementId) {
+      //alert(value + ' - ' + elementId);
+      const selected_option = document.getElementById(elementId);
+      selected_option.style.backgroundColor = 'lightblue';
+
+      resetBackGroundColor(elementId)
+
+    }
+
+function resetBackGroundColor(elementId){
+  // console.log(elementId)
+  liElements = document.getElementsByTagName("li");
+  for (var i=0; i<= liElements.length -1; i++){
+    liElements[i].style = "";
+  }
+  document.getElementById(elementId).style.backgroundColor = "lightblue";
+}
+   </script>
+
+</html>

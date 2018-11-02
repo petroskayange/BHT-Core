@@ -461,7 +461,7 @@ function postAppointmentObs(encounter) {
   var obs = {
     encounter_id: encounter["encounter_id"],
     observations: [
-      { concept_id: 5096, value_datetime: appointment , value_text: "System set date: " + sysDate}
+      { concept_id: 5096, value_datetime: appointment }
     ]
   }; 
 

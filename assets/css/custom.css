@@ -220,7 +220,52 @@ img {
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#333, endColorstr=#ccc);
 }
 #application-icon {
-margin-left: auto;
+    margin-left: auto;
 	margin-right: auto;
 	display: block; height: 80%;
+}
+.options {
+    overflow: auto;
+    font-size: 1.5em;
+    padding: 10px;
+    background: #F0F0F0;
+    width: 96.5%;
+    padding-left: 2%;
+}
+.options ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 0px;
+}
+
+ul li.even {
+    background-color: #eee;
+}
+.options li {
+    color: black;
+    list-style: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
+    font-size: 1.2em;
+}
+ul li {
+    cursor: pointer;
+}
+
+
+ul li.odd {
+    background-color: #ddd;
+}
+.options li {
+    color: black;
+    list-style: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
+    font-size: 1.2em;
 }

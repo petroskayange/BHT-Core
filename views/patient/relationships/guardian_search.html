@@ -1,0 +1,52 @@
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/client-scan-barcode.js"></script>
+<script type="text/javascript" src="/assets/js/core.js"></script>
+<script type="text/javascript">
+var url = new URL(url);
+var id = url.searchParams.get("patient_id");
+sessionStorage.setItem("backupPatientID", id);
+
+  function addGuardianBarcode() {
+    var iFrame = document.getElementById("inputFrame0");
+    var barcodeDiv = document.createElement("div");
+    barcodeDiv.setAttribute("class","barcode");
+    barcodeDiv.setAttribute("url", "/");
+    barcodeDiv.setAttribute("functionName", "postGuardianID");
+    iFrame.appendChild(barcodeDiv);
+
+    iFrame.style = "width: 96%;";
+    inserBarcodeScan();
+  }
+
+  function changeFinishBtn() {
+    var finishButton =  __$("nextButton");
+    finishButton.setAttribute('onmousedown',"registerPatientRedirect();");
+    finishButton.setAttribute('onclick',"");
+    nextButton.innerHTML = "<span>Find or Register Guardian</span>";
+  }
+function setKeyup() {
+  
+  // url="/views/confirm.html" functionName="postID"
+}
+
+// sessionStorage.backupPatientID = sessionStorage.patientID;
+</script>
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+
+      <form>
+
+        <input type="text" name="summary"
+          tt_onLoad="__$('keyboard').style.display = 'none'; addGuardianBarcode(); changeFinishBtn();setKeyup();" 
+          tt_pageStyleClass= "NoControls" helpText="Scan or Register guardian" optional = "true"/>
+
+      </form>
+
+   </div>
+</body>
