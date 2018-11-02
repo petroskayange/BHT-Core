@@ -46,7 +46,7 @@ __$("nextButton").onmousedown = function(){
     validRegEx = /^(?=.{2,20}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
     value = $('touchscreenInput' + tstCurrentPage).value;
    if(value.match(validRegEx) == null) {
-     showMessage("Invalid name inpt");
+     showMessage("Invalid name input");
    }else if (value.match(validRegEx) != null) {
     gotoNextPage();
    }
