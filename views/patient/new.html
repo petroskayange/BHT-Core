@@ -355,7 +355,9 @@
 
   function setAbsoluteMaxBirthYear(){
     var element = document.getElementById('touchscreenInput' + tstCurrentPage);
-    element.setAttribute("absoluteMax", (new Date().getFullYear())); 
+    element.setAttribute("absoluteMax", (new Date().getFullYear()));
+    element.setAttribute("min", (new Date().getFullYear() - 100)); 
+    element.setAttribute("absoluteMin", (new Date().getFullYear() - 120)); 
   }
 
   function validateYear() {
