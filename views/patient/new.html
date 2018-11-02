@@ -187,6 +187,8 @@
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
     <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+    <script type="text/javascript" src="/assets/js/moment.js"></script>
+    <script type="text/javascript" src="/assets/js/demographics.js"></script>
 
   </head>
   <body id="mateme">
@@ -857,8 +859,8 @@ function enrollPatient(person_id) {
   if (http.readyState == 4) {
   if (http.status == 201) {
   var v = JSON.parse(http.responseText);
+  getDemographics(person_id);
   nextEncounter(person_id, 1);
-  // window.location.href = "/views/patient_dashboard.html?patient_id=" + person_id;;
   } else if (http.status == 409) {
   alert('Username already exists');
   } else {
