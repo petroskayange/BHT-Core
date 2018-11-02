@@ -39,11 +39,11 @@
 <script type="text/javascript">
 var tt_cancel_destination = "/";
 
-function validateFirstname() {
+function validateName() {
 __$("nextButton").removeAttribute("onmousedown");
 __$("nextButton").onmousedown = function(){
 
-    validRegEx = /^(?=.{2,20}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
+    validRegEx = /^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
     value = $('touchscreenInput' + tstCurrentPage).value;
    if(value.match(validRegEx) == null) {
      showMessage("Invalid name input");
@@ -57,11 +57,11 @@ __$("nextButton").onmousedown = function(){
 
 
 <form action="search_results.html" method="POST" id="search_results">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateFirstname();' tt_onUnload="getInput();"
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="getInput();"
      helpText="First name"  key="given_name" 
     allowFreeText="true" ajaxURL="/search/given_name?search_string=" />
 
-    <input type="text" name="family_name" id="family_name" field_type="alpha"  ajaxURL="/search/family_name?search_string=" helpText="Last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
+    <input type="text" name="family_name" id="family_name" field_type="alpha"  tt_onLoad='validateName();' ajaxURL="/search/family_name?search_string=" helpText="Last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
 
     <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
       <option value="M">Male</option>
