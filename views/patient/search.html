@@ -13,7 +13,7 @@
 
       function getInput(){
         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-         value = $('touchscreenInput' + tstCurrentPage).value
+         value = $('touchscreenInput' + tstCurrentPage).value;
          sessionStorage.setItem(key, value);
          var d = new Date();
          sessionStorage.setItem("date_created", d.toDateString());
@@ -36,13 +36,27 @@
 </style>
 
 <script type="text/javascript">
-  var tt_cancel_destination = "/";
-  
+var tt_cancel_destination = "/";
+
+function validateFirstname() {
+__$("nextButton").removeAttribute("onmousedown");
+__$("nextButton").onmousedown = function(){
+
+    validRegEx = /^(?=.{2,20}$)[a-z\!]+(?:['_.\s\-\!\][a-z]+)*$/
+    value = $('touchscreenInput' + tstCurrentPage).value;
+   if(value.match(validRegEx) == null) {
+     showMessage("Invalid name inpt");
+   }else if (value.match(validRegEx) != null) {
+    gotoNextPage();
+   }
+  }
+}
+
 </script>
 
 
 <form action="search_results.html" method="POST" id="search_results">
-    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();"
+    <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateFirstname();' tt_onUnload="getInput();"
      helpText="First name"  key="given_name" 
     allowFreeText="true" ajaxURL="/search/given_name?search_string=" />
 
