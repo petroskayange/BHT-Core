@@ -416,7 +416,7 @@ function searchResults(results){
  document.getElementById('popupBox').style="display: none;"; 
   
   var data = JSON.parse(results);     
-  document.getElementById('helpText0').innerHTML = data.length + " Patients found";
+  document.getElementById('helpText0').innerHTML = data.length + " Patient(s) found";
   for(var x in data){
     if(data.hasOwnProperty(x)){
       null_or_empty = function(value) {
