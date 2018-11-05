@@ -657,6 +657,7 @@
   <input type="text" name="person[addresses][address1]" id="landmark" 
     helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" 
     tt_pageStyleClass="azButton" 
+    validationRule = "^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\s\][a-z]+[a-z\!\A-Z\0-9])*$|Unknown|Not Available"
     tt_onLoad="$(nextButton).style.display = block;" />
 
   <input type="text" name="cellphone" id="cellphone" 
