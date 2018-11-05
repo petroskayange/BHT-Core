@@ -102,14 +102,17 @@
       }
 
       function summary() {
-
+      if(__$('person_birth_year').value !== "Unknown") {
         birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
-
+        birth_date = moment(birth_date).format("YYYY/MMM/DD");
+      }else if (__$('person_birth_year').value === "Unknown") {
+        birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY/MM/DD");
+      }
         parameter = {
               given_name:                     __$('given_name').value,
               family_name:                    __$('family_name').value,
               gender:                         __$('gender').value,
-              birthdate:                      birth_date,
+              birthdate:                      birth_date ,
               birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
               current_district:                __$('current_district').value, 
@@ -541,7 +544,7 @@
       <option value="Unknown">Unknown</option>
     </select>
 
-  <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" absoluteMin="10" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
+  <input type="text" name="person[age_estimate]" id="person_age_estimate" helpText="Age Estimate" absoluteMin="1" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$(nextButton).style.display = block;" tt_pageStyleClass="Numeric NumbersOnly" />
 
   <input type="text" name="person[birth_day]" 
     id="person_birth_day" 
