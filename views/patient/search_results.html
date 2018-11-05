@@ -295,7 +295,7 @@ function loadPatient(){
 
 <body onload = "setTimeout('setAttributes();findClients();', 500);">
   <form action="" method="POST">
-        <label for="person">No patients were found:</label>
+        <label for="person" id="patient-results">No patients were found:</label>
     <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "setItems();">
       <!--option onmousedown="search_remote()">Search from remote server for person with name John Does</option-->
 
@@ -416,7 +416,7 @@ function searchResults(results){
  document.getElementById('popupBox').style="display: none;"; 
   
   var data = JSON.parse(results);     
-  
+  document.getElementById('helpText0').innerHTML = data.length + " Patients found";
   for(var x in data){
     if(data.hasOwnProperty(x)){
       null_or_empty = function(value) {
