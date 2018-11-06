@@ -112,11 +112,16 @@ function buildTable() {
     td.setAttribute("id", "td-" + vitalsAssigned[i][0]);
     tr.appendChild(td);
 
+    var fd = document.createElement("td");
+    fd.setAttribute("id", "units-" + vitalsAssigned[i][0]);
+    fd.innerHTML = vitalsAssigned[i][2];
+    tr.appendChild(fd);
+
   
   }
-  table.innerHTML += "<tr><th>Age<td id='age'>"+sessionStorage.patientAge+"</td></th></tr>";
-  table.innerHTML += "<tr><th>BMI<td id='bmi'></td></th></tr>";
-  table.innerHTML += "<tr><th id='bmi-result' colspan='2' style='text-align: center; color: white;'></th></tr>";
+  table.innerHTML += "<tr><th>Age<td id='age'>"+sessionStorage.patientAge+"</td><td> years old</td></th></tr>";
+  table.innerHTML += "<tr><th>BMI<td id='bmi' colspan='3'></td></th></tr>";
+  table.innerHTML += "<tr><th id='bmi-result' colspan='3' style='text-align: center; color: white;'></th></tr>";
 }
 
 function updateBMI() {
