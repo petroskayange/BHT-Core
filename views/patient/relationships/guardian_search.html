@@ -24,7 +24,7 @@ sessionStorage.setItem("backupPatientID", id);
 
   function changeFinishBtn() {
     var finishButton =  __$("nextButton");
-    finishButton.setAttribute('onmousedown',"registerPatientRedirect();");
+    finishButton.setAttribute('onmousedown',"registerGuardianRedirect();");
     finishButton.setAttribute('onclick',"");
     nextButton.innerHTML = "<span>Find or Register Guardian</span>";
   }
