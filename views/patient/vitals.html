@@ -341,6 +341,10 @@ function validateSPO2(spo2){
     return false;
   }
 
+  if(spo2 < 40 || spo2 > 100) {
+    showMessage("Oxygen saturation reading is out of bounds");
+    return false;
+  }
   return true;
 }
 function showValidate(message) {
@@ -528,27 +532,20 @@ function validateBP(bp) {
 
   }
 
-
   if (bp_systolic < 40 || bp_systolic > 250) {
 
-showMessage("Systolic reading it out of normal range");
-return true;
+    showMessage("Systolic reading it out of normal range");
+    return true;
 
-}
-
-
-  
+  }
 
   return true;
 }
-
-
 
 /* .................................... validation helpers .......... */
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 
 function changeNextBtn() {
   var nextBtn = document.getElementById('nextButton');
