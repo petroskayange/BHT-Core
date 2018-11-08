@@ -8,13 +8,17 @@
     <script language="javascript" type="text/javascript" src="/assets/js/birthdate_functions.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/assets/js/generic_ajaxrequest.js" defer="true"></script>
 
-    <script type="text/javascript">
-      var tt_cancel_destination = "/";
+    <script type="text/javascript"> 
+           var url = new URL(url);
+      var backupPatientID = "";
+      var id = url.searchParams.get("patient_id");
+      sessionStorage.setItem("backupPatientID", id);
+      var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.backupPatientID;
     </script>
   </head>
   
   <body>
-    <div id="container">
+     <div id="container">
       <div id="content">
         <div style="padding-left: 15px;font-size:1.2em;">
         </div>
@@ -107,15 +111,11 @@
           parameters += "&family_name=" + sessionStorage.getItem("family_name");
           parameters += "&gender=" + sessionStorage.getItem("gender");
 
-          window.location.href = "/views/patient/new.html" + parameters;
-      }else if (search_redirect.length > 0){
-        sessionStorage.setItem("patientID", people[pos]["Person ID"]);
-        window.location.href = "/views/confirm.html?patient_id=" + people[pos]['Person ID'];
-        // nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
-      }else{
-          showMessage("Select value to continue");
+ = "/witiseletioneIipp/niw.heml?I"/vipes/l=e + w/ndlwtionstipn/newwh/ml?firm.", id=;s+tItem("
+        }else{
+            showMessage("Select value to continue");
+        }
       }
-    }
 
       addFields();
 
@@ -217,29 +217,7 @@ function loadPatient(){
 
       birthdate_estimated      = found_clients[j].birthdate_estimated; 
       people[pos]["Birthdate"] = displayFormatedBirthdate(found_clients[j].birthdate, birthdate_estimated);
-			/*
-      people[pos]["Year"] =  found_clients;
-      if(people[pos]["Year"] == " " ){
-        people[pos]["Year"] =  people[pos]["Birthdate"].split('/')[2].replace("??","");
-      }
-
-      people[pos]["Month"] = "<%=data["birthdate"].to_date.strftime("%b") %>";
-      if(people[pos]["Month"] == "" ){
-        people[pos]["Month"] =  people[pos]["Birthdate"].split('/')[1].replace("??","");
-      }
-
-      people[pos]["Day"] = "<%=data["birthdate"].to_date.day %>";
-      if(people[pos]["Day"] == " " ){
-        people[pos]["Day"] =  people[pos]["Birthdate"].split('/')[0].replace("??","");
-      }
-
-      people[pos]["Age"] = "65";
-      people[pos]["Occupation"] = "<%=data["occupation"]%>";
-			*/
-
-
-      //people[pos]["Birthdate Estimated"] = found_clients[j].birthdate_estimated;;
-
+			
       people[pos]["Home District"] = found_clients[j].home_district;
 
       people[pos]["Ancestral Traditional Authority(T/A)"] = found_clients[j].home_ta
@@ -286,20 +264,18 @@ function loadPatient(){
 
     }
     
-    }
-
-    
+    }  
 
   }
 </script>
 
 <body onload = "setTimeout('setAttributes();findClients();', 500);">
   <form action="" method="POST">
-        <label for="person" id="patient-results">No patients were found:</label>
+        <label for="person">No guardians were found:</label>
     <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "setItems();">
       <!--option onmousedown="search_remote()">Search from remote server for person with name John Does</option-->
 
-          <option class="test" value="0" onmousedown="changeNextButtonText('New Patient')">&nbsp;</option>
+          <option class="test" value="0" onmousedown="changeNextButtonText('New Guardian')">&nbsp;</option>
 
     </select>
     <input type="hidden" id="identifier" name="identifier" value="" />
@@ -346,7 +322,7 @@ function loadPatient(){
     //var inputField = document.getElementById("names");
     //var personName = document.createTextNode(" " + sessionStorage.getItem("given_name") + " " + sessionStorage.getItem("family_name") );
     //inputField.appendChild(personName);
-   string ="Create a new person with the names " + sessionStorage.getItem("given_name") + " " + sessionStorage.getItem("family_name");
+   string ="Create a new guardian with the names " + sessionStorage.getItem("given_name") + " " + sessionStorage.getItem("family_name");
    document.getElementById("0").innerHTML = string;
   }
 
@@ -416,7 +392,6 @@ function searchResults(results){
  document.getElementById('popupBox').style="display: none;"; 
   
   var data = JSON.parse(results);     
-  var patientsNumber = data.length;
   
   for(var x in data){
     if(data.hasOwnProperty(x)){
@@ -464,8 +439,7 @@ function searchResults(results){
   }
 
   document.getElementById("innerPop").style.display = "none";  
-  document.getElementById('helpText0').innerHTML = data.length + " Patient(s) found";
-  // loadPatient();
+  loadPatient();
 }
 
 var interval = setInterval(function(){ 
@@ -479,6 +453,3 @@ var interval = setInterval(function(){
   }
 }, 600);
 </script>
-
-
-

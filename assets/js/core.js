@@ -7,6 +7,10 @@
 var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
+var url = new URL(url);
+var backupPatientID = "";
+var id = url.searchParams.get("patient_id");
+sessionStorage.setItem("backupPatientID", id);
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
 // var activities_tab_content = "";
 // })
@@ -535,6 +539,10 @@ function activitiesRedirect(id) {
 
 function registerPatientRedirect() {
     window.location.href = '/views/patient/search.html';
+}
+
+function registerGuardianRedirect() {
+    window.location.href = '/views/patient/relationships/search.html?patient_id='+sessionStorage.backupPatientID;
 }
 // overview tab work in progress
 function overview() {
