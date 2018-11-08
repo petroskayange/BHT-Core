@@ -270,7 +270,6 @@ function buildBTN(element, name, i) {
 }
 
 function setVital(e) {
-  console.log(e);
   var validInput = validateUserInput();
 
   if(!validInput)
@@ -457,12 +456,6 @@ function validateHeight(height){
   if(height.trim().length < 1)
     return true;
 
-
-  if(!(height.indexOf(".") ==-1)){
-    showMessage("Please remove decimal(s).");
-    return false;
-  }
-
   if(!(height.indexOf("/") ==-1)){
     showMessage("Please remove /.");
     return false;
@@ -480,6 +473,11 @@ function validateHeight(height){
 
   if(!isNumeric(height)){
     showMessage("Not a valid height - please enter a valid height.");
+    return false;
+  }
+
+  if (height > 250 || height < 40) {
+    showMessage("height is out of range");
     return false;
   }
 
