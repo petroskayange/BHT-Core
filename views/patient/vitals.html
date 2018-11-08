@@ -521,6 +521,22 @@ function validateBP(bp) {
     return false;
   }
 
+  if (bp_diastolic < 30 || bp_diastolic > 200) {
+
+    showMessage("Diastolic reading it out of normal range");
+    return false;
+
+  }
+
+
+  if (bp_systolic < 40 || bp_systolic > 250) {
+
+showMessage("Systolic reading it out of normal range");
+return true;
+
+}
+
+
   
 
   return true;
