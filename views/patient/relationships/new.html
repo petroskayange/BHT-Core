@@ -107,9 +107,9 @@
         birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY/MM/DD");
       }
         parameter = {
-              given_name:                     __$('given_name').value,
-              family_name:                    __$('family_name').value,
-              gender:                         __$('gender').value,
+              given_name:                     sessionStorage.given_name,
+              family_name:                    sessionStorage.family_name,
+              gender:                         sessionStorage.gender,
               birthdate:                      birth_date ,
               birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
@@ -861,6 +861,7 @@ function createPatient(person_id) {
       // } else {
         // document.location = "../patient_dashboard.html?patient_id=" + person_id;
         enrollPatient(person_id);
+        sessionStorage.guardianID = person_id;
         document.location = "/views/patient/relationships/guardian_confirm.html?patient_id=" + sessionStorage.backupPatientID + "&guardian_identifier="+person_id;
       // }
       // enrollPatient(person_id);

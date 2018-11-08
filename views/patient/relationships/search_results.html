@@ -8,8 +8,8 @@
     <script language="javascript" type="text/javascript" src="/assets/js/birthdate_functions.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/assets/js/generic_ajaxrequest.js" defer="true"></script>
 
-    <script type="text/javascript">
-      var url = new URL(url);
+    <script type="text/javascript"> 
+           var url = new URL(url);
       var backupPatientID = "";
       var id = url.searchParams.get("patient_id");
       sessionStorage.setItem("backupPatientID", id);
@@ -18,7 +18,7 @@
   </head>
   
   <body>
-    <div id="container">
+     <div id="container">
       <div id="content">
         <div style="padding-left: 15px;font-size:1.2em;">
         </div>
@@ -111,11 +111,7 @@
           parameters += "&family_name=" + sessionStorage.getItem("family_name");
           parameters += "&gender=" + sessionStorage.getItem("gender");
 
-          window.location.href = "/views/patient/relationships/new.html?patient_id=" + sessionStorage.backupPatientID + parameters;
-        }else if (search_redirect.length > 0){
-          sessionStorage.setItem("patientID", people[pos]["Person ID"]);
-          window.location.href = "/views/confirm.html?patient_id=" + sessionStorage.backupPatientID + "&guardian_identifier=" + people[pos]['Person ID'];
-          // nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
+ = "/witiseletioneIipp/niw.heml?I"/vipes/l=e + w/ndlwtionstipn/newwh/ml?firm.", id=;s+tItem("
         }else{
             showMessage("Select value to continue");
         }
