@@ -528,27 +528,20 @@ function validateBP(bp) {
 
   }
 
-
   if (bp_systolic < 40 || bp_systolic > 250) {
 
-showMessage("Systolic reading it out of normal range");
-return true;
+    showMessage("Systolic reading it out of normal range");
+    return true;
 
-}
-
-
-  
+  }
 
   return true;
 }
-
-
 
 /* .................................... validation helpers .......... */
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 
 function changeNextBtn() {
   var nextBtn = document.getElementById('nextButton');
