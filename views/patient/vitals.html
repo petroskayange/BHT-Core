@@ -329,6 +329,11 @@ function validatePulse(pulse){
     return false;
   }
 
+  if(pulse < 50 || pulse > 120) {
+    showMessage("Pulse reading is out of bounds");
+    return false;
+  }
+
   return true;
 }
 
