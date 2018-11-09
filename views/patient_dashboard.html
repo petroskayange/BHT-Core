@@ -113,9 +113,9 @@
     <!-- visits div -->
     <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
         <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; border-bottom: solid 2px black; background-color: white;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
         <div id="dates" style="height: 65%; margin-top: 20%;"> </div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; border-top: solid 2px black; background-color: white;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
      </div>
     <!-- /visits div-->
 
@@ -124,8 +124,8 @@
         <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
         <div class="row">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
+                 <div class="card-header h4 btn-primary" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
                  
                  <div class="list-group" id="encounters">
                  </div> 
@@ -142,8 +142,8 @@
            </div>
            
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
-              <div class="card text-white bg-primary mb-3 btn-success cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Programs</div>
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Programs</div>
 
                  <table class="table ">
                     <tbody id="programs">
@@ -156,8 +156,8 @@
         </div>
         <div class="row" style="margin-top:10px;">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 btn-danger cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Alerts</div>
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 btn-danger" style="margin: 3%; padding: 1%;">Alerts</div>
                  <table class="table ">
                     <tbody id="alerts">
                     </tbody>
@@ -167,8 +167,8 @@
               </div>
            </div>
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white bg-primary mb-3 btn-warning cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Latest Medication</div>
+              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Latest Medication</div>
                  <table class="table ">
                     <tbody id="medication">
                     </tbody>
