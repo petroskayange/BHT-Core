@@ -22,9 +22,27 @@
   </script>   
 
   <style>
+     .flash_notice{
+        left: calc(50% - 225px);
+        width: 450px;
+        position: absolute;
+        top: 250px;
+        font-size: 1.5em;
+        text-align: center;
+        background-color: tomato;
+        color: #292626;
+        padding: 10px;
+        z-index: 999;
+        border: 2px outset tomato;
+        border-radius: 15px;
+    }
 
   </style>
   
+  <div class="flash_notice" id="message_div" style="visibility: hidden;">
+        <span id="message" style="width: 100%; text-align: 'center'">&nbsp;</span> <br/>
+        <button class="blue" id="ok">OK</button>
+  </div>
   <!-- container -->
   <div class="container" style="width: 100%; margin-bottom: 1%;">
 
@@ -98,10 +116,42 @@
     window.location = "/views/patient/relationships/guardian_search.html?patient_id=" + backupPatientID;
   }
 
+  var showMessage = (message)=>{
+        //Show pop message div
+        $("#message_div").css({"visibility":"visible"});
+
+        //Message
+        $("#message").html(message);
+        
+        //Button
+        document.getElementById("ok").onmousedown = ()=>{
+            $("#message").html("");
+            $("#message_div").css({"visibility":"hidden"});
+        }
+   
+  }
+
+  // function showMessage(message) {
+  //       //Show pop message div
+  //       $("#message_div").css({"visibility":"visible"});
+
+  //       //Message
+  //       $("#message").html(message);
+        
+  //       //Button
+  //       document.getElementById("ok").onmousedown = ()=>{
+  //           $("#message").html("");
+  //           $("#message_div").css({"visibility":"hidden"});
+  //       }
+  // }
+
   function dashboard_redirect(e) {
   
     if(guardian_options.length == 0) {
-        alert("select a relationship");
+       // alert("select a relationship");
+        //Pop div
+        showMessage("Select relationship type to continue");
+ 
     }else {
       assignRelationShip(relationship_type_id);
 
@@ -132,7 +182,9 @@
     if (http.readyState == 4) {
     if (http.status == 201) {
     var v = JSON.parse(http.responseText);
+    sessionStorage.patientID = sessionStorage.backupPatientID;
       getDemographics(backupPatientID);
+      
       nextEncounter(backupPatientID, 1);
 
     } else if (http.status == 409) {

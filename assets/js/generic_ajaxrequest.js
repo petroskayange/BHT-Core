@@ -116,31 +116,31 @@ function checkIfActivitySelected(encounter_name, url) {
   // alert(sessionStorage.programID);
 
   if  (parseInt(sessionStorage.programID) == 1 ){
-    if (encounter_name == "art adherence" && !selected_activities.match(/Manage ART adherence/i)) {
+    if (encounter_name == "art adherence" && !selected_activities.match(/ART adherence/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if  (encounter_name == "hiv clinic consultation" && !selected_activities.match(/Manage HIV clinic consultations/i) ) {
+    } else if  (encounter_name == "hiv clinic consultation" && !selected_activities.match(/HIV clinic consultations/i) ) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "hiv reception" && !selected_activities.match(/Manage HIV reception visits/i)) {
+    } else if (encounter_name == "hiv reception" && !selected_activities.match(/HIV reception visits/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "hiv staging" && !selected_activities.match(/Manage HIV staging visits/i)) {
+    } else if (encounter_name == "hiv staging" && !selected_activities.match(/HIV staging visits/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
     } else if (encounter_name == "appointment" && !selected_activities.match(/Manage Appointments/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "dispensing" && !selected_activities.match(/Manage Drug Dispensations/i)) {
+    } else if (encounter_name == "dispensing" && !selected_activities.match(/Drug Dispensations/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "treatment" && !selected_activities.match(/Manage Prescriptions/i)) {
+    } else if (encounter_name == "treatment" && !selected_activities.match(/Prescriptions/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "vitals" && !selected_activities.match(/Manage Vitals/i)) {
+    } else if (encounter_name == "vitals" && !selected_activities.match(/Vitals/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if (encounter_name == "hiv clinic registration" && !selected_activities.match(/Manage HIV first visits/i)) {
+    } else if (encounter_name == "hiv clinic registration" && !selected_activities.match(/HIV first visits/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
     }

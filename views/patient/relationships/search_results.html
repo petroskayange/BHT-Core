@@ -107,7 +107,7 @@
       __$('nextButton').onmousedown = function(){
         search_redirect = $('touchscreenInput' + tstCurrentPage).value;
         if (search_redirect.match(/Create a new/i)){
-          parameters = "?given_name=" + sessionStorage.getItem("given_name");
+          parameters = "&given_name=" + sessionStorage.getItem("given_name");
           parameters += "&family_name=" + sessionStorage.getItem("family_name");
           parameters += "&gender=" + sessionStorage.getItem("gender");
           window.location.href = "/views/patient/relationships/new.html?patient_id=" + sessionStorage.backupPatientID + parameters;

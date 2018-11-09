@@ -49,15 +49,15 @@
   "activities": {
     "url": "/apps/ART/views/activities.html",
     "tasks": [
-      ["Manage ART adherence","art adherence"],
-      ["Manage HIV clinic consultations","hiv clinic consultation"],
-      ["Manage HIV first visits","hiv clinic registration"],
-      ["Manage HIV reception visits","hiv reception"],
-      ["Manage HIV staging visits","hiv staging"],
+      ["ART adherence","art adherence"],
+      ["HIV clinic consultations","hiv clinic consultation"],
+      ["HIV first visits","hiv clinic registration"],
+      ["HIV reception visits","hiv reception"],
+      ["HIV staging visits","hiv staging"],
       ["Manage Appointments","appointment"],
-      ["Manage Drug Dispensations","dispensing"],
-      ["Manage Prescriptions","treatment"],
-      ["Manage Vitals","vitals"]
+      ["Drug Dispensations","dispensing"],
+      ["Prescriptions","treatment"],
+      ["Vitals","vitals"]
     ]
   },
     
