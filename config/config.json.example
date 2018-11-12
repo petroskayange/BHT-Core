@@ -8,6 +8,7 @@
 			"applicationName": "ART",
 	      	"programID": "1",
 			"applicationFolder": "ART/",
+			"url": "apps/ART/views/activities.html",
 			"applicationIcon": "/assets/images/aids.png",
 			"applicationDescription": "Application for HIV testing",
 			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"

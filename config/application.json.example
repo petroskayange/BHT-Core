@@ -18,7 +18,7 @@
     "hiv staging": {
       "available": true,
       "activitiesIcon": "/assets/images/hiv-staging.png",
-      "url": "/apps/ART/views/encounters/patient/hiv_staging.html"
+      "url": "/apps/ART/views/encounters/hiv_staging.html"
     },
     "hiv clinic consultation": {
       "available": true,
