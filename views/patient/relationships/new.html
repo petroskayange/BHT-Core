@@ -32,6 +32,7 @@
       }
 
       function createClient() {
+        
         var summary_table = document.getElementsByClassName('summary-table')[0];
         var rows  = summary_table.getElementsByTagName('tr');
   
@@ -42,11 +43,13 @@
           current_district: null, current_traditional_authority: null, current_village: null,
 					landmark: null, cell_phone_number: null
         }
-
+          
+        
         for(var i = 0 ; i < rows.length ; i++){
+          
           var title = rows[i].getElementsByTagName('th')[0].innerHTML.trim();
           var data 	= rows[i].getElementsByTagName('td')[0].innerHTML.trim();
-
+          
 					if(title.match(/Given name/i)){
 						parametersPassed.given_name = data; 
 					}else if(title.match(/Family name/i)){
@@ -75,7 +78,7 @@
 						parametersPassed.cell_phone_number = data; 
 					}
         }
-
+       
         postClientParamaters(parametersPassed);
       }
 
@@ -832,13 +835,15 @@ function validateEnteredDate(inputText){
 
 function postClientParamaters(parametersPassed) {
   var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/people';
-	var parametersPassed = JSON.stringify(parametersPassed);
+  var parametersPassed = JSON.stringify(parametersPassed);
+  console.log('verifying the data before sending to server' + console.table(parametersPassed));
 	showStatus();
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
+      console.log('examin the id for the person' + obj['person_id'] );
 			createPatient(obj['person_id']);
     }
   };
