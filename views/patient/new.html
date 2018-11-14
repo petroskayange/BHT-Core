@@ -40,7 +40,7 @@
           gender: null, birthdate: null, birthdate_estimated: null,
           home_district: null, home_traditional_authority: null, home_village: null,
           current_district: null, current_traditional_authority: null, current_village: null,
-					landmark: null, cell_phone_number: null, relationship: null
+					landmark: null, cell_phone_number: null, relationship: null, patient_type: null, facility_name: null
         }
 
         for(var i = 0 ; i < rows.length ; i++){
@@ -75,6 +75,10 @@
 						parametersPassed.cell_phone_number = data; 
 					}else if(title.match(/Guardian/i)){
             parametersPassed.relationship = data;
+          }else if(title.match(/Patient Type/i)){
+            parametersPassed.patient_type = data;
+          }else if(title.match(/Facility name/i)){
+            parametersPassed.facility_name = data;
           }
         }
 
@@ -125,6 +129,8 @@
 
               landmark:                        __$('landmark').value,
               cell_phone_number:               __$('cellphone').value,
+              patient_type:                    __$('patient_type').value,
+              facility_name:                   __$('facility_name').value,
               relationship:                    __$('guardian_present').value,
             }
 
@@ -145,6 +151,8 @@
           ["Current Village", parameter.current_village],
           ["Landmark", parameter.landmark],
           ["Cell phone", parameter.cell_phone_number],
+          ["Patient Type", parameter.patient_type],
+          ["Facility name", parameter.facility_name],
           ["Guardian", parameter.relationship]
         ];
 
@@ -669,7 +677,26 @@
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
 
-  <select allowFreeText="false" helpText="Guardian Present" id="guardian_present" name="guardian_present" ttMatchFromBeginning="true" ><option value="Yes">Yes</option>
+  <select allowFreeText="false" helpText="Type of patient"
+    name="patient_type"
+    id="patient_type"
+    key="gender" ><option value=""></option>
+      <option value="New Patient">New patient</option>
+      <option value="Transer in">Transer in</option>
+      <option value="Visiting Patient">Visiting patient</option></select>
+
+  <select objectType="location" ajaxURL="/locations?name=" 
+    allowFreeText="true" 
+    condition="$('patient_type').value != 'New Patient'" 
+    field_type="alpha" 
+    helpText="Please select facility name" 
+    id="facility_name" 
+    name="facility_name"></select>
+
+  <select allowFreeText="false" helpText="Guardian Present" 
+    id="guardian_present" 
+    name="guardian_present" 
+    ttMatchFromBeginning="true" ><option value="Yes">Yes</option>
     <option value="No">No</option></select>
   
   <!-- Make sure patient is created
