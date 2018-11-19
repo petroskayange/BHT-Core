@@ -513,6 +513,7 @@
       var req = new XMLHttpRequest();
       var counter = 0;
       id = patient_id;
+      getPrograms(patient_id, "table", "programs");
       if (index < 0) {
         index = 0;
       }
@@ -527,7 +528,7 @@
               var prev = index - 5;
               document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
               getValue(results[0], patient_id, "encounters", "h4", "table");
-              getPrograms(patient_id, "table", "programs");
+              
               if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
                 document.getElementById("down").removeAttribute("disabled", "");
@@ -796,7 +797,7 @@
       changeActivities();
       generateTasks();
 
-      loadAlerts();
+      // loadAlerts();
     </script>
 </html>
 <script src="/assets/js/generic_ajaxrequest.js"></script> 
