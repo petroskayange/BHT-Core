@@ -152,7 +152,6 @@
           ["Landmark", parameter.landmark],
           ["Cell phone", parameter.cell_phone_number],
           ["Patient Type", parameter.patient_type],
-          ["Facility name", parameter.facility_name],
           ["Guardian", parameter.relationship]
         ];
 
@@ -680,9 +679,10 @@
   <select allowFreeText="false" helpText="Type of patient"
     name="patient_type"
     id="patient_type"
+    tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
     key="gender" ><option value=""></option>
       <option value="New Patient">New patient</option>
-      <option value="Transer in">Transer in</option>
+      <option value="Transfer in">Transer in</option>
       <option value="Visiting Patient">Visiting patient</option></select>
 
   <select objectType="location" ajaxURL="/locations?name=" 
