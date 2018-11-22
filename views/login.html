@@ -10,6 +10,9 @@ body {
   width: 100%;
   border: 1px solid black;
   height: 97vh;
+  /*background-image: url("/assets/images/login-logos/Malawi-Coat_of_arms_of_arms.png");
+  background-repeat: no-repeat;
+  background-position: center;*/
 }
 
 .main-row {
@@ -51,7 +54,7 @@ body {
 
 .logos img {
   width: 120px;
-  height: 70px;
+  height: 120px;
   margin-left: 10px;
   float: left;
 }
@@ -194,6 +197,15 @@ body {
   margin-right: 10px;
 }
 
+#coat-of-arms {
+ height: 160px !important;
+ width: 160px !important;
+}
+
+.other-logos {
+  bottom: -35px !important;
+  position: relative;
+}
 </style>
 
 <script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
@@ -368,14 +380,14 @@ body {
       </div>
     </div>
 
-    <div class="main-row" style="90px;">
+    <div class="main-row" style="height: 90px;">
       <div class="main-cell footer">
-        <span class="logos"><img src="/assets/images/login-logos/LIN.png" /></span>
-        <span class="logos"><img src="/assets/images/login-logos/PEPFAR.png" /></span>
+        <span class="logos"><img id="coat-of-arms" src="/assets/images/login-logos/Malawi-Coat_of_arms_of_arms.png" /></span>
+        <span class="logos"><img class="other-logos" src="/assets/images/login-logos/PEPFAR.png" /></span>
 
-        <button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onmousedown="attemptLogin();">
+        <!--button class="btn btn-primary" style="visibility: hidden;" id="login-btn" onmousedown="attemptLogin();">
           Login
-        </button>
+        </button-->
       </div>
     </div>
 
