@@ -135,7 +135,7 @@ function checkIfActivitySelected(encounter_name, url) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
     } else if (encounter_name == "treatment" && !selected_activities.match(/Prescriptions/i)) {
-      window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      window.location.href = "/views/patient_dashboard.html?source=prescription&patient_id=" + sessionStorage.patientID;
       return;
     } else if (encounter_name == "vitals" && !selected_activities.match(/Vitals/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
