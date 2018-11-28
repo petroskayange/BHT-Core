@@ -465,7 +465,6 @@
       if (this.readyState == 4 && this.status == 200) {
       
         var results = JSON.parse(this.responseText);
-        console.log(results);
         var age = results.person.birthdate;
         var gender = results.person.gender;
         var identifier = "";
