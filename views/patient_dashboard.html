@@ -463,6 +463,7 @@
     req.onreadystatechange = function () {
 
       if (this.readyState == 4 && this.status == 200) {
+      
         var results = JSON.parse(this.responseText);
         var age = results.person.birthdate;
         var gender = results.person.gender;
@@ -470,7 +471,7 @@
         var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
         
         try {
-          var addressl1 = results.person.addresses[0].address1 ;
+          var addressl1 = results.person.addresses[0].city_village ;
         var addressl2 = results.person.addresses[0].address2;
         var phone_number = results.person.person_attributes[1].value;
         }
