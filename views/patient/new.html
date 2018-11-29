@@ -127,7 +127,7 @@
               home_traditional_authority:      __$('home_ta').value,
               home_village:                    __$('home_village').value,
 
-              landmark:                        __$('landmark').value,
+              landmark:                        __$('landmark').value !== 'Other'  ? __$('landmark').value : __$('landmark-other').value,
               cell_phone_number:               __$('cellphone').value,
               patient_type:                    __$('patient_type').value,
               facility_name:                   __$('facility_name').value,
@@ -663,13 +663,31 @@
 
   <!-- <input type="text" name="p[addresses][city_village_a]" id="p_addresses_city_village_a" tt_onUnLoad="$(&quot;person_addresses_city_village&quot;).value = $(&quot;p_addresses_city_village_a&quot;).value" condition="$(&quot;filter_t_a&quot;).value == &quot;Other&quot;" ajaxURL="/person_addresses/village?search_string=" allowFreeText="true" field_type="alpha" helpText="Specify Location/Village" tt_pageStyleClass="azButton" tt_requireNextClick="true" tt_onLoad="$(&#39;nextButton&#39;).style.display = &#39;block&#39;;" /> -->
 
-  <input type="text" name="person[addresses][address1]" id="landmark" 
+  <select type="text" name="person[addresses][address1]" id="landmark" 
+    helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" 
+    tt_pageStyleClass = "NoKeyboard"
+    validationRule = "^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\s\][a-z]+[a-z\!\A-Z\0-9])*$|Unknown|Not Available"
+    tt_onLoad="$(nextButton).style.display = block;"
+    > 
+  <option value="Catholic Church">Catholic Church</option>
+  <option value="CCAP">CCAP</option>
+  <option value="Seventh Day">Seventh Day</option>
+  <option value="Primary School">Primary School</option>
+  <option value="Borehole">Borehole</option>
+  <option value="Secondary School">Secondary School</option>
+  <option value="College">College</option>
+  <option value="Market">Market</option>
+  <option value="Football Ground">Football Ground</option>
+  <option value="Other">Other</option>
+  </select>
+
+  <input type="text" name="person[addresses][address1]" id="landmark-other" 
+  condition="__$('landmark').value === 'Other';"
     helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>" allowFreeText="true" 
     tt_pageStyleClass="azButton" 
     validationRule = "^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\s\][a-z]+[a-z\!\A-Z\0-9])*$|Unknown|Not Available"
     tt_onLoad="$(nextButton).style.display = block;"
     ajaxURL="/search/landmarks?search_string=" />
-
   <input type="text" name="cellphone" id="cellphone" 
     helpText="Cell phone number"
     tt_pageStyleClass="azButton" 
