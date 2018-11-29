@@ -150,6 +150,10 @@ var vitalsAssigned = [
   ["Pulse","pulse-rate.png", "(BPM)"]
 ];
 
+if (sessionStorage.patientAge > 18 && sessionStorage.currentWeight != 0) {
+  vitalsAssigned.splice(1, 1);
+}
+
 function removeFromHash() {
   var allButtons = document.getElementsByClassName('app-btn');
   var currentVital = null;
