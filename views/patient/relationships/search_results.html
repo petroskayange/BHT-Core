@@ -112,7 +112,7 @@
           parameters += "&gender=" + sessionStorage.getItem("gender");
           window.location.href = "/views/patient/relationships/new.html?patient_id=" + sessionStorage.backupPatientID + parameters;
         }else{
-            showMessage("Select value to continue");
+          window.location.href = "/views/patient/relationships/guardian_confirm.html?patient_id=" + sessionStorage.backupPatientID + "&guardian_identifier="+person_id;
         }
       }
 
