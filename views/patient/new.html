@@ -558,7 +558,7 @@
     id="person_birth_day" 
     field_type="number" helpText="Birth Day" 
     condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" 
-    tt_onLoad="setUpPageForDateValidation();" 
+    tt_onLoad="getDayOfMonthPicker($('person_birth_year').value, $('person_birth_month').value);setUpPageForDateValidation();" 
     tt_onUnLoad="resetFinishBtn();" />
 
 
