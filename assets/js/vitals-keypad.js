@@ -131,7 +131,7 @@ function updateBMI() {
   var bmi = document.getElementById('bmi');
   var weight = document.getElementById('td-Weight').innerHTML;
   var height = null;
-  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0) {
+  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
    height =  sessionStorage.currentHeight;
   }else {
     height = document.getElementById('td-Height').innerHTML;
