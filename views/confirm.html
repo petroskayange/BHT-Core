@@ -1,208 +1,363 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Baobab Health Trust</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
-  <link rel="stylesheet" href="/assets/css/custom.css">
-  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
-  <script src="/assets/js/jquery.min.js"></script>
-  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-  <script src="/assets/js/moment.js"></script>
-</head>
-<body>
-  <script src="/assets/js/generic_ajaxrequest.js">
-      // checkIfEnconterCaptured("vitals");   
-  </script>    
 
-  <style>
-  .modal-body {
-   
-    overflow-y: auto;
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/js/moment.js"></script>
+
+<script src="/assets/js/generic_ajaxrequest.js"></script>
+
+
+<style>
+* {
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 }
-  </style>
-  
-  <!-- container -->
-  <div class="container" style="width: 100%; margin-bottom: 1%;">
 
-    <!-- left card -->
-    <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8 cards" style="margin-top: 0.7%; border: solid 1px; border-radius: 1%; height: 115px; padding: 0; width: 65%; margin-left: 1%;">
-    
-      <div class="col-md-12" style="display: flex;">
-        <span style="width: 50%; display: flex;">
-          <img style="height: 28px; width:28px; margin-top: 2px" id="icon_id" alt="person_icon">
-          <h4 id="patient_name"></h4> <h4 style="margin-left: 40px;" id=""></h4>
-        </span>
-        <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <strong>National ID:</strong>
-        </h4>
-        <h4 id="npid" style="margin-left: 10px;"></h4>   
-      </div>
-          
-      <div class="col-md-12 h4" style="display: flex;">
-        <span style="width: 50%; display: flex;">
-          <strong>Date&nbsp;of&nbsp;Birth:</strong> &nbsp;&nbsp;&nbsp;<span id="DOB" style="margin-left: 20px; ">
-          </span>
-          <span style="margin-left: 20px;" id="age"></span> 
-        </span>
-        <span style="margin-left: 40px;">
-          <strong>Phone Number:</strong>
-        </span> 
-        <span id="phone_number" style="margin-left: 40px;"></span>
-      </div>
-        
-      <div class="col-md-12 h4" style="display: flex;"> 
-          <strong>Current Address</strong> 
-          <span id="addressl1" style="margin-left: 40px;"></span> 
-          <span id="addressl3" style="margin-left: 40px;"></span>
-      </div>
-  
-    </div>
-    <!-- /left card -->
-  
-    <!-- right card-->
-    <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
-        <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 2%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
-        <h3 style="text-align: center" id="application-name"></h3>
-        <h5 style="text-align: center"> V1.0.0</h5>
-    </div>
-    <!-- /right card-->
+.demographics-table {
+  display: table;
+  width: 100%;
+  height: 120px;
+}
 
-    <!-- visit details div-->
-    <div class="col-sm-12 col-lg-12 col-md-12 col-xs-12 cards" style="border: solid 2px; padding: 0; margin-left: 1%; height: 520px; margin-top: 2%;margin-right: 3%; margin-left: 3%;width: 94%;" id="generic_tabs">
-       
-     </div>
-    <!-- /visit details div-->
-    
-    <!-- footer -->
-    <footer class="footer">
-      <div class="container-footer">
-        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Next &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-        </button>
-        <button id="btnCancel" class="red left" style="margin: 5px 0px 0px; padding: 0px; float: left;" onclick="window.location.href = '/'">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Cancel &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-        </button>
-      </div>
-    </footer>   
-    <!-- /footer -->
-  
+.demographics-table-row {
+  display: table-row;
+}
 
-  <!-- /container -->
-  </div>
-<!-- /body -->
-</body>
+.demographics-table-cell {
+  display: table-cell;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 5px 10px #888888;
+  padding: 10px;
+}
 
-<script src="/assets/js/core.js "></script>
+
+.info-table {
+  display: table;
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: separate;
+  border-spacing:10px;
+}
+
+.info-table-row {
+  display: table-row;
+}
+
+.info-table-cell {
+  display: table-cell;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 8px 18px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  height: 250px !important;
+  width: 23%;
+  display: table-cell;
+}
+
+.section-badge {
+  margin: 10px 10px 5px 10px;
+  width: 92%;
+  padding-left: 10px;
+  background-color: slategray;
+  vertical-align: center;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  color: #fff;
+}
+
+.section-body {
+  margin: 10px 10px 5px 10px;
+  width: 92%;
+  padding-left: 10px;
+  height: 90%;
+  background-color: white;
+}
+
+#demographics-addresses th {
+  font-size: 12px;
+}
+
+.buttonsDIV {
+  background-color: #333333;
+  display: block;
+  height: 80px;
+  position: absolute;
+  bottom: 1px;
+  width: 98.7%;
+  z-index: 10;
+}
+
+.buttonsDIV button {
+  margin: 5px 0px 0px;
+  margin-right: 10px;
+  height: 60px;
+  font-size: 2rem;
+
+}
+
+.blue {
+  border: 1px solid #7eb9d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 28px;
+  font-family: helvetica;
+  padding: 10px 10px 10px 10px;
+  text-decoration: none;
+  display: inline-block;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #a7cfdf;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+  background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+  background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+  filter: progid: DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+}
+
+.red {
+  border: 1px solid #ff0011;
+  background-image: linear-gradient(bottom, rgb(255, 0, 17) 0%, rgb(255, 0, 17) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(255, 0, 17) 0%, rgb(255, 0, 17) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(255, 0, 17) 0%, rgb(255, 0, 17) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(255, 0, 17) 0%, rgb(255, 0, 17) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(255, 0, 17) 0%, rgb(255, 0, 17) 100%);
+  background-image: -webkit-gradient( color-stop(0, rgb(255, 0, 17)), color-stop(1, rgb(255, 0, 17)) ) !important;
+  background-color: #5c0707;
+
+  border: 1px solid #450111;
+  background-color: #77021d;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#77021d), to(#3a000d));
+  background-image: -webkit-linear-gradient(top, #77021d, #3a000d);
+  background-image: -moz-linear-gradient(top, #77021d, #3a000d);
+  background-image: -ms-linear-gradient(top, #77021d, #3a000d);
+  background-image: -o-linear-gradient(top, #77021d, #3a000d);
+  background-image: linear-gradient(to bottom, #77021d, #3a000d);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#77021d, endColorstr=#3a000d);
+  color: #fff;
+}
+
+.info-tables {
+  width: 99%;
+  border-collapse: collapse;
+}
+
+.info-tables td {
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+}
+
+</style>
+
+
 
 <script>
-  var patientID = "";
-  var selectedEncounterID = "";  
-  function finish() {
-    window.location = "/";
-  }
-  var nextEnc = "";
-    
-  function changeIcon(gender) {
-    var img = document.getElementById('icon_id');
-    if (gender === "M") {
-      img.setAttribute("src", "/assets/images/male.gif");
-    } else {
-      img.setAttribute("src", "/assets/images/female.gif");
+function buildInfoBoxes() {
+  var infoBox = document.getElementsByClassName("info-table")[0];
+  var cells = [
+    "Patient identifiers","Alert(s)","labs",
+    "Program info","Outcome","Gurdian(s)"
+  ];
+
+  var count = 0;
+  var row = document.createElement("div")
+  row.setAttribute("class","info-table-row");
+  infoBox.appendChild(row);
+
+  for(var i = 0 ; i < cells.length ; i++){
+    if(count == 3){
+      row = document.createElement("div")
+      row.setAttribute("class","info-table-row");
+      infoBox.appendChild(row);
+      count = 0;
     }
+
+    var cell = document.createElement("div");
+    cell.setAttribute("class","info-table-cell");
+
+    var header = document.createElement("div");
+    header.setAttribute("class","section-badge");
+    header.innerHTML = cells[i].toUpperCase();
+    cell.appendChild(header);
+
+    var body = document.createElement("div");
+    body.setAttribute("class","section-body");
+    body.setAttribute("id","section-body-" + i);
+    cell.appendChild(body);
+
+
+    row.appendChild(cell);
+
+    count++;
   }
   
-  generateTemplate();
+  insertData();     
+}
 
-  var url = new URL(url);
-  var apiURL = sessionStorage.getItem("apiURL");
-  var apiPort = sessionStorage.getItem("apiPort");
-  var apiProtocol = sessionStorage.getItem("apiProtocol");
-  var id = url.searchParams.get("patient_id");
-  sessionStorage.setItem("patientID", id);
-  changeModule();
-  url = new URL(url);
-  var d = new Date();
+function insertData() {
+  var url_string  = window.location;
+  var url         = new URL(url_string);
+  var patient_id  = url.searchParams.get("patient_id");
+  
+  getClient(patient_id);
+}
 
-  function ajaxRequest() {
-    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
+function getClient(patient_id) {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id;
 
-      if (this.readyState == 4 && this.status == 200) {
-        var results = JSON.parse(this.responseText);
-        var age = results.person.birthdate;
-        var gender = results.person.gender;
-        var identifier = "";
-        var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
-        
-        try {
-          var addressl1 = results.person.addresses[0].address1 ;
-        var addressl2 = results.person.addresses[0].address2;
-        var phone_number = results.person.person_attributes[1].value;
-        }
-        catch (e){
-          var addressl1 = "";
-        var addressl2 = "";
-        var phone_number = "";
-        }
-        try {
-          identifier = results.patient_identifiers[0].identifier || "no value available";
-        } catch (e) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      var patient = obj;
+      obj = obj["person"];
 
-        }
+      var names = obj["names"][0];
+      var client_name = document.getElementById("client-name");
+      client_name.innerHTML = names["given_name"] + " " + names["family_name"];
 
-        setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
-      }
-    };
-    try {
-      req.open('GET', url, true);
-      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
-      req.send(null);
-    } catch (e) {}
+      var dob = document.getElementById("client-dob");
+      dob.innerHTML = "&nbsp;(" + moment(obj["birthdate"]).format("DD/MMM/YYYY") + ")";
+
+      var gender = (obj["gender"] == "M" ? "male.gif" : "female.gif");
+      var icon = document.getElementById("gender-icon-container");
+      var img = document.createElement("img");
+      img.setAttribute("src","/assets/images/" + gender);
+      icon.appendChild(img);
+
+      var ancestry_district = document.getElementById("ancestry-district");
+      var ancestry_ta       = document.getElementById("ancestry-ta");
+      var ancestry_village  = document.getElementById("ancestry-village");
+      ancestry_district.innerHTML = obj["addresses"][0]["address2"];
+      ancestry_ta.innerHTML = obj["addresses"][0]["county_district"];
+      ancestry_village.innerHTML = obj["addresses"][0]["neighborhood_cell"];
+
+      var current_district = document.getElementById("current-district");
+      var current_ta       = document.getElementById("current-ta");
+      var current_village  = document.getElementById("current-village");
+      current_district.innerHTML  = obj["addresses"][0]["state_province"];
+      current_ta.innerHTML        = obj["addresses"][0]["township_division"];
+      current_village.innerHTML  = obj["addresses"][0]["city_village"];
+
+
+      var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
+      sessionStorage.patientAge = roundedAge; 
+      sessionStorage.patientGender = obj["gender"];
+      sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+
+
+
+      buildIdentifiers(patient["patient_identifiers"]);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function buildIdentifiers(identifiers) {
+  var identifiersHash = {};
+  for(var i = 0 ; i < identifiers.length ; i++) {
+    if(identifiers[i]["identifier_type"] == 3) {
+      identifiersHash["NPID"] = identifiers[i]["identifier"];
+    }else if(identifiers[i]["identifier_type"] == 4) {
+      identifiersHash["ARV#"] = identifiers[i]["identifier"];
+    }else if(identifiers[i]["identifier_type"] == 17) {
+      identifiersHash["Active filing#"] = identifiers[i]["identifier"];
+    }else if(identifiers[i]["identifier_type"] == 18) {
+      identifiersHash["Archived filing#"] = identifiers[i]["identifier"];
+    }
   }
 
-    function finish() {
-      nextEncounter(sessionStorage.patientID , 1);
-      // window.location = "patient_dashboard.html?patient_id="+ sessionStorage.patientID;
-    }
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
 
-    function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
-      document.getElementById("patient_name").innerHTML = patient_name;
-      var roundedAge = Math.round(moment().diff(age, 'years', true));
-      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");
-      sessionStorage.patientAge = roundedAge; 
-      sessionStorage.patientGender = gender;
-      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
-      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
-      document.getElementById("npid").innerHTML = identifier;
-      document.getElementById("age").innerHTML = "(" + roundedAge + ")";
-      document.getElementById("addressl1").innerHTML = addressl1;
-      document.getElementById("addressl3").innerHTML = addressl2;
-      document.getElementById("phone_number").innerHTML = phone_number;
-      changeIcon(gender);
-    }
+  for(identifier in identifiersHash) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    td.innerHTML = identifier;
+    tr.appendChild(td);
 
-    ajaxRequest();
+    var td = document.createElement("td");
+    td.innerHTML = identifiersHash[identifier];
+    tr.appendChild(td);
+    table.appendChild(tr);
+  }
 
-    function GetApplicationReports() {
-    nextEncounter(sessionStorage.patientID , 1, false);
-    var dvTable = document.getElementById("generic_tabs");
-    dvTable.innerHTML = null;
-    var obj = document.createElement("object");
-    obj.setAttribute("data", "/apps/ART/views/demographics.html");
-    obj.setAttribute("type","text/html");
-    obj.setAttribute("style","width: 97%; height: 520px; text-align: left;");
+  var container = document.getElementById("section-body-0");
+  container.appendChild(table);
 
-    dvTable.appendChild(obj);
+}
 
-    }
-    GetApplicationReports();
-      
-   </script>
-   
-</html>
-<script src="/assets/js/generic_ajaxrequest.js"></script> 
+</script>
+
+
+
+
+
+<div class="demographics-table">
+  <div class="demographics-table-row">
+    <div class="demographics-table-cell">
+      <div style="border-style: solid; border-width: 0px 0px 1px 0px;">
+       
+       <table id="names">
+        
+        <tr>
+          <td id="gender-icon-container"></td>
+          <td id="client-name"></td>
+          <td id="client-dob"></td>
+        </tr>
+
+       </table>
+        
+      </div>
+       
+       <table id="demographics-addresses">
+        
+        <tr>
+          <th>Ancestry district:&nbsp;<td id="ancestry-district"></td>
+          <th>Ancestry TA:&nbsp;<td id="ancestry-ta"></td>
+          <th>Ancestry village:&nbsp;<td id="ancestry-village"></td>
+        </tr>
+
+        <tr>
+          <th>Current district:&nbsp;<td id="current-district"></td>
+          <th>Current TA:&nbsp;<td id="current-ta"></td>
+          <th>Current village:&nbsp;<td id="current-village"></td>
+        </tr>
+
+       </table>
+
+    </div>
+  </div>
+</div>
+
+<div class="info-table">
+</div>
+
+<div class="buttonsDIV">
+  <button class="red" style="float: left; margin-left: 10px;" onmousedown="location='/'">Cancel</button>
+  <button class="blue" style="float: right;" onmousedown="finish();">Continue</button>
+</div>
+
+
+<script>
+buildInfoBoxes();
+var url = new URL(url);
+var id = url.searchParams.get("patient_id");
+
+function finish() {
+  
+  sessionStorage.patientID = id;
+  nextEncounter(sessionStorage.patientID , 1);
+}
+
+</script>

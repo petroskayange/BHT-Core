@@ -3,6 +3,11 @@
 <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
 <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
 
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+
+
 
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 
@@ -117,6 +122,10 @@
 
 
 <script>
+var apiPort = sessionStorage.apiPort;
+var apiURL = sessionStorage.apiURL;
+var patientID = sessionStorage.patientID;
+
 
 function changeMonth(e) {
   if(e.id == "forward"){
@@ -253,7 +262,7 @@ function monthController() {
   container.appendChild(table);
 }
 
-var currentSetDate = new Date("2018-10-01");
+var currentSetDate;
 
 function buildCalendar() {
   var frame = document.getElementById("inputFrame" + tstCurrentPage);
@@ -280,6 +289,14 @@ function buildCalendar() {
   buildCalendarCells(currentSetDate);
 
   buildControls();
+
+      systemDate = document.getElementById("system-selected-date");
+      var day = suggestedDay;
+      if(day < 10)
+        day = "0" + day;
+
+      var month = getFullMonthName((suggestedMonth - 1));  
+      systemDate.innerHTML = day + "/" + month + "/" + suggestedYear;
 }
 
 function buildDisplayArea() {
@@ -290,7 +307,8 @@ function buildDisplayArea() {
   container.appendChild(table);
 
   var tds = [
-    ["Next appointment date","selected-date"],
+    ["System set appointment date","system-selected-date"],
+    ["User set appointment date","selected-date"],
     ["Appointment(s)","appointments"],
     ["Appointment Limit (per/day)","appointment-limit"]
   ];
@@ -304,6 +322,9 @@ function buildDisplayArea() {
     tr.appendChild(th);
 
     var tr = document.createElement("tr");
+    tr.id = tds[i][1];
+    tr.style.textAlign = "center";
+    tr.style.fontWeight= "bold";
     table.appendChild(tr);
 
     var td = document.createElement("td")
@@ -322,6 +343,29 @@ function buildDisplayArea() {
 
   } 
 
+  getNextAppointment();
+}
+
+function getNextAppointment(){
+
+  var selected_date = document.getElementById("selected-date");
+  var day = suggestedDay;
+  if(day < 10)
+    day += "0" + day;
+
+  var month = getFullMonthName((suggestedMonth - 1));  
+  selected_date.innerHTML = day + "/" + month + "/" + suggestedYear;
+}
+
+function highlightSuggestedDay() {
+  var cells = document.getElementsByClassName("calendar-boxes");
+  var selDate = (suggestedYear + "-" + suggestedMonth + "-" + suggestedDay);
+    
+  for(var i = 0 ; i < cells.length ; i++){
+    if(cells[i].getAttribute("date") == selDate){
+      selectDate(cells[i]);
+    }
+  }
 
 }
 
@@ -370,6 +414,58 @@ function buildCalendarCells(current_date) {
   var dates = getMonthDates(current_date);
 
   setDates(dates);
+  highlightSuggestedDay();
+}
+function changeNextButton() {
+  var bnt = document.getElementById("nextButton")
+  bnt.setAttribute("onmousedown","setAppointmentDate()");
+}
+
+function setAppointmentDate() {
+
+  var encounter = {
+    encounter_type_name: 'APPOINTMENT',
+    encounter_type_id:  7,
+    patient_id: sessionStorage.patientID,
+    encounter_datetime: null
+  }
+
+  submitParameters(encounter, "/encounters", "postAppointmentObs");
+
+}
+
+function postAppointmentObs(encounter) {
+  var appointment = document.getElementById("selected-date").innerHTML;
+  var sysDate = document.getElementById("system-selected-date").innerHTML;
+
+
+  var day   = appointment.split("/")[0];
+  var year  = appointment.split("/")[2];
+  var month = getMonthInNum(appointment.split("/")[1]);
+  if(month < 10)
+    month = "0" + month;
+
+  appointment = year + "-" + month + "-" + day;
+
+  var day   = sysDate.split("/")[0];
+  var year  = sysDate.split("/")[2];
+  var month = getMonthInNum(sysDate.split("/")[1]);
+  if(month < 10)
+    month = "0" + month;
+
+  sysDate = year + "-" + month + "-" + day;
+
+
+
+
+  var obs = {
+    encounter_id: encounter["encounter_id"],
+    observations: [
+      { concept_id: 5096, value_datetime: appointment }
+    ]
+  }; 
+
+  submitParameters(obs, "/observations", "nextPage"); 
 }
 
 function setDates(dates) {
@@ -436,7 +532,7 @@ function selectDate(e) {
     cells[i].setAttribute("style","background-color: '';");
   }
 
-  e.setAttribute("style","background-color: lightblue;");
+  e.setAttribute("style","background-color: green; color: white;");
 }
   
 function getFullMonthName(index) {  
@@ -457,6 +553,27 @@ function getFullMonthName(index) {
   return months[index].substring(0,3);
 }
 
+function getMonthInNum(str) {  
+  var months = new Array();
+  months["Jan"] = 1;
+  months["Feb"] = 2;
+  months["Mar"] = 3;
+  months["Apr"] = 4;
+  months["May"] = 5;
+  months["Jun"] = 6;
+  months["Jul"] = 7;
+  months["Aug"] = 8;
+  months["Sep"] = 9;
+  months["Oct"] = 10;
+  months["Nov"] = 11;
+  months["Dec"] = 12;
+
+  return months[str];
+}
+
+function nextPage(obs){
+  nextEncounter(sessionStorage.patientID, 1);
+}
 
 </script>
 
@@ -470,7 +587,7 @@ function getFullMonthName(index) {
       <form>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none'; buildCalendar();" 
+          tt_onLoad="__$('keyboard').style.display = 'none'; getSuggestedAppointmentDate();changeNextButton();" 
           tt_pageStyleClass= "NoControls" helpText="Appointment booking" optional = "true"/>
 
 
@@ -479,5 +596,38 @@ function getFullMonthName(index) {
    </div>
  </div>
 </body>
+
+
+<script>
+
+var suggestedYear;
+var suggestedMonth;
+var suggestedDay;
+
+function getSuggestedAppointmentDate() {
+  var patient_id = sessionStorage.patientID;
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id + "/next_appointment_date";
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      //currentSetDate = new Date(obj);
+      suggestedYear  = parseInt(obj.split("-")[0]);
+      suggestedMonth = parseInt(obj.split("-")[1]);
+      suggestedDay   = parseInt(obj.split("-")[2]);
+
+      currentSetDate = new Date(suggestedYear, (suggestedMonth - 1), 1);
+      buildCalendar();
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+
+</script>
 
 

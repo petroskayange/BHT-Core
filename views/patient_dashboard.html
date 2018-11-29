@@ -13,6 +13,10 @@
   <script src="/assets/js/jquery.min.js"></script>
   <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="/assets/js/moment.js"></script>
+  
+  
+  <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
+
 </head>
 <body>
   <script src="/assets/js/generic_ajaxrequest.js">
@@ -109,9 +113,9 @@
     <!-- visits div -->
     <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
         <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; background-color: #b5b1b1;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; border-bottom: solid 2px black; background-color: white;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
         <div id="dates" style="height: 65%; margin-top: 20%;"> </div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; background-color: #b5b1b1;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
+        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; border-top: solid 2px black; background-color: white;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
      </div>
     <!-- /visits div-->
 
@@ -120,8 +124,8 @@
         <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
         <div class="row">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
+                 <div class="card-header h4 btn-primary" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
                  
                  <div class="list-group" id="encounters">
                  </div> 
@@ -138,13 +142,14 @@
            </div>
            
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
-              <div class="card text-white bg-primary mb-3 btn-success cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Programs</div>
-
-                 <table class="table ">
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#programModal" onclick="populateProgramsModal();">
+                 <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Programs</div>
+                 <div class="list-group" id="programs">
+                </div> 
+                 <!-- <table class="table ">
                     <tbody id="programs">
                     </tbody>
-                 </table>
+                 </table> -->
                  <div class="card-footer" style="margin: 1%;">
                  </div>
               </div>
@@ -152,8 +157,8 @@
         </div>
         <div class="row" style="margin-top:10px;">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white bg-primary mb-3 btn-danger cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Alerts</div>
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 btn-danger" style="margin: 3%; padding: 1%;">Alerts</div>
                  <table class="table ">
                     <tbody id="alerts">
                     </tbody>
@@ -163,8 +168,8 @@
               </div>
            </div>
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white bg-primary mb-3 btn-warning cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 list-group-item-info" style="margin: 3%; padding: 1%;">Latest Medication</div>
+              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+                 <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Latest Medication</div>
                  <table class="table ">
                     <tbody id="medication">
                     </tbody>
@@ -206,10 +211,10 @@
               <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
             </div>  
   
-            <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: auto;">
+            <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
               <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2" style="border-right: solid 1px;"></div>
               
-              <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9">
+              <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
                 <table class="table table-striped">
                   <thead>
                     <tr>
@@ -234,7 +239,45 @@
       </div>
     <!-- /encounters details modal -->
 
-    <!-- applications modal-->
+    <!-- programs details modal -->
+    <div id="programModal" class="modal fade" role="dialog" style="height: 100%;">
+      <div class="modal-dialog" >     
+        <div class="modal-content" style="margin: 0; max-height: 100%;">
+            
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
+          </div>  
+
+          <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
+            <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="programs2" style="border-right: solid 1px;"></div>
+            
+            <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Program Name</th>
+                    <th>State</th>
+                    <th>Date Enrolled</th>
+                  </tr>
+                </thead>
+                <tbody id="programsTable">
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+              
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+   <!-- /programs details modal -->
+    
+   <!-- applications modal-->
     <div class="modal fade" id="appModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px;">
@@ -347,7 +390,28 @@
         </div>
     </div>
     <!-- /tasks modal-->
-
+   <!-- Use Hanging Pills Modal-->
+   <div class="modal fade" tabindex="-1"  id="hangingPillModal" role="dialog">
+    <div class="modal-dialog" id="thedialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 class="modal-title">Prescription</h2>
+        </div>
+        <div class="modal-body">
+          <p><h3>Use patient's hanging pills?</h3></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+   <!---/Use Hanging Pills-->
   <!-- /container -->
   </div>
 <!-- /body -->
@@ -399,6 +463,7 @@
     req.onreadystatechange = function () {
 
       if (this.readyState == 4 && this.status == 200) {
+      
         var results = JSON.parse(this.responseText);
         var age = results.person.birthdate;
         var gender = results.person.gender;
@@ -406,7 +471,7 @@
         var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
         
         try {
-          var addressl1 = results.person.addresses[0].address1 ;
+          var addressl1 = results.person.addresses[0].city_village ;
         var addressl2 = results.person.addresses[0].address2;
         var phone_number = results.person.person_attributes[1].value;
         }
@@ -470,6 +535,7 @@
       var req = new XMLHttpRequest();
       var counter = 0;
       id = patient_id;
+      getPrograms(patient_id, "table", "programs");
       if (index < 0) {
         index = 0;
       }
@@ -484,7 +550,7 @@
               var prev = index - 5;
               document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
               getValue(results[0], patient_id, "encounters", "h4", "table");
-              getPrograms(patient_id);
+              
               if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
                 document.getElementById("down").removeAttribute("disabled", "");
@@ -495,7 +561,7 @@
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ');">' +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
               moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
 
             if (counter == 4 || (results.length - (index + counter) == 1)) {
@@ -579,19 +645,6 @@
                 listGroup.appendChild(a);
                 break;
               }
-
-              /*
-              encounters.innerHTML += '<tr><td id="' + x +
-                '" class="h4" name="" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;"><li>' +
-                results[x].type.name + '</li></td> <td class="h4" style="border-top-width: 0px;">' + f + '</td> </tr>';
-              if (x == 1) {
-                encounters.innerHTML += '<li class ="h4" style="list-style: none;">...... click to view more </li>';
-                break;
-
-              }
-
-              */
-
             } else if (itemType == "button") {
               encounters.innerHTML +=
                 '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
@@ -613,15 +666,31 @@
     function populateModal() {
       getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
+    
+    function populateProgramsModal() {
+      getPrograms(sessionStorage.patientID, "button", "programs2");
+    }
 
-    function getPrograms(id) {
+    function useHangingPillsDialog(){
+        
+        if(sessionStorage.getItem("medsPrescribed")){
+           $('#hangingPillModal').find(".modal-dialog").css("max-width", 900);
+           $('#hangingPillModal').modal('show');
+        }
+    }
 
-      var programs = document.getElementById("programs");
+    function getPrograms(id, itemType, div) {
+      
+      var programs = document.getElementById(div);
       if (programs.innerHTML != null) {
         programs.innerHTML = "";
       } else {}
       var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id + '/programs/';
       var req = new XMLHttpRequest();
+
+      var listGroup = document.createElement("div");
+      listGroup.setAttribute("class","list-group");
+      programs.appendChild(listGroup);
       req.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
@@ -630,9 +699,36 @@
             var d = new Date(results[x].date_enrolled);
             var f = moment(d).format("hh:mm:ss");
             var name = results[x].program.concept.concept_names[0].name;
-            programs.innerHTML += '<tr><td  id="' + x +
-              '" class="h4" style="width: 98%;  margin: 1%; border-radius: 0%; border-top-width: 0px;" onclick="">' +
-              name.toUpperCase() + '</td> <td style="border-top-width: 0px;" class="h4">' + f + '</td></tr>';
+            if (itemType == "table") {
+            var a = document.createElement("a");
+            var aclass = "list-group-item d-flex justify-content-between";
+            aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+            a.setAttribute("class", aclass);
+            a.setAttribute("href","#");
+            a.innerHTML = name;
+
+            var s = document.createElement("span");
+            s.setAttribute("class","badge badge-primary badge-pill");
+            s.innerHTML = f;
+            a.appendChild(s);
+            listGroup.appendChild(a);
+            if (x == 2 || (results.length == 2 && x == 1)) {
+              var a = document.createElement("a");
+              var aclass = "list-group-item d-flex justify-content-between";
+              aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+              a.setAttribute("class", aclass);
+              a.setAttribute("href","#");
+              a.innerHTML = "Click to show more ..."
+              listGroup.appendChild(a);
+              break;
+            }
+
+            } else if (itemType == "button") {
+              programs.innerHTML +=
+                '<button type="button" id="' + x + '" value="' + results[x].patient_program_id +
+                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getProgramData('+results[x].patient_program_id+')">' +
+                '<span class="h5">' + name.toUpperCase(); + '</span></button>';
+            }
           }
         }
       };
@@ -710,6 +806,37 @@
       } catch (e) {}
 
     }
+
+  function getProgramData(id) {
+
+  var programsTable = document.getElementById("programsTable");
+  if (programsTable.innerHTML != null) {
+    programsTable.innerHTML = "";
+  } else {}
+  var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/"+id;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4) {
+      if(this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        try {
+          var state = results.patient_states[0].state;
+        }catch(e) {
+          var state = "Pre ART";
+        }
+        
+      
+        programsTable.innerHTML = "<td>"+results.program.name+"</td><td>"+state  +"</td><td>"+moment(results.date).format("DD/MMM/YYYY");+"</td>";
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {}
+
+  }
     function GetApplicationInfo() {
     var dvTable = document.getElementById("appInfo");
     dvTable.innerHTML = null;
@@ -730,6 +857,9 @@
       generateActivities();
       changeActivities();
       generateTasks();
+      useHangingPillsDialog();
+
+      // loadAlerts();
     </script>
 </html>
 <script src="/assets/js/generic_ajaxrequest.js"></script> 

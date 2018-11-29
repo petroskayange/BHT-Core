@@ -10,6 +10,9 @@
 
       var d = new Date();
       d.toDateString();
+      var url = new URL(url);
+      var id = url.searchParams.get("patient_id");
+      sessionStorage.setItem("backupPatientID", id);
 
       function getInput(){
         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
@@ -37,7 +40,7 @@
 </style>
 
 <script type="text/javascript">
-var tt_cancel_destination = "/";
+var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.backupPatientID;
 
 function validateName() {
 __$("nextButton").removeAttribute("onmousedown");
@@ -56,14 +59,14 @@ __$("nextButton").onmousedown = function(){
 </script>
 
 
-<form action="search_results.html" method="POST" id="search_results">
+<form action="" method="POST" id="search_results">
     <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="getInput();"
-     helpText="First name"  key="given_name" 
+     helpText="Guardian first name"  key="given_name" 
     allowFreeText="true" ajaxURL="/search/given_name?search_string=" />
 
-    <input type="text" name="family_name" id="family_name" field_type="alpha"  tt_onLoad='validateName();' ajaxURL="/search/family_name?search_string=" helpText="Last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
+    <input type="text" name="family_name" id="family_name" field_type="alpha"  tt_onLoad='validateName();' ajaxURL="/search/family_name?search_string=" helpText="Guardian last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
 
-    <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+    <select allowFreeText="false" helpText="Guardian gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
       <option value="M">Male</option>
       <option value="F">Female</option></select>
 
@@ -80,7 +83,7 @@ __$("nextButton").onmousedown = function(){
   function  submitSearchResults(){
      var gender = __$('gender').value;
      sessionStorage.setItem('gender', gender);
-     document.location = "search_results.html"; 
+     document.location = "/views/patient/relationships/search_results.html?patient_id=" + sessionStorage.backupPatientID;
   }
 
   function changeNextButton(){
@@ -99,6 +102,7 @@ __$("nextButton").onmousedown = function(){
   }
 
   var patientID = ''
+  var backupPatientID = ''
   jQuery(document).ready(function(){
 
     var checkExist = setInterval(function() {
@@ -108,9 +112,9 @@ __$("nextButton").onmousedown = function(){
           yesButton.onmousedown = function(){
             hideMessage();
             if (patientID.length > 0){
-              window.top.location.href = "/patients/show/" + patientID;
+              window.top.location.href = "/views/patient/relationships/search_results.html?patient_id=" + sessionStorage.backupPatientID;
             } else {
-              window.top.location.href = "/";
+              window.top.location.href = "/views/patient_dashboard.html?patient_id=" +sessionStorage.backupPatientID;
             }
             
           }

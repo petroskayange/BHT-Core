@@ -669,7 +669,7 @@ function showPrescribeBTN() {
   var btn = document.getElementById("nextButton");
   btn.style = "display: inline;";
   btn.innerHTML = "<span>Prescribe</span>";
-  btn.setAttribute("onmousedown", "prescribeMeds();")
+  btn.setAttribute("onmousedown", "prescribeMeds();");
 }
 
 function getTotalPillsNeed(drug_id) {
@@ -681,13 +681,14 @@ function getTotalPillsNeed(drug_id) {
 }
 
 function prescribeMeds() {
+
+  sessionStorage.setItem("medsPrescribed",true);
   var encounter = {
     encounter_type_name: 'Treatment',
     encounter_type_id:  25,
     patient_id: sessionStorage.patientID,
     encounter_datetime: null
   }
-
   submitParameters(encounter, "/encounters", "postDrugOrders");
 }
 
@@ -752,3 +753,5 @@ function isEmpty(str){
     return true;
   }
 }
+
+

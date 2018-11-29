@@ -32,6 +32,7 @@
       }
 
       function createClient() {
+        
         var summary_table = document.getElementsByClassName('summary-table')[0];
         var rows  = summary_table.getElementsByTagName('tr');
   
@@ -40,13 +41,15 @@
           gender: null, birthdate: null, birthdate_estimated: null,
           home_district: null, home_traditional_authority: null, home_village: null,
           current_district: null, current_traditional_authority: null, current_village: null,
-					landmark: null, cell_phone_number: null, relationship: null, patient_type: null, facility_name: null
+					landmark: null, cell_phone_number: null
         }
-
+          
+        
         for(var i = 0 ; i < rows.length ; i++){
+          
           var title = rows[i].getElementsByTagName('th')[0].innerHTML.trim();
           var data 	= rows[i].getElementsByTagName('td')[0].innerHTML.trim();
-
+          
 					if(title.match(/Given name/i)){
 						parametersPassed.given_name = data; 
 					}else if(title.match(/Family name/i)){
@@ -73,15 +76,9 @@
 						parametersPassed.landmark = data; 
 					}else if(title.match(/Cell phone/i)){
 						parametersPassed.cell_phone_number = data; 
-					}else if(title.match(/Register guardian/i)){
-            parametersPassed.relationship = data;
-          }else if(title.match(/Patient Type/i)){
-            parametersPassed.patient_type = data;
-          }else if(title.match(/Facility name/i)){
-            parametersPassed.facility_name = data;
-          }
+					}
         }
-
+       
         postClientParamaters(parametersPassed);
       }
 
@@ -113,11 +110,11 @@
         birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY/MM/DD");
       }
         parameter = {
-              given_name:                     __$('given_name').value,
-              family_name:                    __$('family_name').value,
-              gender:                         __$('gender').value,
+              given_name:                     sessionStorage.given_name,
+              family_name:                    sessionStorage.family_name,
+              gender:                         sessionStorage.gender,
               birthdate:                      birth_date ,
-              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? false : true,
+              birthdate_estimated:            __$('person_birth_year').value != 'Unknown'  ? 0 : parseInt(__$('person_age_estimate').value ),
 
               current_district:                __$('current_district').value, 
               current_traditional_authority:   __$('current_ta').value,
@@ -129,14 +126,10 @@
 
               landmark:                        __$('landmark').value,
               cell_phone_number:               __$('cellphone').value,
-              patient_type:                    __$('patient_type').value,
-              facility_name:                   __$('facility_name').value,
-              relationship:                    __$('guardian_present').value,
             }
 
         var table = document.createElement('table');
         table.setAttribute('class','summary-table');
-        console.log(__$('person_age_estimate').value);
 
         var attributes = [
           ["Given name", parameter.given_name],
@@ -151,9 +144,7 @@
           ["Current TA", parameter.current_traditional_authority],
           ["Current Village", parameter.current_village],
           ["Landmark", parameter.landmark],
-          ["Cell phone", parameter.cell_phone_number],
-          ["Patient Type", parameter.patient_type],
-          ["Register Guardian", parameter.relationship]
+          ["Cell phone", parameter.cell_phone_number]
         ];
 
         for(var i = 0 ; i < attributes.length; i++){
@@ -204,7 +195,6 @@
     <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
     <script type="text/javascript" src="/assets/js/moment.js"></script>
     <script type="text/javascript" src="/assets/js/demographics.js"></script>
-    <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 
   </head>
   <body id="mateme">
@@ -337,8 +327,12 @@
 </style>
 
 <script type="text/javascript">
-  var tt_cancel_destination = "/"
   var date_diff = "2008-08-31"
+  var url = new URL(url);
+  var backupPatientID = "";
+  var id = url.searchParams.get("patient_id");
+  sessionStorage.setItem("backupPatientID", id);
+  var tt_cancel_destination = "/views/patient/relationships/search_results.html?patient_id=" + sessionStorage.backupPatientID;
 
   function validateDate() {
     selectYear = parseInt(document.getElementsByName('person[birth_year]')[0].value);
@@ -513,7 +507,7 @@
 	}
 </script>
 
-<form action="/views/patient_dashboard.html" method="POST">
+<form action="" method="POST">
 
   <input type="text" name="given_name" 
   id="given_name" field_type="alpha" 
@@ -559,7 +553,7 @@
     id="person_birth_day" 
     field_type="number" helpText="Birth Day" 
     condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" 
-    tt_onLoad="getDayOfMonthPicker($('person_birth_year').value, $('person_birth_month').value);setUpPageForDateValidation();" 
+    tt_onLoad="setUpPageForDateValidation();" 
     tt_onUnLoad="resetFinishBtn();" />
 
 
@@ -671,36 +665,12 @@
     ajaxURL="/search/landmarks?search_string=" />
 
   <input type="text" name="cellphone" id="cellphone" 
-    helpText="Cell phone number"
-    tt_pageStyleClass="azButton" 
+    helpText="Guardian cell phone number"
+    tt_pageStyleClass="NumbersOnlyWithUnknown" 
     field_type="number"
     validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available"
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
-
-  <select allowFreeText="false" helpText="Type of patient"
-    name="patient_type"
-    id="patient_type"
-    tt_onLoad="setNextButtonToGetInputValue('patient_type')"
-    tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
-    key="gender" ><option value=""></option>
-      <option value="New Patient">New patient</option>
-      <!-- <option value="Transfer in">Transfer in</option> -->
-      <option value="Visiting Patient">Visiting patient</option></select>
-
-  <select objectType="location" ajaxURL="/locations?name=" 
-    allowFreeText="true" 
-    condition="$('patient_type').value != 'New Patient'" 
-    field_type="alpha" 
-    helpText="Please select facility name" 
-    id="facility_name" 
-    name="facility_name"></select>
-
-  <select allowFreeText="false" helpText="Register guardian?" 
-    id="guardian_present" 
-    name="guardian_present" 
-    ttMatchFromBeginning="true" ><option value="Yes">Yes</option>
-    <option value="No">No</option></select>
   
   <!-- Make sure patient is created
 
@@ -863,66 +833,24 @@ function validateEnteredDate(inputText){
   return true;
 }
 
-function submitPatienttype(patient_id) {
-    
-  var encounter = {
-    encounter_type_name: 'REGISTRATION',
-    encounter_type_id:  5,
-    patient_id: patient_id,
-    encounter_datetime: null
-  }
-
-  submitParameters(encounter, "/encounters", "postPatienttypeObs");
-}
-
-var answers_hash = {
-    patient_type: ""
-}
-
-var patient_type_map = {
-    "New patient": 7572,
-    "Transfer in": 2536,
-    "Visiting patient": 9672
-}
-
-function postPatienttypeObs(encounter) {
-  var obs = {
-    encounter_id: encounter["encounter_id"],
-    observations: [
-      { concept_id: 3289, value_coded: patient_type_map[answers_hash["patient_type"]]}
-    ]
-  }; 
-
-  submitParameters(obs, "/observations")  
-}
-
-function setNextButtonToGetInputValue(key){
-  __$('nextButton').onmousedown = function(){
-      value = __$('touchscreenInput' + tstCurrentPage).value;
-      answers_hash[key] = value;
-      gotoNextPage();
-  }
-}
-
 function postClientParamaters(parametersPassed) {
   var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1/people';
-	var parametersPassed = JSON.stringify(parametersPassed);
+  var parametersPassed = JSON.stringify(parametersPassed);
+  console.log('verifying the data before sending to server' + console.table(parametersPassed));
 	showStatus();
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
+      console.log('examin the id for the person' + obj['person_id'] );
 			createPatient(obj['person_id']);
-
-        // submitPatienttype(obj['person_id']);
     }
   };
   xhttp.open("POST", url, true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send(parametersPassed);
-
 }
 
 function createPatient(person_id) {
@@ -933,12 +861,14 @@ function createPatient(person_id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
-      if (__$('guardian_present').value == 'Yes'){
-        document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
-      } else {
+      // if (__$('guardian_present').value == 'Yes'){
+      //   document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
+      // } else {
         // document.location = "../patient_dashboard.html?patient_id=" + person_id;
         enrollPatient(person_id);
-      }
+        sessionStorage.guardianID = person_id;
+        document.location = "/views/patient/relationships/guardian_confirm.html?patient_id=" + sessionStorage.backupPatientID + "&guardian_identifier="+person_id;
+      // }
       // enrollPatient(person_id);
 			// document.location = "../patient_dashboard.html?patient_id=" + person_id;
     }
@@ -964,7 +894,6 @@ function enrollPatient(person_id) {
   if (http.status == 201) {
   var v = JSON.parse(http.responseText);
   getDemographics(person_id);
-  submitPatienttype(person_id);
   nextEncounter(person_id, 1);
   } else if (http.status == 409) {
   alert('Username already exists');

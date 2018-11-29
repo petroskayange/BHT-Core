@@ -15,7 +15,11 @@ function submitParameters(parameters, url, returnToFunction) {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
       eval(returnToFunction)(obj);
-      document.getElementById("innerPop").style.display = "none";
+	 try {    
+      		document.getElementById("innerPop").style.display = "none";
+	 }catch(e) {
+
+	 }
     }
   };
   xhttp.open("POST", url, true);

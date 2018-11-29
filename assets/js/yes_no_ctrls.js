@@ -57,7 +57,6 @@ function buildYesNoUI(concept_name, values, targetElement) {
 
 function createNewCtrl(e, concept_name, values) {
   var attributes = values.split("#");
- 
 	for(var i = 0 ; i < attributes.length; i++){
 		if(!yesNo_Hash[concept_name])
 		  yesNo_Hash[concept_name] = {};

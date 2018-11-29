@@ -90,6 +90,7 @@ function enterKeypadValue(e){
   vitalsEntered["vitals-" + id] = inputBox.value;
   if(targetTD.innerHTML.length < 1)
     vitalsEntered["vitals-" + id] = null;
+    updateBMI();
 
 }
 
@@ -111,6 +112,46 @@ function buildTable() {
     td.setAttribute("id", "td-" + vitalsAssigned[i][0]);
     tr.appendChild(td);
 
+    var fd = document.createElement("td");
+    fd.setAttribute("id", "units-" + vitalsAssigned[i][0]);
+    fd.innerHTML = vitalsAssigned[i][2];
+    tr.appendChild(fd);
+
+  
   }
+  table.innerHTML += "<tr><th>Age<td id='age'>"+sessionStorage.patientAge+"</td><td> years old</td></th></tr>";
+  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
+    table.innerHTML += "<tr><th>Previous Weight<td id='previous-Height'></td><td>"+sessionStorage.currentHeight+" (KG)</td></th></tr>";
+  }
+  table.innerHTML += "<tr><th>BMI<td id='bmi' colspan='3'></td></th></tr>";
+  table.innerHTML += "<tr><th id='bmi-result' colspan='3' style='text-align: center; color: white;'></th></tr>";
 }
 
+function updateBMI() {
+  var bmi = document.getElementById('bmi');
+  var weight = document.getElementById('td-Weight').innerHTML;
+  var height = null;
+  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0) {
+   height =  sessionStorage.currentHeight;
+  }else {
+    height = document.getElementById('td-Height').innerHTML;
+  }
+  var bmi_result = document.getElementById('bmi-result');
+  // console.log()
+  if (weight != 0 && height != 0) {
+      
+    var bmindex = (weight /height/ height) * 10000;
+    var bmindex = Math.round( bmindex * 10 ) / 10;
+    var gender = "";
+    if (sessionStorage.patientGender === "F") {
+      gender = "female";
+    }else if (sessionStorage.patientGender === "M") {
+      gender = "male";
+    } 
+    getBMIResult(gender, sessionStorage.patientAge, bmindex);
+    bmi.innerHTML = bmindex;
+    bmi_result.style.backgroundColor = sessionStorage.bmiColor;
+    bmi_result.innerHTML = sessionStorage.bmiResult;
+  }
+  
+}

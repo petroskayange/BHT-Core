@@ -7,14 +7,15 @@
 var apiURL, apiPort, apiProtocol;
 getAPI();
 var url = window.location.href;
+var url = new URL(url);
+var backupPatientID = "";
+var id = url.searchParams.get("patient_id");
+sessionStorage.setItem("backupPatientID", id);
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
 // var activities_tab_content = "";
 // })
-admin_tab_content = '<button class="btn btn-info overview-btns" id="create-user" onclick="redirect(this.id);"><span>Create user</span></button>';
-admin_tab_content += '<button class="btn btn-info overview-btns" id="view-user" onclick="redirect(this.id); "><span>View user</span></button>';
-report_tab_content = '<button class="btn btn-info overview-btns" id="report-1" "><span>Report 1</span></button>';
-report_tab_content += '<button class="btn btn-info overview-btns" id="report-2" "><span>Report 2</span></button>';
-report_tab_content += '<button class="btn btn-info overview-btns" id="report-3" "><span>Report 3</span></button>';
+admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -534,7 +535,11 @@ function activitiesRedirect(id) {
 }
 
 function registerPatientRedirect() {
-    window.location.href = './views/patient/search.html';
+    window.location.href = '/views/patient/search.html';
+}
+
+function registerGuardianRedirect() {
+    window.location.href = '/views/patient/relationships/search.html?patient_id='+sessionStorage.backupPatientID;
 }
 // overview tab work in progress
 function overview() {
