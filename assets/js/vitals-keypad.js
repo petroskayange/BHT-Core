@@ -120,8 +120,8 @@ function buildTable() {
   
   }
   table.innerHTML += "<tr><th>Age<td id='age'>"+sessionStorage.patientAge+"</td><td> years old</td></th></tr>";
-  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0) {
-    table.innerHTML += "<tr><th>Previous Weight<td id='previous-weight'></td><td>"+sessionStorage.currentHeight+" (KG)</td></th></tr>";
+  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
+    table.innerHTML += "<tr><th>Previous Weight<td id='previous-Height'></td><td>"+sessionStorage.currentHeight+" (KG)</td></th></tr>";
   }
   table.innerHTML += "<tr><th>BMI<td id='bmi' colspan='3'></td></th></tr>";
   table.innerHTML += "<tr><th id='bmi-result' colspan='3' style='text-align: center; color: white;'></th></tr>";

@@ -150,7 +150,7 @@ var vitalsAssigned = [
   ["Pulse","pulse-rate.png", "(BPM)"]
 ];
 
-if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0) {
+if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
   vitalsAssigned.splice(1, 1);
 }
 
