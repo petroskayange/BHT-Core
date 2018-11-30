@@ -264,7 +264,6 @@ function getClient(patient_id) {
 }
 function getHeight(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5089";
-
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
