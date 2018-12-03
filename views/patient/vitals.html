@@ -151,7 +151,7 @@ var vitalsAssigned = [
 ];
 
 if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
-  vitalsAssigned.splice(1, 1);
+  // vitalsAssigned.splice(1, 1);
 }
 
 function removeFromHash() {
@@ -224,21 +224,26 @@ function buildVitalsButtons(element) {
   var btnCont = document.createElement('div')
   btnCont.setAttribute('class',"table-main");  
   for(var i = 0; i < buttons.length; i++){
-    var btnContRow = document.createElement('div')
-    btnContRow.setAttribute('class',"table-main-row");
-    btnCont.appendChild(btnContRow);  
-    var cell = document.createElement('div');
-    cell.setAttribute('class',"table-main-cell separator");
-    cell.innerHTML = '&nbsp;'
+    if (vitalsAssigned[i][0] === "Height" && sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
+        // table.innerHTML += "<tr><th>Height<td id='previous-Height'></td><td>"+sessionStorage.currentHeight+" (CM)</td></th></tr>";
+    }else {
+      var btnContRow = document.createElement('div')
+      btnContRow.setAttribute('class',"table-main-row");
+      btnCont.appendChild(btnContRow);  
+      var cell = document.createElement('div');
+      cell.setAttribute('class',"table-main-cell separator");
+      cell.innerHTML = '&nbsp;'
 
 
-    var btnContRow = document.createElement('div')
-    btnContRow.setAttribute('class',"table-main-row");
-    var cell = document.createElement('div');
-    btnContRow.appendChild(cell);
-    cell.setAttribute('class',"table-main-cell");
-    buildBTN(cell, buttons[i], i);
-    btnCont.appendChild(btnContRow);  
+      var btnContRow = document.createElement('div')
+      btnContRow.setAttribute('class',"table-main-row");
+      var cell = document.createElement('div');
+      btnContRow.appendChild(cell);
+      cell.setAttribute('class',"table-main-cell");
+      buildBTN(cell, buttons[i], i);
+      btnCont.appendChild(btnContRow);
+    }
+      
   }
    
   element.appendChild(btnCont);

@@ -251,7 +251,7 @@ function getClient(patient_id) {
       sessionStorage.patientGender = obj["gender"];
       sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
       sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
-
+      getHeight(patient_id);
 
 
       buildIdentifiers(patient["patient_identifiers"]);
@@ -262,7 +262,25 @@ function getClient(patient_id) {
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
 }
-
+function getHeight(patient_id) {
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5089";
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+            var obj = JSON.parse(this.responseText);
+            console.log(obj);
+            if (obj.length > 0) {
+              sessionStorage.currentHeight = obj[0].value_numeric;
+            }else {
+              sessionStorage.currentHeight = 0;
+            }
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
+}
 function buildIdentifiers(identifiers) {
   var identifiersHash = {};
   for(var i = 0 ; i < identifiers.length ; i++) {
