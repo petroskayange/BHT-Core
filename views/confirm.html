@@ -1,11 +1,15 @@
-
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <script src="/assets/js/moment.js"></script>
 
 <script src="/assets/js/generic_ajaxrequest.js"></script>
-
-
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css"> 
+    <!-- <rel="stylesheet" href="/assets/css/maindashboard/headefooter.css">  -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/moment.js"></script>
+    <script src="/assets/js/bmi.js"></script>
+    <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <style>
 * {
     -webkit-touch-callout:none;
@@ -30,7 +34,7 @@
   border-style: solid;
   border-width: 1px;
   box-shadow: 5px 10px #888888;
-  padding: 10px;
+  padding: 20px;
 }
 
 
@@ -72,7 +76,7 @@
   margin: 10px 10px 5px 10px;
   width: 92%;
   padding-left: 10px;
-  height: 90%;
+  height: 80%;
   background-color: white;
 }
 
@@ -147,7 +151,9 @@
   width: 99%;
   border-collapse: collapse;
 }
-
+td,th {
+  padding: 3px;
+}
 .info-tables td {
   border-width: 0px 0px 1px 0px;
   border-style: solid;
@@ -158,6 +164,7 @@
 
 
 <script>
+  var patientDead = false;
 function buildInfoBoxes() {
   var infoBox = document.getElementsByClassName("info-table")[0];
   var cells = [
@@ -252,9 +259,25 @@ function getClient(patient_id) {
       sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
       sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
       getHeight(patient_id);
-
+      getWeight(patient_id);
+      
 
       buildIdentifiers(patient["patient_identifiers"]);
+      buildStates(obj);
+      var orders = JSON.parse(this.responseText);
+      buildOrders(orders["orders"].length);
+      buildProgramInfo(patient_id);
+      buildRelationShips(patient_id);
+      buildAlerts(patient_id);
+      var gender = null;
+      if (sessionStorage.patientGender === "F") {
+        gender = "female";
+      }else if(sessionStorage.patientGender === "M"){
+        gender = "male";
+      }
+      var bmindex = (sessionStorage.currentWeight /sessionStorage.currentHeight/ sessionStorage.currentHeight) * 10000;
+      bmindex = Math.round(bmindex * 10 ) / 10;
+      getBMIResult(gender, roundedAge, bmindex);
     }
   };
   xhttp.open("GET", url, true);
@@ -263,16 +286,33 @@ function getClient(patient_id) {
   xhttp.send();
 }
 function getHeight(patient_id) {
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+            var obj = JSON.parse(this.responseText);
+            if (obj.length > 0) {
+              sessionStorage.currentHeight = obj[0].value_numeric;
+            }else {
+              sessionStorage.currentHeight = 0;
+            }
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
+}
+function getWeight(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5089";
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
             var obj = JSON.parse(this.responseText);
-            console.log(obj);
             if (obj.length > 0) {
-              sessionStorage.currentHeight = obj[0].value_numeric;
+              sessionStorage.currentWeight = obj[0].value_numeric;
             }else {
-              sessionStorage.currentHeight = 0;
+              sessionStorage.currentWeight = 0;
             }
         }
     };
@@ -314,12 +354,239 @@ function buildIdentifiers(identifiers) {
   container.appendChild(table);
 
 }
+function buildStates(identifiers) {
 
+  var identifiersHash = {};
+    if(identifiers["dead"] == 1) {
+      identifiersHash["Current Outcome"] = "Patient Died";
+      patientDead = true;
+    }
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+
+  for(identifier in identifiersHash) {
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    td.innerHTML = identifier;
+    tr.appendChild(td);
+
+    var td = document.createElement("td");
+    td.innerHTML = identifiersHash[identifier];
+    tr.appendChild(td);
+    table.appendChild(tr);
+  }
+
+  var container = document.getElementById("section-body-4");
+  container.appendChild(table);
+
+}
+function buildOrders(identifiers) {
+  
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+
+  
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    td.innerHTML = identifiers;
+    tr.appendChild(td);
+
+    var td = document.createElement("td");
+    td.innerHTML = " Previous Lab Orders";
+    tr.appendChild(td);
+    table.appendChild(tr);
+
+  var container = document.getElementById("section-body-2");
+  container.appendChild(table);
+
+}
+function buildRelationShips(patient_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/people/'+patient_id+'/relationships' ;
+  var req = new XMLHttpRequest();
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+  var container = document.getElementById("section-body-5");
+  container.appendChild(table);
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+        for(var x = 0; x < results.length; x ++){
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.innerHTML = results[x].relation.names[0].given_name + " " + results[x].relation.names[0].family_name;
+          tr.appendChild(td);
+          var td = document.createElement("td");
+          td.innerHTML = results[x].type.b_is_to_a;
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
+
+function buildAlerts(patient_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=7755';
+  var req = new XMLHttpRequest();
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+  var container = document.getElementById("section-body-1");
+  container.appendChild(table);
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.innerHTML = "Patient Has Side Effects";
+          td.setAttribute("colspan", 2);
+          tr.appendChild(td);
+          table.appendChild(tr);
+
+        }
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.innerHTML = "Patient Weight is";
+      tr.appendChild(td);
+      var td = document.createElement("td");
+      td.innerHTML = sessionStorage.bmiResult;
+      tr.appendChild(td);
+      table.appendChild(tr);
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+  buildDefaulter(patient_id, table)
+}
+function buildDefaulter(patient_id, table){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=6828';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.innerHTML = "Patient Is a Defaulter";
+          td.setAttribute("colspan", 2);
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
+function buildProgramInfo(patient_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/'+patient_id+'/next_appointment_date';
+  var req = new XMLHttpRequest();
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+  var container = document.getElementById("section-body-3");
+  container.appendChild(table);
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.innerHTML = "Next Appointment Date";
+        tr.appendChild(td);
+        var td = document.createElement("td");
+        td.innerHTML = moment(results).format("DD/MMM/YYYY");
+        tr.appendChild(td);
+        table.appendChild(tr);
+
+      }else {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.innerHTML = "No Appointment Date Available";
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+  buildFT(patient_id, table);
+}
+
+function buildFT(patient_id, table){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=9561';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          buildFTAssessment(table, results[0].encounter_id);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
+function buildFTAssessment(table, encounter_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/encounters/'+encounter_id;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.observations[0].value_coded == 1065) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.setAttribute("colspan", 2);
+          td.innerHTML = "Patient Is on fast track";
+          td.style.color = "green";
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
 </script>
-
-
-
-
 
 <div class="demographics-table">
   <div class="demographics-table-row">
@@ -360,11 +627,27 @@ function buildIdentifiers(identifiers) {
 
 <div class="info-table">
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal"
+    style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="margin: 0; ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Patient Has Died, are you sure you want to continue?</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
+                <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="buttonsDIV">
   <button class="red" style="float: left; margin-left: 10px;" onmousedown="location='/'">Cancel</button>
-  <button class="blue" style="float: right;" onmousedown="finish();">Continue</button>
+  <button class="blue" style="float: right;" id="continue" onmousedown="finish();">Continue</button>
 </div>
+
 
 
 <script>
@@ -373,9 +656,39 @@ var url = new URL(url);
 var id = url.searchParams.get("patient_id");
 
 function finish() {
-  
   sessionStorage.patientID = id;
-  nextEncounter(sessionStorage.patientID , 1);
-}
+  if (patientDead == true) {
 
+  $("#mi-modal").modal('show');
+    var modalConfirm = function (callback) {
+        $("#continue").on("click", function () {
+            $("#mi-modal").modal('show');
+        });
+
+        $("#modal-btn-si").on("click", function () {
+            callback(true);
+            $("#mi-modal").modal('hide');
+        });
+
+        $("#modal-btn-no").on("click", function () {
+            callback(false);
+            $("#mi-modal").modal('hide');
+        });
+    };
+
+    modalConfirm(function (confirm) {
+        if (confirm) {
+            window.location.href = "/views/patient_dashboard.html?patient_id="+id;
+        } else {
+            $("#mi-modal").modal('hide');
+
+            window.location.href = "/";
+        }
+    });
+  }else {
+    nextEncounter(sessionStorage.patientID , 1);
+  }
+  
+}
+    
 </script>
