@@ -343,6 +343,7 @@ function buildDisplayArea() {
 
   } 
 
+  getLimit();
   getNextAppointment();
 }
 
@@ -461,7 +462,12 @@ function postAppointmentObs(encounter) {
   var obs = {
     encounter_id: encounter["encounter_id"],
     observations: [
-      { concept_id: 5096, value_datetime: appointment }
+      { 
+        concept_id: 5096, value_datetime: appointment
+      },
+      { 
+        concept_id: 7437, value_datetime: appointment
+      }
     ]
   }; 
 
@@ -525,8 +531,7 @@ function selectDate(e) {
   selected_date += "/" + e.getAttribute("date").split("-")[0];
 
   document.getElementById("selected-date").innerHTML = selected_date;
-  document.getElementById("appointments").innerHTML = 20;
-
+  getAppointMents(e);
   var cells = document.getElementsByClassName("calendar-boxes");
   for(var i = 0 ; i < cells.length ; i++){
     cells[i].setAttribute("style","background-color: '';");
@@ -612,7 +617,6 @@ function getSuggestedAppointmentDate() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      //currentSetDate = new Date(obj);
       suggestedYear  = parseInt(obj.split("-")[0]);
       suggestedMonth = parseInt(obj.split("-")[1]);
       suggestedDay   = parseInt(obj.split("-")[2]);
@@ -626,8 +630,36 @@ function getSuggestedAppointmentDate() {
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
 }
+function getLimit() {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=clinic.appointment.limit";
 
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+     document.getElementById("appointment-limit").innerHTML = obj["clinic.appointment.limit"]; 
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
 
+function getAppointMents(date) {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/appointments?date="+date.getAttribute("date");
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      document.getElementById("appointments").innerHTML = obj.length;
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
 </script>
 
 
