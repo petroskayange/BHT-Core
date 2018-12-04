@@ -412,7 +412,8 @@ function addDeleteBTN(order_id) {
 }
 
 function getPrescriptions() {
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/drug_orders";
+  var prescription_date = moment().format("YYYY-MM-DD");
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/drug_orders?patient_id=" + sessionStorage.patientID + "&date=" + prescription_date;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -427,8 +428,7 @@ function getPrescriptions() {
     }
   };
 
-  var prescription_date = moment().format("YYYY-MM-DD");
-  xhttp.open("GET", (url + "?patient_id=" + sessionStorage.patientID + "&date=" + prescription_date), true);
+  xhttp.open("GET", url , true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
