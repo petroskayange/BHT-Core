@@ -108,9 +108,9 @@
       function summary() {
       if(__$('person_birth_year').value !== "Unknown") {
         birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
-        birth_date = moment(birth_date).format("YYYY/MMM/DD");
+        birth_date = moment(birth_date).format("DD/MMM/YYYY");
       }else if (__$('person_birth_year').value === "Unknown") {
-        birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY/MM/DD");
+        birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("DD/MMM/YYYY");
       }
         parameter = {
               given_name:                     __$('given_name').value,
@@ -136,8 +136,6 @@
 
         var table = document.createElement('table');
         table.setAttribute('class','summary-table');
-        console.log(__$('person_age_estimate').value);
-
         var attributes = [
           ["Given name", parameter.given_name],
           ["Family name", parameter.family_name],
