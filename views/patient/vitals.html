@@ -639,7 +639,7 @@ function postVitalsObs(encounter) {
       vitals_observations.push({concept_id: 5085,  value_numeric: bp_systolic})
       vitals_observations.push({concept_id: 5086,  value_numeric: bp_diastolic})
     }else if(name.match(/Temp/i)) {
-      vitals_observations.push({concept_id: 5088,  value_numeric: vital, value_modifier: "°C"})
+      vitals_observations.push({concept_id: 5088,  value_numeric: vital, value_modifier: "C"})
     }else if(name.match(/SPO2/i)) {
       vitals_observations.push({concept_id: 5092,  value_numeric: vital, value_modifier: "o2"})
     }else if(name.match(/Pulse/i)) {
