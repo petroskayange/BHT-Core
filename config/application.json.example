@@ -44,6 +44,11 @@
       "available": true,
       "activitiesIcon": "/assets/images/dispensing.png",
       "url": "/views/patient/dispensing.html"
+    },
+    "fast track": {
+    "available": true,
+    "activitiesIcon": "/assets/images/prescription.png",
+    "url": "/apps/ART/views/encounters/fast_track.html"
     }
   },
   "activities": {

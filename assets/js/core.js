@@ -16,6 +16,7 @@ sessionStorage.setItem("backupPatientID", id);
 // })
 admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -522,7 +523,16 @@ function redirect(id) {
     if (id === "view-user") {
         window.location.href = './views/users/view_users.html';
     }
-    if (id === "report-1") {}
+    if (id === "view-sys-settings") {}
+      var dvTable = document.getElementById("generic_tabs");
+      dvTable.innerHTML = null;
+      dvTable.style = "width: 97% !important;";
+
+      var obj = document.createElement("object");
+      obj.setAttribute("data", "/apps/ART/views/system_settings.html");
+      obj.setAttribute("type","text/html");
+      obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+      dvTable.appendChild(obj);
     if (id === "report-1") {}
 }
 function activitiesRedirect(id) {
