@@ -984,7 +984,9 @@ function enrollPatient(person_id) {
   var v = JSON.parse(http.responseText);
   getDemographics(person_id);
   submitPatienttype(person_id);
-  nextEncounter(person_id, 1);
+  
+    document.location = "/views/patient/print.html?person_id=" + person_id;
+
   } else if (http.status == 409) {
   alert('Username already exists');
   } else {
@@ -995,7 +997,5 @@ function enrollPatient(person_id) {
   http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
   http.send(params);
 }
-
-
 
 </script>

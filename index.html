@@ -24,6 +24,27 @@
                 $("#myModal").modal('show');
             }
         });
+
+        function resetPatientStorage() {
+          sessionStorage.backupPatientID = null;
+          sessionStorage.bmiColor = null;
+          sessionStorage.bmiResult = null;
+          sessionStorage.currentHeight = null;
+          sessionStorage.date_created = null;
+          sessionStorage.family_name = null;
+          sessionStorage.gender = null;
+          sessionStorage.given_name = null;
+          sessionStorage.patientAge = null;
+          sessionStorage.patientDOB = null;
+          sessionStorage.patientGender = null;
+          sessionStorage.patientID = null;
+          sessionStorage.patient_type = null;
+          sessionStorage.previousWeight = null;
+          sessionStorage.showPregnantQuestion = null;
+          sessionStorage.showWeightChart  = null;
+        }
+
+        resetPatientStorage();
     </script>
     <style>
         body {

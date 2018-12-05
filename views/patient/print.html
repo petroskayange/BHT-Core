@@ -1,0 +1,95 @@
+
+
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script>
+
+function printID() {
+  var url = new URL(location.href);
+  var person_id = parseInt(url.searchParams.get("person_id"));
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += "/patients/" + person_id + "/labels/national_health_id";
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var text = (this.responseText);
+      printFile("label.lbl", text);
+      setTimeout(redirectPage, 6000);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function printFile(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function redirectPage() {
+  nextEncounter(sessionStorage.patientID, 1, true);
+}
+
+printID();
+</script>
+
+<style>
+
+* {
+-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.print-table {
+  display: table;
+  width: 99%;
+  height: 99%;
+}
+
+.print-table-row {
+  display: table-row;
+}
+
+.print-table-cell {
+  display: table-cell;
+  text-align: center;
+}
+
+.barcode {
+  margin-top: 5%;
+}
+
+.print-table-cell p {
+  font-size: 50px;
+}
+
+</style>
+
+
+<div class="print-table">
+  <div class="print-table-row">
+    
+    <div class="print-table-cell">
+      <img src="/assets/images/zebra-label-printer.jpeg" class="barcode" />
+      <p>Printing barcode label.</p>
+      <p>Please wait <blink>....</blink><p>
+    </div>
+  
+
+  </div>
+</div>
