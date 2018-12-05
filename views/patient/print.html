@@ -1,6 +1,8 @@
 
 
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/moment.js"></script>
+<script type="text/javascript" src="/assets/js/demographics.js"></script>
 <script>
 
 function printID() {
@@ -8,7 +10,7 @@ function printID() {
   var person_id = parseInt(url.searchParams.get("person_id"));
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
   url += "/patients/" + person_id + "/labels/national_health_id";
-
+  getDemographics(person_id);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {

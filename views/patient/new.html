@@ -979,10 +979,8 @@ function enrollPatient(person_id) {
   http.onreadystatechange = function () { //Call a function when the state changes.
   if (http.readyState == 4) {
   if (http.status == 201) {
-  var v = JSON.parse(http.responseText);
-  getDemographics(person_id);
-  submitPatienttype(person_id);
-  
+    var v = JSON.parse(http.responseText);
+    submitPatienttype(person_id);
     document.location = "/views/patient/print.html?person_id=" + person_id;
 
   } else if (http.status == 409) {
