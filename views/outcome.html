@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+
+      function validateOutcomeDay() {
+          date = sessionDate;
+          currYear = date.getFullYear();
+          currDay = date.getDate();
+          currMonth = date.getMonth() + 1;
+          availableMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          outcome_year = parseInt(jQuery('#outcome_year')[0].value);
+          outcome_month = parseInt(jQuery('#outcome_month')[0].value);
+
+          if (outcome_year == currYear) {
+              if (outcome_month == currMonth) {
+                  return $('touchscreenInput' + tstCurrentPage).setAttribute('absoluteMax', currDay);
+              }
+          }
+      }
+
+      function outcomeAbsoluteMaxYear(){
+        var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+        element.setAttribute("absoluteMax", (new Date().getFullYear()));
+        element.setAttribute("min", (new Date().getFullYear() - 100)); 
+        element.setAttribute("absoluteMin", (new Date().getFullYear() - 120)); 
+      }
+</script>
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+/*.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }*/
+
+</style>
+
+<script type="text/javascript">
+var patient_id = sessionStorage.patientID;
+var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patient_id;
+
+</script>
+
+
+<form action="" method="POST" id="outcome">
+    <select name="outcome_options" id="outcome_options" tt_onUnload="getInput();" helpText="Select outcome"  key="outcome_options" ><option value=""></option>
+      <option value="Patient died">Patient died</option>
+      <option value="Transferred out">Transferred out</option>
+      <option value="Treatment stopped">Treatment stopped</option></select>
+
+    <select objectType="location" ajaxURL="/locations?name=" 
+    allowFreeText="true" 
+    condition="$('outcome_options').value == 'Transferred out'" 
+    field_type="alpha" 
+    helpText="Please select facility name" 
+    id="facility_name" 
+    name="facility_name"></select>
+
+    <input absoluteMin="1890" field_type="number" helpText="Outcome Year" id="outcome_year" min="1940" name="outcome_year" tt_onLoad="jQuery('#Unknown').show();outcomeAbsoluteMaxYear();" tt_pageStyleClass="Numeric NumbersOnly" type="text" />
+
+    <select allowFreeText="false" condition="$('outcome_year').value.toUpperCase() == 'UNKNOWN'" helpText="Outcome estimated time" id="outcome_date_estimation" name="outcome_date_estimation" ttMatchFromBeginning="true">
+      <option value=""></option>
+      <option value="6 months">6 months ago</option>
+      <option value="12 months">12 months ago</option>
+      <option value="18 months">18 months ago</option>
+      <option value="24 months">24 months ago</option>
+      <option value="Over 2 years">Over 2 years ago</option>
+    </select>
+
+    <input allowFreeText="false" id="outcome_month_date" name="observations[][value_datetime]" type="hidden" value="" value_datetime="true" />
+    <input allowFreeText="false" id="date_outcome" name="observations[][value_datetime]" type="hidden" value="" value_datetime="true" />
+
+    <select condition="$('outcome_year').value.toUpperCase() != 'UNKNOWN'" helpText="Outcome month" tt_pageStyleClass = "NoKeyboard" id="outcome_month" name="outcome_month" validationMessage="Please enter a valid date">
+      <option value=""></option>
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">Mar</option>
+      <option value="4">Apr</option>
+      <option value="5">May</option>
+      <option value="6">Jun</option>
+      <option value="7">Jul</option>
+      <option value="8">Aug</option>
+      <option value="9">Sep</option>
+      <option value="10">Oct</option>
+      <option value="11">Nov</option>
+      <option value="12">Dec</option>
+      <option value="Unknown">Unknown</option>
+    </select>
+
+    <input condition="$('outcome_year').value.toUpperCase() != 'UNKNOWN' && $('outcome_month').value.toUpperCase() != 'UNKNOWN'" field_type="number" helpText="Outcome day" id="outcome_day" name="outcome_day" tt_onLoad="getDayOfMonthPicker($('outcome_year').value, $('outcome_month').value);$('nextButton').style.display = 'block';validateOutcomeDay();" type="text" validationMessage="Outcome date out of range" />
+
+</form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
