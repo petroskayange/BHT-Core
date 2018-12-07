@@ -548,6 +548,10 @@ function registerPatientRedirect() {
     window.location.href = '/views/patient/search.html';
 }
 
+function updateOutcomeRedirect() {
+    window.location.href = '/views/outcome.html';
+}
+
 function registerGuardianRedirect() {
     window.location.href = '/views/patient/relationships/search.html?patient_id='+sessionStorage.backupPatientID;
 }
