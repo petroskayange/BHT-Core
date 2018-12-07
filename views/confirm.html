@@ -286,15 +286,24 @@ function getClient(patient_id) {
   xhttp.send();
 }
 function getHeight(patient_id) {
-    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
+    url += "&date=" + moment(new Date(sessionStorage.sessionDate)).format('YYYY-MM-DD');
+    url += "&page_size=1";
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
             var obj = JSON.parse(this.responseText);
             if (obj.length > 0) {
-              sessionStorage.currentHeight = obj[0].value_numeric;
-            }else {
-              sessionStorage.currentHeight = 0;
+              var height = parseInt(obj[0].value_numeric);
+              if(height > 0) {
+                sessionStorage.currentHeight = height;
+              }else if(obj[0].value_text.length > 0) {
+                sessionStorage.currentHeight = parseInt(obj[0].value_text);
+              }else{
+                sessionStorage.currentHeight = null;
+              }
             }
         }
     };
@@ -304,17 +313,27 @@ function getHeight(patient_id) {
     xhttp.send();
 }
 function getWeight(patient_id) {
-    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/observations?person_id=" + patient_id + "&concept_id=5089";
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5089";
+    url += "&date=" + moment(new Date(sessionStorage.sessionDate)).format('YYYY-MM-DD');
+    url += "&page_size=1";
+
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-            var obj = JSON.parse(this.responseText);
-            if (obj.length > 0) {
-              sessionStorage.currentWeight = obj[0].value_numeric;
-            }else {
-              sessionStorage.currentWeight = 0;
-            }
+      if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+        var obj = JSON.parse(this.responseText);
+        if (obj.length > 0) {
+          var weight = parseFloat(obj[0].value_numeric);
+          if(weight > 0) {
+            sessionStorage.currentWeight = weight;
+          }else if(obj[0].value_text.length > 0) {
+            sessionStorage.currentWeight = parseFloat(obj[0].value_text);
+          }else{
+            sessionStorage.currentWeight = null;
+          }
         }
+      }
     };
     xhttp.open("GET", url, true);
     xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
