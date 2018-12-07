@@ -116,7 +116,7 @@ function checkIfActivitySelected(encounter_name, url) {
   // alert(sessionStorage.programID);
 
   if  (parseInt(sessionStorage.programID) == 1 ){
-    if (encounter_name == "art adherence" && !selected_activities.match(/cdART adherence/i)) {
+    if (encounter_name == "art adherence" && !selected_activities.match(/ART adherence/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
     } else if  (encounter_name == "hiv clinic consultation" && !selected_activities.match(/HIV clinic consultations/i) ) {
