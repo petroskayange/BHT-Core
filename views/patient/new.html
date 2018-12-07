@@ -687,11 +687,12 @@
     validationRule = "^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\s\][a-z]+[a-z\!\A-Z\0-9])*$|Unknown|Not Available"
     tt_onLoad="$(nextButton).style.display = block;"
     ajaxURL="/search/landmarks?search_string=" />
+
   <input type="text" name="cellphone" id="cellphone" 
-    helpText="Cell phone number"
-    tt_pageStyleClass="azButton" 
+    helpText="Cell phone number"     
     field_type="number"
-    validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available"
+    tt_pageStyleClass="nota"
+    validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available|N\/A"
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
 
