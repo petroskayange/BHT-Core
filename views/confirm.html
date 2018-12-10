@@ -228,7 +228,8 @@ function getClient(patient_id) {
       var names = obj["names"][0];
       var client_name = document.getElementById("client-name");
       client_name.innerHTML = names["given_name"] + " " + names["family_name"];
-
+      sessionStorage.given_name = names["given_name"];
+      sessionStorage.family_name = names["family_name"];
       var dob = document.getElementById("client-dob");
       dob.innerHTML = "&nbsp;(" + moment(obj["birthdate"]).format("DD/MMM/YYYY") + ")";
 
