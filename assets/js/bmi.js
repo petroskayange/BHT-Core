@@ -31,7 +31,6 @@ function getBMIResult(gender, age, bmindex) {
 }
 
 function buildBounds(bounds, dataset, bmindex, results) {
-    console.log(bmindex);
     if(bounds.indexOf("-") >= 0){
         var boundsArray = bounds.split("-");
         if (bmindex >= parseFloat(boundsArray[0]) && bmindex <= parseFloat(boundsArray[1])) {
