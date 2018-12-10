@@ -123,7 +123,7 @@ function buildTable() {
   
   }
   table.innerHTML += "<tr><th>Age<td id='age'>"+sessionStorage.patientAge+"</td><td> years old</td></th></tr>";
-  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != null) {
+  if (sessionStorage.patientAge > 18 && sessionStorage.currentHeight != 0 && sessionStorage.currentHeight != "null") {
     document.getElementById("td-Height").innerHTML = sessionStorage.currentHeight;
   }
   table.innerHTML += "<tr><th>BMI<td id='bmi' colspan='3'></td></th></tr>";

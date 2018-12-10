@@ -27,6 +27,8 @@ function checkIfEncounterCaptured(encounter_name, id, redirect) {
               sessionStorage.setItem("nextEncounterAvailable", "Available");
             } else {
               // window.location.href = url;
+              sessionStorage.setItem("nextEncounter", encounter_name);
+              sessionStorage.setItem("nextEncounterAvailable", "Available");
               checkIfActivitySelected(encounter_name, url);
             } 
             
@@ -99,6 +101,8 @@ function nextEncounter(patient_id, program_id, redirect) {
         
       }
       else if (this.status == 204) {
+        sessionStorage.setItem("nextEncounter", "None");
+        sessionStorage.setItem("nextEncounterAvailable", "Unavailable");
         window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       }
 
@@ -116,7 +120,7 @@ function checkIfActivitySelected(encounter_name, url) {
   // alert(sessionStorage.programID);
 
   if  (parseInt(sessionStorage.programID) == 1 ){
-    if (encounter_name == "art adherence" && !selected_activities.match(/cdART adherence/i)) {
+    if (encounter_name == "art adherence" && !selected_activities.match(/ART adherence/i)) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
     } else if  (encounter_name == "hiv clinic consultation" && !selected_activities.match(/HIV clinic consultations/i) ) {

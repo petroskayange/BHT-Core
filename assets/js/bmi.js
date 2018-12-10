@@ -9,14 +9,13 @@ function getBMIResult(gender, age, bmindex) {
             }
             var req = new XMLHttpRequest();
             req.onreadystatechange = function () {
-
                 if (this.readyState == 4) {
                     if (this.status == 200) {
                         var results = JSON.parse(this.responseText);
                         var bounds = Object.keys(results[gender][0][age]);
                         var dataset  =results[gender][0][age];
-                        bounds.forEach( function(bounds) {
-                            buildBounds(bounds, dataset, bmindex, results);
+                        bounds.forEach( function(bound) {
+                            buildBounds(bound, dataset, bmindex, results);
                         });
                     }
                 }

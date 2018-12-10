@@ -228,7 +228,8 @@ function getClient(patient_id) {
       var names = obj["names"][0];
       var client_name = document.getElementById("client-name");
       client_name.innerHTML = names["given_name"] + " " + names["family_name"];
-
+      sessionStorage.given_name = names["given_name"];
+      sessionStorage.family_name = names["family_name"];
       var dob = document.getElementById("client-dob");
       dob.innerHTML = "&nbsp;(" + moment(obj["birthdate"]).format("DD/MMM/YYYY") + ")";
 
@@ -302,7 +303,7 @@ function getHeight(patient_id) {
               }else if(obj[0].value_text.length > 0) {
                 sessionStorage.currentHeight = parseInt(obj[0].value_text);
               }else{
-                sessionStorage.currentHeight = null;
+                sessionStorage.currentHeight = 0;
               }
             }
         }
@@ -330,7 +331,7 @@ function getWeight(patient_id) {
           }else if(obj[0].value_text.length > 0) {
             sessionStorage.currentWeight = parseFloat(obj[0].value_text);
           }else{
-            sessionStorage.currentWeight = null;
+            sessionStorage.currentWeight = 0;
           }
         }
       }
@@ -472,14 +473,17 @@ function buildAlerts(patient_id){
           table.appendChild(tr);
 
         }
-      var tr = document.createElement("tr");
-      var td = document.createElement("td");
-      td.innerHTML = "Patient Weight is";
-      tr.appendChild(td);
-      var td = document.createElement("td");
-      td.innerHTML = sessionStorage.bmiResult;
-      tr.appendChild(td);
-      table.appendChild(tr);
+      if (sessionStorage.bmiResult !== "null") {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.innerHTML = "Patient Weight is";
+        tr.appendChild(td);
+        var td = document.createElement("td");
+        td.innerHTML = sessionStorage.bmiResult;
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+        
       }
     }
   };
