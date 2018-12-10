@@ -1,10 +1,18 @@
 var panelID;
+var locationID;
+var selectedPanels = [];
+var testDate;
+var selectedOrders = [];
+var ordersWitoutResults = [];
+var selectedTestForResultEntry;
+var orderResult;
 
 var resultsTableCSS = document.createElement("span");
 resultsTableCSS.innerHTML = "<style>\
 #results-table {\
   width: 100%;\
   overflow: auto;\
+  border-collapse: collapse;\
 }\
 .results-table-headers {\
   background-color: lightgrey;\
@@ -12,6 +20,18 @@ resultsTableCSS.innerHTML = "<style>\
 .results-table-headers th {\
   text-align: left;\
   padding-left: 5px;\
+}\
+#results-table td {\
+  border-width: 0px 0px 1px 0px;\
+  border-style: solid;\
+  text-align: center;\
+}\
+.row_odd {\
+  background-color: white;\
+}\
+.row_even {\
+  background-color: aliceblue;\
+  color: black;\
 }\
 #orders-popup-div {\
   display: none;\
@@ -100,12 +120,11 @@ function buildOrderEntry() {
   nextBtn.innerHTML = '<span>Order</span>';
   nextBtn.setAttribute('onmousedown','orderTest();');
 
-
   var resultsTable = document.createElement('table');
   resultsTable.setAttribute('id','results-table');
   frame.appendChild(resultsTable);
 
-  var thead = document.createElement('tbody');
+  var thead = document.createElement('thead');
   resultsTable.appendChild(thead);
 
   var tr = document.createElement('tr');
@@ -134,6 +153,13 @@ function buildOrderEntry() {
 
   hmtlBody.appendChild(popUpDIV);
   hmtlBody.appendChild(coverDIV);
+
+  var enterResult = document.createElement('button');
+  enterResult.innerHTML = '<span>Enter results</span>';
+  enterResult.setAttribute('class','button blue navButton');
+  enterResult.setAttribute('onmousedown','enterResults();');
+  var root = document.getElementById('buttons');
+  root.appendChild(enterResult);
 
   getOrders();
 }
@@ -271,11 +297,26 @@ function addKeyboardKeys(e) {
 
   }
 
-  loadLabOrders();
+  //loadLabOrders();
+  var inputBox = document.getElementById('input-lab-order');
+  loadFunction = 'loadLabOrders()';
+   
+  if(inputBox == undefined){
+    inputBox = document.getElementById('input-lab-location'); 
+    loadFunction = 'loadLocations()';
+  }
+
+  eval(loadFunction);
 }
 
 function keyboardPress(key) {
-  var inputBox = document.getElementById('input-lab-order'); 
+  var inputBox = document.getElementById('input-lab-order');
+  loadFunction = 'loadLabOrders()';
+   
+  if(inputBox == undefined){
+    inputBox = document.getElementById('input-lab-location'); 
+    loadFunction = 'loadLocations()';
+  }
 
   try{                                                                          
                                                                                 
@@ -293,19 +334,24 @@ function keyboardPress(key) {
                                                                                 
   }catch(x) { }                                                                 
                                                                                 
-  loadLabOrders();
+  //loadLabOrders();
+  eval(loadFunction);
 }
-
-
-
-
-
 
 function cancelOrder() {
   var box = document.getElementById('orders-popup-div')
   box.innerHTML = null;
   box.style = 'display: none;';
   document.getElementById('orders-cover-div').style = 'display: none;';
+
+  panelID = null;
+  locationID  = null;
+  testDate = null;
+  selectedPanels = [];
+  selectedOrders = [];
+  selectedTestForResultEntry = null;
+  orderResult = null;
+
 }
 
 function getOrders() {
@@ -316,6 +362,67 @@ function getOrders() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
+      var tbody = document.getElementById('lab-orders');
+      tbody.innerHTML = null;
+      ordersWitoutResults = [];
+
+      for(var i = 0 ; i < obj.length ; i++){
+        var evenODD = i % 2 == 0 ? "odd" : "even";
+
+        var tr = document.createElement('tr');
+        tr.setAttribute('class','row_' + evenODD);
+        tbody.appendChild(tr);
+
+        var td = document.createElement('td');
+        try {
+          var test_name = obj[i].lab_sample.lab_parameter.test_type.TestName;
+          td.innerHTML = test_name.replace(/_/g, " ");
+        }catch(e){
+          td.innerHTML = '&nbsp;';
+        }
+        td.setAttribute('style','text-align: left; padding-left: 5px;')
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        try {
+          td.innerHTML = formatDate(new Date(obj[i].OrderDate));
+        }catch(x) {
+          td.innerHTML = '&nbsp;';
+        }
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        try {
+          td.innerHTML = obj[i].lab_sample.lab_parameter.TESTVALUE;
+        }catch(e){
+          td.innerHTML = '&nbsp;';
+        }
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        tr.appendChild(td);
+
+        /* ................. all samples without results starts ................................. */
+        try {
+          var lab_sample_result = obj[i].lab_sample.lab_parameter.TESTVALUE
+          if(lab_sample_result == null){
+            ordersWitoutResults.push({
+              order_date: obj[i].OrderDate,
+              accession_number: obj[i].AccessionNum,
+              sample_id: obj[i].lab_sample.Sample_ID,
+              test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
+              test_type: obj[i].lab_sample.lab_parameter.test_type.TestType
+            });
+          }
+        }catch(z) {
+          continue;
+        }
+        /* ................. ends ................................. */
+
+      }
     }
   };
   xhttp.open("GET", url, true);
@@ -368,6 +475,21 @@ function selectOrder(e) {
 }
 
 function nextPage(num) {
+  
+  if(num == 0 && panelID == undefined){
+    showMessage('Please select Lab order');
+    return;
+  }else if(num == 1 && selectedPanels.length < 1){
+    showMessage('Please select tests');
+    return;
+  }else if(num == 2 && testDate == undefined){
+    showMessage('Please select test date');
+    return;
+  }else if(num == 3 && selectedTestForResultEntry == undefined){
+    showMessage('Please select test');
+    return;
+  }
+  
   var next = (parseInt(num) + 1);
   var popUpBox = document.getElementById('orders-popup-div');                   
   var coverDIV = document.getElementById('orders-cover-div');
@@ -381,6 +503,12 @@ function nextPage(num) {
     buildLabTestTypes();
   }else if(next == 2){
     buildTestDate();
+  }else if(next == 3){
+    buildLabLocations();
+  }else if(next == 4){
+    buildEnteryDate();
+  }else if(next == 5){
+    buildResultEnteryKeypad();
   }
 }
 
@@ -389,12 +517,27 @@ function previousPage(num) {
   var root = document.getElementById('orders-nav-bar');
   container.innerHTML = null;
   var backBTN = document.getElementById('previous-button');
-  root.removeChild(backBTN)
   
   if(num == 0){
     addOrders();
+    root.removeChild(backBTN);
   }else if(num == 1){
+    root.removeChild(backBTN)
     buildLabTestTypes();
+  }else if(num == 2){
+    var nextB = document.getElementById('next-button');
+    nextB.innerHTML = "<span>Next</span>";
+    buildTestDate();
+  }else if(num == 3){
+    root.removeChild(backBTN);
+    var nextB = document.getElementById('next-button');
+    nextB.setAttribute('onmousedown','nextPage(3);');
+    addResultsInputs();
+  }else if(num == 4){
+    root.removeChild(backBTN)
+    var nextB = document.getElementById('next-button');
+    nextB.setAttribute('onmousedown','nextPage(3);');
+    buildEnteryDate();
   }
 }
 
@@ -500,9 +643,17 @@ function updateSelectedPanels(e) {
   if(e.getAttribute('style').match(/lightblue/)) {
     img.setAttribute('src','/public/touchscreentoolkit/lib/images/unticked.jpg');
     e.style = 'background-color: ""';
+    var tempList = [];
+    for(var i = 0 ; i < selectedPanels.length ; i++){
+      if(parseInt(selectedPanels[i]) != parseInt(e.getAttribute('testtype'))){
+        tempList.push(selectedPanels[i]);
+      }
+    }
+    selectedPanels = tempList;
   }else{
     img.setAttribute('src','/public/touchscreentoolkit/lib/images/ticked.jpg');
     e.style = 'background-color: lightblue;';
+    selectedPanels.push(parseInt(e.getAttribute('testtype')));
   }
 }
 
@@ -514,10 +665,10 @@ function buildTestDate() {
   helpText.setAttribute('class','helpTextClass');
   container.appendChild(helpText);
 
-  addDate(container);
+  addDate(container, 'order-test');
 }
 
-function addDate(e) {
+function addDate(e, transaction_type) {
 
   var dateContainer = document.createElement('div');
   dateContainer.setAttribute('id','date-container');
@@ -618,8 +769,17 @@ function addDate(e) {
   document.getElementById('month-input').value = currentMonth;
   document.getElementById('year-input').value = currentYear;
 
-  var prevBTN = document.getElementById('previous-button');
-  prevBTN.setAttribute('onmousedown','previousPage(1);');
+  if(transaction_type == 'order-test') {
+    var prevBTN = document.getElementById('previous-button');
+    prevBTN.setAttribute('onmousedown','previousPage(1);');
+    var nextBTN = document.getElementById('next-button');
+    nextBTN.setAttribute('onmousedown','nextPage(2);');
+  }else{
+    var nextBTN = document.getElementById('next-button');
+    nextBTN.setAttribute('onmousedown','nextPage(4);');
+    nextBTN.innerHTML = '<span>Next</span>';
+  }
+
 }
 
 function setDateToDay(e) {
@@ -633,6 +793,8 @@ function setDateToDay(e) {
   document.getElementById('day-input').value = currentDay;
   document.getElementById('month-input').value = currentMonth;
   document.getElementById('year-input').value = currentYear;
+  
+  testDate = (currentYear + '-' + getMonthInNum(currentMonth) + '-' + currentDay)
 }
 
 function adjuastDate(e) {
@@ -672,6 +834,9 @@ function adjuastDate(e) {
   document.getElementById('day-input').value = currentDay;
   document.getElementById('month-input').value = currentMonth;
   document.getElementById('year-input').value = currentYear;
+
+  testDate = (currentYear + '-' + getMonthInNum(currentMonth) + '-' + currentDay);
+
 }
 
 function formatDate(dateOBJ) {
@@ -700,4 +865,474 @@ function monthInText(num) {
   month[10] = "Nov";
   month[11] = "Dec";
   return month[num];
+}
+
+function getMonthInNum(month_str) {
+  var month = new Array();
+  month[0] = "Jan";
+  month[1] = "Feb";
+  month[2] = "Mar";
+  month[3] = "Apr";
+  month[4] = "May";
+  month[5] = "Jun";
+  month[6] = "Jul";
+  month[7] = "Aug";
+  month[8] = "Sep";
+  month[9] = "Oct";
+  month[10] = "Nov";
+  month[11] = "Dec";
+  
+  var m;
+  for(var i = 0 ; i < month.length ; i++){
+    if(month[i] == month_str)
+      m = (i + 1);
+  }
+  return m;
+}
+
+function buildLabLocations() {
+  var container = document.getElementById('input-container');
+
+   var helpText = document.createElement('label');
+   helpText.innerHTML = 'Lab location <span style="font-size: 15px;">(where the sample(s) being sent)</span>';
+   helpText.setAttribute('class','helpTextClass');
+   container.appendChild(helpText);
+
+  var serachR = document.createElement('div');
+  serachR.style = "display: table;width: 100%;";
+  container.appendChild(serachR);
+  
+  var serachRrow = document.createElement('div');
+  serachRrow.style = "display: table-row;";
+  serachR.appendChild(serachRrow);
+  
+  var serachRcell = document.createElement('div');
+  var CSSstyle = "display: table-cell;";
+  CSSstyle += 'border-width: 1px 1px 0px 1px;border-style: solid;';
+  CSSstyle += 'border-radius: 9px 9px 0px 0px;';
+  serachRcell.style = CSSstyle;
+  serachRrow.appendChild(serachRcell);
+
+  var inputBox = document.createElement('input');
+  inputBox.setAttribute('type','text');
+//  inputBox.style = 'width: 100%;border-style: solid; border-width: 0px 0px 1px 0px;'
+  //inputBox.style += 'height: 80px;';
+  inputBox.setAttribute('class','touchscreenTextInput');
+  inputBox.setAttribute('id','input-lab-location');
+  serachRcell.appendChild(inputBox);
+ 
+ 
+  var serachRrow = document.createElement('div');
+  serachRrow.style = "display: table-row;";
+  serachR.appendChild(serachRrow);
+  
+  var serachRcell = document.createElement('div');
+  serachRcell.style = "display: table-cell;";
+  serachRrow.appendChild(serachRcell);
+  
+  var viewPort = document.createElement('div');
+  viewPort.setAttribute('class','options scrollable');
+  viewPort.setAttribute('id','test-lab-locations');
+  var cssText = "border: solid 1px;border-radius: 0px 0px 9px 9px;";
+  viewPort.style = cssText;
+  serachRcell.appendChild(viewPort);
+
+  var keyboardContainer = document.createElement('div');
+  keyboardContainer.setAttribute('id','keyboard-container');
+  var cssText = "border: solid 1px; border-radius: 9px 9px 9px 9px;";
+  cssText += "margin-top: 15px;";
+  keyboardContainer.style = cssText;
+  container.appendChild(keyboardContainer);
+
+  addKeyboardKeys(keyboardContainer);
+  
+  prevBTN = document.getElementById('previous-button');
+  prevBTN.setAttribute('onmousedown','previousPage(2);');
+
+  nextB = document.getElementById('next-button');
+  nextB.innerHTML = '<span>Finish</span>';
+  nextB.setAttribute('onmousedown','createOrder(this);');
+}
+
+function loadLocations() {
+  var search_string = document.getElementById('input-lab-location').value;
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/locations?name='+search_string;      
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      var r = document.getElementById('test-lab-locations');
+      r.innerHTML = null;
+      var ul = document.createElement('ul');
+
+      for(var i = 0 ; i < obj.length ; i++){
+        var li = document.createElement('li');
+        li.innerHTML = obj[i].name;
+        li.setAttribute('value', obj[i].location_id);
+        li.setAttribute('id', i);
+        li.setAttribute('class', 'test-order-location');
+        li.setAttribute('onmousedown', "selectLocation(this);");
+        ul.appendChild(li);
+      }
+      r.appendChild(ul);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function selectLocation(e) {
+  var list = document.getElementsByClassName('test-order-location');
+
+  for(var i = 0 ; i < list.length ; i++){
+    list[i].style = 'background-color: ""';
+  }
+
+  e.style = 'background-color: lightblue;';
+  document.getElementById('input-lab-location').value = e.innerHTML;
+  locationID = e.value;
+}
+
+function createOrder(e) {
+  if(locationID == undefined){
+    showMessage('Please select Lab loacation');
+    return;
+  }else if(selectedPanels.length < 1){
+    showMessage('Please select tests');
+    return;
+  }else if(testDate == undefined){
+    showMessage('Please select test date');
+    return;
+  }
+
+  e.setAttribute('onmousedown','');
+  submitOrders();                                                   
+}
+
+function submitOrders() {                                                       
+  var encounter = {                                                             
+    encounter_type_id:  57,                                                   
+    patient_id: sessionStorage.patientID,                                                    
+    encounter_datetime: null                                                  
+  }                                                                             
+  submitParameters(encounter, "/encounters", "setOrders");                      
+} 
+
+function setOrders(encounter) {
+  for(var i = 0 ; i < selectedPanels.length ; i++){
+    selectedOrders.push({
+      encounter_id: encounter.encounter_id,
+      test_type_id: selectedPanels[i],
+      date: testDate
+    });
+  }
+
+  postOrders(selectedOrders[0]);
+}
+  
+
+function postOrders(order) {                               
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/programs/1/lab_tests/orders?patient_id=' + sessionStorage.patientID;
+  
+  
+  var parametersPassed = JSON.stringify(order);
+  selectedOrders.shift();
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      if(selectedOrders.length > 0) {
+        postOrders(selectedOrders[0]);
+      }else{
+        showMessage('Created orders');
+        cancelOrder();
+        getOrders();
+      }
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send(parametersPassed);
+}
+
+function enterResults() {
+  var popUpBox = document.getElementById('orders-popup-div');
+  var coverDIV = document.getElementById('orders-cover-div');
+
+  coverDIV.style = 'display: inline;';
+  popUpBox.style = 'display: inline;';
+ 
+  popUpBox.innerHTML = null; 
+  
+  var ordersNavBar = document.createElement('div');
+  ordersNavBar.setAttribute('id','orders-nav-bar');
+  popUpBox.appendChild(ordersNavBar);
+
+
+  var nextB = document.createElement('button');
+  nextB.innerHTML = '<span>Next</span>';
+  nextB.setAttribute('class','button green navButton nav-order-btns');
+  nextB.setAttribute('onmousedown','nextPage(3);');
+  nextB.setAttribute('id','next-button');
+  ordersNavBar.appendChild(nextB);
+
+  var cancelB = document.createElement('button');
+  cancelB.innerHTML = '<span>Cancel</span>';
+  cancelB.style = 'float: left; left: 5px;';
+  cancelB.setAttribute('class','button red navButton nav-order-btns');
+  cancelB.setAttribute('onmousedown','cancelOrder();');
+  ordersNavBar.appendChild(cancelB);
+  
+  var orderDiv = document.createElement('div');
+  orderDiv.setAttribute('id','input-container'); 
+  popUpBox.appendChild(orderDiv);
+
+  addResultsInputs();
+}
+
+function addResultsInputs() {
+  var container = document.getElementById('input-container');
+
+  var helpText = document.createElement('label');
+  helpText.innerHTML = 'Select test';
+  helpText.setAttribute('class','helpTextClass');
+  container.appendChild(helpText);
+
+  var inputDIV = document.createElement('div');
+  var inputDIVstyle = 'border-style: solid; border-width: 1px 1px 0px 1px;';
+  inputDIVstyle += 'border-radius: 9px 9px 0px 0px;';
+  inputDIV.style = inputDIVstyle;
+  container.appendChild(inputDIV);
+
+  var input = document.createElement('input');
+  input.setAttribute('id','selected-test');
+  input.setAttribute('type','text');
+  input.setAttribute('class','touchscreenTextInput');
+  input. readOnly = true;
+  inputDIV.appendChild(input);
+  
+  var options = document.createElement('div');
+  options.setAttribute('class','options');
+  var inputDIVstyle = 'border-style: solid; border-width: 0px 1px 1px 1px;';
+  inputDIVstyle += 'border-radius: 0px 0px 9px 9px; height: 85%;';
+  options.style = inputDIVstyle;
+  container.appendChild(options);
+
+  var viewport = document.createElement('div');
+  viewport.setAttribute('class','scrollable');
+  viewport.setAttribute('id','orders-without-results');
+  options.appendChild(viewport);
+
+  var ul = document.createElement('ul');
+  viewport.appendChild(ul);
+
+  for(var i = 0 ; i < ordersWitoutResults.length ; i++){
+    var li = document.createElement('li');
+    li.innerHTML = ordersWitoutResults[i].test_name.replace(/_/g, " ");
+    li.setAttribute('value', ordersWitoutResults[i].test_type);
+    li.setAttribute('accession_number', ordersWitoutResults[i].accession_number);
+    li.setAttribute('id', i);
+    li.setAttribute('class', 'test-order-without-results');
+    li.setAttribute('onmousedown', "selectTest(this);");
+    ul.appendChild(li);
+  }
+
+
+}
+
+function selectTest(e) {
+  var list = document.getElementsByClassName('test-order-without-results');
+
+  for(var i = 0 ; i < list.length ; i++){
+    list[i].style = 'background-color: ""';
+  }
+
+  e.style = 'background-color: lightblue;';
+  document.getElementById('selected-test').value = e.innerHTML;
+  selectedTestForResultEntry = e.getAttribute('accession_number');
+}
+
+function buildEnteryDate() {
+  var container = document.getElementById('input-container');
+  
+  var helpText = document.createElement('label');
+  helpText.innerHTML = 'Test result date';
+  helpText.setAttribute('class','helpTextClass');
+  container.appendChild(helpText);
+  addDate(container, 'enter-test-result');
+ 
+  var backBTN = document.createElement('button'); 
+  backBTN.innerHTML = '<span>Back</span>';
+  backBTN.setAttribute('class','button blue navButton nav-order-btns');
+  backBTN.setAttribute('onmousedown','previousPage(3);');
+  backBTN.setAttribute('id','previous-button');
+  var root = document.getElementById('orders-nav-bar');
+  root.appendChild(backBTN);
+    
+  var nextB = document.getElementById('next-button');
+  nextB.setAttribute('onmousedown','nextPage(4);');
+}
+
+function buildResultEnteryKeypad() {
+  var container = document.getElementById('input-container');
+
+  var helpText = document.createElement('label');
+  helpText.innerHTML = 'Result entry';
+  helpText.setAttribute('class','helpTextClass');
+  container.appendChild(helpText);
+
+  var inputDIV = document.createElement('div');
+  var inputDIVstyle = 'border-style: solid; border-width: 1px 1px 0px 1px;';
+  inputDIVstyle += 'border-radius: 9px 9px 0px 0px;';
+  inputDIV.style = inputDIVstyle;
+  container.appendChild(inputDIV);
+
+  var input = document.createElement('input');
+  input.setAttribute('id','test-result');
+  input.setAttribute('type','text');
+  input.setAttribute('class','touchscreenTextInput');
+  input. readOnly = true;
+  inputDIV.appendChild(input);
+
+  var keypadContainer = document.createElement('div');
+  keypadContainer.setAttribute('id','keypad-container');
+  container.appendChild(keypadContainer);
+  cssText = 'border-style: solid; border-width: 0px 1px 1px 1px;';
+  cssText += 'border-radius: 0px 0px 9px 9px;height: 85%;';
+  keypadContainer.style = cssText;
+  addResultsEntryKeyPad(keypadContainer);
+
+  var finish = document.getElementById('next-button');
+  finish.innerHTML = '<span>Finish</span>';
+  finish.setAttribute('onmousedown','submitOrderResults();');
+
+  var back = document.getElementById('previous-button');
+  back.setAttribute('onmousedown','previousPage(4);')
+}
+
+function addResultsEntryKeyPad(e) {
+  var keys = [
+    ['<','7','8','9'],
+    ['=','4','5','6'],
+    ['>','1','2','3'],
+    ["/",'Del.', '0','.'],
+    ['Positivie','Negative','Clear']
+  ];
+
+  var keyboard = document.createElement('div');
+  cssText = 'margin-left: 30%; display: block; border: solid 1px; width: 355px;';
+  cssText += 'text-align: center; height: 415px; top: 120px !important;';
+  cssText += 'border-radius: 9px; position: absolute;padding-top: 10px;';
+
+  keyboard.setAttribute('style', cssText);
+  e.appendChild(keyboard);
+
+  for(var i = 0 ; i < keys.length ; i++){
+    var span = document.createElement('span');
+    span.setAttribute('class','buttonLine');
+    span.setAttribute('id','buttonLine' + (i + 1));
+    keyboard.appendChild(span);
+    var keyLine = keys[i];
+    
+    for(var x = 0 ; x < keyLine.length ; x++){
+      var button = document.createElement('button');
+      button.setAttribute('onmousedown','keypadPress(this);');
+      button.setAttribute('class','keyboardButton');
+      button.setAttribute('key', keyLine[x]);
+      button.setAttribute('id', (i + 1) + '' + (x + 1));
+      button.innerHTML = "<span>" + keyLine[x] + '</span>';
+      if(keyLine[x] == 'Clear')
+        button.style = 'width: 200px;';
+
+      span.appendChild(button);
+    }
+
+  }
+}
+
+
+function keypadPress(key) {
+  inputBox = document.getElementById('test-result'); 
+
+  if(inputBox.value.length < 1) {
+    var atrr = key.getAttribute('key');
+    if(atrr != 'Positivie' && atrr != 'Negative' && atrr != 'Del.'){
+      if(atrr != '<' && atrr != '>' && atrr != '='){
+        showMessage('Please start by entering one of the following parameters:<br />=, <, >');
+        return;
+      }
+    }
+  }
+
+  if(inputBox.value.match(/>|<|=/) && key.getAttribute('key').match(/>|<|=/)){
+    var parameter = inputBox.value.match(/>|<|=/)[0];
+    showMessage(parameter + ' already selected');
+    return;
+  }
+
+  
+  if(inputBox.value == 'Positivie' || inputBox.value == 'Negative'){
+    if(key.getAttribute('key') != 'Clear'){
+      return;
+    }
+  }
+
+  try{                                                                          
+                                                                                
+    if(key.getAttribute('key').match(/Del/i)){                                            
+      inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);  
+    }else if(key.getAttribute('key').match(/Clear/i)){                                    
+      inputBox.value = null;
+    }else if(key.getAttribute('key') == 'Negative' || key.getAttribute('key') == 'Positivie'){                                    
+      inputBox.value = key.getAttribute('key');
+    }else{                                                                      
+      inputBox.value += key.getAttribute('key');                                          
+    }                                                                           
+                                                                                
+  }catch(x) {
+    console.log('######### ' + x)
+  }                                                                 
+                                                                                
+  orderResult = inputBox.value;
+}
+
+function submitOrderResults() {
+  var value_modifier = '=';
+
+  if(orderResult != 'Positivie' && orderResult != 'Negative') {
+    value_modifier = orderResult.match(/>|<|=/)[0];
+  }
+
+  order = { 
+    accession_number: selectedTestForResultEntry, 
+    test_value: (value_modifier + orderResult) 
+  }
+  updateOrder(order);
+}
+
+function updateOrder(order) {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/programs/1/lab_tests/results';
+  
+  
+  var parametersPassed = JSON.stringify(order);
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+        showMessage('Updated orders');
+        cancelOrder();
+        getOrders();
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send(parametersPassed);
 }
