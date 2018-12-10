@@ -352,10 +352,10 @@ function addPrescriptions(data) {
     var medication    = data[i].drug.name;
     var amount_needed = data[i].amount_needed;
     var quantity      = data[i].quantity;
-   
+    var complete_pack = calculate_complete_pack(data[i], amount_needed)- (quantity || 0)
     fetchedPrescriptions[drug_id] = order_id;
      
-    setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id, amount_needed), addValue(order_id, quantity), '']).node().id = order_id;
+    setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id, complete_pack), addValue(order_id, quantity), '']).node().id = order_id;
     setDataTable.draw();
     addClassIMGcontainter(order_id);
   }
@@ -401,6 +401,7 @@ function deleteOrder(row) {
 }
 
 function addDeleteBTN(order_id) {
+  /*
   var span = document.createElement("span");
   var img  = document.createElement("img");
   img.setAttribute("class","delete-icon");
@@ -409,6 +410,8 @@ function addDeleteBTN(order_id) {
   img.setAttribute("src", "../../assets/images/delete.png");
   span.appendChild(img); 
   return span.innerHTML;
+  */
+  return "&nbsp;"
 }
 
 function getPrescriptions() {
@@ -419,7 +422,7 @@ function getPrescriptions() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var obj = JSON.parse(this.responseText);
-      fetchedPrescriptions = {} 
+      fetchedPrescriptions = {}
       addPrescriptions(obj);
       if(checkIfDoneDispensing == true) {
         dispensationDone();
@@ -608,12 +611,12 @@ function addRows(data){
     start_date        = formatDate(start_date);
      
     setDataTable.row.add([medication, start_date, quantity]).node().id = order_id;
-    var table = $('#example').DataTable();
+    /*var table = $('#example').DataTable();
      
     $('#example tbody').on('click', 'tr', function () {
         var data = table.row( this ).data();
         alert( 'You clicked on '+data[0]+'\'s row' );
-    } );
+    } );*/
     setDataTable.draw();
   }
 }
@@ -642,4 +645,27 @@ function formatDate(date_str) {
     full_day = "0" + full_day;
 
   return (full_day + "/" + months[full_month] + "/" + full_year);
+}
+
+function calculate_complete_pack(drug, units){
+    var drug_order_barcodes = drug.barcodes.sort(function(a,b){return a.tabs - b.tabs;}); //sorting in an ascending order by tabs
+    if (drug_order_barcodes.length == 0 || parseFloat(units) == 0.0){
+      return units;
+    }
+
+    for (var i=0; i<= drug_order_barcodes.length - 1; i++){
+        if (parseInt(drug_order_barcodes[i].tabs) >= units) {
+            return drug_order_barcodes[i].tabs;
+        }
+    }
+
+    var smallest_available_tab = parseInt(drug_order_barcodes[0].tabs)
+    var complete_pack =  parseInt(drug_order_barcodes[drug_order_barcodes.length - 1].tabs)
+
+    while (complete_pack < units.to_f) {
+        complete_pack += smallest_available_tab
+    }
+
+    return complete_pack
+
 }
