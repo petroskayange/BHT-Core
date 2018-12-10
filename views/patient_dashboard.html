@@ -231,8 +231,10 @@
             </div>
                 
             <div class="modal-footer">
-              <button class="btn btn-danger" id="btn-confirm">Void Encounter</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <!-- <button class="btn btn-danger" id="btn-confirm">Void Encounter</button> -->
+              <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+              <button type="button" class="button blue navButton" id="btn-confirm" style="visibility:hidden;">Void Encounter</button>
+              <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
             </div>
             
           </div>
@@ -790,6 +792,7 @@ modalConfirm(function(confirm){
 
     function getEncounter(id) {
       currentEncounter = id;
+      document.getElementById("btn-confirm").style.visibility = "visible";
       var obsDiv = document.getElementById("observationsTable");
       if (obsDiv.innerHTML != null) {
         obsDiv.innerHTML = "";
