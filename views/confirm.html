@@ -302,7 +302,7 @@ function getHeight(patient_id) {
               }else if(obj[0].value_text.length > 0) {
                 sessionStorage.currentHeight = parseInt(obj[0].value_text);
               }else{
-                sessionStorage.currentHeight = null;
+                sessionStorage.currentHeight = 0;
               }
             }
         }
@@ -330,7 +330,7 @@ function getWeight(patient_id) {
           }else if(obj[0].value_text.length > 0) {
             sessionStorage.currentWeight = parseFloat(obj[0].value_text);
           }else{
-            sessionStorage.currentWeight = null;
+            sessionStorage.currentWeight = 0;
           }
         }
       }
