@@ -472,14 +472,17 @@ function buildAlerts(patient_id){
           table.appendChild(tr);
 
         }
-      var tr = document.createElement("tr");
-      var td = document.createElement("td");
-      td.innerHTML = "Patient Weight is";
-      tr.appendChild(td);
-      var td = document.createElement("td");
-      td.innerHTML = sessionStorage.bmiResult;
-      tr.appendChild(td);
-      table.appendChild(tr);
+      if (sessionStorage.bmiResult !== "null") {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.innerHTML = "Patient Weight is";
+        tr.appendChild(td);
+        var td = document.createElement("td");
+        td.innerHTML = sessionStorage.bmiResult;
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+        
       }
     }
   };
