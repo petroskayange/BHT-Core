@@ -33,6 +33,8 @@
   .list-group-links {
     width: 94%;
     margin-left: 10px;
+    /*background-color: transparent !important;
+    color: white !important; */
   }
 
   .badge {
@@ -232,8 +234,7 @@
               <!-- <button class="btn btn-danger" id="btn-confirm">Void Encounter</button> -->
               <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
               <button type="button" class="button blue navButton" id="btn-confirm" style="visibility:hidden;">Void Encounter</button>
-              <button type="button" class="button navButton red" data-dismiss="modal" onmousedown="document.getElementById('btn-confirm').style.visibility = 'hidden';">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
-      
+              <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
             </div>
             
           </div>
@@ -610,7 +611,7 @@ modalConfirm(function(confirm){
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="getvalue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
               moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
 
             if (counter == 4 || (results.length - (index + counter) == 1)) {
@@ -803,7 +804,7 @@ modalConfirm(function(confirm){
         if (this.readyState == 4 && this.status == 200) {
 
           var results = JSON.parse(this.responseText);
-          console.log(results);
+
           for (var x = 0; x < results.observations.length; x++) {
             var d = new Date(results.observations[x].obs_datetime);
             var f = moment(d).format("hh:mm:ss");
