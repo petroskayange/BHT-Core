@@ -13,7 +13,7 @@
     "treatment": {
       "available": true,
       "activitiesIcon": "/assets/images/prescription.png",
-      "url": "/views/patient/prescription.html"
+      "url": "/apps/ART/views/encounters/prescription.html"
     },
     "hiv staging": {
       "available": true,
@@ -45,10 +45,10 @@
       "activitiesIcon": "/assets/images/dispensing.png",
       "url": "/views/patient/dispensing.html"
     },
-    "fast track": {
+    "Lab orders": {
     "available": true,
-    "activitiesIcon": "/assets/images/prescription.png",
-    "url": "/apps/ART/views/encounters/fast_track.html"
+    "activitiesIcon": "/assets/images/lab.png",
+    "url": "/views/patient/labs.html"
     }
   },
   "activities": {
