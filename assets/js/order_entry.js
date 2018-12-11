@@ -200,7 +200,7 @@ function orderTest() {
   var nextB = document.createElement('button');
   nextB.innerHTML = '<span>Next</span>';
   nextB.setAttribute('class','button green navButton nav-order-btns');
-  nextB.setAttribute('onmousedown','nextPage(0);');
+  nextB.setAttribute('onmousedown','nextChapter(0);');
   nextB.setAttribute('id','next-button');
   ordersNavBar.appendChild(nextB);
 
@@ -276,7 +276,7 @@ function addOrders() {
   addKeyboardKeys(keyboardContainer);
   
   nextB = document.getElementById('next-button');
-  nextB.setAttribute('onmousedown','nextPage(0);');
+  nextB.setAttribute('onmousedown','nextChapter(0);');
 }
 
 function addKeyboardKeys(e) {
@@ -493,7 +493,7 @@ function selectOrder(e) {
   panelID = e.value;
 }
 
-function nextPage(num) {
+function nextChapter(num) {
   
   if(num == 0 && panelID == undefined){
     showMessage('Please select Lab order');
@@ -550,12 +550,12 @@ function previousPage(num) {
   }else if(num == 3){
     root.removeChild(backBTN);
     var nextB = document.getElementById('next-button');
-    nextB.setAttribute('onmousedown','nextPage(3);');
+    nextB.setAttribute('onmousedown','nextChapter(3);');
     addResultsInputs();
   }else if(num == 4){
     root.removeChild(backBTN)
     var nextB = document.getElementById('next-button');
-    nextB.setAttribute('onmousedown','nextPage(3);');
+    nextB.setAttribute('onmousedown','nextChapter(3);');
     buildEnteryDate();
   }
 }
@@ -572,7 +572,7 @@ function buildLabTestTypes() {
   root.appendChild(backBTN);
 
   var nextB = document.getElementById('next-button')
-  nextB.setAttribute('onmousedown','nextPage(1);');
+  nextB.setAttribute('onmousedown','nextChapter(1);');
 
    var helpText = document.createElement('label');
    helpText.innerHTML = 'Test types';
@@ -792,10 +792,10 @@ function addDate(e, transaction_type) {
     var prevBTN = document.getElementById('previous-button');
     prevBTN.setAttribute('onmousedown','previousPage(1);');
     var nextBTN = document.getElementById('next-button');
-    nextBTN.setAttribute('onmousedown','nextPage(2);');
+    nextBTN.setAttribute('onmousedown','nextChapter(2);');
   }else{
     var nextBTN = document.getElementById('next-button');
-    nextBTN.setAttribute('onmousedown','nextPage(4);');
+    nextBTN.setAttribute('onmousedown','nextChapter(4);');
     nextBTN.innerHTML = '<span>Next</span>';
   }
 
@@ -1097,7 +1097,7 @@ function enterResults() {
   var nextB = document.createElement('button');
   nextB.innerHTML = '<span>Next</span>';
   nextB.setAttribute('class','button green navButton nav-order-btns');
-  nextB.setAttribute('onmousedown','nextPage(3);');
+  nextB.setAttribute('onmousedown','nextChapter(3);');
   nextB.setAttribute('id','next-button');
   ordersNavBar.appendChild(nextB);
 
@@ -1195,7 +1195,7 @@ function buildEnteryDate() {
   root.appendChild(backBTN);
     
   var nextB = document.getElementById('next-button');
-  nextB.setAttribute('onmousedown','nextPage(4);');
+  nextB.setAttribute('onmousedown','nextChapter(4);');
 }
 
 function buildResultEnteryKeypad() {
@@ -1322,15 +1322,14 @@ function keypadPress(key) {
 }
 
 function submitOrderResults() {
-  var value_modifier = '=';
 
-  if(orderResult != 'Positivie' && orderResult != 'Negative') {
-    value_modifier = orderResult.match(/>|<|=/)[0];
+  if(orderResult == 'Positivie' || orderResult == 'Negative') {
+    orderResult = '=' + orderResult;
   }
 
   order = { 
     accession_number: selectedTestForResultEntry, 
-    test_value: (value_modifier + orderResult) 
+    test_value: (orderResult) 
   }
   updateOrder(order);
 }
