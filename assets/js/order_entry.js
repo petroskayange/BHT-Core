@@ -96,6 +96,39 @@ resultsTableCSS.innerHTML = "<style>\
 .date-navButton {\
   width: 120px;\
 }\
+.buttonContainer {\
+  width: 97%;\
+  display: table;\
+  position: absolute;\
+  bottom: 0px;\
+  padding: 10px;\
+  border-collapse: separate;\
+  border-spacing: 5px 10px;\
+}\
+.buttonContainerRow {\
+  display: table-row;\
+}\
+.buttonContainerCell {\
+  display: table-cell;\
+  border-width: 1px;\
+  border-style: solid;\
+  text-align: center;\
+  vertical-align: middle;\
+  box-shadow: 0 8px 6px -6px black;\
+  height: 100px;\
+  font-weight: bold;\
+  font-size: 20px;\
+  color: white;\
+}\
+#buttonContainerCell-green {\
+  background-color: rgb(34, 139, 34);\
+}\
+#buttonContainerCell-blue {\
+  background-color: rgb(79, 148, 205);\
+}\
+#buttonContainerCell-red {\
+  background-color: tomato;\
+}\
 </style>";
 
 function buildOrderEntry() {
@@ -413,13 +446,19 @@ function getOrders() {
         var td = document.createElement('td');
         td.style = 'text-align: right; padding-right: 10px;';
         try {
-          td.innerHTML = obj[i].lab_sample.lab_parameter.TESTVALUE;
+          var range = obj[i].lab_sample.lab_parameter.Range
+          td.innerHTML = (range + obj[i].lab_sample.lab_parameter.TESTVALUE);
         }catch(e){
           td.innerHTML = '&nbsp;';
         }
         tr.appendChild(td);
 
         var td = document.createElement('td');
+        try {
+          td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
+        }catch(e){
+          td.innerHTML = '&nbsp;';
+        }
         tr.appendChild(td);
 
         var td = document.createElement('td');
@@ -442,7 +481,29 @@ function getOrders() {
         }
         /* ................. ends ................................. */
 
+        /* ................ 
+        Getting all VL results to be use to calculate for next VL popup
+        */
+        if(obj[i].TestOrdered == 'HIV viral load'){
+          try {
+            var range = obj[i].lab_sample.lab_sample.Range
+          }catch(r) {
+            var range = null;
+          }
+          vlResults.push({
+            order_date: obj[i].OrderDate,
+            accession_number: obj[i].Pat_ID,
+            sample_id: obj[i].lab_sample.Sample_ID,
+            test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
+            test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
+            result: obj[i].lab_sample.lab_parameter.TESTVALUE,
+            range: range
+          });
+        }
+        /* ......................... ends ............................... */
+
       }
+      getARTstartedDate();
     }
   };
   xhttp.open("GET", url, true);
@@ -1368,3 +1429,249 @@ function updateOrder(order) {
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send(parametersPassed);
 }
+
+/* .......................... VL reminder ................................. */
+var earliest_start_dates;
+var vlResults = [];
+
+function dateDiffInDays(date1, date2){
+  var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return diffDays;
+}
+
+function dateDiffInMonths(dt2, dt1) {
+  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= (60 * 60 * 24 * 7 * 4);
+  return Math.abs(Math.round(diff));
+}
+
+
+function getARTstartedDate() {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/programs/1/patients/' + sessionStorage.patientID;
+  url += '/earliest_start_date';
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      earliest_start_dates = JSON.parse(this.responseText);
+      calculateVLreminder();
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function calculateVLreminder() {
+  if(earliest_start_dates.length < 1){
+    return false;
+  }
+
+  var earliest_start_date = earliest_start_dates.earliest_start_date
+  var period_on_art;
+
+  var date1 = new Date(sessionStorage.sessionDate);
+  var date2 = new Date(earliest_start_date);
+
+  period_on_art = dateDiffInMonths(date1, date2);
+  
+  var resultsVLavailsble = false;
+  var vlOrdersDone = false;
+
+  for(var i = 0 ; i < vlResults.length; i++){
+    if(vlResults[i].result != null)
+      resultsVLavailsble = true;
+
+    vlOrdersDone = true;
+  }
+
+/*
+          vlResults.push({
+            order_date: obj[i].OrderDate,
+            accession_number: obj[i].Pat_ID,
+            sample_id: obj[i].lab_sample.Sample_ID,
+            test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
+            test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
+            result: obj[i].lab_sample.lab_parameter.TESTVALUE,
+            range: range
+          });*/
+
+  if(resultsVLavailsble) {
+    checkIFwithVLBounds();
+  }else if(!resultsVLavailsble && vlOrdersDone) {
+    askForTheVLresults();
+  }else{
+    vlAlert(period_on_art);
+  }
+
+}
+
+function checkIFwithVLBounds() {
+  console.log('............. here')
+}
+
+function askForTheVLresults() {
+  var popUpBox = document.getElementById('orders-popup-div');
+  var coverDIV = document.getElementById('orders-cover-div');
+
+  if(coverDIV == undefined) {
+    var coverDIV = document.createElement('div')
+    coverDIV.setAttribute('id','orders-cover-div');
+    var popUpBox = document.createElement('div')
+    popUpBox.setAttribute('id','orders-popup-div');
+   
+    var hmtlBody = document.getElementsByTagName("body")[0];                         
+    hmtlBody.appendChild(popUpBox);
+    hmtlBody.appendChild(coverDIV);
+  }
+
+  coverDIV.style = 'display: inline;';
+  popUpBox.style  = 'display: inline;';
+  popUpBox.innerHTML = null;
+
+  var message = "Please enter the VL results if available";
+
+  var p = document.createElement('p');
+  p.innerHTML = message;
+  cssText = 'text-align: center;color: green; font-weight: bold; font-size: 2.3em;';
+  cssText += 'margin-top: 10%;';
+  p.style = cssText;
+  popUpBox.appendChild(p);
+
+
+
+
+
+  /* ............... buttons ............................... */
+  var buttonContainer = document.createElement('div');
+  buttonContainer.setAttribute('class','buttonContainer');
+  popUpBox.appendChild(buttonContainer);
+
+  var buttonContainerRow = document.createElement('div');
+  buttonContainerRow.setAttribute('class','buttonContainerRow');
+  buttonContainer.appendChild(buttonContainerRow);
+
+  var cells = ['Cancel','Enter VL results'];
+
+  for(var i = 0 ; i < cells.length ; i++){
+    var buttonContainerCell = document.createElement('div');
+    buttonContainerCell.setAttribute('class','buttonContainerCell');
+    buttonContainerCell.setAttribute('style','width: 100px;');
+    buttonContainerCell.innerHTML = cells[i];
+
+    if(i == 0) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-red');
+      buttonContainerCell.setAttribute('onmousedown','cancelVLOrder();');
+    }else if(i == 1) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-blue');
+      buttonContainerCell.setAttribute('onmousedown','cancelVLOrder();enterResults();');
+    }
+
+    buttonContainerRow.appendChild(buttonContainerCell);
+  }
+  
+}
+
+function vlAlert(period_on_art){
+  var popUpBox = document.getElementById('orders-popup-div');
+  var coverDIV = document.getElementById('orders-cover-div');
+
+  if(coverDIV == undefined) {
+    var coverDIV = document.createElement('div')
+    coverDIV.setAttribute('id','orders-cover-div');
+    var popUpBox = document.createElement('div')
+    popUpBox.setAttribute('id','orders-popup-div');
+   
+    var hmtlBody = document.getElementsByTagName("body")[0];                         
+    hmtlBody.appendChild(popUpBox);
+    hmtlBody.appendChild(coverDIV);
+  }
+
+  coverDIV.style = 'display: inline;';
+  popUpBox.style  = 'display: inline;';
+  popUpBox.innerHTML = null;
+
+  resultsVLavailsble = false;
+
+  for(var i = 0 ; i < vlResults.length; i++){
+    if(vlResults[i].result != null)
+      resultsVLavailsble = true;
+
+    console.log("============= " + resultsVLavailsble)
+  }
+
+
+  var message;
+  if(!resultsVLavailsble && period_on_art >= 6){
+    message = vlFirstMessage(period_on_art);
+  }
+
+
+  var p = document.createElement('p');
+  p.innerHTML = message;
+  cssText = 'text-align: center;color: green; font-weight: bold; font-size: 2.3em;';
+  cssText += 'margin-top: 10%;';
+  p.style = cssText;
+  popUpBox.appendChild(p);
+
+
+
+
+
+  /* ............... buttons ............................... */
+  var buttonContainer = document.createElement('div');
+  buttonContainer.setAttribute('class','buttonContainer');
+  popUpBox.appendChild(buttonContainer);
+
+  var buttonContainerRow = document.createElement('div');
+  buttonContainerRow.setAttribute('class','buttonContainerRow');
+  buttonContainer.appendChild(buttonContainerRow);
+
+  var cells = ['Cancel','Order VL'];
+
+  for(var i = 0 ; i < cells.length ; i++){
+    var buttonContainerCell = document.createElement('div');
+    buttonContainerCell.setAttribute('class','buttonContainerCell');
+    buttonContainerCell.setAttribute('style','width: 100px;');
+    buttonContainerCell.innerHTML = cells[i];
+
+    if(i == 0) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-red');
+      buttonContainerCell.setAttribute('onmousedown','cancelVLOrder();');
+    }else if(i == 1) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-blue');
+      buttonContainerCell.setAttribute('onmousedown','orderVLtest();');
+    }
+
+    buttonContainerRow.appendChild(buttonContainerCell);
+  }
+  
+}
+
+function cancelVLOrder() {
+  var div = document.getElementById('orders-popup-div')
+  div.innerHTML = null;
+  div.style = 'display: none;';  
+  document.getElementById('orders-cover-div').style = 'display: none;';
+}
+
+function orderVLtest() {
+  cancelVLOrder();
+  orderTest();
+}
+
+function vlFirstMessage(months){
+  var message = "The patient has never been tested for VL before<br />";
+  message += "and it has been <b style='color: red;'>" + months + " </b>months since ART treatment<br />"
+  message += "was started on the <b style='color: black;'>";
+  message += formatDate(new Date(earliest_start_dates.earliest_start_date)) + '</b>';
+
+  return message;
+}
+
+
+
+/* .......................... VL reminder ends ................................. */
