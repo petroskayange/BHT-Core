@@ -630,6 +630,7 @@ function postVitalsObs(encounter) {
 
     if(name.match(/weight/i)) {
       vitals_observations.push({concept_id: 5089, value_numeric: vital, value_modifier: "kg"})
+      sessionStorage.currentWeight = vital;
     }else if(name.match(/height/i)) {
       vitals_observations.push({concept_id: 5090,  value_numeric: vital, value_modifier: "cm"})
     }else if(name.match(/BP/i)) {
