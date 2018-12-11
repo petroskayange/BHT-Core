@@ -797,6 +797,7 @@ function buildReasonForTest() {
     var li = document.createElement('li');
     li.innerHTML = reasons[i];
     li.setAttribute('value', reasons[i]);
+    li.setAttribute('reason', reasons[i]);
     li.setAttribute('id', i);
     li.setAttribute('class', 'test-reasons');
     li.setAttribute('onmousedown', "selectReason(this);");
@@ -1161,7 +1162,7 @@ function selectReason(e) {
 
   e.style = 'background-color: lightblue;';
   document.getElementById('selected-test').value = e.innerHTML;
-  reasonForTest = e.value;
+  reasonForTest = e.getAttribute('reason');
 }
 
 function createOrder(e) {
