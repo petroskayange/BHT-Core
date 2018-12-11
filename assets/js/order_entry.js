@@ -431,7 +431,7 @@ function getOrders() {
           if(lab_sample_result == null){
             ordersWitoutResults.push({
               order_date: obj[i].OrderDate,
-              accession_number: obj[i].AccessionNum,
+              accession_number: obj[i].Pat_ID,
               sample_id: obj[i].lab_sample.Sample_ID,
               test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
               test_type: obj[i].lab_sample.lab_parameter.test_type.TestType
