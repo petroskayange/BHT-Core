@@ -1,5 +1,6 @@
-var previousNextButton = null;
+var previousNextButton = {};
 var yesNo_Hash = {};
+var yesNoValues = {};
 
 function isHashEmpty(obj) {
 	for(var key in obj) {
@@ -9,14 +10,17 @@ function isHashEmpty(obj) {
 	return true;
 }
 
-function validateYesNo(concept_name, values) {
+function validateYesNo(concept_name) {
 
   if(isHashEmpty(yesNo_Hash)){
     showMessage('Please complete selection by clicking Yes / No');
     return;
   }
 
-	var values = values.split('#');
+	//var values = values.split('#');
+	var values = yesNoValues[concept_name].join('');
+  values = values.split('#');
+
 	for(c in yesNo_Hash){
 		for(name in yesNo_Hash[c]){
 		
@@ -32,19 +36,19 @@ function validateYesNo(concept_name, values) {
 	}
 
   var nextButton =  document.getElementById('nextButton');
-  nextButton.setAttribute('onmousedown', previousNextButton);
+  nextButton.setAttribute('onmousedown', previousNextButton[concept_name]);
 	//gotoNextPage();
 
-	eval(previousNextButton);
-  previousNextButton = null;
+	eval(previousNextButton[concept_name]);
+  previousNextButton[concept_name] = null;
 }
 
 function buildYesNoUI(concept_name, values, targetElement) {
   var nextButton =  document.getElementById('nextButton');
-  if(!previousNextButton)
-	  previousNextButton = nextButton.getAttribute("onmousedown");
+  if(!previousNextButton[concept_name])
+	  previousNextButton[concept_name] = nextButton.getAttribute("onmousedown");
 
-  nextButton.setAttribute('onmousedown',"validateYesNo('" + concept_name + "','" + values + "');");
+  nextButton.setAttribute('onmousedown',"validateYesNo('" + concept_name + "');");
   nextButton.setAttribute('onclick',"");
 
 
@@ -53,6 +57,12 @@ function buildYesNoUI(concept_name, values, targetElement) {
   createNewCtrl(targetElement, concept_name, values);
 
   preSelectYesNo();
+
+  if(!yesNoValues[concept_name])
+    yesNoValues[concept_name] = [];
+
+    
+  yesNoValues[concept_name].push(values);
 }
 
 function createNewCtrl(e, concept_name, values) {
