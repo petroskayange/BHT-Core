@@ -449,7 +449,11 @@ function getOrders() {
         td.style = 'text-align: right; padding-right: 10px;';
         try {
           var range = obj[i].lab_sample.lab_parameter.Range
-          td.innerHTML = (range + obj[i].lab_sample.lab_parameter.TESTVALUE);
+          var result = obj[i].lab_sample.lab_parameter.TESTVALUE;
+          td.innerHTML = '&nbsp;'
+          if(result != null)
+            td.innerHTML = range + result
+          
         }catch(e){
           td.innerHTML = '&nbsp;';
         }
@@ -457,7 +461,10 @@ function getOrders() {
 
         var td = document.createElement('td');
         try {
-          td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
+          td.innerHTML = '&nbsp;'
+          if(result != null)
+            td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
+
         }catch(e){
           td.innerHTML = '&nbsp;';
         }
