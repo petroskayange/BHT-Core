@@ -1563,7 +1563,7 @@ function getARTstartedDate() {
 }
 
 function calculateVLreminder() {
-  if(earliest_start_dates.length < 1){
+  if(earliest_start_dates.earliest_start_date == null){
     return false;
   }
 
