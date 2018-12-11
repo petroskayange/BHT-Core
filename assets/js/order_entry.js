@@ -497,7 +497,8 @@ function getOrders() {
             test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
             test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
             result: obj[i].lab_sample.lab_parameter.TESTVALUE,
-            range: range
+            range: range, 
+            result_date: obj[i].lab_sample.DATE
           });
         }
         /* ......................... ends ............................... */
@@ -1496,7 +1497,8 @@ function calculateVLreminder() {
             test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
             test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
             result: obj[i].lab_sample.lab_parameter.TESTVALUE,
-            range: range
+            range: range,
+            result_date: obj[i].lab_sample.DATE
           });*/
 
   if(resultsVLavailsble) {
@@ -1510,7 +1512,53 @@ function calculateVLreminder() {
 }
 
 function checkIFwithVLBounds() {
-  console.log('............. here')
+  var datesANDresults = {};
+  var latest_result_date;
+
+  for(var i = 0 ; i < vlResults.length; i++){
+    try {
+      var result_date = new Date(vlResults[i].result_date);
+      datesANDresults[result_date] = {
+        result_date: vlResults.result_date,
+        result: vlResults.result,
+        range: vlResults.range
+      }
+      if(latest_result_date == undefined)
+        latest_result_date = result_date;
+
+      if(latest_result_date > result_date)
+        latest_result_date = result_date;
+          
+    }catch(e){
+      continue;
+    }
+  }
+
+  var date1 = new Date(sessionStorage.sessionDate);
+  var date2 = new Date(latest_result_date);
+  var period_gone = dateDiffInMonths(date1, date2);
+  
+  var earliest_start_date = (earliest_start_dates.earliest_start_date)
+  var date1 = new Date(sessionStorage.sessionDate);
+  var date2 = new Date(earliest_start_date);
+  var period_on_art = dateDiffInMonths(date1, date2);
+ 
+  //if(period_gone < 6);
+    //return;
+  
+  var time_bounds = [];
+  var cutoff = 12;
+  var i = 0;
+  
+  while(i <= 36) {
+    time_bounds.push({start: (cutoff - 3), end: (cutoff + 3)});
+    cutoff += 24  
+    i++
+  }
+  
+  if(period_on_art >= time_bounds.start && period_on_art <= time_bounds.end){
+    alertVL(latest_result_date, period_gone, period_on_art);
+  }
 }
 
 function askForTheVLresults() {
@@ -1600,7 +1648,6 @@ function vlAlert(period_on_art){
     if(vlResults[i].result != null)
       resultsVLavailsble = true;
 
-    console.log("============= " + resultsVLavailsble)
   }
 
 
@@ -1672,6 +1719,77 @@ function vlFirstMessage(months){
   return message;
 }
 
+
+function alertVL(latest_result_date,  period_gone, period_on_art) {
+  var popUpBox = document.getElementById('orders-popup-div');
+  var coverDIV = document.getElementById('orders-cover-div');
+
+  if(coverDIV == undefined) {
+    var coverDIV = document.createElement('div')
+    coverDIV.setAttribute('id','orders-cover-div');
+    var popUpBox = document.createElement('div')
+    popUpBox.setAttribute('id','orders-popup-div');
+   
+    var hmtlBody = document.getElementsByTagName("body")[0];                         
+    hmtlBody.appendChild(popUpBox);
+    hmtlBody.appendChild(coverDIV);
+  }
+
+  coverDIV.style = 'display: inline;';
+  popUpBox.style  = 'display: inline;';
+  popUpBox.innerHTML = null;
+
+  resultsVLavailsble = false;
+
+  for(var i = 0 ; i < vlResults.length; i++){
+    if(vlResults[i].result != null)
+      resultsVLavailsble = true;
+
+  }
+
+  var message = "<p>Latest VL recorded was on <span style='color:black;'>";
+  message += formatDate(latest_result_date) + "</span>";
+  message += "</p> It has been <span style='color: red;'>" + period_gone;
+  message += " months</span>";
+  message += '<p style="color: black;">Please order a new VL test.</p>';  
+
+  var p = document.createElement('p');
+  p.innerHTML = message;
+  cssText = 'text-align: center;color: green; font-weight: bold; font-size: 2.3em;';
+  cssText += 'margin-top: 10%;';
+  p.style = cssText;
+  popUpBox.appendChild(p);
+
+
+  /* ............... buttons ............................... */
+  var buttonContainer = document.createElement('div');
+  buttonContainer.setAttribute('class','buttonContainer');
+  popUpBox.appendChild(buttonContainer);
+
+  var buttonContainerRow = document.createElement('div');
+  buttonContainerRow.setAttribute('class','buttonContainerRow');
+  buttonContainer.appendChild(buttonContainerRow);
+
+  var cells = ['Cancel','Order VL'];
+
+  for(var i = 0 ; i < cells.length ; i++){
+    var buttonContainerCell = document.createElement('div');
+    buttonContainerCell.setAttribute('class','buttonContainerCell');
+    buttonContainerCell.setAttribute('style','width: 100px;');
+    buttonContainerCell.innerHTML = cells[i];
+
+    if(i == 0) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-red');
+      buttonContainerCell.setAttribute('onmousedown','cancelVLOrder();');
+    }else if(i == 1) {
+      buttonContainerCell.setAttribute('id','buttonContainerCell-blue');
+      buttonContainerCell.setAttribute('onmousedown','orderVLtest();');
+    }
+
+    buttonContainerRow.appendChild(buttonContainerCell);
+  }
+  
+}
 
 
 /* .......................... VL reminder ends ................................. */
