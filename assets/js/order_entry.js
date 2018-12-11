@@ -133,7 +133,7 @@ resultsTableCSS.innerHTML = "<style>\
 
 function buildOrderEntry() {
   var frame = document.getElementById('inputFrame' + tstCurrentPage);
-  frame.style = 'width: 96%; height: 90%;';
+  frame.style = 'width: 96%; height: 90%;overflow: auto;';
 
   try {
     var clearBTN = document.getElementById('clearButton');
@@ -1505,7 +1505,7 @@ function calculateVLreminder() {
     checkIFwithVLBounds();
   }else if(!resultsVLavailsble && vlOrdersDone) {
     askForTheVLresults();
-  }else{
+  }else if(period_on_art >= 6){
     vlAlert(period_on_art);
   }
 
