@@ -7,6 +7,14 @@
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/order_entry.js"></script>
 
+<style>
+#nextButton { display: none; }
+</style>
+
+<script type="text/javascript">
+  var patient_id = sessionStorage.patientID;
+  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patient_id;
+</script>
 
 <body id="mateme">
   <div id="container">

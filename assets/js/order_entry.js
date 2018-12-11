@@ -114,12 +114,6 @@ function buildOrderEntry() {
   var popUpDIV = document.createElement('div')
   popUpDIV.setAttribute('id','orders-popup-div');
 
-
-
-  var nextBtn = document.getElementById('nextButton');
-  nextBtn.innerHTML = '<span>Order</span>';
-  nextBtn.setAttribute('onmousedown','orderTest();');
-
   var resultsTable = document.createElement('table');
   resultsTable.setAttribute('id','results-table');
   frame.appendChild(resultsTable);
@@ -153,15 +147,40 @@ function buildOrderEntry() {
 
   hmtlBody.appendChild(popUpDIV);
   hmtlBody.appendChild(coverDIV);
+  
+  var orderBTN = document.createElement('button');
+  orderBTN.innerHTML = '<span>Order</span>';
+  orderBTN.setAttribute('class','button green navButton');
+  orderBTN.setAttribute('onmousedown','orderTest();');
+  orderBTN.setAttribute('id','order-entery-button');
+  var root = document.getElementById('buttons');
+  root.appendChild(orderBTN);
 
   var enterResult = document.createElement('button');
   enterResult.innerHTML = '<span>Enter results</span>';
   enterResult.setAttribute('class','button blue navButton');
+  enterResult.setAttribute('id','result-entery-button');
   enterResult.setAttribute('onmousedown','enterResults();');
   var root = document.getElementById('buttons');
   root.appendChild(enterResult);
 
+  next_button = document.getElementById('nextButton');
+  if(next_button){
+    var attr = next_button.getAttribute('onmousedown');
+    var onmousedown_attr = attr + ";removeOrderEntry();";
+    next_button.setAttribute('onmousedown', onmousedown_attr);
+  }
+
+
   getOrders();
+}
+
+function removeOrderEntry() {
+  orderBTN  = document.getElementById('order-entery-button');
+  resultBTN = document.getElementById('result-entery-button');
+  var root = document.getElementById('buttons');
+  root.removeChild(orderBTN); 
+  root.removeChild(resultBTN); 
 }
 
 function orderTest() {
