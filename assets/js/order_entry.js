@@ -411,6 +411,7 @@ function getOrders() {
         tr.appendChild(td);
 
         var td = document.createElement('td');
+        td.style = 'text-align: right; padding-right: 10px;';
         try {
           td.innerHTML = obj[i].lab_sample.lab_parameter.TESTVALUE;
         }catch(e){
@@ -1327,9 +1328,22 @@ function submitOrderResults() {
     orderResult = '=' + orderResult;
   }
 
+  var currentTime = new Date();
+  
+  var hour = currentTime.getHours();
+  hour = (hour < 10 ? ('0' + hour) : hour);
+
+  var minutes = currentTime.getMinutes();
+  minutes = (minutes < 10 ? ('0' + minutes) : minutes);
+
+  var seconds = currentTime.getSeconds();
+  seconds = (seconds < 10 ? ('0' + seconds) : seconds);
+
+  var time = ' ' + (hour + ':' + minutes + ':' + seconds);
+
   order = { 
     accession_number: selectedTestForResultEntry, 
-    test_value: (orderResult) 
+    test_value: (orderResult), time: (testDate + time)
   }
   updateOrder(order);
 }
