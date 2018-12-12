@@ -346,14 +346,17 @@ function dispensationDone() {
 }
 
 function addPrescriptions(data) {
+ 
   for(var i = 0 ; i < data.length ; i++){
     var order_id      = data[i].order_id;
     var drug_id       = data[i].drug_inventory_id;
     var medication    = data[i].drug.name;
     var amount_needed = data[i].amount_needed;
     var quantity      = data[i].quantity;
+
     var complete_pack = calculate_complete_pack(data[i], amount_needed)- (quantity || 0)
     fetchedPrescriptions[drug_id] = order_id;
+    complete_pack = complete_pack < 0 ? 0 : complete_pack;
      
     setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id, complete_pack), addValue(order_id, quantity), '']).node().id = order_id;
     setDataTable.draw();
