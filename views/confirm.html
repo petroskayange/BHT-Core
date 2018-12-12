@@ -709,6 +709,8 @@ function finish() {
         }
     });
   }else {
+    sessionStorage.showWeightChart = true;
+    sessionStorage.showPregnantQuestion = true;
     nextEncounter(sessionStorage.patientID , 1);
   }
   
