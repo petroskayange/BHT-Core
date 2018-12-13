@@ -21,6 +21,7 @@
 <body>
   <script src="/assets/js/generic_ajaxrequest.js">
       // checkIfEnconterCaptured("vitals");   
+      var encDate = "null";
   </script>    
 
   <style>
@@ -168,8 +169,8 @@
               </div>
            </div>
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
-                 <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Latest Medication</div>
+              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#medicationModal" onclick="populateMedicationModal();">
+                 <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Medication</div>
                  <table class="table ">
                     <tbody id="medication">
                     </tbody>
@@ -297,6 +298,42 @@
     </div>
    <!-- /programs details modal -->
     
+   <!-- Medication details modal -->
+   <div id="medicationModal" class="modal fade" role="dialog" style="height: 100%;">
+    <div class="modal-dialog" >     
+      <div class="modal-content" style="margin: 0; max-height: 100%;">
+          
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"> Medication History <span id="encounterDate"> </span></h4>
+        </div>  
+
+        <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
+          <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="medications2" style="border-right: solid 1px;"></div>
+          
+          <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Medication Name</th>
+                  <th>Date Started</th>
+                </tr>
+              </thead>
+              <tbody id="medicationsTable">
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
+            
+        <div class="modal-footer">
+          <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+ <!-- /programs details modal -->
    <!-- applications modal-->
     <div class="modal fade" id="appModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
@@ -599,6 +636,7 @@ modalConfirm(function(confirm){
             if (counter == 0) {
               var prev = index - 5;
               document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
+
               getValue(results[0], patient_id, "encounters", "h4", "table");
               
               if (index == 0 || index % 5 == 0) {
@@ -611,9 +649,11 @@ modalConfirm(function(confirm){
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="this.style.color=0xffffff;getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
               moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
-
+              encDate =  moment(results[0]).format("DD/MMM/YYYY");
+              getMedication(patient_id, "table", "medication");
+              // getMedication(patient_id ,"encounters", "h4"034, &#034table&#034);
             if (counter == 4 || (results.length - (index + counter) == 1)) {
 
               var next = index + counter + 1;
@@ -641,7 +681,9 @@ modalConfirm(function(confirm){
         req.send(null);
       } catch (e) {}
     }
-
+    function changeDate(element) {
+      encDate = element.innerHTML;
+    }
     getDates(id, 0);
 
     function getValue(value, id, div, className, itemType) {
@@ -661,7 +703,7 @@ modalConfirm(function(confirm){
         if (this.readyState == 4 && this.status == 200) {
 
           var results = JSON.parse(this.responseText);
-          document.getElementById("encounterHeader").innerHTML = results.length + " Encounters";
+          document.getElementById("encounterHeader").innerHTML = results.length + " Activities";
 
           var listGroup = document.createElement("div");
           listGroup.setAttribute("class","list-group");
@@ -669,7 +711,7 @@ modalConfirm(function(confirm){
 
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].encounter_datetime);
-            var f = moment(d).format("hh:mm:ss");
+            var f = moment(d).format("HH:MM");
 
             if (itemType == "table") {
               var a = document.createElement("a");
@@ -720,7 +762,10 @@ modalConfirm(function(confirm){
     function populateProgramsModal() {
       getPrograms(sessionStorage.patientID, "button", "programs2");
     }
-
+    
+    function populateMedicationModal() {
+      getMedication(sessionStorage.patientID, "button", "medications2");
+    }
     function useHangingPillsDialog(){
         
         if(sessionStorage.getItem("medsPrescribed")){
@@ -747,31 +792,31 @@ modalConfirm(function(confirm){
           var results = JSON.parse(this.responseText);
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].date_enrolled);
-            var f = moment(d).format("hh:mm:ss");
+            var f = moment(d).format("HH:MM");
             var name = results[x].program.concept.concept_names[0].name;
             if (itemType == "table") {
-            var a = document.createElement("a");
-            var aclass = "list-group-item d-flex justify-content-between";
-            aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-            a.setAttribute("class", aclass);
-            a.setAttribute("href","#");
-            a.innerHTML = name;
-
-            var s = document.createElement("span");
-            s.setAttribute("class","badge badge-primary badge-pill");
-            s.innerHTML = f;
-            a.appendChild(s);
-            listGroup.appendChild(a);
-            if (x == 2 || (results.length == 2 && x == 1)) {
               var a = document.createElement("a");
               var aclass = "list-group-item d-flex justify-content-between";
               aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
               a.setAttribute("class", aclass);
               a.setAttribute("href","#");
-              a.innerHTML = "Click to show more ..."
+              a.innerHTML = name;
+
+              var s = document.createElement("span");
+              s.setAttribute("class","badge badge-primary badge-pill");
+              s.innerHTML = f;
+              a.appendChild(s);
               listGroup.appendChild(a);
-              break;
-            }
+              if (x == 2 || (results.length == 2 && x == 1)) {
+                var a = document.createElement("a");
+                var aclass = "list-group-item d-flex justify-content-between";
+                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                a.setAttribute("class", aclass);
+                a.setAttribute("href","#");
+                a.innerHTML = "Click to show more ..."
+                listGroup.appendChild(a);
+                break;
+              }
 
             } else if (itemType == "button") {
               programs.innerHTML +=
@@ -790,6 +835,74 @@ modalConfirm(function(confirm){
 
     }
 
+
+     function getMedication(id, itemType, div) {
+      var programs = document.getElementById(div);
+      if (programs.innerHTML != null) {
+        programs.innerHTML = "";
+      } else {}
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id;
+      var req = new XMLHttpRequest();
+
+      var listGroup = document.createElement("div");
+      listGroup.setAttribute("class","list-group");
+      programs.appendChild(listGroup);
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+          var results = JSON.parse(this.responseText);
+          for (var x = 0; x < results.length; x++) {
+            if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
+              var d = new Date(results[x].order.start_date);
+              var f = moment(d).format("HH:MM");
+              var name = results[x].drug.name;
+              if(itemType === "table") {
+                    var a = document.createElement("a");
+                    var aclass = "list-group-item d-flex justify-content-between";
+                    aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                    a.setAttribute("class", aclass);
+                    a.setAttribute("href","#");
+                    a.innerHTML = name;
+
+                    var s = document.createElement("span");
+                    s.setAttribute("class","badge badge-primary badge-pill");
+                    s.innerHTML = f;
+                    a.appendChild(s);
+                    listGroup.appendChild(a);
+                    if (x == 2 || (results.length == 2 && x == 1)) {
+                      var a = document.createElement("a");
+                      var aclass = "list-group-item d-flex justify-content-between";
+                      aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                      a.setAttribute("class", aclass);
+                      a.setAttribute("href","#");
+                      a.innerHTML = "Click to show more ..."
+                      listGroup.appendChild(a);
+                      break;
+                    }    
+                }
+                else if (itemType == "button") {
+                    programs.innerHTML +=
+                      '<button type="button" id="' + x + '" value="' +name+  
+                      '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
+                      '<span class="h5">' + name.toUpperCase(); + '</span></button>';
+                  }
+
+              }
+              
+        }
+           
+
+          
+        }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+
+    }   
+
     function getEncounter(id) {
       currentEncounter = id;
       document.getElementById("btn-confirm").style.visibility = "visible";
@@ -807,7 +920,7 @@ modalConfirm(function(confirm){
 
           for (var x = 0; x < results.observations.length; x++) {
             var d = new Date(results.observations[x].obs_datetime);
-            var f = moment(d).format("hh:mm:ss");
+            var f = moment(d).format("HH:MM");
             var value = "";
             var modifier = results.observations[x].value_modifier;
             if (modifier !== "%") {
