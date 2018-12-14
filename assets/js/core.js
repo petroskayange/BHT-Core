@@ -698,7 +698,8 @@ function checkCredentials(username, password) {
                 // alert('Username already exists');
                 sleep(2000);
                 // showMessage("Wrong username or password");
-                alert('wrong password');
+                // alert('wrong password');
+                showConfirmatoryTestPopup();
                 window.location = "/views/login.html";
                 // sleep
             } else if (http.status == 0){
