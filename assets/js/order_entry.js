@@ -462,9 +462,13 @@ function getOrders() {
         var td = document.createElement('td');
         try {
           td.innerHTML = '&nbsp;'
-          if(result != null)
+          if(result != null) {
+            tr.style.backgroundColor = "green";
             td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
+          }else {
 
+          tr.style.backgroundColor = "#FFC200";
+          }
         }catch(e){
           td.innerHTML = '&nbsp;';
         }
