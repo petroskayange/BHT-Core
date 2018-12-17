@@ -469,6 +469,7 @@ function getOrders() {
 
           tr.style.backgroundColor = "#FFC200";
           }
+          
         }catch(e){
           td.innerHTML = '&nbsp;';
         }
