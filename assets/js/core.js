@@ -695,13 +695,7 @@ function checkCredentials(username, password) {
                 // sessionStorage.removeItem("userPassword");
                 // window.location.href = 'show.html?user_id=' + v.user.user_id;
             } else if (http.status == 401) {
-                // alert('Username already exists');
-                sleep(2000);
-                // showMessage("Wrong username or password");
-                // alert('wrong password');
-                showConfirmatoryTestPopup();
-                window.location = "/views/login.html";
-                // sleep
+                wrongPasswordUsernameAlert();
             } else if (http.status == 0){
                 // await sleep(2000);
                 // showMessage('No connection to EMR API',null,10000000000);

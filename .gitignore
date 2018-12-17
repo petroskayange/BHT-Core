@@ -4,3 +4,4 @@
 /public/touchscreentoolkit/*
 *.swp
 *.json
+*.DS_Store
