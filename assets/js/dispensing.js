@@ -315,7 +315,7 @@ function postDispensation(order_id , amount_dispensed) {
   }
 
   var drug_order = {
-    dispensations: [{drug_order_id: order_id, quantity: amount_dispensed}]
+    dispensations: [{date: sessionStorage.sessionDate, drug_order_id: order_id, quantity: amount_dispensed}]
   }
   submitParameters(drug_order, "/dispensations", "doneDispensing"); 
 }
@@ -418,8 +418,9 @@ function addDeleteBTN(order_id) {
 }
 
 function getPrescriptions() {
-  var prescription_date = moment().format("YYYY-MM-DD");
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/drug_orders?patient_id=" + sessionStorage.patientID + "&date=" + prescription_date;
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+  url +="/api/v1/drug_orders?patient_id=" + sessionStorage.patientID;
+  url += "&date=" + sessionStorage.sessionDate;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {

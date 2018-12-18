@@ -258,7 +258,7 @@ function getClient(patient_id) {
       sessionStorage.patientAge = roundedAge; 
       sessionStorage.patientGender = obj["gender"];
       sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
-      sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+      sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
       getHeight(patient_id);
       getWeight(patient_id);
       
