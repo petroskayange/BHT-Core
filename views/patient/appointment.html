@@ -6,6 +6,7 @@
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/moment.js"></script>
 
 
 
@@ -361,6 +362,7 @@ function getNextAppointment(){
 function highlightSuggestedDay() {
   var cells = document.getElementsByClassName("calendar-boxes");
   var selDate = (suggestedYear + "-" + suggestedMonth + "-" + suggestedDay);
+  selDate = moment(selDate).format('YYYY-MM-DD'); 
     
   for(var i = 0 ; i < cells.length ; i++){
     if(cells[i].getAttribute("date") == selDate){
@@ -423,12 +425,15 @@ function changeNextButton() {
 }
 
 function setAppointmentDate() {
+  var currentTime = moment().format(' HH:mm:ss');
+  var encounter_datetime = moment(sessionStorage.sessionDate).format('YYYY-MM-DD'); 
+  encounter_datetime += currentTime; 
 
   var encounter = {
     encounter_type_name: 'APPOINTMENT',
     encounter_type_id:  7,
     patient_id: sessionStorage.patientID,
-    encounter_datetime: null
+    encounter_datetime: encounter_datetime
   }
 
   submitParameters(encounter, "/encounters", "postAppointmentObs");
@@ -492,7 +497,7 @@ function setDates(dates) {
     if(parseInt(calendarBoxes[i].getAttribute("weekDayNum")) == date.getDay() && calendarBoxes[i].innerHTML == "&nbsp;"){
       calendarBoxes[i].innerHTML = date.getDate();
       calendarBoxes[i].setAttribute("onmousedown","selectDate(this);")
-      calendarBoxes[i].setAttribute("date", date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+      calendarBoxes[i].setAttribute("date", moment(date).format('YYYY-MM-DD'));
       count++;
     }
   }
@@ -538,6 +543,10 @@ function selectDate(e) {
   }
 
   e.setAttribute("style","background-color: green; color: white;");
+  suggestedYear = moment(e.getAttribute('date')).format('YYYY'); 
+  suggestedMonth = moment(e.getAttribute('date')).format('MM'); 
+  suggestedDay = moment(e.getAttribute('date')).format('DD'); 
+    
 }
   
 function getFullMonthName(index) {  
@@ -611,7 +620,8 @@ var suggestedDay;
 
 function getSuggestedAppointmentDate() {
   var patient_id = sessionStorage.patientID;
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id + "/next_appointment_date";
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/";
+  url += patient_id + "/next_appointment_date?date=" + sessionStorage.sessionDate;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {

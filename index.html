@@ -41,6 +41,9 @@
           sessionStorage.patient_type = null;
           sessionStorage.previousWeight = null;
         }
+        
+        if(sessionStorage.sessionDate == undefined)
+          sessionStorage.sessionDate = moment().format('YYYY-MM-DD');
 
         resetPatientStorage();
     </script>

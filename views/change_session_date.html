@@ -1,0 +1,106 @@
+
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/moment.js"></script>
+
+<style>
+#tt_page_month #viewport {
+  height: 80%;
+}
+
+.inputFrameClass {
+  width: 95.5%;
+}
+
+.tt_controls_month #keyboard {
+  display: none !important;
+}
+
+
+</style>
+
+<script>
+var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+function setAbsoluteMaxYear() {
+  var y = document.getElementById('touchscreenInput' + tstCurrentPage);
+  y.setAttribute('absoluteMax', (new Date().getFullYear()));
+}
+
+function setSubmit() {
+  var b = document.getElementById('nextButton');
+  b.setAttribute('onmousedown','submitDate();');
+}
+
+function resetSubmitButton() {
+  var b = document.getElementById('nextButton');
+  b.setAttribute('onmousedown','gotoNextPage();');
+}
+
+function submitDate() {
+  var year = document.getElementById('session_year').value;
+  var month = document.getElementById('session_month').value;
+  var day = document.getElementById('touchscreenInput' + tstCurrentPage).value;
+  
+  if(parseInt(month) < 10)
+    month = '0' + month;
+
+  if(parseInt(day) < 10)
+    day = '0' + day;
+
+  var set_date = (year + '-' + month + '-' + day);
+  set_date = new Date(set_date);
+
+  if(set_date > (new Date())) {
+    showMessage('Date is greater than current date');
+    return;
+  }
+
+  sessionStorage.sessionDate = moment(set_date).format('YYYY-MM-DD');
+  document.location = tt_cancel_destination; 
+}
+</script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+      <form>
+      
+        <input type="text" name="session_year" id="session_year" helpText="Year" field_type="number" 
+          absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxYear()" 
+          tt_pageStyleClass="Numeric NumbersOnly" />
+
+        <select name="session_month" id="session_month" helpText="Month" 
+          tt_onLoad="__$(keyboard).style.display = none;">
+          <option value=""></option>
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+
+        <input type="text" name="session_day" 
+          id="session_day" 
+          field_type="number" helpText="Day" 
+          tt_onLoad="setSubmit();" 
+          tt_onUnLoad="resetSubmitButton();"/> 
+            
+      
+      
+      
+      </form>
+
+   </div>
+ </div>
+</body>
+

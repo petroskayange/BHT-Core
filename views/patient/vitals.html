@@ -8,6 +8,11 @@
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/bmi.js"></script>
+<<<<<<< HEAD
+=======
+<script type="text/javascript" src="/assets/js/moment.js"></script>
+
+>>>>>>> 4af296a59542e60fc2de8dbe4a05f433489e4ed7
 <style>
 
 .main-table-div {
@@ -663,11 +668,15 @@ function confirmIfWeightIsEntered() {
 }
 
 function submitVitals() {
+  var currentTime = moment().format(' HH:mm:ss');
+  var encounter_datetime = moment(sessionStorage.sessionDate).format('YYYY-MM-DD'); 
+  encounter_datetime += currentTime;
+                        	
   var encounter = {
     encounter_type_name: 'Vitals',
     encounter_type_id:  6,
     patient_id: sessionStorage.patientID,
-    encounter_datetime: null
+    encounter_datetime: encounter_datetime
   }
 
   submitParameters(encounter, "/encounters", "postVitalsObs");
