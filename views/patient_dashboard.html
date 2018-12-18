@@ -859,7 +859,10 @@ modalConfirm(function(confirm){
 
         if (this.readyState == 4 && this.status == 200) {
           var results = JSON.parse(this.responseText);
+          console.log(results);
+          var dates = {};
           for (var x = 0; x < results.length; x++) {
+            dates[results[x].order.start_date] = "added";
             if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
               var d = new Date(results[x].order.start_date);
               var f = moment(d).format("HH:MM");
@@ -888,19 +891,20 @@ modalConfirm(function(confirm){
                       break;
                     }    
                 }
-                else if (itemType == "button") {
-                    programs.innerHTML +=
-                      '<button type="button" id="' + x + '" value="' +name+  
-                      '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
-                      '<span class="h5">' + name.toUpperCase(); + '</span></button>';
-                  }
+                
 
               }
               
         }
-           
-
-          
+        if (itemType == "button") {
+          var dateKeys = Object.keys(dates);
+          for (let index = 0; index < dateKeys.length; index++) {
+            programs.innerHTML +=
+            '<button type="button" id="' + x + '" value="' +index+  
+            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
+            '<span class="h5">' + moment(dateKeys[index]).format("DD/MMM/YYYY") + '</span></button>';
+          }
+        }
         }
       };
       try {
