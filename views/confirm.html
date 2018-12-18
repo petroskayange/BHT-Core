@@ -279,6 +279,8 @@ function getClient(patient_id) {
       var bmindex = (sessionStorage.currentWeight /sessionStorage.currentHeight/ sessionStorage.currentHeight) * 10000;
       bmindex = Math.round(bmindex * 10 ) / 10;
       getBMIResult(gender, roundedAge, bmindex);
+    }else if(this.status == 404) {
+      window.location.href = "/";
     }
   };
   xhttp.open("GET", url, true);
