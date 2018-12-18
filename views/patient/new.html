@@ -704,7 +704,7 @@
     key="gender" ><option value=""></option>
       <option value="New Patient">New patient</option>
       <!-- <option value="Transfer in">Transfer in</option> -->
-      <option value="Visiting Patient">Visiting patient</option></select>
+      <option value="External consultation">External consultation</option></select>
 
   <select objectType="location" ajaxURL="/locations?name=" 
     allowFreeText="true" 
@@ -899,8 +899,8 @@ var answers_hash = {
 
 var patient_type_map = {
     "New patient": 7572,
-    "Transfer in": 2536,
-    "Visiting patient": 9672
+    // "Transfer in": 2536,
+    "External consultation": 9684
 }
 
 function postPatienttypeObs(encounter) {
