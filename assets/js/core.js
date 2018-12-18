@@ -639,7 +639,9 @@ function buildPrintOutandOthers(data) {
     var values = data.others[j]
     var name = values.activitiesName;
     var icon = values.activitiesIcon;
-    tasks.push([name, icon, "#"]);
+    var url = values.url;
+    url = (url == undefined ? '#' : url);
+    tasks.push([name, icon, url]);
   });
 
   var container = document.getElementById("activities-body");

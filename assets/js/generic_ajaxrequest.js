@@ -108,7 +108,7 @@ function nextEncounter(patient_id, program_id, redirect) {
 
     }
   };
-  xhttp.open("GET", (url + "/" + program_id + "/" + patient_id), true);
+  xhttp.open("GET", (url + "/" + program_id + "/" + patient_id + "?date=" + sessionStorage.sessionDate), true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
