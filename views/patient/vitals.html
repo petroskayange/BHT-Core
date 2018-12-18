@@ -8,11 +8,15 @@
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/bmi.js"></script>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 
 >>>>>>> 4af296a59542e60fc2de8dbe4a05f433489e4ed7
+=======
+<script src="/assets/js/moment.js"></script>
+>>>>>>> Stashed changes
 <style>
 
 .main-table-div {
@@ -150,7 +154,7 @@ img {
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 12% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
@@ -174,12 +178,23 @@ img {
 .height-text {
   font-size: 60px; 
   text-align: center;
+  margin-top: 0px;
 }
 .heightDivs {
-  width: 50%; background-color:
-  blue; height: 200px; 
+  width: 48%; 
+  height: 200px; 
   display: inline;
   float:left;
+  background-color: white;
+  margin-left: 1%;
+  border: solid black 1px;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  border-radius: 3%;
+}
+
+.height-headers {
+  font-size: 20px;
+  text-align: center;
 }
 </style>
 <script type="text/javascript">
@@ -427,7 +442,20 @@ function showValidate(message) {
             "<span>No</span></button>";
             messageBar.style.display = "block";
 }
+function showConfirm(message, returnFunction) {
+  
+  messageBar.innerHTML = "";
+  messageBar.innerHTML += "<p>" + ((message.match(/^Value\s/))?(message.replace(/^Value\s/, "")):message) +
+            ". Are you sure about this value?</p><div style='display: block;'>" +
+            "<button class='button' style='float: none;' onclick='this.offsetParent.style.display=\"none\";"+returnFunction+"();' onmousedown='this.offsetParent.style.display=\"none\";"+returnFunction+"();'"+
+            "><span>Yes</span></button><button class='button' " +
+            "style='float: none; right: 3px;' onmousedown='this.offsetParent.style.display=\"none\"; '>" +
+            "<span>No</span></button>";
+            messageBar.style.display = "block";
+}
+
 function validateTemp(temp){
+
   var minValue = 35;
   var maxValue = 40;
   var absMinValue = 30;
@@ -550,16 +578,16 @@ function validateHeight(height){
     return false;
   }
 
-  if(sessionStorage.currentHeight > height) {
+  if(parseInt(sessionStorage.currentHeight) > height) {
     var modal = document.getElementById('myModal');
     var modalError = document.getElementById("modal-error");
     var currentHeight = document.getElementById("current-height");
-    currentHeight.innerHTML = "<p class='height-text' >"+sessionStorage.currentHeight+"</p>";
+    currentHeight.innerHTML = "<p class='height-headers'>Previous Height </p><p class='height-text' >"+sessionStorage.currentHeight+"KG</p>";
     currentHeight.setAttribute("value", sessionStorage.currentHeight);
     var newHeight = document.getElementById("new-height") ;
-    newHeight.innerHTML = "<p class='height-text' >"+height+"</p>";
+    newHeight.innerHTML = "<p class='height-headers'>Current Weight</p><p class='height-text' >"+height+"KG</p>";
     newHeight.setAttribute("value", height);
-    modalError.innerHTML = ("Height can not be lower than previous weight of " + sessionStorage.currentHeight + ". Please Choose the correct height. Selected height: <span id='selected-height'><span>");
+    modalError.innerHTML = "<p style='color: red; font-size: 20px;'>Inconsistent Height Reading: </p>" + ("Height can not be lower than previous height of " + sessionStorage.currentHeight + "KG. Please SELECT the correct height.");
     modal.style.display = "block";
     return false;
   }
@@ -754,30 +782,25 @@ function changeNextBtnToSubmit() {
           tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtn();buildVitalsPage();buildKeyPad();buildTable();" 
           tt_pageStyleClass= "NoControls" helpText="Vitals" optional = "true"/>
 
-        <!-- <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none';changeNextBtnToSubmit();buildVitalSummary();" 
-          tt_pageStyleClass= "NoControls" helpText="Summary" optional = "true"
-          tt_onUnLoad="resetNextButton();" /> -->
-
       </form>
 
       <div id="myModal" class="modal">
 
         <!-- Modal content -->
-        <div class="modal-content" style="height: 350px;">
+        <div class="modal-content" style="height: 400px;">
           <span class="close">&times;</span>
           <p id="modal-error" ></p>
-          <div style="width: 100%; height:200px;">
-            <div style="background-color: green" class="heightDivs" onclick="selectHeight(this);" id="current-height">
+          <div style="margin-top: 3%; width: 100%; height:200px;">
+            <div class="heightDivs" onclick="selectHeight(this);" id="current-height">
               
             </div>
-            <div class="heightDivs" id="new-height"style="background-color: red;" onclick="selectHeight(this);">
+            <div class="heightDivs" id="new-height" onclick="selectHeight(this);">
              
             </div>
           </div>
-          <div style="width:55%;">
+          <div style="margin-top:4%;">
 
-          <button id="saveObs" class="button green navButton" style="width: 80px;"><span>save</span></button>
+          <button id="saveObs" class="button red navButton" style="width: 80px; visibility: hidden;" onclick="showConfirm('Are you sure you want to void height?', 'voidHeight');"><span>Void</span></button>
           </div>
         </div>
       
@@ -788,40 +811,91 @@ function changeNextBtnToSubmit() {
 
  <script type="text/javascript">
  
+ var modal = document.getElementById('myModal');
  function selectHeight(element) {
    var divs = document.getElementsByClassName("heightDivs");
   for (var x = 0; x < divs.length; x++) {
-    divs[x].style.backgroundColor = "red";
+    divs[x].style.backgroundColor = "white";
+    divs[x].style.color = "black";
    }
-   document.getElementById("selected-height").innerHTML = element.getAttribute("value");
-   element.style.backgroundColor = "green";
+   if(element.id === "current-height") {
+    modal.style.display = "none";
+    document.getElementById("vitals-input").value = null;
+    document.getElementById("td-Height").innerHTML = null;
+    vitalsEntered["vitals-Height"] = null;
+    document.getElementById("saveObs").style.visibility = "hidden";
+   }
+  else if(element.id === "new-height") {
+    document.getElementById("saveObs").style.visibility = "visible";
+    element.style.backgroundColor = "#0e4d86";
+    element.style.color = "white";
+   }
+  
  }
 
- var modal = document.getElementById('myModal');
 
-// Get the button that opens the modal
-// var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on the button, open the modal 
-// btn.onclick = function() {
-//   modal.style.display = "block";
-// }
-
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 }
 
+function voidHeight() {
+  var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/observations/'+sessionStorage.currentHeightObsID;
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 204) {
+          modal.style.display = "none";
+          getHeight(sessionStorage.patientID);
+        }else {
+        }
+      };
+      try {
+        req.open('DELETE', url, true);
+        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {}
+
+    }
+
+    function getHeight(patient_id) {
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
+    url += "&date=" + moment(new Date(sessionStorage.sessionDate)).format('YYYY-MM-DD');
+    url += "&page_size=1";
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+            var obj = JSON.parse(this.responseText);
+            if (obj.length > 0) {
+              sessionStorage.currentHeightObsID = obj[0].obs_id;
+              var height = parseInt(obj[0].value_numeric);
+              if(height > 0) {
+                sessionStorage.currentHeight = height;
+              }else if(obj[0].value_text.length > 0) {
+                sessionStorage.currentHeight = parseInt(obj[0].value_text);
+                
+              }else{
+                sessionStorage.currentHeight = 0;
+              }
+            }else {
+                sessionStorage.currentHeight = 0;
+            }
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
+}
  </script>
 </body>
 
