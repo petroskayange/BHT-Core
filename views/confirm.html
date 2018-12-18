@@ -297,11 +297,13 @@ function getHeight(patient_id) {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
             var obj = JSON.parse(this.responseText);
             if (obj.length > 0) {
+              sessionStorage.currentHeightObsID = obj[0].obs_id;
               var height = parseInt(obj[0].value_numeric);
               if(height > 0) {
                 sessionStorage.currentHeight = height;
               }else if(obj[0].value_text.length > 0) {
                 sessionStorage.currentHeight = parseInt(obj[0].value_text);
+                
               }else{
                 sessionStorage.currentHeight = 0;
               }
