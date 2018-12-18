@@ -859,7 +859,6 @@ modalConfirm(function(confirm){
 
         if (this.readyState == 4 && this.status == 200) {
           var results = JSON.parse(this.responseText);
-          console.log(results);
           var dates = {};
           for (var x = 0; x < results.length; x++) {
             dates[results[x].order.start_date] = "added";
