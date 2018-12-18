@@ -955,7 +955,7 @@ modalConfirm(function(confirm){
                 sessionStorage.removeItem("value_coded");
               
             }else if (results.observations[x].value_datetime != null){ 
-              value = results.observations[x].value_datetime;
+              value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:MM");
             }else {
 
             }
