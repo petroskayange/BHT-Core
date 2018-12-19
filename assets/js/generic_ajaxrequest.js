@@ -103,7 +103,9 @@ function nextEncounter(patient_id, program_id, redirect) {
       else if (this.status == 204) {
         sessionStorage.setItem("nextEncounter", "None");
         sessionStorage.setItem("nextEncounterAvailable", "Unavailable");
-        window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+        if(redirect !== false) {
+          window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+        }
       }
 
     }
