@@ -711,7 +711,7 @@ modalConfirm(function(confirm){
 
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].encounter_datetime);
-            var f = moment(d).format("HH:MM");
+            var f = moment(d).format("HH:mm A");
 
             if (itemType == "table") {
               var a = document.createElement("a");
@@ -792,7 +792,7 @@ modalConfirm(function(confirm){
           var results = JSON.parse(this.responseText);
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].date_enrolled);
-            var f = moment(d).format("HH:MM");
+            var f = moment(d).format("HH:mm A");
             var name = results[x].program.concept.concept_names[0].name;
             if (itemType == "table") {
               var a = document.createElement("a");
@@ -854,7 +854,7 @@ modalConfirm(function(confirm){
           for (var x = 0; x < results.length; x++) {
             if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
               var d = new Date(results[x].order.start_date);
-              var f = moment(d).format("HH:MM");
+              var f = moment(d).format("HH:mm A");
               var name = results[x].drug.name;
               if(itemType === "table") {
                     var a = document.createElement("a");
@@ -920,7 +920,7 @@ modalConfirm(function(confirm){
 
           for (var x = 0; x < results.observations.length; x++) {
             var d = new Date(results.observations[x].obs_datetime);
-            var f = moment(d).format("HH:MM");
+            var f = moment(d).format("HH:mm A");
             var value = "";
             var modifier = results.observations[x].value_modifier;
             if (modifier !== "%") {
@@ -955,7 +955,7 @@ modalConfirm(function(confirm){
                 sessionStorage.removeItem("value_coded");
               
             }else if (results.observations[x].value_datetime != null){ 
-              value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:MM");
+              value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:mm A");
             }else {
 
             }
