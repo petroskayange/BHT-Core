@@ -4,6 +4,7 @@
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/moment.js"></script>
 
+  <script src="/assets/js/generic_ajaxrequest.js"></script>
 <style>
 #tt_page_month #viewport {
   height: 80%;
@@ -58,6 +59,7 @@ function submitDate() {
   }
 
   sessionStorage.sessionDate = moment(set_date).format('YYYY-MM-DD');
+  nextEncounter(sessionStorage.patientID, 1, false);
   document.location = tt_cancel_destination; 
 }
 </script>

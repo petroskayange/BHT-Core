@@ -66,6 +66,13 @@
     width: 300px;
     color: #fff;
   }
+
+  .alerts {
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 15px;
+    margin-top: 5px;  
+  }
   </style>
   
   <!-- container -->
@@ -158,7 +165,7 @@
         </div>
         <div class="row" style="margin-top:10px;">
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal">
+              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;">
                  <div class="card-header h4 btn-danger" style="margin: 3%; padding: 1%;">Alerts</div>
                  <table class="table ">
                     <tbody id="alerts">
@@ -513,6 +520,7 @@ modalConfirm(function(confirm){
     window.location = "/";
   }
   var nextEnc = "";
+  nextEncounter(sessionStorage.patientID, 1, false);
   if (sessionStorage.nextEncounter != null) {
     nextEnc = sessionStorage.nextEncounter;
   }else {
@@ -851,7 +859,9 @@ modalConfirm(function(confirm){
 
         if (this.readyState == 4 && this.status == 200) {
           var results = JSON.parse(this.responseText);
+          var dates = {};
           for (var x = 0; x < results.length; x++) {
+            dates[results[x].order.start_date] = "added";
             if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
               var d = new Date(results[x].order.start_date);
               var f = moment(d).format("HH:mm A");
@@ -880,19 +890,20 @@ modalConfirm(function(confirm){
                       break;
                     }    
                 }
-                else if (itemType == "button") {
-                    programs.innerHTML +=
-                      '<button type="button" id="' + x + '" value="' +name+  
-                      '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
-                      '<span class="h5">' + name.toUpperCase(); + '</span></button>';
-                  }
+                
 
               }
               
         }
-           
-
-          
+        if (itemType == "button") {
+          var dateKeys = Object.keys(dates);
+          for (let index = 0; index < dateKeys.length; index++) {
+            programs.innerHTML +=
+            '<button type="button" id="' + x + '" value="' +index+  
+            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
+            '<span class="h5">' + moment(dateKeys[index]).format("DD/MMM/YYYY") + '</span></button>';
+          }
+        }
         }
       };
       try {
@@ -1033,6 +1044,165 @@ function voidEncounter(id) {
     dvTable.appendChild(obj);
 
     }
+  function buildAlerts(patient_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=7755';
+  var req = new XMLHttpRequest();
+  var table = document.getElementById("alerts");
+  table.setAttribute("class","info-tables");
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          var tr = document.createElement("tr");
+          tr.setAttribute("class", "alerts");
+          var td = document.createElement("td");
+          td.innerHTML = "Patient Has Side Effects";
+          td.setAttribute("colspan", 2);
+          tr.appendChild(td);
+          table.appendChild(tr);
+
+        }
+      if (sessionStorage.bmiResult !== "null") {
+        var tr = document.createElement("tr");
+        tr.setAttribute("class", "alerts");
+        var td = document.createElement("td");
+        td.innerHTML = "Patient BMI is";
+        tr.appendChild(td);
+        var td = document.createElement("td");
+        td.innerHTML = sessionStorage.bmiResult;
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+        
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+  buildDefaulter(patient_id, table)
+}
+function buildDefaulter(patient_id, table){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=6828';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          var tr = document.createElement("tr");
+          tr.setAttribute("class", "alerts");
+          var td = document.createElement("td");
+          td.innerHTML = "Patient Is a Defaulter";
+          td.setAttribute("colspan", 2);
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
+function buildProgramInfo(patient_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/'+patient_id+'/next_appointment_date';
+  var req = new XMLHttpRequest();
+  var table = document.createElement("table");
+  table.setAttribute("class","info-tables");
+  var container = document.getElementById("section-body-3");
+  container.appendChild(table);
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        var tr = document.createElement("tr");
+          tr.setAttribute("class", "alerts");
+        var td = document.createElement("td");
+        td.innerHTML = "Next Appointment Date";
+        tr.appendChild(td);
+        var td = document.createElement("td");
+        td.innerHTML = moment(results).format("DD/MMM/YYYY");
+        tr.appendChild(td);
+        table.appendChild(tr);
+
+      }else {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.innerHTML = "No Appointment Date Available";
+        tr.appendChild(td);
+        table.appendChild(tr);
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+  buildFT(patient_id, table);
+}
+
+function buildFT(patient_id, table){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=9561';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.length > 0) {
+          buildFTAssessment(table, results[0].encounter_id);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
+function buildFTAssessment(table, encounter_id){
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/encounters/'+encounter_id;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+      var results = JSON.parse(this.responseText);
+      if(results.observations[0].value_coded == 1065) {
+          var tr = document.createElement("tr");
+          tr.setAttribute("class", "alerts");
+          var td = document.createElement("td");
+          td.setAttribute("colspan", 2);
+          td.innerHTML = "Patient Is on fast track";
+          td.style.color = "green";
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
+  
+  }
+}
     GetApplicationInfo();
 
     ajaxRequest();
@@ -1042,6 +1212,7 @@ function voidEncounter(id) {
       generateActivities();
       changeActivities();
       generateTasks();
+      buildAlerts(sessionStorage.patientID);
       useHangingPillsDialog();
 
       // loadAlerts();
