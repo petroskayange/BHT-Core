@@ -929,9 +929,10 @@ function addDate(e, transaction_type) {
     tr.appendChild(td);
   }
 
-  var currentDay    = sessionStorage.sessionDate.split('/')[0];
-  var currentMonth  = sessionStorage.sessionDate.split('/')[1];
-  var currentYear   = sessionStorage.sessionDate.split('/')[2];
+  var currentDay      = sessionStorage.sessionDate.split('-')[2];
+  var currentMonthNum = parseInt(sessionStorage.sessionDate.split('-')[1])
+  var currentMonth    = monthInText(currentMonthNum - 1);
+  var currentYear     = sessionStorage.sessionDate.split('-')[0];
   
   document.getElementById('day-input').value = currentDay;
   document.getElementById('month-input').value = currentMonth;
@@ -1405,7 +1406,7 @@ function addResultsEntryKeyPad(e) {
     ['=','4','5','6'],
     ['>','1','2','3'],
     ["/",'Del.', '0','.'],
-    ['Positivie','Negative','Clear']
+    ['Positive','Negative','Clear']
   ];
 
   var keyboard = document.createElement('div');
@@ -1445,7 +1446,7 @@ function keypadPress(key) {
 
   if(inputBox.value.length < 1) {
     var atrr = key.getAttribute('key');
-    if(atrr != 'Positivie' && atrr != 'Negative' && atrr != 'Del.'){
+    if(atrr != 'Positive' && atrr != 'Negative' && atrr != 'Del.'){
       if(atrr != '<' && atrr != '>' && atrr != '='){
         showMessage('Please start by entering one of the following parameters:<br />=, <, >');
         return;
@@ -1460,7 +1461,7 @@ function keypadPress(key) {
   }
 
   
-  if(inputBox.value == 'Positivie' || inputBox.value == 'Negative'){
+  if(inputBox.value == 'Positive' || inputBox.value == 'Negative'){
     if(key.getAttribute('key') != 'Clear'){
       return;
     }
@@ -1472,7 +1473,7 @@ function keypadPress(key) {
       inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);  
     }else if(key.getAttribute('key').match(/Clear/i)){                                    
       inputBox.value = null;
-    }else if(key.getAttribute('key') == 'Negative' || key.getAttribute('key') == 'Positivie'){                                    
+    }else if(key.getAttribute('key') == 'Negative' || key.getAttribute('key') == 'Positive'){                                    
       inputBox.value = key.getAttribute('key');
     }else{                                                                      
       inputBox.value += key.getAttribute('key');                                          
@@ -1487,7 +1488,7 @@ function keypadPress(key) {
 
 function submitOrderResults() {
 
-  if(orderResult == 'Positivie' || orderResult == 'Negative') {
+  if(orderResult == 'Positive' || orderResult == 'Negative') {
     orderResult = '=' + orderResult;
   }
 
