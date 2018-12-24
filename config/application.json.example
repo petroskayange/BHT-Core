@@ -45,10 +45,10 @@
       "activitiesIcon": "/assets/images/dispensing.png",
       "url": "/views/patient/dispensing.html"
     },
-    "Lab orders": {
+    "Fast track": {
     "available": true,
-    "activitiesIcon": "/assets/images/lab.png",
-    "url": "/views/patient/labs.html"
+    "activitiesIcon": "/assets/images/fast-track.png",
+    "url": "/apps/ART/views/encounters/fast_track.html"
     }
   },
   "activities": {

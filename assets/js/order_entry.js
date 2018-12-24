@@ -257,7 +257,7 @@ function addOrders() {
   var container = document.getElementById('input-container');
 
    var helpText = document.createElement('label');
-   helpText.innerHTML = 'Lab orders';
+   helpText.innerHTML = 'Specimen type';
    helpText.setAttribute('class','helpTextClass');
    container.appendChild(helpText);
 
