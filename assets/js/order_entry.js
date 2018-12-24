@@ -1,4 +1,4 @@
-var panelID;
+var SpecimenType;
 var locationID;
 var selectedPanels = [];
 var testDate;
@@ -132,6 +132,39 @@ resultsTableCSS.innerHTML = "<style>\
 }\
 </style>";
 
+function showInfoMessage(aMessage, withCancel, timed) {
+    /*
+        msgType by default is error message with tomato background
+        if msgType is info background is green
+     */
+    if(typeof(tstMessageBar) == "undefined"){
+        __$("content").innerHTML += "<div id='messageBar' class='messageBar'></div>";
+
+        tstMessageBar = __$('messageBar');
+    }
+
+    var messageBar = tstMessageBar;
+    messageBar.innerHTML = aMessage +
+        "<br />" + (typeof(withCancel) != "undefined" ? (withCancel == true ?
+        "<button onmousedown='tstMessageBar.style.display = \"none\"; " +
+        "clearTimeout(tstTimerHandle);'><span>Cancel</span></button>" : "") : "") +
+        "<button style='width: 200px;' onmousedown='__$(\"messageBar\").style.backgroundColor = \"tomato\"; tstMessageBar.style.display = \"none\"; " +
+        "clearTimeout(tstTimerHandle); eval(tstTimerFunctionCall);'><span>OK</span></button>";
+    if (aMessage.length > 0) {
+        messageBar.style.display = 'block'
+        if((typeof(timed) == "undefined" ? true : timed) == true){
+            window.setTimeout("hideInfoMessage()",3000)
+        }
+    }
+
+    __$('messageBar').style.backgroundColor = "green";
+}
+
+function hideInfoMessage(){
+    __$('messageBar').style.backgroundColor = "tomato";
+    tstMessageBar.style.display = 'none'
+}
+
 function buildOrderEntry() {
   var frame = document.getElementById('inputFrame' + tstCurrentPage);
   frame.style = 'width: 96%; height: 90%;overflow: auto;';
@@ -257,7 +290,7 @@ function addOrders() {
   var container = document.getElementById('input-container');
 
    var helpText = document.createElement('label');
-   helpText.innerHTML = 'Lab orders';
+   helpText.innerHTML = 'Specimen Type';
    helpText.setAttribute('class','helpTextClass');
    container.appendChild(helpText);
 
@@ -397,8 +430,8 @@ function cancelOrder() {
   box.style = 'display: none;';
   document.getElementById('orders-cover-div').style = 'display: none;';
 
-  panelID = null;
-  locationID = null
+  specimenType = null;
+  locationID = null;
   selectedPanels = [];
   testDate = null;
   selectedOrders = [];
@@ -530,8 +563,7 @@ function getOrders() {
 function loadLabOrders() {
   var search_string = document.getElementById('input-lab-order').value;
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/programs/1/lab_tests/types/?search_string=" + search_string;
-
+  url += "/programs/1/lab_tests/panels/?search_string=" + search_string;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
@@ -542,8 +574,8 @@ function loadLabOrders() {
 
       for(var i = 0 ; i < obj.length ; i++){
         var li = document.createElement('li');
-        li.innerHTML = obj[i].TestName;
-        li.setAttribute('value', obj[i].Panel_ID);
+        li.innerHTML = obj[i];
+        li.setAttribute('value', obj[i]);
         li.setAttribute('id', i);
         li.setAttribute('class', 'test-order-list');
         li.setAttribute('onmousedown', "selectOrder(this);");
@@ -567,13 +599,13 @@ function selectOrder(e) {
 
   e.style = 'background-color: lightblue;';
   document.getElementById('input-lab-order').value = e.innerHTML;
-  panelID = e.value;
+  specimenType = e.innerHTML;
 }
 
 function nextChapter(num) {
   
-  if(num == 0 && panelID == undefined){
-    showMessage('Please select Lab order');
+  if(num == 0 && specimenType == undefined){
+    showMessage('Please select specimen type');
     return;
   }else if(num == 1 && selectedPanels.length < 1){
     showMessage('Please select tests');
@@ -683,7 +715,7 @@ function buildLabTestTypes() {
 
 function getLabTestType() {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/programs/1/lab_tests/types?panel_id=" + panelID;
+  url += "/programs/1/lab_tests/types?specimen_type=" + specimenType;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -699,6 +731,7 @@ function getLabTestType() {
 }
 
 function loadPanels(data) {
+
   var panels = document.getElementById('panels');
   panels.setAttribute('class','options');
 
@@ -714,8 +747,8 @@ function loadPanels(data) {
     var li = document.createElement('li');
     li.setAttribute('class', 'test-panel-list');
     li.setAttribute('tstvalue', 'panel-list');
-    li.setAttribute('testType', data[i].TestType);
-    li.setAttribute('panel-id', data[i].ID);
+    li.setAttribute('testType', data[i]);
+    li.setAttribute('panel-id', data[i]);
     li.setAttribute('onmousedown','updateSelectedPanels(this);');
     li.style = '';
 
@@ -730,12 +763,12 @@ function loadPanels(data) {
     var img = document.createElement('img');
     img.setAttribute('src','/public/touchscreentoolkit/lib/images/unticked.jpg');
     img.setAttribute('alt', '[ ]');
-    img.setAttribute('id', 'checkbox-' + data[i].ID);
+    img.setAttribute('id', 'checkbox-' + data[i]);
     div2.appendChild(img);
 
     var div3 = document.createElement('div');
     div3.style = 'display: table-cell; vertical-align: middle; text-align: left; padding-left: 15px;';
-    div3.innerHTML = data[i].TestName;
+    div3.innerHTML = data[i];
     div1.appendChild(div3);
 
 
@@ -754,7 +787,7 @@ function updateSelectedPanels(e) {
     e.style = 'background-color: ""';
     var tempList = [];
     for(var i = 0 ; i < selectedPanels.length ; i++){
-      if(parseInt(selectedPanels[i]) != parseInt(e.getAttribute('testtype'))){
+      if(selectedPanels[i] != e.getAttribute('testtype')){
         tempList.push(selectedPanels[i]);
       }
     }
@@ -762,8 +795,9 @@ function updateSelectedPanels(e) {
   }else{
     img.setAttribute('src','/public/touchscreentoolkit/lib/images/ticked.jpg');
     e.style = 'background-color: lightblue;';
-    selectedPanels.push(parseInt(e.getAttribute('testtype')));
+    selectedPanels.push(e.getAttribute('testtype'));
   }
+
 }
 
 function buildReasonForTest() {
@@ -1206,13 +1240,16 @@ function submitOrders() {
 } 
 
 function setOrders(encounter) {
-  for(var i = 0 ; i < selectedPanels.length ; i++){
+  //for(var i = 0 ; i < selectedPanels.length ; i++){
     selectedOrders.push({
       encounter_id: encounter.encounter_id,
-      test_type_id: selectedPanels[i],
-      date: testDate, reason: reasonForTest
+      test_types: selectedPanels,
+      date: testDate,
+      reason: reasonForTest,
+      target_lab: locationID,
+      specimenType: specimenType
     });
-  }
+  //}
 
   postOrders(selectedOrders[0]);
 }
@@ -1232,7 +1269,7 @@ function postOrders(order) {
       if(selectedOrders.length > 0) {
         postOrders(selectedOrders[0]);
       }else{
-        showMessage('Created orders');
+        showInfoMessage('Created orders');
         cancelOrder();
         getOrders();
       }
@@ -1522,7 +1559,7 @@ function updateOrder(order) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-        showMessage('Updated orders');
+        showInfoMessage('Updated orders');
         cancelOrder();
         getOrders();
     }
