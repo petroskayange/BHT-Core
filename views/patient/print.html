@@ -16,7 +16,7 @@ function printID() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var text = (this.responseText);
       printFile("label.lbl", text);
-      setTimeout(redirectPage, 6000);
+      setTimeout(redirectPage, 5000);
     }
   };
   xhttp.open("GET", url, true);
@@ -41,10 +41,38 @@ function printFile(filename, text) {
 function redirectPage() {
   sessionStorage.showPregnantQuestion= 'true';
   sessionStorage.showWeightChart = 'true';
-  nextEncounter(sessionStorage.patientID, 1, true);
+  if(use_filing_number){
+    /* .............................. */
+    assignFilingNumber();
+    /* .............................. */
+  }else{
+    nextEncounter(sessionStorage.patientID, 1, true);
+  }
+}
+
+var use_filing_number = false;
+
+function filingNumberActivated() {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += "/global_properties?property=use.filing.number";
+  
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var ans = (this.responseText);
+      if(ans['use.filing.number'] == 'true'){
+        use_filing_number = true;
+      }
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
 }
 
 printID();
+filingNumberActivated()
 </script>
 
 <style>

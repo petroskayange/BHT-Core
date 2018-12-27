@@ -192,13 +192,13 @@ function buildOrderEntry() {
   tr.setAttribute('class','results-table-headers');
   thead.appendChild(tr);
 
-  var tHeaders = ['Test','Order date','Result','Result date','Given to client'];
+  var tHeaders = ['Test','Order date','Status','Result','Result date','Given to client'];
   for(var i = 0 ; i < tHeaders.length ; i++){
     var th = document.createElement('th');
-    if(i == 1 || i == 3 || i == 4)
+    if(i == 1 || i == 4 || i == 2 || i == 5)
       th.style = 'text-align: center;';
 
-    if(i == 2)
+    if(i == 3)
       th.style = 'text-align: right; padding-right: 5px;';
 
     th.innerHTML = tHeaders[i];
@@ -223,13 +223,13 @@ function buildOrderEntry() {
   var root = document.getElementById('buttons');
   root.appendChild(orderBTN);
 
-  var enterResult = document.createElement('button');
+  /*var enterResult = document.createElement('button');
   enterResult.innerHTML = '<span>Enter results</span>';
   enterResult.setAttribute('class','button blue navButton');
   enterResult.setAttribute('id','result-entery-button');
   enterResult.setAttribute('onmousedown','enterResults();');
   var root = document.getElementById('buttons');
-  root.appendChild(enterResult);
+  root.appendChild(enterResult);*/
 
   next_button = document.getElementById('nextButton');
   if(next_button){
@@ -436,7 +436,7 @@ function cancelOrder() {
   selectedPanels = [];
   testDate = null;
   selectedOrders = [];
-  ordersWitoutResults = [];
+  //ordersWitoutResults = [];
   selectedTestForResultEntry = null;
   orderResult = null;
   reasonForTest = null;
@@ -449,112 +449,123 @@ function getOrders() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-      var obj = JSON.parse(this.responseText);
+      var orders = JSON.parse(this.responseText);
       var tbody = document.getElementById('lab-orders');
       tbody.innerHTML = null;
       ordersWitoutResults = [];
 
-      for(var i = 0 ; i < obj.length ; i++){
-        var evenODD = i % 2 == 0 ? "odd" : "even";
-
-        var tr = document.createElement('tr');
-        tr.setAttribute('class','row_' + evenODD);
-        tbody.appendChild(tr);
-
-        var td = document.createElement('td');
-        try {
-          var test_name = obj[i].lab_sample.lab_parameter.test_type.TestName;
-          td.innerHTML = test_name.replace(/_/g, " ");
-        }catch(e){
-          td.innerHTML = '&nbsp;';
-        }
-        td.setAttribute('style','text-align: left; padding-left: 5px;')
-        tr.appendChild(td);
-
-        var td = document.createElement('td');
-        try {
-          td.innerHTML = formatDate(new Date(obj[i].OrderDate));
-        }catch(x) {
-          td.innerHTML = '&nbsp;';
-        }
-        tr.appendChild(td);
-
-        var td = document.createElement('td');
-        td.style = 'text-align: right; padding-right: 10px;';
-        try {
-          var range = obj[i].lab_sample.lab_parameter.Range
-          var result = obj[i].lab_sample.lab_parameter.TESTVALUE;
-          td.innerHTML = '&nbsp;'
-          if(result != null)
-            td.innerHTML = range + result
+      for(var x = 0 ; x < orders.length ; x++){
+        var obj = orders[x].tests;
+        for(var i = 0 ; i < obj.length ; i++){
+          var evenODD = i % 2 == 0 ? "odd" : "even";
           
-        }catch(e){
-          td.innerHTML = '&nbsp;';
-        }
-        tr.appendChild(td);
+          var tr = document.createElement('tr');
+          tr.setAttribute('class','row_' + evenODD);
+          tbody.appendChild(tr);
 
-        var td = document.createElement('td');
-        try {
-          td.innerHTML = '&nbsp;'
-          if(result != null) {
-            tr.style.backgroundColor = "green";
-            td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
-          }else {
-
-          tr.style.backgroundColor = "#FFC200";
+          var td = document.createElement('td');
+          try {
+            var test_name = obj[i].test_type;
+            td.innerHTML = test_name.replace(/_/g, " ");
+          }catch(e){
+            td.innerHTML = '&nbsp;';
           }
-          
-        }catch(e){
-          td.innerHTML = '&nbsp;';
-        }
-        tr.appendChild(td);
+          td.setAttribute('style','text-align: left; padding-left: 5px;')
+          tr.appendChild(td);
 
-        var td = document.createElement('td');
-        tr.appendChild(td);
+          var td = document.createElement('td');
+          try {
+            td.innerHTML = formatDate(new Date(orders[i].date_ordered));
+          }catch(x) {
+            td.innerHTML = '&nbsp;';
+          }
+          tr.appendChild(td);
 
-        /* ................. all samples without results starts ................................. */
-        try {
-          var lab_sample_result = obj[i].lab_sample.lab_parameter.TESTVALUE
-          if(lab_sample_result == null){
-            ordersWitoutResults.push({
+          var td = document.createElement('td');
+          try {
+            td.innerHTML = obj[i].test_status.toUpperCase();
+          }catch(x) {
+            td.innerHTML = '&nbsp;';
+          }
+          tr.appendChild(td);
+
+          var td = document.createElement('td');
+          td.style = 'text-align: right; padding-right: 10px;';
+          try {
+            var results = obj[i].test_values;
+            for(var j = 0 ; j < results.length ; j++){
+              if(j == 0)
+                td.innerHTML = results[j].indicator + ": " + results[j].value;
+
+              if(j > 0)
+                td.innerHTML += '<br />' + results[j].indicator + ": " + results[j].value;
+
+            }    
+          }catch(e){
+            td.innerHTML = '&nbsp;';
+          }
+          tr.appendChild(td);
+
+          var td = document.createElement('td');
+          try {
+            td.innerHTML = '&nbsp;'
+            if(result != null) {
+              tr.style.backgroundColor = "green";
+              td.innerHTML = formatDate(new Date(obj[i].lab_sample.DATE));
+            }else {
+              tr.style.backgroundColor = "#FFC200";
+            }
+          }catch(e){
+            td.innerHTML = '&nbsp;';
+          }
+          tr.appendChild(td);
+
+          var td = document.createElement('td');
+          tr.appendChild(td);
+
+          /* ................. all samples without results starts ................................. */
+          try {
+            var results = obj[i].test_values
+            if(results.length < 1){
+              ordersWitoutResults.push({
+                order_date: moment(orders[x].date_ordered).format('DD/MMM/YYYY'),
+                accession_number: orders[x].accession_number,
+                test_type: obj[i].test_type,
+                test_name: obj[i].test_type
+              });
+            }
+          }catch(z) {
+            continue;
+          }
+          /* ................. ends ................................. */
+
+          /* ................ 
+          Getting all VL results to be use to calculate for next VL popup
+          */
+          if(obj[i].TestOrdered == 'HIV viral load'){
+            try {
+              var range = obj[i].lab_sample.lab_sample.Range
+            }catch(r) {
+              var range = null;
+            }
+            vlResults.push({
               order_date: obj[i].OrderDate,
               accession_number: obj[i].Pat_ID,
               sample_id: obj[i].lab_sample.Sample_ID,
               test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
-              test_type: obj[i].lab_sample.lab_parameter.test_type.TestType
+              test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
+              result: obj[i].lab_sample.lab_parameter.TESTVALUE,
+              range: range, 
+              result_date: obj[i].lab_sample.DATE
             });
           }
-        }catch(z) {
-          continue;
-        }
-        /* ................. ends ................................. */
+          /* ......................... ends ............................... */
 
-        /* ................ 
-        Getting all VL results to be use to calculate for next VL popup
-        */
-        if(obj[i].TestOrdered == 'HIV viral load'){
-          try {
-            var range = obj[i].lab_sample.lab_sample.Range
-          }catch(r) {
-            var range = null;
-          }
-          vlResults.push({
-            order_date: obj[i].OrderDate,
-            accession_number: obj[i].Pat_ID,
-            sample_id: obj[i].lab_sample.Sample_ID,
-            test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
-            test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
-            result: obj[i].lab_sample.lab_parameter.TESTVALUE,
-            range: range, 
-            result_date: obj[i].lab_sample.DATE
-          });
         }
-        /* ......................... ends ............................... */
-
+        getARTstartedDate();
       }
-      getARTstartedDate();
-    }
-  };
+    };
+  }
   xhttp.open("GET", url, true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
@@ -839,7 +850,7 @@ function buildReasonForTest() {
   var ul = document.createElement('ul');
   viewport.appendChild(ul);
 
-  var reasons = ['Routine','Targeted','Follow-up after high VL','Repeat'];
+  var reasons = ['Routine','Targeted','Confirmatory','Stat'];
   for(var i = 0 ; i < reasons.length ; i++){
     var li = document.createElement('li');
     li.innerHTML = reasons[i];
