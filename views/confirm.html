@@ -264,7 +264,7 @@ function getClient(patient_id) {
       
 
       buildIdentifiers(patient["patient_identifiers"]);
-      buildStates(obj);
+      buildStates(obj, patient_id);
       var orders = JSON.parse(this.responseText);
       buildOrders(orders["orders"].length);
       buildProgramInfo(patient_id);
@@ -378,30 +378,44 @@ function buildIdentifiers(identifiers) {
   container.appendChild(table);
 
 }
-function buildStates(identifiers) {
+function buildStates(identifiers, patient_id) {
 
   var identifiersHash = {};
-    if(identifiers["dead"] == 1) {
-      identifiersHash["Current Outcome"] = "Patient Died";
-      patientDead = true;
+  var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/programs/1/patients/' + patient_id;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+
+        identifiersHash["Current Outcome"] = ((results.current_outcome !== "N/A") ? results.current_outcome : "No Outcome Available");
+        var table = document.createElement("table");
+        table.setAttribute("class","info-tables");
+
+        for(identifier in identifiersHash) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.innerHTML = identifier;
+          tr.appendChild(td);
+
+          var td = document.createElement("td");
+          td.innerHTML = identifiersHash[identifier];
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+
+        var container = document.getElementById("section-body-4");
+        container.appendChild(table);
+      }
     }
-  var table = document.createElement("table");
-  table.setAttribute("class","info-tables");
-
-  for(identifier in identifiersHash) {
-    var tr = document.createElement("tr");
-    var td = document.createElement("td");
-    td.innerHTML = identifier;
-    tr.appendChild(td);
-
-    var td = document.createElement("td");
-    td.innerHTML = identifiersHash[identifier];
-    tr.appendChild(td);
-    table.appendChild(tr);
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    req.send(null);
+  } catch (e) {
   }
-
-  var container = document.getElementById("section-body-4");
-  container.appendChild(table);
 
 }
 function buildOrders(identifiers) {
