@@ -217,7 +217,7 @@ function buildOrderEntry() {
   
   var orderBTN = document.createElement('button');
   orderBTN.innerHTML = '<span>Order</span>';
-  orderBTN.setAttribute('class','button green navButton');
+  orderBTN.setAttribute('class','button blue navButton');
   orderBTN.setAttribute('onmousedown','orderTest();');
   orderBTN.setAttribute('id','order-entery-button');
   var root = document.getElementById('buttons');
@@ -244,10 +244,10 @@ function buildOrderEntry() {
 
 function removeOrderEntry() {
   orderBTN  = document.getElementById('order-entery-button');
-  resultBTN = document.getElementById('result-entery-button');
+  //resultBTN = document.getElementById('result-entery-button');
   var root = document.getElementById('buttons');
   root.removeChild(orderBTN); 
-  root.removeChild(resultBTN); 
+  //root.removeChild(resultBTN); 
 }
 
 function orderTest() {
