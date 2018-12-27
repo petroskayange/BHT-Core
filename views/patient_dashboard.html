@@ -646,7 +646,6 @@ modalConfirm(function(confirm){
               document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
 
               getValue(results[0], patient_id, "encounters", "h4", "table");
-              
               if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
                 document.getElementById("down").removeAttribute("disabled", "");
@@ -657,10 +656,11 @@ modalConfirm(function(confirm){
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="activateButton(this);changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
               moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
               encDate =  moment(results[0]).format("DD/MMM/YYYY");
               getMedication(patient_id, "table", "medication");
+              activateButton(document.getElementsByClassName("app-btn btn btn-primary")[0]);
               // getMedication(patient_id ,"encounters", "h4"034, &#034table&#034);
             if (counter == 4 || (results.length - (index + counter) == 1)) {
 
@@ -1203,6 +1203,16 @@ function buildFTAssessment(table, encounter_id){
   } catch (e) {
   
   }
+}
+
+function activateButton(button) {
+  var buttons = document.getElementsByClassName("app-btn btn btn-primary");
+
+  for (let index = 0; index < buttons.length; index++) {
+    buttons[index].style.backgroundColor = "white";
+  }
+
+  button.style.backgroundColor = "#204d74";
 }
     GetApplicationInfo();
 
