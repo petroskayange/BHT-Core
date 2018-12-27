@@ -1,5 +1,5 @@
 var SpecimenType;
-var locationID;
+var targetedLabName;
 var selectedPanels = [];
 var testDate;
 var selectedOrders = [];
@@ -432,7 +432,7 @@ function cancelOrder() {
   document.getElementById('orders-cover-div').style = 'display: none;';
 
   specimenType = null;
-  locationID = null;
+  targetedLabName = null;
   selectedPanels = [];
   testDate = null;
   selectedOrders = [];
@@ -1098,7 +1098,7 @@ function buildLabLocations() {
   var container = document.getElementById('input-container');
 
    var helpText = document.createElement('label');
-   helpText.innerHTML = 'Lab location <span style="font-size: 15px;">(where the sample(s) being sent)</span>';
+   helpText.innerHTML = 'Targeted lab <span style="font-size: 15px;">(where the sample(s) being sent)</span>';
    helpText.setAttribute('class','helpTextClass');
    container.appendChild(helpText);
 
@@ -1161,7 +1161,7 @@ function buildLabLocations() {
 function loadLocations() {
   var search_string = document.getElementById('input-lab-location').value;
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += '/locations?name='+search_string;      
+  url += '/programs/1/lab_tests/labs?name='+search_string;      
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -1171,10 +1171,10 @@ function loadLocations() {
       r.innerHTML = null;
       var ul = document.createElement('ul');
 
-      for(var i = 0 ; i < obj.length ; i++){
+      for(var i = 0 ; i < obj.sort().length ; i++){
         var li = document.createElement('li');
-        li.innerHTML = obj[i].name;
-        li.setAttribute('value', obj[i].location_id);
+        li.innerHTML = obj[i];
+        li.setAttribute('value', obj[i]);
         li.setAttribute('id', i);
         li.setAttribute('class', 'test-order-location');
         li.setAttribute('onmousedown', "selectLocation(this);");
@@ -1198,7 +1198,7 @@ function selectLocation(e) {
 
   e.style = 'background-color: lightblue;';
   document.getElementById('input-lab-location').value = e.innerHTML;
-  locationID = e.value;
+  targetedLabName = e.getAttribute("value");
 }
 
 function selectReason(e) {
@@ -1214,7 +1214,7 @@ function selectReason(e) {
 }
 
 function createOrder(e) {
-  if(locationID == undefined){
+  if(targetedLabName == undefined){
     showMessage('Please select Lab loacation');
     return;
   }else if(selectedPanels.length < 1){
@@ -1241,16 +1241,14 @@ function submitOrders() {
 } 
 
 function setOrders(encounter) {
-  //for(var i = 0 ; i < selectedPanels.length ; i++){
-    selectedOrders.push({
-      encounter_id: encounter.encounter_id,
-      test_types: selectedPanels,
-      date: testDate,
-      reason: reasonForTest,
-      target_lab: locationID,
-      specimenType: specimenType
-    });
-  //}
+  selectedOrders.push({
+    encounter_id: encounter.encounter_id,
+    test_types: selectedPanels,
+    date: testDate,
+    reason: reasonForTest,
+    target_lab: targetedLabName,
+    specimen_type: specimenType
+  });
 
   postOrders(selectedOrders[0]);
 }
