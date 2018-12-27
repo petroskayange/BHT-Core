@@ -250,16 +250,16 @@
       </div>
     <!-- /encounters details modal -->
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:60%;" aria-hidden="true" id="mi-modal">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content" style="margin-left: 50%; margin-right:10%;">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; " aria-hidden="true" id="mi-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">Are You sure you want to void this encounter?</h4>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" id="modal-btn-si">yes</button>
-            <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+            <button type="button" class="btn btn-default btn-lg" id="modal-btn-si">yes</button>
+            <button type="button" class="btn btn-primary btn-lg" id="modal-btn-no">No</button>
           </div>
         </div>
       </div>
@@ -1015,6 +1015,7 @@ function voidEncounter(id) {
     if (this.readyState == 4) {
       if(this.status == 200) {
         var results = JSON.parse(this.responseText);
+        console.log(results);
         try {
           var state = results.patient_states[0].state;
         }catch(e) {
