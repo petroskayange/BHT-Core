@@ -864,7 +864,7 @@ modalConfirm(function(confirm){
             dates[results[x].order.start_date] = "added";
             if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
               var d = new Date(results[x].order.start_date);
-              var f = moment(d).format("HH:mm A");
+              var f = moment(d).format("HH:mm");
               var name = results[x].drug.name;
               if(itemType === "table") {
                     var a = document.createElement("a");
