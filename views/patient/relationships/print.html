@@ -30,7 +30,7 @@ function printGuardianID() {
   var url = new URL(location.href);
   var person_id = parseInt(url.searchParams.get("guardian_id"));
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/patients/" + person_id + "/labels/national_health_id";
+  url += "/patients/" + person_id + "/labels/national_health_id"; 
   getDemographics(person_id);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
