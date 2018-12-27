@@ -294,7 +294,7 @@ function buildCalendar() {
       systemDate = document.getElementById("system-selected-date");
       var day = suggestedDay;
       if(day < 10)
-        day =  ('0' + day);
+        day = ('0' + day);
 
       var month = getFullMonthName((suggestedMonth - 1));  
       systemDate.innerHTML = day + "/" + month + "/" + suggestedYear;
