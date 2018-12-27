@@ -250,16 +250,16 @@
       </div>
     <!-- /encounters details modal -->
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:60%;" aria-hidden="true" id="mi-modal">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content" style="margin-left: 50%; margin-right:10%;">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; " aria-hidden="true" id="mi-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">Are You sure you want to void this encounter?</h4>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" id="modal-btn-si">yes</button>
-            <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+            <button type="button" class="btn btn-default btn-lg" id="modal-btn-si">yes</button>
+            <button type="button" class="btn btn-primary btn-lg" id="modal-btn-no">No</button>
           </div>
         </div>
       </div>
@@ -646,7 +646,6 @@ modalConfirm(function(confirm){
               document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
 
               getValue(results[0], patient_id, "encounters", "h4", "table");
-              
               if (index == 0 || index % 5 == 0) {
                 document.getElementById("up").setAttribute("disabled", "");
                 document.getElementById("down").removeAttribute("disabled", "");
@@ -657,10 +656,11 @@ modalConfirm(function(confirm){
 
             }
             div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
+              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="activateButton(this);changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
               moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
               encDate =  moment(results[0]).format("DD/MMM/YYYY");
               getMedication(patient_id, "table", "medication");
+              activateButton(document.getElementsByClassName("app-btn btn btn-primary")[0]);
               // getMedication(patient_id ,"encounters", "h4"034, &#034table&#034);
             if (counter == 4 || (results.length - (index + counter) == 1)) {
 
@@ -864,7 +864,7 @@ modalConfirm(function(confirm){
             dates[results[x].order.start_date] = "added";
             if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
               var d = new Date(results[x].order.start_date);
-              var f = moment(d).format("HH:mm A");
+              var f = moment(d).format("HH:mm");
               var name = results[x].drug.name;
               if(itemType === "table") {
                     var a = document.createElement("a");
@@ -1015,6 +1015,7 @@ function voidEncounter(id) {
     if (this.readyState == 4) {
       if(this.status == 200) {
         var results = JSON.parse(this.responseText);
+        console.log(results);
         try {
           var state = results.patient_states[0].state;
         }catch(e) {
@@ -1202,6 +1203,16 @@ function buildFTAssessment(table, encounter_id){
   } catch (e) {
   
   }
+}
+
+function activateButton(button) {
+  var buttons = document.getElementsByClassName("app-btn btn btn-primary");
+
+  for (let index = 0; index < buttons.length; index++) {
+    buttons[index].style.backgroundColor = "white";
+  }
+
+  button.style.backgroundColor = "#204d74";
 }
     GetApplicationInfo();
 
