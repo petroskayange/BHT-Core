@@ -2,6 +2,8 @@
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <script src="/assets/js/moment.js"></script>
 
+<script src="/apps/ART/assets/js/fast_track_alert.js"></script>
+
 <script src="/assets/js/generic_ajaxrequest.js"></script>
     <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css"> 
     <!-- <rel="stylesheet" href="/assets/css/maindashboard/headefooter.css">  -->
@@ -580,34 +582,15 @@ function buildProgramInfo(patient_id){
 }
 
 function buildFT(patient_id, table){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=9561';
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/on_fast_track?person_id=';
+  url += patient_id + '&date=' + sessionStorage.sessionDate;
   var req = new XMLHttpRequest();
   req.onreadystatechange = function(){
     if (this.readyState == 4) {
       if (this.status == 200) {
       var results = JSON.parse(this.responseText);
-      if(results.length > 0) {
-          buildFTAssessment(table, results[0].encounter_id);
-        }
-      }
-    }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-}
-function buildFTAssessment(table, encounter_id){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/encounters/'+encounter_id;
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      if(results.observations[0].value_coded == 1065) {
+      
+      if(results['continue FT'] == true) {
           var tr = document.createElement("tr");
           var td = document.createElement("td");
           td.setAttribute("colspan", 2);
@@ -615,6 +598,9 @@ function buildFTAssessment(table, encounter_id){
           td.style.color = "green";
           tr.appendChild(td);
           table.appendChild(tr);
+          
+          var finishButton = document.getElementById('continue');
+          setUpFTalert(finishButton);    
         }
       }
     }
@@ -733,5 +719,5 @@ function finish() {
   }
   
 }
-    
+
 </script>
