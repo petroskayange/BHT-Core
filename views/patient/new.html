@@ -703,7 +703,6 @@
     tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
     key="gender" ><option value=""></option>
       <option value="New Patient">New patient</option>
-      <!-- <option value="Transfer in">Transfer in</option> -->
       <option value="External consultation">External consultation</option></select>
 
   <select objectType="location" ajaxURL="/locations?name=" 
@@ -899,7 +898,6 @@ var answers_hash = {
 
 var patient_type_map = {
     "New patient": 7572,
-    // "Transfer in": 2536,
     "External consultation": 9684
 }
 
@@ -911,7 +909,11 @@ function postPatienttypeObs(encounter) {
     ]
   }; 
 
-  submitParameters(obs, "/observations")  
+  submitParameters(obs, "/observations", savePatienttypeThenRedirect(encounter))  
+}
+
+function savePatienttypeThenRedirect(encounter){
+  document.location = "/views/patient/print.html?person_id=" + encounter.patient_id;
 }
 
 function setNextButtonToGetInputValue(key){
@@ -982,7 +984,6 @@ function enrollPatient(person_id) {
   if (http.status == 201) {
     var v = JSON.parse(http.responseText);
     submitPatienttype(person_id);
-    document.location = "/views/patient/print.html?person_id=" + person_id;
 
   } else if (http.status == 409) {
   alert('Username already exists');
