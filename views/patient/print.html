@@ -41,7 +41,7 @@ function printFile(filename, text) {
 function redirectPage() {
   sessionStorage.showPregnantQuestion= 'true';
   sessionStorage.showWeightChart = 'true';
-  
+
   if(use_filing_number && parseInt(sessionStorage.programID) == 1){
     /* .............................. */
     var url = new URL(location.href);
@@ -57,13 +57,14 @@ var use_filing_number = false;
 
 function filingNumberActivated() {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/global_properties?property=use.filing.number";
-  
+  url += "/global_properties?property=use.filing.numbers";
+
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var ans = JSON.parse(this.responseText);
-      if(ans['use.filing.number'] == 'true'){
+      console.log(ans)
+      if(ans['use.filing.numbers'] == 'true'){
         use_filing_number = true;
       }
     }
@@ -118,13 +119,13 @@ printID();
 
 <div class="print-table">
   <div class="print-table-row">
-    
+
     <div class="print-table-cell">
       <img src="/assets/images/zebra-label-printer.jpeg" class="barcode" />
       <p>Printing barcode label.</p>
       <p>Please wait <blink>....</blink><p>
     </div>
-  
+
 
   </div>
 </div>
