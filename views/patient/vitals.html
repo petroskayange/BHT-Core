@@ -193,6 +193,40 @@ img {
 <script type="text/javascript">
   var patientID = sessionStorage.getItem("patientID");
   var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patientID;
+  
+  function getHeight(patient_id) {
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
+    url += "&date=" + moment(new Date(sessionStorage.sessionDate)).format('YYYY-MM-DD');
+    url += "&page_size=1";
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+            var obj = JSON.parse(this.responseText);
+            if (obj.length > 0) {
+              sessionStorage.currentHeightObsID = obj[0].obs_id;
+              var height = parseInt(obj[0].value_numeric);
+              if(height > 0) {
+                sessionStorage.currentHeight = height;
+                return height;
+              }else if(obj[0].value_text.length > 0) {
+                sessionStorage.currentHeight = parseInt(obj[0].value_text);
+                return parseInt(obj[0].value_text);
+              }else{
+                sessionStorage.currentHeight = 0;
+                return 0;
+              }
+            }
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
+}
+  
+getHeight(patientID);
 </script>
 
 

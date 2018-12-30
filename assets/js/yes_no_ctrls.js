@@ -22,17 +22,16 @@ function validateYesNo(concept_name) {
   values = values.split('#');
 
 	for(c in yesNo_Hash){
-		for(name in yesNo_Hash[c]){
-		
-			for(var j = 0 ; j < values.length; j++){
-				var concept = values[j].split(',')[0].trim();
-				if(!yesNo_Hash[concept_name][concept]){
-					showMessage('Please complete all selection(s) by clicking either Yes / No');
-					return;
-				}
-			}
+	  if(concept_name != c)
+      continue;
 
+  	for(name in yesNo_Hash[c]){
+      if(yesNo_Hash[c][name] == null){
+        showMessage('Please complete all selection(s) by clicking either Yes / No');
+        return;
+      }
 		}
+
 	}
 
   var nextButton =  document.getElementById('nextButton');

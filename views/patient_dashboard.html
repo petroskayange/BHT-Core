@@ -1015,7 +1015,6 @@ function voidEncounter(id) {
     if (this.readyState == 4) {
       if(this.status == 200) {
         var results = JSON.parse(this.responseText);
-        console.log(results);
         try {
           var state = results.patient_states[0].state;
         }catch(e) {
