@@ -46,7 +46,7 @@ function redirectPage() {
     /* .............................. */
     var url = new URL(location.href);
     var person_id = parseInt(url.searchParams.get("person_id"));
-    document.location = "/apps/ART/views/assign_filing_number.html?patient_id=" + person_id;
+    document.location = "/apps/ART/views/file_numbers.html?patient_id=" + person_id;
     /* .............................. */
   }else{
     nextEncounter(sessionStorage.patientID, 1, true);
@@ -74,8 +74,8 @@ function filingNumberActivated() {
   xhttp.send();
 }
 
-printID();
 filingNumberActivated()
+printID();
 </script>
 
 <style>
