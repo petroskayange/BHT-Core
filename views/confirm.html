@@ -351,13 +351,13 @@ function buildIdentifiers(identifiers) {
   var identifiersHash = {};
   for(var i = 0 ; i < identifiers.length ; i++) {
     if(identifiers[i]["identifier_type"] == 3) {
-      identifiersHash["NPID"] = identifiers[i]["identifier"];
+      identifiersHash["NPID"] = formatIdentifier(identifiers[i]["identifier"]);
     }else if(identifiers[i]["identifier_type"] == 4) {
       identifiersHash["ARV#"] = identifiers[i]["identifier"];
     }else if(identifiers[i]["identifier_type"] == 17) {
-      identifiersHash["Active filing#"] = identifiers[i]["identifier"];
+      identifiersHash["Active filing#"] = formatIdentifier(identifiers[i]["identifier"]);
     }else if(identifiers[i]["identifier_type"] == 18) {
-      identifiersHash["Archived filing#"] = identifiers[i]["identifier"];
+      identifiersHash["Archived filing#"] = formatIdentifier(identifiers[i]["identifier"]);
     }
   }
 
@@ -720,4 +720,22 @@ function finish() {
   
 }
 
+function formatIdentifier(identifier){
+  if(identifier.length == 6){
+    var id = identifier.substring(0, 3);
+    id += '-' + identifier.substring(3, 6);
+    identifier = id;
+  }else if(identifier.length == 10){
+    var id = identifier.substring(0, 5);
+    id += '-' + identifier.substring(5, 10);
+    identifier = id;
+  }else if(identifier.length == 13){
+    var id = identifier.substring(0, 5);
+    id += '-' + identifier.substring(5, 9);
+    id += '-' + identifier.substring(9, 13);
+    identifier = id;
+  }
+
+  return identifier;
+}
 </script>
