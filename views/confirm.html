@@ -313,7 +313,7 @@ function populatePatient(obj, obj_2) {
       buildIdentifiers(patient["patient_identifiers"]);
       buildStates(obj, patient_id);
       var orders = obj_2;
-      buildOrders(orders["orders"].length);
+      buildOrders(orders["orders"]);
       buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
