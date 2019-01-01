@@ -213,20 +213,65 @@ function insertData() {
   var url_string  = window.location;
   var url         = new URL(url_string);
   var patient_id  = url.searchParams.get("patient_id");
-  
-  getClient(patient_id);
+  var person_id = url.searchParams.get("person_id");
+  if(person_id != null) {
+    getClientbyID(person_id);
+  } else if (patient_id != null) {
+    getClient(patient_id);
+  } 
 }
 
 function getClient(patient_id) {
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id;
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_npid?npid=" + patient_id;
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText)[0];
+      var obj_2 = JSON.parse(this.responseText)[0];
+      // if(obj.length > 1) {
+        // location.href = "/views/duplicates.html?health_id="+ patient_id;
+      // }else {
+        populatePatient(obj, obj_2);
+      
+    }else if(this.status == 204) {
+      window.location.href = "/";
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function getClientbyID(person_id) {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + person_id;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      var patient = obj;
+      var obj_2 = JSON.parse(this.responseText);
+      // if(obj.length > 1) {
+        // location.href = "/views/duplicates.html?health_id="+ patient_id;
+      // }else {
+        populatePatient(obj, obj_2);
+      
+    }else if(this.status == 204) {
+      window.location.href = "/";
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+function populatePatient(obj, obj_2) {
+    var patient = obj;
       obj = obj["person"];
-
+      patient_id = patient["patient_id"];
+      sessionStorage.patientID = patient_id;
+      document.getElementById("continue").setAttribute("onmousedown", "finish("+patient_id+")");
       var names = obj["names"][0];
       var client_name = document.getElementById("client-name");
       client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -267,7 +312,7 @@ function getClient(patient_id) {
 
       buildIdentifiers(patient["patient_identifiers"]);
       buildStates(obj, patient_id);
-      var orders = JSON.parse(this.responseText);
+      var orders = obj_2;
       buildOrders(orders["orders"].length);
       buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
@@ -281,15 +326,8 @@ function getClient(patient_id) {
       var bmindex = (sessionStorage.currentWeight /sessionStorage.currentHeight/ sessionStorage.currentHeight) * 10000;
       bmindex = Math.round(bmindex * 10 ) / 10;
       getBMIResult(gender, roundedAge, bmindex);
-    }else if(this.status == 404) {
-      window.location.href = "/";
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send();
 }
+
 function getHeight(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort;
     url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
@@ -672,17 +710,14 @@ function buildFT(patient_id, table){
 
 <div class="buttonsDIV">
   <button class="red" style="float: left; margin-left: 10px;" onmousedown="location='/'">Cancel</button>
-  <button class="blue" style="float: right;" id="continue" onmousedown="finish();">Continue</button>
+  <button class="blue" style="float: right;" id="continue" >Continue</button>
 </div>
 
 
 
 <script>
 buildInfoBoxes();
-var url = new URL(url);
-var id = url.searchParams.get("patient_id");
-
-function finish() {
+function finish(id) {
   sessionStorage.patientID = id;
   if (patientDead == true) {
 
