@@ -229,11 +229,11 @@ function getClient(patient_id) {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText)[0];
       var obj_2 = JSON.parse(this.responseText)[0];
-      // if(obj.length > 1) {
-        // location.href = "/views/duplicates.html?health_id="+ patient_id;
-      // }else {
+      if(JSON.parse(this.responseText).length > 1) {
+        location.href = "/views/duplicates.html?health_id="+ patient_id;
+      }else {
         populatePatient(obj, obj_2);
-      
+      } 
     }else if(this.status == 204) {
       window.location.href = "/";
     }
