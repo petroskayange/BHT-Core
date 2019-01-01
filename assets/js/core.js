@@ -422,7 +422,7 @@ function buildDashboardButtons(tasks, container) {
     containerTableCell = document.createElement("div");
     containerTableCell.setAttribute("class","tasks-table-cell");
     containerTableCell.setAttribute("style","display: table-cell;");
-    if(tasks[i][0].match(/National ID/i)){
+    if(tasks[i][0].match(/National Health ID/i)){
       containerTableCell.setAttribute("onmousedown","printNPID();");
     }else{
       containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");

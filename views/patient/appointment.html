@@ -13,6 +13,9 @@
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 
 <style>
+.system-suggested-date {
+  background-color: gray;
+}
 
 .calendar-table {
   display: table;
@@ -359,6 +362,8 @@ function getNextAppointment(){
   selected_date.innerHTML = day + "/" + month + "/" + suggestedYear;
 }
 
+var systemSuggestedDate;
+
 function highlightSuggestedDay() {
   var cells = document.getElementsByClassName("calendar-boxes");
   var selDate = (suggestedYear + "-" + suggestedMonth + "-" + suggestedDay);
@@ -367,7 +372,22 @@ function highlightSuggestedDay() {
   for(var i = 0 ; i < cells.length ; i++){
     if(cells[i].getAttribute("date") == selDate){
       selectDate(cells[i]);
+      if(systemSuggestedDate == undefined){
+        var cellClass = cells[i].getAttribute('class');
+        cells[i].setAttribute('class', cellClass + ' system-suggested-date');
+        systemSuggestedDate = selDate;
+      }
     }
+
+    /* ................... */
+    if(systemSuggestedDate != undefined && cells[i].getAttribute("date") == systemSuggestedDate){
+      var cellClass = cells[i].getAttribute('class');
+      if(!cellClass.match(/system-suggested-date/i)){
+        cells[i].setAttribute('class', cellClass + ' system-suggested-date');
+      }
+    }
+    /* ................... */
+
   }
 
 }
