@@ -8,10 +8,196 @@
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 
+<style>
+.tt_controls_outcome_month #keyboard {
+  display: none !important;
+}
+
+#tt_page_outcome_month #viewport {
+  height: 95%;
+}
+
+#tt_page_outcome_month .inputFrameClass {
+  height: 88%;
+  width: 96%;
+}
+
+</style>
+
 <script>
 tt_cancel_destination = '/views/patient/programs.html';
 
 function passURL() {
+}
+
+function setAbsoluteMaxOutcomeYear(){
+  var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+  element.setAttribute("absoluteMax", (new Date().getFullYear()));
+  element.setAttribute("min", (new Date().getFullYear() - 100)); 
+  element.setAttribute("absoluteMin", (new Date().getFullYear() - 120)); 
+}
+
+function setUpPageForDateValidation() {
+  var nextBtn =  __$("nextButton");
+  nextBtn.setAttribute('onmousedown',"validateOutcomeDate();");
+  nextBtn.setAttribute('onclick',"");
+
+  if(transferring_out == false)
+    nextBtn.innerHTML = '<span>Finish</span>';
+
+}
+
+var set_dob;
+
+function validateOutcomeDate() {
+  setOutcomeDate();
+  var valid_date = validateEnteredDate(set_dob);
+
+  if(!valid_date){
+    showMessage("Invalid Date");
+    return;
+  }
+
+  currDate  = new Date();
+  currDate  = new Date(currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate());
+  setDate   = new Date(set_dob);
+  
+  if(setDate > currDate){
+    showMessage("Outcome date can not be more than the current date");
+    return;
+  }
+ 
+  if(transferring_out == true){ 
+    gotoNextPage();
+  }else{
+    submitOutcome();
+  }
+}
+
+function setOutcomeDate() {
+  try {
+    dob_year = document.getElementById('outcome_year').value; //getElementsByTagName("input")[0].value
+  }catch(e){ dob_year = dob_year }
+  try {
+    dob_month = document.getElementById('outcome_month').value; //getElementsByTagName("input")[0].getAttribute('tstvalue')
+    if (dob_month.length == 1)
+      dob_month = 0 + dob_month
+  }catch(e){ dob_month = dob_month }
+  try {
+    dob_day = document.getElementById('outcome_day').value; //getElementsByTagName("input")[0].value
+    if(dob_day.length < 1)
+      dob_day = document.getElementById('touchscreenInput' + tstCurrentPage).value; //getElementsByTagName("input")[0].value
+
+    if (dob_day.length == 1)
+      dob_day = 0 + dob_day
+  }catch(e){ dob_day = dob_day }
+
+  set_dob = (dob_year + '-' + dob_month + '-' + dob_day)
+}
+  
+function validateMonth() {
+  var nextBtn =  __$("nextButton");
+  nextBtn.setAttribute('onmousedown',"validateOutcomeYearMonth();");
+  nextBtn.setAttribute('onclick',"");
+}
+
+function validateOutcomeYearMonth() {
+  setYear = parseInt(document.getElementById('outcome_year').value);
+  if(setYear == (new Date().getFullYear())){
+    var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+    var selectedMonth = parseInt(element.getAttribute('tstValue'));
+    var currMonth     = parseInt(new Date().getMonth() + 1);
+    if(selectedMonth > currMonth){
+      showMessage("Selected month is greater than current month");
+      return;
+    }
+  }
+
+  gotoNextPage();
+}
+
+function validateEnteredDate(inputText){
+  // Match the date format through regular expression
+  if(inputText.match(/-/i)) {
+
+    //Test which seperator is used '/' or '-'
+    var pdate = inputText.split('-');
+
+    var dd = parseInt(pdate[2]);
+    var mm  = parseInt(pdate[1]);
+    var yy = parseInt(pdate[0]);
+
+    if(dd == 0){
+      return false;
+    }
+
+    // Create list of days of a month [assume there is no leap year by default]
+    var ListofDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+    if (mm==1 || mm>2){
+      if (dd>ListofDays[mm-1]) {
+        //alert('Invalid date format!');
+        return false;
+      }
+    }
+  
+    if (mm==2) {
+      var lyear = false;
+      if ( (!(yy % 4) && yy % 100) || !(yy % 400)){
+        lyear = true;
+      }
+  
+      if ((lyear==false) && (dd>=29)) {
+        //alert('Invalid date format!');
+        return false;
+      }
+  
+      if ((lyear==true) && (dd>29)){
+        //alert('Invalid date format!');
+        return false;
+      }
+    }
+  }else{
+    //alert("Invalid date format!");
+    //document.form1.text1.focus();
+    return false;
+  }
+
+  return true;
+}
+
+var transferring_out = false;
+
+function transferringOut() {
+  var i = document.getElementById('states');
+  transferring_out = false;
+
+  if(parseInt(i.value) == 1744)
+    transferring_out = true;
+
+}
+
+function validateLocation() {
+  var nextBtn = document.getElementById('nextButton');
+  nextBtn.setAttribute('onmousedown','submitOutcome();');
+}
+
+function submitOutcome() { 
+
+  if(transferring_out == true) {
+   var location_id = document.getElementById('to_location').value;
+    if(location_id.length < 1) {
+      showMessage('Please enter TO location');
+      return;
+    } 
+  }
+
+  if(transferring_out == true) {
+    var location_id = document.getElementById('to_location').value;
+    var state = document.getElementById('states').value;
+    var outcome = 
+  }else{
+  }
+
 }
 
 </script>
@@ -33,6 +219,44 @@ function passURL() {
           tt_onUnload =""
           objectType="states" />
       
+        <input type="text" name="state_year" id="outcome_year" 
+          helpText="Outcome year" field_type="number"
+          absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxOutcomeYear();transferringOut();" 
+          tt_pageStyleClass="Numeric NumbersOnly" />
+
+        <select name="outcome_month" id="outcome_month" helpText="Outcome month" 
+          condition="$('outcome_year').value.toLowerCase() != 'unknown'" 
+          validationMessage="Please enter a valid date" tt_onUnLoad="" 
+          tt_onLoad="validateMonth();__$(keyboard).style.display = none;">
+            <option value=""></option>
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+            <!-- option value="Unknown">Unknown</option -->
+          </select>
+
+          <input type="text" name="outcome_day" 
+            id="outcome_day" 
+            field_type="number" helpText="Outcome Day" 
+            condition="($('outcome_year').value != 'Unknown') && ($('outcome_month').value != 'Unknown')" 
+            tt_onLoad="getDayOfMonthPicker($('outcome_year').value, $('outcome_month').value);setUpPageForDateValidation();" 
+            tt_onUnLoad="" />
+
+          <select objectType="location" ajaxURL="/locations?name=" 
+            condition="transferring_out == true" 
+            field_type="alpha" 
+            helpText="Transfer out location" 
+            id="to_location" name="to_location" 
+            tt_onLoad="validateLocation();"></select>
       
       </form>
 
