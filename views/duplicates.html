@@ -87,7 +87,24 @@ function getClient() {
 }
 
 function reassignID() {
-    console.log(patientID);
+    var http = new XMLHttpRequest();
+    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/'+patientID+ "/npid";
+    http.open('POST', url, true);
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+    if (http.readyState == 4) {
+        if (http.status == 201) {
+                var v = JSON.parse(http.responseText);
+                window.location.href = '/views/confirm.html?patient_id='+v.new_identifier.identifier;
+            } else if (http.status == 409) {
+                alert('Username already exists');
+            } else {
+                alert('error' + http.status);
+            }
+    }
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    http.send();
 }
 function changeNextButton() {
     var nextButton =  document.getElementById('nextButton');
