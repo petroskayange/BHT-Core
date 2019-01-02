@@ -214,7 +214,7 @@ function insertData() {
   var url         = new URL(url_string);
   var patient_id  = url.searchParams.get("patient_id");
   var person_id = url.searchParams.get("person_id");
-  person_id = ("05X-YCR-").replace(/-/g, "");
+  patient_id = (patient_id).replace(/-/g, "");
   if(person_id != null) {
     getClientbyID(person_id);
   } else if (patient_id != null) {
