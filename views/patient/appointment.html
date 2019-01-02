@@ -13,6 +13,10 @@
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 
 <style>
+#system-selected-date {
+  visibility: collapse;
+}
+
 .system-suggested-date {
   background-color: gray;
 }
@@ -346,7 +350,7 @@ function buildDisplayArea() {
     tr.appendChild(td);
 
     if(i == 4)
-      td.setAttribute('style','visibility: collapse;');
+      tr.setAttribute('style','visibility: collapse;');
   
   } 
 
