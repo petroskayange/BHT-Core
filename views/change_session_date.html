@@ -56,9 +56,9 @@ function submitDate() {
     day = '0' + day;
 
   var set_date = (year + '-' + month + '-' + day);
-  set_date = new Date(set_date);
-
-  if(set_date > (new Date())) {
+  set_date = moment(new Date(set_date)).format('YYYY-MM-DD');
+  
+  if(set_date > moment(new Date()).format('YYYY-MM-DD')) {
     showMessage('Date is greater than current date');
     return;
   }

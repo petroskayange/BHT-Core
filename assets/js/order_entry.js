@@ -460,7 +460,7 @@ function getOrders() {
           var evenODD = i % 2 == 0 ? "odd" : "even";
           
           var tr = document.createElement('tr');
-          tr.setAttribute('class','row_' + evenODD);
+          tr.setAttribute('class','lab-orders row_' + evenODD);
           tbody.appendChild(tr);
 
           var td = document.createElement('td');
@@ -470,7 +470,8 @@ function getOrders() {
           }catch(e){
             td.innerHTML = '&nbsp;';
           }
-          td.setAttribute('style','text-align: left; padding-left: 5px;')
+          td.setAttribute('style','text-align: left; padding-left: 5px;');
+          td.setAttribute('class','test-names');
           tr.appendChild(td);
 
           var td = document.createElement('td');
@@ -484,6 +485,7 @@ function getOrders() {
           var td = document.createElement('td');
           try {
             td.innerHTML = obj[i].test_status.toUpperCase();
+            td.setAttribute('class','test-status');
           }catch(x) {
             td.innerHTML = '&nbsp;';
           }
@@ -525,13 +527,16 @@ function getOrders() {
 
           /* ................. all samples without results starts ................................. */
           try {
-            var results = obj[i].test_values
-            if(results.length < 1){
+            var results = obj
+            for(var k = 0 ; k < results.length ; k++){
+              if(results[k].test_values.length > 0)
+                continue;
+
               ordersWitoutResults.push({
                 order_date: moment(orders[x].date_ordered).format('DD/MMM/YYYY'),
                 accession_number: orders[x].accession_number,
-                test_type: obj[i].test_type,
-                test_name: obj[i].test_type
+                test_type: results[k].test_type,
+                test_status: results[k].test_status
               });
             }
           }catch(z) {
@@ -539,31 +544,10 @@ function getOrders() {
           }
           /* ................. ends ................................. */
 
-          /* ................ 
-          Getting all VL results to be use to calculate for next VL popup
-          */
-          if(obj[i].TestOrdered == 'HIV viral load'){
-            try {
-              var range = obj[i].lab_sample.lab_sample.Range
-            }catch(r) {
-              var range = null;
-            }
-            vlResults.push({
-              order_date: obj[i].OrderDate,
-              accession_number: obj[i].Pat_ID,
-              sample_id: obj[i].lab_sample.Sample_ID,
-              test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
-              test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
-              result: obj[i].lab_sample.lab_parameter.TESTVALUE,
-              range: range, 
-              result_date: obj[i].lab_sample.DATE
-            });
-          }
-          /* ......................... ends ............................... */
 
         }
-        getARTstartedDate();
       }
+      getARTstartedDate();
     };
   }
   xhttp.open("GET", url, true);
@@ -1258,7 +1242,8 @@ function setOrders(encounter) {
     date: testDate,
     reason: reasonForTest,
     target_lab: targetedLabName,
-    specimen_type: specimenType
+    specimen_type: specimenType,
+    requesting_clinician: sessionStorage.username
   });
 
   postOrders(selectedOrders[0]);
@@ -1582,7 +1567,6 @@ function updateOrder(order) {
 
 /* .......................... VL reminder ................................. */
 var earliest_start_dates;
-var vlResults = [];
 
 function dateDiffInDays(date1, date2){
   var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -1626,77 +1610,41 @@ function calculateVLreminder() {
   var date1 = new Date(sessionStorage.sessionDate);
   var date2 = new Date(earliest_start_date);
 
-  period_on_art = dateDiffInMonths(date1, date2);
-  
-  var resultsVLavailsble = false;
-  var vlOrdersDone = false;
-
-  for(var i = 0 ; i < vlResults.length; i++){
-    if(vlResults[i].result != null)
-      resultsVLavailsble = true;
-
-    vlOrdersDone = true;
-  }
-
-/*
-          vlResults.push({
-            order_date: obj[i].OrderDate,
-            accession_number: obj[i].Pat_ID,
-            sample_id: obj[i].lab_sample.Sample_ID,
-            test_name: obj[i].lab_sample.lab_parameter.test_type.TestName,
-            test_type: obj[i].lab_sample.lab_parameter.test_type.TestType,
-            result: obj[i].lab_sample.lab_parameter.TESTVALUE,
-            range: range,
-            result_date: obj[i].lab_sample.DATE
-          });*/
-
-  if(resultsVLavailsble) {
+  //period_on_art = dateDiffInMonths(date1, date2);
+ 
+  if(sessionStorage.sessionDate == moment().format('YYYY-MM-DD')) 
     checkIFwithVLBounds();
-  }else if(!resultsVLavailsble && vlOrdersDone) {
-    askForTheVLresults();
-  }else if(period_on_art >= 6){
-    vlAlert(period_on_art);
-  }
+
+  console.log(sessionStorage.sessionDate == moment().format('YYYY-MM-DD')) 
 
 }
 
+var VLdate;
+
 function checkIFwithVLBounds() {
-  var datesANDresults = {};
-  var latest_result_date;
+  var rows = document.getElementsByClassName('lab-orders');
+  for(var i = 0 ; i < rows.length ; i++){
+    var test = rows[i].children[0];
+    if(test.innerHTML.match(/viral/i)){
+      var vlD = (rows[i].children[1].innerHTML);
+      if(VLdate == undefined)
+        VLdate = moment(vlD).format('YYYY-MM-DD');
 
-  for(var i = 0 ; i < vlResults.length; i++){
-    try {
-      var result_date = new Date(vlResults[i].result_date);
-      datesANDresults[result_date] = {
-        result_date: vlResults.result_date,
-        result: vlResults.result,
-        range: vlResults.range
+      if(moment(vlD).format('YYYY-MM-DD') > VLdate){
+        VLdate = moment(vlD).format('YYYY-MM-DD');
       }
-      if(latest_result_date == undefined)
-        latest_result_date = result_date;
+   }   
 
-      if(latest_result_date > result_date)
-        latest_result_date = result_date;
-          
-    }catch(e){
-      continue;
-    }
   }
-
-  var date1 = new Date(sessionStorage.sessionDate);
-  var date2 = new Date(latest_result_date);
-  var period_gone = dateDiffInMonths(date1, date2);
   
   var earliest_start_date = (earliest_start_dates.earliest_start_date)
   var date1 = new Date(sessionStorage.sessionDate);
   var date2 = new Date(earliest_start_date);
   var period_on_art = dateDiffInMonths(date1, date2);
  
-  //if(period_gone < 6);
-    //return;
-  
   var time_bounds = [];
-  var cutoff = 12;
+  time_bounds.push({start: 3, end: 9});
+  var cutoff = 24;
   var i = 0;
   
   while(i <= 36) {
@@ -1704,9 +1652,21 @@ function checkIFwithVLBounds() {
     cutoff += 24  
     i++
   }
-  
-  if(period_on_art >= time_bounds.start && period_on_art <= time_bounds.end){
-    alertVL(latest_result_date, period_gone, period_on_art);
+
+  for(var i = 0 ; i < time_bounds.length ; i++){ 
+    if(period_on_art >= time_bounds[i].start && period_on_art <= time_bounds[i].end){
+      
+      if(VLdate != undefined){
+        var months_since_last_order =  dateDiffInMonths(new Date(sessionStorage.sessionDate), new Date(VLdate));
+        console.log('XXXXXXXX' + months_since_last_order);
+        if(months_since_last_order >= time_bounds[i].start && months_since_last_order <= time_bounds[i].end){
+          break;
+        }
+      }
+      
+      vlAlert(period_on_art);
+      break;
+    }
   }
 }
 
@@ -1791,19 +1751,8 @@ function vlAlert(period_on_art){
   popUpBox.style  = 'display: inline;';
   popUpBox.innerHTML = null;
 
-  resultsVLavailsble = false;
 
-  for(var i = 0 ; i < vlResults.length; i++){
-    if(vlResults[i].result != null)
-      resultsVLavailsble = true;
-
-  }
-
-
-  var message;
-  if(!resultsVLavailsble && period_on_art >= 6){
-    message = vlFirstMessage(period_on_art);
-  }
+  var message = vlFirstMessage(period_on_art);
 
 
   var p = document.createElement('p');
@@ -1812,8 +1761,6 @@ function vlAlert(period_on_art){
   cssText += 'margin-top: 10%;';
   p.style = cssText;
   popUpBox.appendChild(p);
-
-
 
 
 
@@ -1826,7 +1773,7 @@ function vlAlert(period_on_art){
   buttonContainerRow.setAttribute('class','buttonContainerRow');
   buttonContainer.appendChild(buttonContainerRow);
 
-  var cells = ['Cancel','Order VL'];
+  var cells = ['Remind later','Order VL'];
 
   for(var i = 0 ; i < cells.length ; i++){
     var buttonContainerCell = document.createElement('div');
@@ -1860,8 +1807,8 @@ function orderVLtest() {
 }
 
 function vlFirstMessage(months){
-  var message = "The patient has never been tested for VL before<br />";
-  message += "and it has been <b style='color: red;'>" + months + " </b>months since ART treatment<br />"
+  var message = "VL milestone has been reached<br />";
+  message += "It has been <b style='color: red;'>" + months + " </b>months since ART treatment<br />"
   message += "was started on the <b style='color: black;'>";
   message += formatDate(new Date(earliest_start_dates.earliest_start_date)) + '</b>';
 
@@ -1888,13 +1835,6 @@ function alertVL(latest_result_date,  period_gone, period_on_art) {
   popUpBox.style  = 'display: inline;';
   popUpBox.innerHTML = null;
 
-  resultsVLavailsble = false;
-
-  for(var i = 0 ; i < vlResults.length; i++){
-    if(vlResults[i].result != null)
-      resultsVLavailsble = true;
-
-  }
 
   var message = "<p>Latest VL recorded was on <span style='color:black;'>";
   message += formatDate(latest_result_date) + "</span>";
