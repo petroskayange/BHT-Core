@@ -44,9 +44,9 @@
                 var v = JSON.parse(http.responseText);
                 window.location.href = "show.html?user_id="+v.user.user_id;
               } else if (http.status == 409) {
-                alert("Username already exists");
+                showMessage("Username already exists");
               } else {
-                alert("error" + http.status);
+                showMessage("error" + http.status);
               }
             }
           }
