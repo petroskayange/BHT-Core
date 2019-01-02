@@ -1,0 +1,202 @@
+
+
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<style>
+    .order-table-cell {
+        /* background-color : red; */
+        height:100px;
+        /* width: px; */
+        border: solid 1px black;
+        margin-top: 1%;
+        float:left;
+        width:47%;
+        overflow:hidden;
+        margin-right: 1%;
+        margin-left: 1%;
+        box-shadow: 2px 2px 2px 2px #888888;
+        background-color: white;
+    }
+
+    #sides{
+    margin:0;
+    }
+    #left{
+    float:left;
+    width:48%;
+    overflow:hidden;
+    margin-right: 1%;
+    margin-left: 1%;
+    }
+    #right{
+    float:left;
+    width:48%;
+    overflow:hidden;
+    } 
+    #bottom-left{
+    float:left;
+    margin-right: 1%;
+    margin-left: 1%;
+    width:48%;
+    overflow:hidden;
+    }
+    #bottom-right{
+    float:left;
+    width:48%;
+    overflow:hidden;
+    }
+</style>
+<script type="text/javascript" src="/assets/js/yes_no_ctrls.js"></script>
+<link rel="stylesheet" href="/assets/css/yes_no_ctrls.css" type="text/css">
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/apps/ART/assets/js/arv_number.js"></script>
+<script type="text/javascript" src="/assets/js/moment.js"></script>
+
+<script>
+var apiProtocol = sessionStorage.apiProtocol;
+var apiURL = sessionStorage.apiURL;
+var apiPort = sessionStorage.apiPort;
+
+var programID = sessionStorage.getItem("programID");
+var tt_cancel_destination = "/";
+var patientID = null;
+
+function getClient() {
+  var url_string  = window.location;
+  var url         = new URL(url_string);
+  var patient_id  = url.searchParams.get("health_id");
+  
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_npid?npid=" + patient_id;
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      buildDuplicates(obj);
+    
+    }else if(this.status == 204) {
+      window.location.href = "/";
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+function reassignID() {
+    var http = new XMLHttpRequest();
+    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/'+patientID+ "/npid";
+    http.open('POST', url, true);
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+    if (http.readyState == 4) {
+        if (http.status == 201) {
+                var v = JSON.parse(http.responseText);
+                window.location.href = '/views/confirm.html?patient_id='+v.new_identifier.identifier;
+            } else if (http.status == 409) {
+                alert('Username already exists');
+            } else {
+                alert('error' + http.status);
+            }
+    }
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    http.send();
+}
+function changeNextButton() {
+    var nextButton =  document.getElementById('nextButton');
+    nextButton.setAttribute("onmousedown","reassignID();")
+}
+
+function selectRecord(element) {
+    patientID = element.id;
+    var all = document.getElementsByClassName("order-table-cell");
+    for (let index = 0; index < all.length; index++) {
+        all[index].style.backgroundColor = "#f0f0f0";        
+    }
+    element.style.backgroundColor = "#8cc08c";
+}
+
+
+function buildDuplicates(object) {
+    var frame = document.getElementById("inputFrame" + tstCurrentPage);
+    frame.style = "width: 96%; height: 90%; overflow: scroll;";
+    var orderTable = document.createElement("div");
+    orderTable.setAttribute("class","order-table");
+    frame.appendChild(orderTable);
+    var orderTableRow = document.createElement("div");
+    orderTableRow.setAttribute("class","order-table-row");
+    orderTable.appendChild(orderTableRow);
+
+    var cells = ["left","right", "bottom-left", "bottom-right"];
+    console.log(object);
+    for(var i = 0 ; i < object.length ; i++){
+        obj = object[i]["person"];
+        var dob = moment(obj["birthdate"]).format("DD/MMM/YYYY");
+
+        var gender = obj["gender"];
+
+        var ancestry_district = obj["addresses"][0]["address2"];
+        var ancestry_ta = obj["addresses"][0]["county_district"];
+        var ancestry_village = obj["addresses"][0]["neighborhood_cell"];
+
+        var current_district= obj["addresses"][0]["state_province"];
+        var current_ta = obj["addresses"][0]["township_division"];
+        var current_village = obj["addresses"][0]["city_village"];
+        var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
+        var patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
+        
+        var orderTableCell = document.createElement("div");
+        var name = document.createElement("div");
+        orderTableCell.setAttribute("onmousedown", "selectRecord(this);")
+        var table = document.createElement("table");
+        table.setAttribute("class","info-tables");
+
+        var identifiersHash = {};
+        var tr = document.createElement("tr");
+        tr.style.width = "100%";
+        tr.style.fontSize = "20px";
+        var td = document.createElement("td");
+        td.innerHTML = "Name: " + object[i].person.names[0].given_name + " " + object[i].person.names[0].family_name;
+        td.innerHTML += " (" + gender + ") <br/>Age / DOB: " + patientDOB + " " + roundedAge; 
+        tr.appendChild(td);
+        table.appendChild(tr);
+
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        tr.style.width = "100%";
+        tr.style.fontSize = "20px";
+        td.innerHTML = current_village;
+        var td = document.createElement("td");
+        td.innerHTML ="Residence: " + current_village;
+        tr.appendChild(td);
+        table.appendChild(tr);
+        orderTableCell.appendChild(table);
+        orderTableCell.setAttribute("class","order-table-cell");
+        orderTableCell.setAttribute("id",object[i].patient_id);
+        orderTable.appendChild(orderTableCell);
+    }
+
+}
+
+</script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+      <form>
+        <input type="text" name="duplicate ID's found"
+          tt_pageStyleClass="NoKeyboard"
+          tt_onLoad="__$('keyboard').style.display = 'none';changeNextButton();getClient();"
+          tt_pageStyleClass= "NoControls" helpText="Duplicate ID's found" />
+
+      </form>
+
+   </div>
+ </div>
+</body>
+
