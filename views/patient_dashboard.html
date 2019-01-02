@@ -1056,11 +1056,20 @@ function voidEncounter(id) {
     if (this.readyState == 4) {
       if (this.status == 200) {
       var results = JSON.parse(this.responseText);
+      var sideEffects = 0;
+      
       if(results.length > 0) {
+          for (var index = 0; index < results.length; index++) {
+            if (results[index].children[0].value_coded == 1065){
+              sideEffects ++;
+            }
+          }
           var tr = document.createElement("tr");
           tr.setAttribute("class", "alerts");
           var td = document.createElement("td");
-          td.innerHTML = "Patient Has Side Effects";
+          td.style.borderTop = "0";
+          tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
+          td.innerHTML = "Patient Has " +sideEffects +" Side Effect(s)";
           td.setAttribute("colspan", 2);
           tr.appendChild(td);
           table.appendChild(tr);
@@ -1068,12 +1077,12 @@ function voidEncounter(id) {
         }
       if (sessionStorage.bmiResult !== "null") {
         var tr = document.createElement("tr");
+        tr.style.display = "block";
         tr.setAttribute("class", "alerts");
         var td = document.createElement("td");
-        td.innerHTML = "Patient BMI is";
-        tr.appendChild(td);
-        var td = document.createElement("td");
-        td.innerHTML = sessionStorage.bmiResult;
+        td.innerHTML = "Patient BMI is "+ sessionStorage.bmiResult; 
+        td.style.borderTop = "0";
+        tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
         tr.appendChild(td);
         table.appendChild(tr);
       }
