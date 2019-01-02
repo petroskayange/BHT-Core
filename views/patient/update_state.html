@@ -1,0 +1,42 @@
+
+
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/assets/css/yes_no_ctrls.css" type="text/css">
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/moment.js"></script>
+
+<script>
+tt_cancel_destination = '/views/patient/programs.html';
+
+function passURL() {
+}
+
+</script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+
+      <form>
+        <input type="text" name="states" 
+          id="states" 
+          field_type="alpha" 
+          xhelpText="State"
+          helpText="States"
+          ajaxURL = "/programs/1/workflows"
+          setvalue = ""
+          tt_pageStyleClass = "NoKeyboard"
+          tt_onLoad="passURL();"
+          tt_onUnload =""
+          objectType="states" />
+      
+      
+      </form>
+
+   </div>
+ </div>
+</body>
+
