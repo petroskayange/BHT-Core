@@ -217,6 +217,7 @@ function insertData() {
   if(person_id != null) {
     getClientbyID(person_id);
   } else if (patient_id != null) {
+    patient_id = (patient_id).replace(/-/g, "");
     getClient(patient_id);
   } 
 }
@@ -285,22 +286,23 @@ function populatePatient(obj, obj_2) {
       var img = document.createElement("img");
       img.setAttribute("src","/assets/images/" + gender);
       icon.appendChild(img);
+      
+      if (obj["addresses"].length > 0 ) {
+        var ancestry_district = document.getElementById("ancestry-district");
+        var ancestry_ta       = document.getElementById("ancestry-ta");
+        var ancestry_village  = document.getElementById("ancestry-village");
+        ancestry_district.innerHTML = obj["addresses"][0]["county_district"];
+        ancestry_ta.innerHTML = obj["addresses"][0]["county_district"];
+        ancestry_village.innerHTML =obj["addresses"][0]["neighborhood_cell"];
 
-      var ancestry_district = document.getElementById("ancestry-district");
-      var ancestry_ta       = document.getElementById("ancestry-ta");
-      var ancestry_village  = document.getElementById("ancestry-village");
-      ancestry_district.innerHTML = obj["addresses"][0]["address2"];
-      ancestry_ta.innerHTML = obj["addresses"][0]["county_district"];
-      ancestry_village.innerHTML = obj["addresses"][0]["neighborhood_cell"];
-
-      var current_district = document.getElementById("current-district");
-      var current_ta       = document.getElementById("current-ta");
-      var current_village  = document.getElementById("current-village");
-      current_district.innerHTML  = obj["addresses"][0]["state_province"];
-      current_ta.innerHTML        = obj["addresses"][0]["township_division"];
-      current_village.innerHTML  = obj["addresses"][0]["city_village"];
-
-
+        var current_district = document.getElementById("current-district");
+        var current_ta       = document.getElementById("current-ta");
+        var current_village  = document.getElementById("current-village");
+        current_district.innerHTML  = obj["addresses"][0]["state_province"];
+        current_ta.innerHTML        = obj["addresses"][0]["township_division"];
+        current_village.innerHTML  = obj["addresses"][0]["city_village"];
+      }
+      
       var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
       sessionStorage.patientAge = roundedAge; 
       sessionStorage.patientGender = obj["gender"];
@@ -459,7 +461,9 @@ function buildStates(identifiers, patient_id) {
 
 }
 function buildOrders(identifiers) {
-  
+  if (identifiers == undefined) {
+    identifiers = 0;
+  }
   var table = document.createElement("table");
   table.setAttribute("class","info-tables");
 
@@ -522,10 +526,16 @@ function buildAlerts(patient_id){
     if (this.readyState == 4) {
       if (this.status == 200) {
       var results = JSON.parse(this.responseText);
+      var sideEffects = 0;
       if(results.length > 0) {
+          for (var index = 0; index < results.length; index++) {
+            if (results[index].children[0].value_coded == 1065){
+              sideEffects ++;
+            }
+          }
           var tr = document.createElement("tr");
           var td = document.createElement("td");
-          td.innerHTML = "Patient Has Side Effects";
+          td.innerHTML = "Patient Has " + sideEffects + " Side Effect(s)";
           td.setAttribute("colspan", 2);
           tr.appendChild(td);
           table.appendChild(tr);
