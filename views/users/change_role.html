@@ -63,9 +63,10 @@
         if (http.status == 200) {
           document.location = '/views/users/show.html?user_id=' + id;
         } else if (http.status == 400) {
-          alert("Bad Request");
+          showMessage("Bad Request");
         } else {
-          alert("error" + http.status);
+          showMessage("Please select value from list");
+          // alert("error" + http.status);
         }
       }
     }

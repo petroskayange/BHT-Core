@@ -276,7 +276,8 @@ function showUser(username, given_name, family_name, role, date_created) {
     document.getElementById("last_name").innerHTML = family_name;
     document.getElementById("username").innerHTML = username;
     document.getElementById("role").innerHTML = role;
-    document.getElementById("date_created").innerHTML = date_created;
+    document.getElementById("date_created").innerHTML = moment(sessionStorage.sessionDate).format('DD/MMM/YYYY');
+    // document.getElementById("date_created").innerHTML = date_created;    
 }
 
 function setUser() {
