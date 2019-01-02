@@ -1,6 +1,8 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <script src="/assets/js/moment.js"></script>
+<script src="/assets/js/httpUtils.js"></script>
+
 
 <script src="/apps/ART/assets/js/fast_track_alert.js"></script>
 
@@ -166,6 +168,7 @@ td,th {
 
 
 <script>
+  const apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`
   var patientDead = false;
 function buildInfoBoxes() {
   var infoBox = document.getElementsByClassName("info-table")[0];
@@ -316,7 +319,7 @@ function populatePatient(obj, obj_2) {
       buildStates(obj, patient_id);
       var orders = obj_2;
       buildOrders(orders["orders"]);
-      buildProgramInfo(patient_id);
+      buildProgramInfo();
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
       var gender = null;
@@ -590,76 +593,95 @@ function buildDefaulter(patient_id, table){
   
   }
 }
-function buildProgramInfo(patient_id){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/'+patient_id+'/next_appointment_date';
-  var req = new XMLHttpRequest();
-  var table = document.createElement("table");
-  table.setAttribute("class","info-tables");
-  var container = document.getElementById("section-body-3");
-  container.appendChild(table);
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-        var results = JSON.parse(this.responseText);
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        td.innerHTML = "Next Appointment Date";
-        tr.appendChild(td);
-        var td = document.createElement("td");
-        td.innerHTML = moment(results).format("DD/MMM/YYYY");
-        tr.appendChild(td);
-        table.appendChild(tr);
 
-      }else {
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        td.innerHTML = "No Appointment Date Available";
-        tr.appendChild(td);
-        table.appendChild(tr);
-      }
-    }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-  buildFT(patient_id, table);
+function buildProgramInfo(){
+  document.getElementById('section-body-3').innerHTML += `
+    <table class='info-tables'>
+      <tr>
+        <td>Next Appointment Date:</td>
+        <td id='nextAptDate'>N/A</td>
+      </tr>
+      <tr>
+        <td>ART Duration:</td>
+        <td id='artDuration'>N/A</td>  
+      </tr>
+      <tr>
+        <td>On Fast Track:</td>
+        <td id='onFastTrack'>N/A</td>
+      </tr>
+    </table>
+  `
+  populateNextAppointmentDate({ elementToUse: 'nextAptDate' })
+  populateArtDuration({ elementToUse: 'artDuration' })
+  populateOnFastTrack({ elementToUse: 'onFastTrack' })
 }
 
-function buildFT(patient_id, table){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/on_fast_track?person_id=';
-  url += patient_id + '&date=' + sessionStorage.sessionDate;
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      
-      if(results['continue FT'] == true) {
-          var tr = document.createElement("tr");
-          var td = document.createElement("td");
-          td.setAttribute("colspan", 2);
-          td.innerHTML = "Patient Is on fast track";
-          td.style.color = "green";
-          tr.appendChild(td);
-          table.appendChild(tr);
-          
-          var finishButton = document.getElementById('continue');
-          setUpFTalert(finishButton);    
-        }
+function populateNextAppointmentDate (options) {
+  GET (
+    {
+      url: `${apiPath}/patients/${fetchArgumentFromUrlString('person_id')}/next_appointment_date`,
+      async: true,
+      headers: {
+        'Authorization': sessionStorage.getItem('authorization')
+      }
+    },
+    {},
+    (data) => {
+      document.getElementById(options.elementToUse).innerText = moment(data).format('DD/MM/YYYY')
+    },
+    (error, status) => {
+      if (status === 404) {
+        document.getElementById(options.elementToUse).innerText = 'Not Available'
+      } else {
+        console.error(error)
       }
     }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
+  )
+}
+
+function populateArtDuration (options) {
+  GET (
+    {
+      url: `${apiPath}/programs/${sessionStorage.getItem('programID')}/patients/${fetchArgumentFromUrlString('person_id')}`,
+      async: true,
+      headers: {
+        'Authorization': sessionStorage.getItem('authorization')
+      }
+    },
+    {},
+    (data) => {
+      if (data.art_duration !== 'N/A') {
+        document.getElementById(options.elementToUse).innerText = `${data.art_duration} Month(s)`
+      }
+    },
+    (error, status) => {
+      console.error(error)
+    }
+  )
+}
+
+function populateOnFastTrack (options) {
+  GET (
+    {
+      url: `${apiPath}/on_fast_track?person_id=${fetchArgumentFromUrlString('person_id')}&date=${sessionStorage.getItem('sessionDate')}`,
+      async: true,
+      headers: {
+        'Authorization': sessionStorage.getItem('authorization')
+      }
+    },
+    {},
+    (data) => {
+      if (data['continue FT'] === true) {
+        document.getElementById(options.elementToUse).innerText = `Yes`
+        setUpFTalert(document.getElementById('continue'));
+      } else {
+        document.getElementById(options.elementToUse).innerText = `No`
+      }
+    },
+    (error, status) => {
+      console.error(error)
+    }
+  )
 }
 </script>
 
