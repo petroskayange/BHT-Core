@@ -22,7 +22,12 @@
 </style>
 
 <script>
-var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+if(sessionStorage.patientID == null || sessionStorage.patientID == 'null') {
+  var tt_cancel_destination = "/";
+}else{
+  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+}
 
 function setAbsoluteMaxYear() {
   var y = document.getElementById('touchscreenInput' + tstCurrentPage);
