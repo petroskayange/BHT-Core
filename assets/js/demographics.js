@@ -19,7 +19,7 @@ function getDemographics(patient_id) {
             sessionStorage.patientAge = roundedAge;
             sessionStorage.patientGender = obj["gender"];
             sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
-            sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
+            //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
             sessionStorage.currentWeight = 0;
             sessionStorage.previousWeight = 0;
             sessionStorage.currentHeight = 0;

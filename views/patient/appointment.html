@@ -294,13 +294,12 @@ function buildCalendar() {
 
   buildControls();
 
-      systemDate = document.getElementById("system-selected-date");
-      var day = suggestedDay;
-      if(day < 10)
-        day = ('0' + day);
-
-      var month = getFullMonthName((suggestedMonth - 1));  
-      systemDate.innerHTML = day + "/" + month + "/" + suggestedYear;
+  systemDate = document.getElementById("medication-runout-date");
+  systemDate.innerHTML = medication_runout_date;
+  
+  systemDate = document.getElementById("system-selected-date");
+  systemDate2 = document.getElementById("selected-date");
+  systemDate.innerHTML = systemDate2.innerHTML;
 }
 
 function buildDisplayArea() {
@@ -311,10 +310,11 @@ function buildDisplayArea() {
   container.appendChild(table);
 
   var tds = [
-    ["System set appointment date","system-selected-date"],
+    ["Medication run-out date","medication-runout-date"],
     ["User set appointment date","selected-date"],
     ["Appointment(s)","appointments"],
-    ["Appointment Limit (per/day)","appointment-limit"]
+    ["Appointment Limit (per/day)","appointment-limit"],
+    ["&nbsp;","system-selected-date"]
   ];
 
   for(var i = 0 ; i < tds.length ; i++){
@@ -345,6 +345,9 @@ function buildDisplayArea() {
     td.setAttribute("class","separator");
     tr.appendChild(td);
 
+    if(i == 4)
+      td.setAttribute('style','visibility: collapse;');
+  
   } 
 
   getLimit();
@@ -368,7 +371,7 @@ function highlightSuggestedDay() {
   var cells = document.getElementsByClassName("calendar-boxes");
   var selDate = (suggestedYear + "-" + suggestedMonth + "-" + suggestedDay);
   selDate = moment(selDate).format('YYYY-MM-DD'); 
-    
+   
   for(var i = 0 ; i < cells.length ; i++){
     if(cells[i].getAttribute("date") == selDate){
       selectDate(cells[i]);
@@ -548,7 +551,14 @@ function getMonthDates(current_date){
 
 function selectDate(e) {
   var selected_date;
-  selected_date = e.getAttribute("date").split("-")[2];
+  selected_date = e.getAttribute("date");
+  if((new Date(selected_date)) > (new Date(medication_runout_date))){
+    showMessage('Medication would have run-out on the selected date.</p>Select a different date.');
+    return;
+  } 
+  
+  selected_date = selected_date.split("-")[2];
+    
   if(selected_date.length < 2)
     selected_date = "0" + selected_date;
 
@@ -638,6 +648,8 @@ var suggestedYear;
 var suggestedMonth;
 var suggestedDay;
 
+var medication_runout_date;
+
 function getSuggestedAppointmentDate() {
   var patient_id = sessionStorage.patientID;
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/";
@@ -647,9 +659,14 @@ function getSuggestedAppointmentDate() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      suggestedYear  = parseInt(obj.split("-")[0]);
-      suggestedMonth = parseInt(obj.split("-")[1]);
-      suggestedDay   = parseInt(obj.split("-")[2]);
+      suggestedYear  = parseInt(obj.appointment_date.split("-")[0]);
+      suggestedMonth = parseInt(obj.appointment_date.split("-")[1]);
+      suggestedDay   = parseInt(obj.appointment_date.split("-")[2]);
+
+      try {
+        medication_runout_date = moment(obj.drugs_run_out_date).format('DD/MMM/YYYY');
+      }catch(e){
+      }
 
       currentSetDate = new Date(suggestedYear, (suggestedMonth - 1), 1);
       buildCalendar();

@@ -307,7 +307,7 @@ function populatePatient(obj, obj_2) {
       sessionStorage.patientAge = roundedAge; 
       sessionStorage.patientGender = obj["gender"];
       sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
-      sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
+      //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
       getHeight(patient_id);
       getWeight(patient_id);
       
