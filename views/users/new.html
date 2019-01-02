@@ -75,6 +75,18 @@
 <body id="">
   <div id="">
     <div id="content">
+      <style>
+      .tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+      .tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+      .tt_controls_username #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+      .tt_controls_password #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+      .tt_controls_confirm_password #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+      </style>
       <form method="POST">
         <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onUnload="getInput();" helpText="First name"
           key="given_name" allowFreeText="true" tt_onUnLoad="getInput();" ajaxURL="/search/given_name?search_string=" />
