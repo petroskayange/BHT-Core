@@ -1643,7 +1643,7 @@ function checkIFwithVLBounds() {
   var period_on_art = dateDiffInMonths(date1, date2);
  
   var time_bounds = [];
-  time_bounds.push({start: 3, end: 9});
+  time_bounds.push({start: 6, end: 12});
   var cutoff = 24;
   var i = 0;
   
@@ -1658,7 +1658,6 @@ function checkIFwithVLBounds() {
       
       if(VLdate != undefined){
         var months_since_last_order =  dateDiffInMonths(new Date(sessionStorage.sessionDate), new Date(VLdate));
-        console.log('XXXXXXXX' + months_since_last_order);
         if(months_since_last_order >= time_bounds[i].start && months_since_last_order <= time_bounds[i].end){
           break;
         }

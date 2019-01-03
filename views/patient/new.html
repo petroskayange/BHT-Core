@@ -702,12 +702,12 @@
     tt_onLoad="setNextButtonToGetInputValue('patient_type')"
     tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
     key="gender" ><option value=""></option>
-      <option value="New Patient">New patient</option>
+      <option value="New patient">New patient</option>
       <option value="External consultation">External consultation</option></select>
 
   <select objectType="location" ajaxURL="/locations?name=" 
     allowFreeText="true" 
-    condition="$('patient_type').value != 'New Patient'" 
+    condition="$('patient_type').value != 'New patient'" 
     field_type="alpha" 
     helpText="Please select facility name" 
     id="facility_name" 
@@ -902,18 +902,20 @@ var patient_type_map = {
 }
 
 function postPatienttypeObs(encounter) {
+  var patient_type = $('patient_type');
+  var ans = patient_type_map[patient_type.value];
   var obs = {
-    encounter_id: encounter["encounter_id"],
+    encounter_id: encounter.encounter_id,
     observations: [
-      { concept_id: 3289, value_coded: patient_type_map[answers_hash["patient_type"]]}
+      { concept_id: 3289, value_coded: ans }
     ]
   }; 
 
-  submitParameters(obs, "/observations", savePatienttypeThenRedirect(encounter))  
+  submitParameters(obs, "/observations", "savePatienttypeThenRedirect");  
 }
 
-function savePatienttypeThenRedirect(encounter){
-  document.location = "/views/patient/print.html?person_id=" + encounter.patient_id;
+function savePatienttypeThenRedirect(obs){
+  document.location = "/views/patient/print.html?person_id=" + obs[0].person_id;
 }
 
 function setNextButtonToGetInputValue(key){
