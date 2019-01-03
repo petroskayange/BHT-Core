@@ -590,7 +590,6 @@
   <input type="text" name="home_ta" 
   id="home_ta" field_type="alpha" 
   helpText="Home TA" 
-  ajaxURL=""
   condition="$('home_region').value != '4'"
   tt_requireNextClick = 'false'
   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
@@ -600,7 +599,6 @@
   <input type="text" name="home_village" 
   id="home_village" field_type="alpha" 
   helpText="Home Village" 
-  ajaxURL="" 
   condition="$('home_region').value != '4'"
   tt_requireNextClick = 'false'
   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
@@ -638,7 +636,6 @@
   <input type="text" name="current_ta" 
     id="current_ta" field_type="alpha" 
     helpText="Current TA" 
-    ajaxURL="" 
     condition="$('current_region').value != '4'"
     tt_requireNextClick = 'false'
     tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
@@ -648,7 +645,6 @@
   <input type="text" name="current_village" 
     id="current_village" field_type="alpha" 
     helpText="Current Village" 
-    ajaxURL="" 
     condition="$('current_region').value != '4'"
     tt_requireNextClick = 'false'
     tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
