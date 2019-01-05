@@ -1,6 +1,7 @@
 
 function submitParameters(parameters, url, returnToFunction) {
   try {
+    buildWall();
     showStatus();
   } catch (e) {
 
@@ -28,3 +29,27 @@ function submitParameters(parameters, url, returnToFunction) {
   xhttp.send(parametersPassed);
 }
 
+function buildWall() {
+  var divCover = document.createElement('div');
+  divCover.setAttribute('id','submit-cover');
+  var wBody = document.getElementsByTagName('body')[0];
+  
+  var span = document.createElement('span');
+  span.innerHTML = "<style>\
+    #submit-cover {\
+    position: absolute;\
+    background-color: black;\
+    width: 100%;\
+    height: 102%;\
+    left: 0%;\
+    top: 0%;\
+    z-index: 990;\
+    opacity: 0.65;\
+  }\
+  </style>";
+  
+  try {
+    wBody.appendChild(span);
+    wBody.appendChild(divCover);
+  }catch(i) {}
+}
