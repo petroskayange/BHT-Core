@@ -9,6 +9,10 @@
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 
 <style>
+#Unknown {
+  display: inline !important;
+}
+
 .tt_controls_outcome_month #keyboard {
   display: none !important;
 }
@@ -191,15 +195,66 @@ function submitOutcome() {
     } 
   }
 
+  var outcome_date = getOutcomeDate();
+
   if(transferring_out == true) {
-    var location_id = document.getElementById('to_location').value;
-    var state = document.getElementById('states').value;
-    var outcome = 
+    state = {
+      location_id: document.getElementById('to_location').value,
+      state: document.getElementById('states').value,
+      outcome_date: outcome_date
+    }
+  }else{
+    state = {
+      state: document.getElementById('states').value,
+      outcome_date: outcome_date
+    }
+  }
+
+  postState(state);
+}
+
+function getOutcomeDate() {
+  if(estimated_outcome_date != null || estimated_outcome_date != undefined){
+    return moment(estimated_outcome_date).format('YYYY-MM-DD');
+  }else{
+    return moment(set_dob).format('YYYY-MM-DD');
+  }
+}
+
+function postState(state) {
+  console.log(state);
+}
+
+var estimated_outcome_date;
+
+function calculatePeriod() {
+  var nextBtn = document.getElementById('nextButton');
+  nextBtn.setAttribute('onmousedown','estimateOutcomeDate();');
+  estimated_outcome_date = null;
+
+  if(transferring_out == false)
+    nextBtn.innerHTML = '<span>Finish</span>';
+
+}
+
+function estimateOutcomeDate() {
+  var outcome_period_estimated = $('outcome_period_estimated').value;
+  if(outcome_period_estimated.length < 1){
+    showMessage('Please estimate the outcome date');
+    return;
+  }  
+
+  var curr_date = sessionStorage.sessionDate;
+  curr_date = new Date(curr_date);
+  curr_date.setDate(curr_date.getDate() - outcome_period_estimated);
+  estimated_outcome_date = curr_date;
+
+  if(transferring_out == true){
+    gotoNextPage();
   }else{
   }
 
 }
-
 </script>
 
 <body id="mateme">
@@ -223,6 +278,18 @@ function submitOutcome() {
           helpText="Outcome year" field_type="number"
           absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxOutcomeYear();transferringOut();" 
           tt_pageStyleClass="Numeric NumbersOnly" />
+
+        <select name="outcome_period_estimated" 
+          id="outcome_period_estimated" helpText="Outcome estimated period" 
+          condition="$('outcome_year').value.toLowerCase() == 'unknown'" 
+          tt_onLoad="calculatePeriod();__$(keyboard).style.display = none;">
+            <option value=""></option>
+            <option value="168">6 months ago</option>
+            <option value="336">12 months ago</option>
+            <option value="504">18 months ago</option>
+            <option value="672">24 months ago</option>
+            <option value="1344">Over 2 years ago</option>
+        </select>
 
         <select name="outcome_month" id="outcome_month" helpText="Outcome month" 
           condition="$('outcome_year').value.toLowerCase() != 'unknown'" 

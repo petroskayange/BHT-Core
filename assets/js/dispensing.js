@@ -324,6 +324,13 @@ function doneDispensing(orders){
   var e = document.getElementById("nav-prescribed");
   setPage(e);
   checkIfDoneDispensing = true;
+
+  try {
+    var cover = document.getElementById('submit-cover');
+    cover.style = 'display: none;';
+  }catch(e) {}
+
+
 }
 
 var checkIfDoneDispensing = false;
@@ -331,7 +338,6 @@ var checkIfDoneDispensing = false;
 function dispensationDone() {
   var done = true;
   var amount_needed = document.getElementsByClassName("medication-amount-needed");
-  console.log(amount_needed)
 
   for(var i = 0 ; i < amount_needed.length ; i++){
     var amount = amount_needed[i].children[0].innerHTML

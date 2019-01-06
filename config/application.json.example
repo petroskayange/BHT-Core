@@ -49,6 +49,16 @@
     "available": true,
     "activitiesIcon": "/assets/images/fast-track.png",
     "url": "/apps/ART/views/encounters/fast_track.html"
+    },
+    "bp_management": {
+      "available": true,
+      "activitiesIcon": "/assets/images/dispensing.png",
+      "url": "/apps/ART/views/htn/bp_management.html"
+    },
+    "bp_alert": {
+      "available": true,
+      "activitiesIcon": "/assets/images/dispensing.png",
+      "url": "/apps/ART/views/htn/bp_alert.html"
     }
   },
   "activities": {
