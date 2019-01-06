@@ -154,8 +154,8 @@
            
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
               <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#programModal" onclick="populateProgramsModal();">
-                 <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Programs</div>
-                 <div class="list-group" id="programs">
+                 <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Lab Orders</div>
+                 <div class="list-group" id="programs" style="height: 100%; overflow: scroll;">
                 </div> 
                  <!-- <table class="table ">
                     <tbody id="programs">
@@ -791,7 +791,7 @@ modalConfirm(function(confirm){
       if (programs.innerHTML != null) {
         programs.innerHTML = "";
       } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id + '/programs/';
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/programs/1/lab_tests/orders?patient_id='+id;
       var req = new XMLHttpRequest();
 
       var listGroup = document.createElement("div");
@@ -803,8 +803,8 @@ modalConfirm(function(confirm){
           var results = JSON.parse(this.responseText);
           for (var x = 0; x < results.length; x++) {
             var d = new Date(results[x].date_enrolled);
-            var f = moment(d).format("HH:mm A");
-            var name = results[x].program.concept.concept_names[0].name;
+            var f = moment(results[x].OrderDate).format("DD/MMM/YYYY");
+            var name = results[x].lab_sample.lab_parameter.test_type.TestName.replace(/_/g, " ");
             if (itemType == "table") {
               var a = document.createElement("a");
               var aclass = "list-group-item d-flex justify-content-between";
@@ -831,8 +831,8 @@ modalConfirm(function(confirm){
 
             } else if (itemType == "button") {
               programs.innerHTML +=
-                '<button type="button" id="' + x + '" value="' + results[x].patient_program_id +
-                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getProgramData('+results[x].patient_program_id+')">' +
+                '<button type="button" id="' + x + '" value="' + x +
+                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="">' +
                 '<span class="h5">' + name.toUpperCase(); + '</span></button>';
             }
           }
@@ -852,7 +852,7 @@ modalConfirm(function(confirm){
       if (programs.innerHTML != null) {
         programs.innerHTML = "";
       } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id;
+      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&paginate=false";
       var req = new XMLHttpRequest();
 
       var listGroup = document.createElement("div");
