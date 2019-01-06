@@ -36,11 +36,6 @@
 <script>
   var setDataTable = null;
 
-  try {
-    var cover = document.getElementById('submit-cover');
-    cover.style = 'display: none;';
-  }catch(e) {}
-
   function initDataTable() {
     setDataTable = jQuery('#med-list').DataTable( {
       fixedHeader: true,
