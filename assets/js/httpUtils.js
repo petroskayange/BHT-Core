@@ -37,7 +37,11 @@ function GET (config, data = {}, successCallback, failureCallback) {
     } 
   }
 
-  request.open('GET', config.url + `?${encodeURI(buildParametersString(data))}`, config.async)
+  if (Object.keys(data).length < 1) {
+    request.open('GET', config.url, config.async)
+  } else {
+    request.open('GET', config.url + `?${encodeURI(buildParametersString(data))}`, config.async)
+  }
 
   Object.keys(config.headers).forEach((key) => {
     request.setRequestHeader(key, config.headers[key])

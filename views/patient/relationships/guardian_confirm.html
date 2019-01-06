@@ -185,7 +185,7 @@
     var v = JSON.parse(http.responseText);
     sessionStorage.patientID = sessionStorage.backupPatientID;
       getDemographics(backupPatientID);
-      window.location.href = "/views/patient/relationships/print.html?patient_id="+backupPatientID+"&guardian_id="+ guardianID;
+      window.location.href = "/views/patient/print.html?person_id="+backupPatientID+"&guardian_id="+ guardianID;
       
 
     } else if (http.status == 409) {
