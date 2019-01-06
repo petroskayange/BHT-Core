@@ -21,31 +21,6 @@ function init () {
   filingNumberIsActivated({
     authToken: sessionStorage.getItem('authorization')
   })
-
-  createPatientState(
-    {
-      patientId: PERSON_ID,
-      programId: PROGRAM_ID,
-      authToken: sessionStorage.getItem('authorization'),
-      stateName: PRE_ART_STATE_NAME,
-      success: (data) => {
-        printPersonInformation({
-          personId: PERSON_ID,
-          filename: PATIENT_FILE_LABEL
-        })
-        if (GUARDIAN_ID) {
-          printPersonInformation({
-            personId: GUARDIAN_ID,
-            filename: GUARDIAN_FILE_LABEL
-          })
-        }
-        //setTimeout(redirectPage, 5000)
-      },
-      error: (error) => {
-        console.error(error)
-      }
-    }
-  )
 }
 
 function setPatientDemographics (personId) {
@@ -121,7 +96,31 @@ function filingNumberIsActivated (options = {}) {
     },
     {},
     (data) => {
-      useFilingNumbers = (data['use.filing.numbers' === 'true']) ? true  : false
+      useFilingNumbers = (data['use.filing.numbers'] === 'true') ? true  : false
+      createPatientState(
+        {
+          patientId: PERSON_ID,
+          programId: PROGRAM_ID,
+          authToken: sessionStorage.getItem('authorization'),
+          stateName: PRE_ART_STATE_NAME,
+          success: (data) => {
+            printPersonInformation({
+              personId: PERSON_ID,
+              filename: PATIENT_FILE_LABEL
+            })
+            if (GUARDIAN_ID) {
+              printPersonInformation({
+                personId: GUARDIAN_ID,
+                filename: GUARDIAN_FILE_LABEL
+              })
+            }
+            setTimeout(redirectPage, 5000)
+          },
+          error: (error) => {
+            console.error(error)
+          }
+        }
+      )
     },
     (error) => {
       console.error(error)
