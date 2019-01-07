@@ -321,7 +321,7 @@ function populatePatient(obj, obj_2) {
       buildStates(obj, patient_id);
       var orders = obj_2;
       buildOrders(orders["orders"]);
-      buildProgramInfo();
+      buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
       var gender = null;
@@ -596,23 +596,29 @@ function buildDefaulter(patient_id, table){
   }
 }
 
-function buildProgramInfo() {
+function buildProgramInfo(patient_id) {
   document.getElementById('section-body-3').innerHTML += '<table class=\'info-tables\'><tr><td>Next Appointment Date:</td><td id=\'nextAptDate\'>N/A</td>' +
     '</tr><tr><td>ART Duration:</td><td id=\'artDuration\'>N/A</td></tr><tr><td>On Fast Track:</td><td id=\'onFastTrack\'>N/A</td></tr></table>';
-  populateNextAppointmentDate({ elementToUse: 'nextAptDate' });
-  populateArtDuration({ elementToUse: 'artDuration' });
-  populateOnFastTrack({ elementToUse: 'onFastTrack' });
+  populateNextAppointmentDate({ elementToUse: 'nextAptDate' }, patient_id);
+  populateArtDuration({ elementToUse: 'artDuration' }, patient_id);
+  populateOnFastTrack({ elementToUse: 'onFastTrack' }, patient_id);
 }
 
-function populateNextAppointmentDate(options) {
+function populateNextAppointmentDate(options, patient_id) {
   GET({
-    url: apiPath + '/patients/' + fetchArgumentFromUrlString('person_id') + '/next_appointment_date',
+    url: apiPath + '/observations?person_id='+patient_id+'&concept_id=5096',
     async: true,
     headers: {
       'Authorization': sessionStorage.getItem('authorization')
     }
   }, {}, function (data) {
-    document.getElementById(options.elementToUse).innerText = moment(data).format('DD/MM/YYYY');
+    var date = "";
+    try {
+      date = moment(data[0].value_datetime).format('DD/MMM/YYYY');
+    }catch(e) {
+      date = "Not Available";
+    }
+    document.getElementById(options.elementToUse).innerText = date;
   }, function (error, status) {
     if (status === 404) {
       document.getElementById(options.elementToUse).innerText = 'Not Available';
@@ -622,9 +628,9 @@ function populateNextAppointmentDate(options) {
   });
 }
 
-function populateArtDuration(options) {
+function populateArtDuration(options, patient_id) {
   GET({
-    url: apiPath + '/programs/' + sessionStorage.getItem('programID') + '/patients/' + fetchArgumentFromUrlString('person_id'),
+    url: apiPath + '/programs/' + sessionStorage.getItem('programID') + '/patients/' + patient_id,
     async: true,
     headers: {
       'Authorization': sessionStorage.getItem('authorization')
@@ -638,9 +644,9 @@ function populateArtDuration(options) {
   });
 }
 
-function populateOnFastTrack(options) {
+function populateOnFastTrack(options, patient_id) {
   GET({
-    url: apiPath + '/on_fast_track?person_id=' + fetchArgumentFromUrlString('person_id') + '&date=' + sessionStorage.getItem('sessionDate'),
+    url: apiPath + '/on_fast_track?person_id=' + patient_id + '&date=' + sessionStorage.getItem('sessionDate'),
     async: true,
     headers: {
       'Authorization': sessionStorage.getItem('authorization')
