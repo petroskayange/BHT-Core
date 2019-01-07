@@ -50,6 +50,11 @@
     "activitiesIcon": "/assets/images/fast-track.png",
     "url": "/apps/ART/views/encounters/fast_track.html"
     },
+    "htn_vitals": {
+      "available": true,
+      "activitiesIcon": "/assets/images/dispensing.png",
+      "url": "/apps/ART/views/htn/vitals.html"
+    },
     "bp_management": {
       "available": true,
       "activitiesIcon": "/assets/images/dispensing.png",
