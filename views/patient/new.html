@@ -920,11 +920,7 @@ function postPatienttypeObs(encounter) {
 }
 
 function savePatienttypeThenRedirect(obs){
-  if (__$('guardian_present').value == 'Yes'){
-    document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + obs[0].person_id;
-  } else {
-    document.location = "/views/patient/print.html?person_id=" + obs[0].person_id;
-  }
+  document.location = "/views/patient/print.html?person_id=" + obs[0].person_id;
 }
 
 function setNextButtonToGetInputValue(key){
@@ -964,7 +960,14 @@ function createPatient(person_id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 201) {
       var obj = JSON.parse(this.responseText);
-      enrollPatient(person_id);
+      if (__$('guardian_present').value == 'Yes'){
+        document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
+      } else {
+        // document.location = "../patient_dashboard.html?patient_id=" + person_id;
+        enrollPatient(person_id);
+      }
+      // enrollPatient(person_id);
+			// document.location = "../patient_dashboard.html?patient_id=" + person_id;
     }
   };
   xhttp.open("POST", url, true);
@@ -987,7 +990,8 @@ function enrollPatient(person_id) {
   if (http.readyState == 4) {
   if (http.status == 201) {
     var v = JSON.parse(http.responseText);
-    submitPatienttype(person_id)
+    submitPatienttype(person_id);
+
   } else if (http.status == 409) {
   alert('Username already exists');
   } else {
@@ -998,4 +1002,5 @@ function enrollPatient(person_id) {
   http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
   http.send(params);
 }
+
 </script>
