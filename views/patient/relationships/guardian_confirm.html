@@ -432,7 +432,7 @@ function postPatienttypeObs(encounter) {
 
 function savePatienttypeThenRedirect(obs){
   console.log(obs);
-  document.location = "/views/patient/print.html?person_id=" + sessionStorage.backupPatientID;
+  document.location = "/views/patient/print.html?person_id=" + sessionStorage.backupPatientID + "&guardian_id="+ guardianID;
 }
 
 function enrollPatient(person_id) {
