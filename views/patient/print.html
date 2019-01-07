@@ -1,11 +1,13 @@
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 <script type="text/javascript" src="/assets/js/demographics.js"></script>
+<script type="text/javascript" src="/assets/js/httpUtils.js"></script>
+<script type="text/javascript" src="/assets/js/patientState.js"></script>
 <script>
   var useFilingNumbers = false;
   var API_PATH = 'http://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
   var FILING_NUMBERS_ROUTE = '/apps/ART/views/file_numbers.html';
-  var PRE_ART_STATE_NAME = 'Pre-ART (Continue)';
+  var PRE_ART_STATE_NAME = 'Treatment never started';
   var PERSON_ID = fetchArgumentFromUrlString('person_id');
   var GUARDIAN_ID = fetchArgumentFromUrlString('guardian_id');
   var PROGRAM_ID = sessionStorage.getItem('programID');
