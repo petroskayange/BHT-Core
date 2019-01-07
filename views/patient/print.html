@@ -15,8 +15,39 @@
   var GUARDIAN_FILE_LABEL = 'guardianLabel.lbl';
 
   function init() {
-    filingNumberIsActivated({
-      authToken: sessionStorage.getItem('authorization')
+    createPatientState({
+      patientId: PERSON_ID,
+      programId: PROGRAM_ID,
+      authToken: sessionStorage.getItem('authorization'),
+      stateName: PRE_ART_STATE_NAME,
+      success: function success(data) {
+        printPersonInformation({
+          personId: PERSON_ID,
+          filename: PATIENT_FILE_LABEL
+        });
+        if (GUARDIAN_ID) {
+          printPersonInformation({
+            personId: GUARDIAN_ID,
+            filename: GUARDIAN_FILE_LABEL
+          });
+        }
+        filingNumberIsActivated({
+          authToken: sessionStorage.getItem('authorization')
+        });
+      },
+      error: function (_error2) {
+        function error(_x6) {
+          return _error2.apply(this, arguments);
+        }
+
+        error.toString = function () {
+          return _error2.toString();
+        };
+
+        return error;
+      }(function (error) {
+        console.error(error);
+      })
     });
   }
 
@@ -109,40 +140,10 @@
       }
     }, {}, function (data) {
       useFilingNumbers = data['use.filing.numbers'] === 'true' ? true : false;
-      createPatientState({
-        patientId: PERSON_ID,
-        programId: PROGRAM_ID,
-        authToken: sessionStorage.getItem('authorization'),
-        stateName: PRE_ART_STATE_NAME,
-        success: function success(data) {
-          printPersonInformation({
-            personId: PERSON_ID,
-            filename: PATIENT_FILE_LABEL
-          });
-          if (GUARDIAN_ID) {
-            printPersonInformation({
-              personId: GUARDIAN_ID,
-              filename: GUARDIAN_FILE_LABEL
-            });
-          }
-          setTimeout(redirectPage, 5000);
-        },
-        error: function (_error2) {
-          function error(_x6) {
-            return _error2.apply(this, arguments);
-          }
-
-          error.toString = function () {
-            return _error2.toString();
-          };
-
-          return error;
-        }(function (error) {
-          console.error(error);
-        })
-      });
-    }, function (error) {
-      redirectPage()
+      setTimeout(redirectPage, 5000);
+    }, function (error, status) {
+      console.error(error)
+      setTimeout(redirectPage, 5000)
     });
   }
 
