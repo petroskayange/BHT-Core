@@ -318,19 +318,22 @@ function postDispensation(order_id , amount_dispensed) {
     dispensations: [{date: sessionStorage.sessionDate, drug_order_id: order_id, quantity: amount_dispensed}]
   }
   submitParameters(drug_order, "/dispensations", "doneDispensing"); 
+
+  try {
+    var cover = document.getElementById('submit-cover');
+    cover.style = 'display: none;';
+  }catch(e) {}
 }
 
 function doneDispensing(orders){
   var e = document.getElementById("nav-prescribed");
   setPage(e);
   checkIfDoneDispensing = true;
-
+  
   try {
     var cover = document.getElementById('submit-cover');
     cover.style = 'display: none;';
   }catch(e) {}
-
-
 }
 
 var checkIfDoneDispensing = false;
