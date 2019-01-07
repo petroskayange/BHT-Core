@@ -94,7 +94,7 @@
     if (useFilingNumbers && parseInt(sessionStorage.programID) === 1) {
       document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
     } else {
-      nextEncounter(sessionStorage.patientID, 1, true);
+      nextEncounter(PERSON_ID, PROGRAM_ID, true);
     }
   }
 
@@ -142,7 +142,7 @@
         })
       });
     }, function (error) {
-      console.error(error);
+      redirectPage()
     });
   }
 

@@ -224,7 +224,6 @@ function postState(state) {
   var programId = fetchArgumentFromUrlString('program_id')
   var patientId = sessionStorage.getItem('patientID')
   var apiPath = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/programs/' + programId + '/patients/' + patientId + '/states';
-  console.log(state)
   POST (
     {
       url: apiPath,
@@ -244,9 +243,9 @@ function postState(state) {
     function (error) {
       console.error(error)
       showMessage('There was a problem updating the patient\'s state.')
-      //setTimeout(function() {
-      //  document.location = '/views/patient/programs.html'
-      //}, 3000)
+      setTimeout(function() {
+        document.location = '/views/patient/programs.html'
+      }, 3000)
     }
   )
 }
