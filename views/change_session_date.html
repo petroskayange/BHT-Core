@@ -64,8 +64,11 @@ function submitDate() {
   }
 
   sessionStorage.sessionDate = moment(set_date).format('YYYY-MM-DD');
-  nextEncounter(sessionStorage.patientID, 1, false);
-  document.location = tt_cancel_destination; 
+  if(parseInt(sessionStorage.patientID) > 0){
+    nextEncounter(sessionStorage.patientID, 1, true);
+  }else{
+    document.location = tt_cancel_destination; 
+  }
 }
 </script>
 

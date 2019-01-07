@@ -82,7 +82,13 @@ function showStates(program){
   program.style = 'background-color: lightblue;';
 
   //Add program update state button
-  var btn = document.createElement('button');
+  if(document.getElementById('update-state') == undefined) {
+    var btn = document.createElement('button');
+  }else{
+    var btn = document.getElementById('update-state');
+  }
+  
+  btn.setAttribute('id','update-state');
   btn.setAttribute('class','button blue navButton');
   btn.innerHTML = '<span>Update state</span>';
   btn.setAttribute('onmousedown','updateState(' + program.id + ');');
