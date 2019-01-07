@@ -244,9 +244,9 @@ function postState(state) {
       console.log(encodeURI(buildParametersString(state)))
       console.error(error)
       showMessage('There was a problem updating the patient\'s state.')
-      //setTimeout(function() {
-      //  document.location = '/views/patient/programs.html'
-      //}, 3000)
+      setTimeout(function() {
+        document.location = '/views/patient/programs.html'
+      }, 3000)
     }
   )
 }
