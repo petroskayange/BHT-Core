@@ -9,7 +9,27 @@
   </head>
   <body>
 <script>
-    var tt_cancel_destination = "/views/patient_dashboard.html";
+  var patient_id = sessionStorage.patientID;
+
+  function finish() {
+    window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+  }
+
+  function editName() {
+    document.location = '/views/patient/edit_demographics/name.html?patient_id='+ sessionStorage.patientID;
+  }
+
+  function editGender() {
+    document.location = '/views/patient/edit_demographics/gender.html?patient_id='+ sessionStorage.patientID;
+  }
+
+  function editBirthdate() {
+    document.location = '/views/patient/edit_demographics/birthdate.html?patient_id='+ sessionStorage.patientID;
+  }
+
+  function editAddresses() {
+    document.location = '/views/patient/edit_demographics/addresses.html?patient_id='+ sessionStorage.patientID;
+  }
 </script>
 
 <style>
@@ -94,7 +114,7 @@
     }
 
     .demographics_container {
-        background-color: #FFFFDF;
+        background-color: #FFF;
         margin: 20px 20px 20px 20px;
         overflow: auto;
     }
@@ -210,7 +230,7 @@
 
 
 <div class="demographics">
-  <div style="font-size: 2.3em; background-color: rgb(98, 129, 167); color: rgb(238, 238, 238); padding: 15px;" align="center">
+  <div style="font-size: 2.3em; background-color: rgb(112, 128, 144); color: rgb(238, 238, 238); padding: 15px;" align="center">
       Edit Demographics
   </div>
 
@@ -225,11 +245,11 @@
               <th class="data_header"><h2>Name</h2></th>
               <td class='data' style='border-width:1px 1px 1px'>
                 <p>
-                  John Doe
+                  &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/name/4">
+                <a onmousedown="editName();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -242,11 +262,11 @@
               </th>
               <td class='data'>
                 <p>
-                  Male
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/sex/4">
+                <a onmousedown="editGender();">
                     <span>
                         <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -259,11 +279,11 @@
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
                 <p>
-                  07/Apr/1984
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/age/4">
+                <a onmousedown="editBirthdate();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -276,28 +296,11 @@
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
                 <p>
-                  Balaka
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/district_of_residence/4">
-                    <span>
-                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
-                    </span>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th class="data_header">
-                <h2>Nearest health centre</h2>
-              </th>
-              <td class='data' style='border-width:1px 1px 1px'>
-                <p>
-                  Banja La Mstogolo (BLM) Nkhata
-                </p>
-              </td>
-              <td class='anchor_class'>
-                <a href="/demographic_modify/district_of_residence/4">
+                <a onmousedown="editAddresses();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -310,11 +313,11 @@
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
                 <p>
-                  Northern
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/location/4">
+                <a onmousedown="editAddresses();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -327,10 +330,11 @@
               </th>
               <td class='data'>
                 <p>
-                    Chitipa
+                     &nbsp;
                 </p>
               </td>
-              <td class='anchor_class'><a href="/demographic_modify/location/4">
+              <td class='anchor_class'>
+                <a onmousedown="editAddresses();">
                 <span>
                   <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                 </span></a>
@@ -342,11 +346,11 @@
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
                 <p>
-                  Chitipa Boma
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/location/4">
+                <a onmousedown="editAddresses();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>
@@ -359,11 +363,11 @@
               </th>
               <td class='data'>
                 <p>
-                    Airfield Staff houses
+                     &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/location/4">
+                <a onmousedown="editAddresses();">
                 <span>
                   <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                 </span></a>
@@ -375,24 +379,7 @@
               </th>
               <td class='data'>
                 <p>
-                    Unknown
-                </p>
-              </td>
-              <td class='anchor_class'>
-                <a href="/demographic_modify/phone_numbers/4">
-                    <span>
-                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
-                    </span>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th class="data_header">
-                <h2>Phone type</h2>
-              </th>
-              <td class='data'>
-                <p>
-                  Neighbour&#39;s phone
+                     &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
