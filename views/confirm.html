@@ -7,15 +7,15 @@
 <script src="/apps/ART/assets/js/fast_track_alert.js"></script>
 
 <script src="/assets/js/generic_ajaxrequest.js"></script>
-    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css"> 
-    <!-- <rel="stylesheet" href="/assets/css/maindashboard/headefooter.css">  -->
-    <link rel="stylesheet" href="/assets/css/custom.css">
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/js/moment.js"></script>
-    <script src="/assets/js/bmi.js"></script>
-    <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+<!-- <rel="stylesheet" href="/assets/css/maindashboard/headefooter.css">  -->
+<link rel="stylesheet" href="/assets/css/custom.css">
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/moment.js"></script>
+<script src="/assets/js/bmi.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <style>
-* {
+  * {
     -webkit-touch-callout:none;
     -webkit-user-select:none;
     -moz-user-select:none;
@@ -321,7 +321,7 @@ function populatePatient(obj, obj_2) {
       buildStates(obj, patient_id);
       var orders = obj_2;
       buildOrders(orders["orders"]);
-      buildProgramInfo();
+      buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
       var gender = null;
@@ -596,94 +596,71 @@ function buildDefaulter(patient_id, table){
   }
 }
 
-function buildProgramInfo(){
-  document.getElementById('section-body-3').innerHTML += `
-    <table class='info-tables'>
-      <tr>
-        <td>Next Appointment Date:</td>
-        <td id='nextAptDate'>N/A</td>
-      </tr>
-      <tr>
-        <td>ART Duration:</td>
-        <td id='artDuration'>N/A</td>  
-      </tr>
-      <tr>
-        <td>On Fast Track:</td>
-        <td id='onFastTrack'>N/A</td>
-      </tr>
-    </table>
-  `
-  populateNextAppointmentDate({ elementToUse: 'nextAptDate' })
-  populateArtDuration({ elementToUse: 'artDuration' })
-  populateOnFastTrack({ elementToUse: 'onFastTrack' })
+function buildProgramInfo(patient_id) {
+  document.getElementById('section-body-3').innerHTML += '<table class=\'info-tables\'><tr><td>Next Appointment Date:</td><td id=\'nextAptDate\'>N/A</td>' +
+    '</tr><tr><td>ART Duration:</td><td id=\'artDuration\'>N/A</td></tr><tr><td>On Fast Track:</td><td id=\'onFastTrack\'>N/A</td></tr></table>';
+  populateNextAppointmentDate({ elementToUse: 'nextAptDate' }, patient_id);
+  populateArtDuration({ elementToUse: 'artDuration' }, patient_id);
+  populateOnFastTrack({ elementToUse: 'onFastTrack' }, patient_id);
 }
 
-function populateNextAppointmentDate (options) {
-  GET (
-    {
-      url: `${apiPath}/patients/${fetchArgumentFromUrlString('person_id')}/next_appointment_date`,
-      async: true,
-      headers: {
-        'Authorization': sessionStorage.getItem('authorization')
-      }
-    },
-    {},
-    (data) => {
-      document.getElementById(options.elementToUse).innerText = moment(data).format('DD/MM/YYYY')
-    },
-    (error, status) => {
-      if (status === 404) {
-        document.getElementById(options.elementToUse).innerText = 'Not Available'
-      } else {
-        console.error(error)
-      }
+function populateNextAppointmentDate(options, patient_id) {
+  GET({
+    url: apiPath + '/observations?person_id='+patient_id+'&concept_id=5096',
+    async: true,
+    headers: {
+      'Authorization': sessionStorage.getItem('authorization')
     }
-  )
+  }, {}, function (data) {
+    var date = "";
+    try {
+      date = moment(data[0].value_datetime).format('DD/MMM/YYYY');
+    }catch(e) {
+      date = "Not Available";
+    }
+    document.getElementById(options.elementToUse).innerText = date;
+  }, function (error, status) {
+    if (status === 404) {
+      document.getElementById(options.elementToUse).innerText = 'Not Available';
+    } else {
+      console.error(error);
+    }
+  });
 }
 
-function populateArtDuration (options) {
-  GET (
-    {
-      url: `${apiPath}/programs/${sessionStorage.getItem('programID')}/patients/${fetchArgumentFromUrlString('person_id')}`,
-      async: true,
-      headers: {
-        'Authorization': sessionStorage.getItem('authorization')
-      }
-    },
-    {},
-    (data) => {
-      if (data.art_duration !== 'N/A') {
-        document.getElementById(options.elementToUse).innerText = `${data.art_duration} Month(s)`
-      }
-    },
-    (error, status) => {
-      console.error(error)
+function populateArtDuration(options, patient_id) {
+  GET({
+    url: apiPath + '/programs/' + sessionStorage.getItem('programID') + '/patients/' + patient_id,
+    async: true,
+    headers: {
+      'Authorization': sessionStorage.getItem('authorization')
     }
-  )
+  }, {}, function (data) {
+    if (data.art_duration !== 'N/A') {
+      document.getElementById(options.elementToUse).innerText = data.art_duration + ' Month(s)';
+    }
+  }, function (error, status) {
+    console.error(error);
+  });
 }
 
-function populateOnFastTrack (options) {
-  GET (
-    {
-      url: `${apiPath}/on_fast_track?person_id=${fetchArgumentFromUrlString('person_id')}&date=${sessionStorage.getItem('sessionDate')}`,
-      async: true,
-      headers: {
-        'Authorization': sessionStorage.getItem('authorization')
-      }
-    },
-    {},
-    (data) => {
-      if (data['continue FT'] === true) {
-        document.getElementById(options.elementToUse).innerText = `Yes`
-        setUpFTalert(document.getElementById('continue'));
-      } else {
-        document.getElementById(options.elementToUse).innerText = `No`
-      }
-    },
-    (error, status) => {
-      console.error(error)
+function populateOnFastTrack(options, patient_id) {
+  GET({
+    url: apiPath + '/on_fast_track?person_id=' + patient_id + '&date=' + sessionStorage.getItem('sessionDate'),
+    async: true,
+    headers: {
+      'Authorization': sessionStorage.getItem('authorization')
     }
-  )
+  }, {}, function (data) {
+    if (data['continue FT'] === true) {
+      document.getElementById(options.elementToUse).innerText = 'Yes';
+      setUpFTalert(document.getElementById('continue'));
+    } else {
+      document.getElementById(options.elementToUse).innerText = 'No';
+    }
+  }, function (error, status) {
+    console.error(error);
+  });
 }
 </script>
 
@@ -691,21 +668,21 @@ function populateOnFastTrack (options) {
   <div class="demographics-table-row">
     <div class="demographics-table-cell">
       <div style="border-style: solid; border-width: 0px 0px 1px 0px;">
-       
-       <table id="names">
-        
-        <tr>
-          <td id="gender-icon-container"></td>
-          <td id="client-name"></td>
-          <td id="client-dob"></td>
-        </tr>
 
-       </table>
-        
+        <table id="names">
+
+          <tr>
+            <td id="gender-icon-container"></td>
+            <td id="client-name"></td>
+            <td id="client-dob"></td>
+          </tr>
+
+        </table>
+
       </div>
-       
-       <table id="demographics-addresses">
-        
+
+      <table id="demographics-addresses">
+
         <tr>
           <th>Ancestry district:&nbsp;<td id="ancestry-district"></td>
           <th>Ancestry TA:&nbsp;<td id="ancestry-ta"></td>
@@ -718,7 +695,7 @@ function populateOnFastTrack (options) {
           <th>Current village:&nbsp;<td id="current-village"></td>
         </tr>
 
-       </table>
+      </table>
 
     </div>
   </div>
@@ -727,84 +704,85 @@ function populateOnFastTrack (options) {
 <div class="info-table">
 </div>
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal"
-    style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content" style="margin: 0; ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h1 class="modal-title" id="myModalLabel">Patient Has Died, are you sure you want to continue?</h1>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
-                <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
-            </div>
-        </div>
+  style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="margin: 0; ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Patient Has Died, are you sure you want to continue?</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="button green" id="modal-btn-si" style="float:left; text-align: center; width: 100px;">Yes</button>
+        <button type="button" class="button red" id="modal-btn-no" style="width: 100px;">No</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="buttonsDIV">
   <button class="red" style="float: left; margin-left: 10px;" onmousedown="location='/'">Cancel</button>
-  <button class="blue" style="float: right;" id="continue" >Continue</button>
+  <button class="blue" style="float: right;" id="continue">Continue</button>
 </div>
 
 
 
 <script>
-buildInfoBoxes();
-function finish(id) {
-  sessionStorage.patientID = id;
-  if (patientDead == true) {
+  buildInfoBoxes();
 
-  $("#mi-modal").modal('show');
-    var modalConfirm = function (callback) {
+  function finish(id) {
+    sessionStorage.patientID = id;
+    if (patientDead == true) {
+
+      $("#mi-modal").modal('show');
+      var modalConfirm = function (callback) {
         $("#continue").on("click", function () {
-            $("#mi-modal").modal('show');
+          $("#mi-modal").modal('show');
         });
 
         $("#modal-btn-si").on("click", function () {
-            callback(true);
-            $("#mi-modal").modal('hide');
+          callback(true);
+          $("#mi-modal").modal('hide');
         });
 
         $("#modal-btn-no").on("click", function () {
-            callback(false);
-            $("#mi-modal").modal('hide');
+          callback(false);
+          $("#mi-modal").modal('hide');
         });
-    };
+      };
 
-    modalConfirm(function (confirm) {
+      modalConfirm(function (confirm) {
         if (confirm) {
-            window.location.href = "/views/patient_dashboard.html?patient_id="+id;
+          window.location.href = "/views/patient_dashboard.html?patient_id=" + id;
         } else {
-            $("#mi-modal").modal('hide');
+          $("#mi-modal").modal('hide');
 
-            window.location.href = "/";
+          window.location.href = "/";
         }
-    });
-  }else {
-    sessionStorage.showWeightChart = true;
-    sessionStorage.showPregnantQuestion = true;
-    nextEncounter(sessionStorage.patientID , 1);
-  }
-  
-}
+      });
+    } else {
+      sessionStorage.showWeightChart = true;
+      sessionStorage.showPregnantQuestion = true;
+      nextEncounter(sessionStorage.patientID, 1);
+    }
 
-function formatIdentifier(identifier){
-  if(identifier.length == 6){
-    var id = identifier.substring(0, 3);
-    id += '-' + identifier.substring(3, 6);
-    identifier = id;
-  }else if(identifier.length == 10){
-    var id = identifier.substring(0, 5);
-    id += '-' + identifier.substring(5, 10);
-    identifier = id;
-  }else if(identifier.length == 13){
-    var id = identifier.substring(0, 5);
-    id += '-' + identifier.substring(5, 9);
-    id += '-' + identifier.substring(9, 13);
-    identifier = id;
   }
 
-  return identifier;
-}
+  function formatIdentifier(identifier) {
+    if (identifier.length == 6) {
+      var id = identifier.substring(0, 3);
+      id += '-' + identifier.substring(3, 6);
+      identifier = id;
+    } else if (identifier.length == 10) {
+      var id = identifier.substring(0, 5);
+      id += '-' + identifier.substring(5, 10);
+      identifier = id;
+    } else if (identifier.length == 13) {
+      var id = identifier.substring(0, 5);
+      id += '-' + identifier.substring(5, 9);
+      id += '-' + identifier.substring(9, 13);
+      identifier = id;
+    }
+
+    return identifier;
+  }
 </script>

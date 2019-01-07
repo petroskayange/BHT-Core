@@ -1,5 +1,3 @@
-
-
 <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
@@ -7,9 +5,10 @@
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
+<script type="text/javascript" src="/assets/js/httpUtils.js"></script>
 
 <style>
-#Unknown {
+  #Unknown {
   display: inline !important;
 }
 
@@ -29,7 +28,7 @@
 </style>
 
 <script>
-tt_cancel_destination = '/views/patient/programs.html';
+  tt_cancel_destination = '/views/patient/programs.html';
 
 function passURL() {
 }
@@ -222,7 +221,33 @@ function getOutcomeDate() {
 }
 
 function postState(state) {
-  console.log(state);
+  var programId = fetchArgumentFromUrlString('program_id')
+  var patientId = sessionStorage.getItem('patientID')
+  var apiPath = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/programs/' + programId + '/patients/' + patientId + '/states';
+  POST (
+    {
+      url: apiPath,
+      async: true,
+      headers: {
+        'Authorization': sessionStorage.getItem('authorization'),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    },
+    state,
+    function (data) {
+      showMessage('The patient\'s state was updated successfully.')
+      setTimeout(function() {
+        document.location = '/views/patient/programs.html'
+      }, 3000)
+    },
+    function (error) {
+      console.error(error)
+      showMessage('There was a problem updating the patient\'s state.')
+      setTimeout(function() {
+        document.location = '/views/patient/programs.html'
+      }, 3000)
+    }
+  )
 }
 
 var estimated_outcome_date;
@@ -262,72 +287,49 @@ function estimateOutcomeDate() {
     <div id="content">
 
       <form>
-        <input type="text" name="states" 
-          id="states" 
-          field_type="alpha" 
-          xhelpText="State"
-          helpText="States"
-          ajaxURL = "/programs/1/workflows"
-          setvalue = ""
-          tt_pageStyleClass = "NoKeyboard"
-          tt_onLoad="passURL();"
-          tt_onUnload =""
-          objectType="states" />
-      
-        <input type="text" name="state_year" id="outcome_year" 
-          helpText="Outcome year" field_type="number"
-          absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxOutcomeYear();transferringOut();" 
-          tt_pageStyleClass="Numeric NumbersOnly" />
+        <input type="text" name="states" id="states" field_type="alpha" xhelpText="State" helpText="States" ajaxURL="/programs/1/workflows"
+          setvalue="" tt_pageStyleClass="NoKeyboard" tt_onLoad="passURL();" tt_onUnload="" objectType="states" />
 
-        <select name="outcome_period_estimated" 
-          id="outcome_period_estimated" helpText="Outcome estimated period" 
-          condition="$('outcome_year').value.toLowerCase() == 'unknown'" 
-          tt_onLoad="calculatePeriod();__$(keyboard).style.display = none;">
-            <option value=""></option>
-            <option value="168">6 months ago</option>
-            <option value="336">12 months ago</option>
-            <option value="504">18 months ago</option>
-            <option value="672">24 months ago</option>
-            <option value="1344">Over 2 years ago</option>
+        <input type="text" name="state_year" id="outcome_year" helpText="Outcome year" field_type="number" absoluteMin="1900"
+          min="1900" tt_onLoad="setAbsoluteMaxOutcomeYear();transferringOut();" tt_pageStyleClass="Numeric NumbersOnly" />
+
+        <select name="outcome_period_estimated" id="outcome_period_estimated" helpText="Outcome estimated period"
+          condition="$('outcome_year').value.toLowerCase() == 'unknown'" tt_onLoad="calculatePeriod();__$(keyboard).style.display = none;">
+          <option value=""></option>
+          <option value="168">6 months ago</option>
+          <option value="336">12 months ago</option>
+          <option value="504">18 months ago</option>
+          <option value="672">24 months ago</option>
+          <option value="1344">Over 2 years ago</option>
         </select>
 
-        <select name="outcome_month" id="outcome_month" helpText="Outcome month" 
-          condition="$('outcome_year').value.toLowerCase() != 'unknown'" 
-          validationMessage="Please enter a valid date" tt_onUnLoad="" 
-          tt_onLoad="validateMonth();__$(keyboard).style.display = none;">
-            <option value=""></option>
-            <option value="1">Jan</option>
-            <option value="2">Feb</option>
-            <option value="3">Mar</option>
-            <option value="4">Apr</option>
-            <option value="5">May</option>
-            <option value="6">Jun</option>
-            <option value="7">Jul</option>
-            <option value="8">Aug</option>
-            <option value="9">Sep</option>
-            <option value="10">Oct</option>
-            <option value="11">Nov</option>
-            <option value="12">Dec</option>
-            <!-- option value="Unknown">Unknown</option -->
-          </select>
+        <select name="outcome_month" id="outcome_month" helpText="Outcome month" condition="$('outcome_year').value.toLowerCase() != 'unknown'"
+          validationMessage="Please enter a valid date" tt_onUnLoad="" tt_onLoad="validateMonth();__$(keyboard).style.display = none;">
+          <option value=""></option>
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+          <!-- option value="Unknown">Unknown</option -->
+        </select>
 
-          <input type="text" name="outcome_day" 
-            id="outcome_day" 
-            field_type="number" helpText="Outcome Day" 
-            condition="($('outcome_year').value != 'Unknown') && ($('outcome_month').value != 'Unknown')" 
-            tt_onLoad="getDayOfMonthPicker($('outcome_year').value, $('outcome_month').value);setUpPageForDateValidation();" 
-            tt_onUnLoad="" />
+        <input type="text" name="outcome_day" id="outcome_day" field_type="number" helpText="Outcome Day" condition="($('outcome_year').value != 'Unknown') && ($('outcome_month').value != 'Unknown')"
+          tt_onLoad="getDayOfMonthPicker($('outcome_year').value, $('outcome_month').value);setUpPageForDateValidation();"
+          tt_onUnLoad="" />
 
-          <select objectType="location" ajaxURL="/locations?name=" 
-            condition="transferring_out == true" 
-            field_type="alpha" 
-            helpText="Transfer out location" 
-            id="to_location" name="to_location" 
-            tt_onLoad="validateLocation();"></select>
-      
+        <select objectType="location" ajaxURL="/locations?name=" condition="transferring_out == true" field_type="alpha"
+          helpText="Transfer out location" id="to_location" name="to_location" tt_onLoad="validateLocation();"></select>
+
       </form>
 
-   </div>
- </div>
+    </div>
+  </div>
 </body>
-

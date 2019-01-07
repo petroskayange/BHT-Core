@@ -16,6 +16,7 @@
   <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="/assets/js/moment.js"></script>
   <script src="/assets/js/demographics.js"></script>
+    <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 </head>
 <body>  
   <script src="/assets/js/generic_ajaxrequest.js">
@@ -100,7 +101,7 @@
   var url = new URL(url);
   var guardianID = url.searchParams.get("guardian_identifier");
   sessionStorage.setItem("guardianID", guardianID);
-  // var p = sessionStorage.;
+  // var p = sessionStor age.;
   var selectedEncounterID = ""; 
   var elementId = "";
   sessionStorage.guardian_options = elementId;
@@ -185,7 +186,8 @@
     var v = JSON.parse(http.responseText);
     sessionStorage.patientID = sessionStorage.backupPatientID;
       getDemographics(backupPatientID);
-      window.location.href = "/views/patient/relationships/print.html?patient_id="+backupPatientID+"&guardian_id="+ guardianID;
+      enrollPatient(backupPatientID);
+      // window.location.href = "/views/patient/relationships/print.html?patient_id="+backupPatientID+"&guardian_id="+ guardianID;
       
 
     } else if (http.status == 409) {
@@ -389,6 +391,75 @@ function resetBackGroundColor(elementId){
     liElements[i].style = "";
   }
   document.getElementById(elementId).style.backgroundColor = "lightblue";
+}
+
+function submitPatienttype(patient_id) {
+  var currentTime = moment().format(' HH:mm:ss');
+  var encounter_datetime = moment(sessionStorage.sessionDate).format('YYYY-MM-DD'); 
+  encounter_datetime += currentTime;
+    
+  var encounter = {
+    encounter_type_name: 'REGISTRATION',
+    encounter_type_id:  5,
+    patient_id: patient_id,
+    encounter_datetime: encounter_datetime
+  }
+
+  submitParameters(encounter, "/encounters", "postPatienttypeObs");
+}
+
+var answers_hash = {
+    patient_type: ""
+}
+
+var patient_type_map = {
+    "New patient": 7572,
+    "External consultation": 9684
+}
+
+function postPatienttypeObs(encounter) {
+  var patient_type = $('patient_type');
+  var ans = patient_type_map[patient_type.value];
+  var obs = {
+    encounter_id: encounter.encounter_id,
+    observations: [
+      { concept_id: 3289, value_coded: ans }
+    ]
+  }; 
+
+  submitParameters(obs, "/observations", "savePatienttypeThenRedirect");  
+}
+
+function savePatienttypeThenRedirect(obs){
+  console.log(obs);
+  document.location = "/views/patient/print.html?person_id=" + sessionStorage.backupPatientID + "&guardian_id="+ guardianID;
+}
+
+function enrollPatient(person_id) {
+  sessionStorage.patientID = person_id;
+  var http = new XMLHttpRequest();
+  var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/'+person_id +"/programs/";
+  var params = JSON.stringify({
+  program_id: 1,
+  });
+  http.open('POST', url, true);
+  //Send the proper header information along with the request
+  http.setRequestHeader('Content-type', 'application/json');
+  http.onreadystatechange = function () { //Call a function when the state changes.
+  if (http.readyState == 4) {
+  if (http.status == 201) {
+    var v = JSON.parse(http.responseText);
+    submitPatienttype(person_id);
+
+  } else if (http.status == 409) {
+  alert('Username already exists');
+  } else {
+  alert('error' + http.status);
+  }
+  }
+  }
+  http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+  http.send(params);
 }
    </script>
 

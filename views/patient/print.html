@@ -1,118 +1,194 @@
-
-
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 <script type="text/javascript" src="/assets/js/demographics.js"></script>
+<script type="text/javascript" src="/assets/js/httpUtils.js"></script>
+<script type="text/javascript" src="/assets/js/patientState.js"></script>
 <script>
+  var useFilingNumbers = false;
+  var API_PATH = 'http://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
+  var FILING_NUMBERS_ROUTE = '/apps/ART/views/file_numbers.html';
+  var PRE_ART_STATE_NAME = 'Treatment never started';
+  var PERSON_ID = fetchArgumentFromUrlString('person_id');
+  var GUARDIAN_ID = fetchArgumentFromUrlString('guardian_id');
+  var PROGRAM_ID = sessionStorage.getItem('programID');
+  var PATIENT_FILE_LABEL = 'personData.lbl';
+  var GUARDIAN_FILE_LABEL = 'guardianLabel.lbl';
 
-function printID() {
-  var url = new URL(location.href);
-  var person_id = parseInt(url.searchParams.get("person_id"));
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/patients/" + person_id + "/labels/national_health_id";
-  getDemographics(person_id);
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-      var text = (this.responseText);
-      printFile("label.lbl", text);
-      setTimeout(redirectPage, 5000);
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send();
-}
+  function init() {
+    createPatientState({
+      patientId: PERSON_ID,
+      programId: PROGRAM_ID,
+      authToken: sessionStorage.getItem('authorization'),
+      stateName: PRE_ART_STATE_NAME,
+      success: function success(data) {
+        printPersonInformation({
+          personId: PERSON_ID,
+          filename: PATIENT_FILE_LABEL
+        });
+        if (GUARDIAN_ID) {
+          printPersonInformation({
+            personId: GUARDIAN_ID,
+            filename: GUARDIAN_FILE_LABEL
+          });
+        }
+        filingNumberIsActivated({
+          authToken: sessionStorage.getItem('authorization')
+        });
+      },
+      error: function (_error2) {
+        function error(_x6) {
+          return _error2.apply(this, arguments);
+        }
 
-function printFile(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
+        error.toString = function () {
+          return _error2.toString();
+        };
 
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
-function redirectPage() {
-  sessionStorage.showPregnantQuestion= 'true';
-  sessionStorage.showWeightChart = 'true';
-
-  if(use_filing_number && parseInt(sessionStorage.programID) == 1){
-    /* .............................. */
-    var url = new URL(location.href);
-    var person_id = parseInt(url.searchParams.get("person_id"));
-    document.location = "/apps/ART/views/file_numbers.html?patient_id=" + person_id;
-    /* .............................. */
-  }else{
-    nextEncounter(sessionStorage.patientID, 1, true);
+        return error;
+      }(function (error) {
+        console.error(error);
+      })
+    });
   }
-}
 
-var use_filing_number = false;
+  function setPatientDemographics(personId) {
+    getDemographics(personId);
+  }
 
-function filingNumberActivated() {
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  url += "/global_properties?property=use.filing.numbers";
+  function fetchPersonNationalId() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-      var ans = JSON.parse(this.responseText);
-      if(ans['use.filing.numbers'] == 'true'){
-        use_filing_number = true;
+    var url = API_PATH + '/patients/' + options.personId + '/labels/national_health_id';
+    var token = options.authToken;
+
+    var req = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MicrosoftXMLHTTP');
+    req.onload = function () {
+      if (req.status === 200) {
+        options.success(req.responseText);
+      } else if (req.status >= 400) {
+        options.error(error);
       }
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send();
-}
+    };
 
-filingNumberActivated()
-printID();
+    req.open('GET', url, options.async);
+    req.setRequestHeader('Authorization', options.authToken);
+    req.send();
+  }
+
+  function printPersonInformation() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    setPatientDemographics(options.personId);
+
+    fetchPersonNationalId({
+      personId: options.personId,
+      authToken: sessionStorage.getItem('authorization'),
+      async: true,
+      success: function success(data) {
+        print({
+          filename: options.filename,
+          data: data
+        });
+      },
+      error: function (_error) {
+        function error(_x3) {
+          return _error.apply(this, arguments);
+        }
+
+        error.toString = function () {
+          return _error.toString();
+        };
+
+        return error;
+      }(function (error) {
+        options.error(error);
+      })
+    });
+  }
+
+  function print() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var el = document.createElement('a');
+    el.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(options.data));
+    el.setAttribute('download', options.filename);
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    el.click();
+    document.body.removeChild(el);
+  }
+
+  function redirectPage() {
+    sessionStorage.showPregnantQuestion = 'true';
+    sessionStorage.showWeightChart = 'true';
+
+    if (useFilingNumbers && parseInt(sessionStorage.programID) === 1) {
+      document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
+    } else {
+      nextEncounter(PERSON_ID, PROGRAM_ID, true);
+    }
+  }
+
+  function filingNumberIsActivated() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    GET({
+      url: API_PATH + '/global_properties?property=use.filing.numbers',
+      async: true,
+      headers: {
+        'Authorization': options.authToken
+      }
+    }, {}, function (data) {
+      useFilingNumbers = data['use.filing.numbers'] === 'true' ? true : false;
+      setTimeout(redirectPage, 5000);
+    }, function (error, status) {
+      console.error(error)
+      setTimeout(redirectPage, 5000)
+    });
+  }
+
+  init();
 </script>
 
 <style>
-
-* {
--webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  * {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
-}
+  }
 
-.print-table {
-  display: table;
-  width: 99%;
-  height: 99%;
-}
+  .print-table {
+    display: table;
+    width: 99%;
+    height: 99%;
+  }
 
-.print-table-row {
-  display: table-row;
-}
+  .print-table-row {
+    display: table-row;
+  }
 
-.print-table-cell {
-  display: table-cell;
-  text-align: center;
-}
+  .print-table-cell {
+    display: table-cell;
+    text-align: center;
+  }
 
-.barcode {
-  margin-top: 5%;
-}
+  .barcode {
+    margin-top: 5%;
+  }
 
-.print-table-cell p {
-  font-size: 50px;
-}
-
+  .print-table-cell p {
+    font-size: 50px;
+  }
 </style>
 
 
@@ -122,7 +198,8 @@ printID();
     <div class="print-table-cell">
       <img src="/assets/images/zebra-label-printer.jpeg" class="barcode" />
       <p>Printing barcode label.</p>
-      <p>Please wait <blink>....</blink><p>
+      <p>Please wait <blink>....</blink>
+        <p>
     </div>
 
 

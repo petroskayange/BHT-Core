@@ -14,6 +14,14 @@
   <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="/assets/js/moment.js"></script>
   
+  <! -- ...................... -->
+  <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
+  <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
+
+  <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+  <script src="/assets/js/medication.history.js"></script>
+  <! -- ...................... -->
   
   <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
@@ -179,7 +187,7 @@
               </div>
            </div>
            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#medicationModal" onclick="populateMedicationModal();">
+              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#medicationModal" onmousedown="populateMedicationHistory();">
                  <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Medication</div>
                  <table class="table ">
                     <tbody id="medication">
@@ -774,9 +782,6 @@ modalConfirm(function(confirm){
       getPrograms(sessionStorage.patientID, "button", "programs2");
     }
     
-    function populateMedicationModal() {
-      getMedication(sessionStorage.patientID, "button", "medications2");
-    }
     function useHangingPillsDialog(){
         
         if(sessionStorage.getItem("medsPrescribed")){
