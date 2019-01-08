@@ -30,6 +30,11 @@ function submitParameters(parameters, url, returnToFunction) {
 }
 
 function buildWall() {
+  var submitCover = document.getElementById('submit-cover');
+  if (submitCover){
+      submitCover.parentNode.removeChild(submitCover);
+  }
+
   var divCover = document.createElement('div');
   divCover.setAttribute('id','submit-cover');
   var wBody = document.getElementsByTagName('body')[0];
