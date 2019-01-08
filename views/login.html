@@ -385,7 +385,9 @@ body {
       hideKeyboard();
       showKeyboard(focusInput, 'LOGIN');
     }else{
-      btn.style = "visibility: hidden;";
+      try {
+        btn.style = "visibility: hidden;";
+      }catch(z) {}
     }
   }
 
