@@ -1,35 +1,21 @@
 
 function displayFormatedBirthdate(dob, est){
-  var birthdate = new Date(dob);
+  var birthdate = moment(dob).format('DD/MMM/YYY');
   var estimated = parseInt(est);
-  var year      = birthdate.getFullYear();
-  var month     = birthdate.getMonth();
-  var day       = birthdate.getDay();
-
-  var months = new Array();
-  months[0] = "January";
-  months[1] = "February";
-  months[2] = "March";
-  months[3] = "April";
-  months[4] = "May";
-  months[5] = "June";
-  months[6] = "July";
-  months[7] = "August";
-  months[8] = "September";
-  months[9] = "October";
-  months[10] = "November";
-  months[11] = "December";
+  var year      = moment(dob).format('YYYY');
+  var month     = month(birthdate).format('MM');
+  var day       = moment(birthdate).format('DD');
 
   if(estimated == 1){
     if(month == 7 && day == 1){
       return ("??/???/" + year);
     }else if(day == 15){
-      return ("??/" + months[month] + "/" + year);
+      return ("??/" + month(dob).format('MMM') + "/" + year);
     }else{
-      return (day + "/" + months[month] + "/" + year);
+      return birthdate;
     }
   }
-  return (day + "/" + months[month] + "/" + year);
+  return birthdate;
 }
 
 
