@@ -75,17 +75,44 @@ function postID(identifier) {
 }
 
 function postGuardianID(identifier) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      // alert(iden)
-      // document.location = "/confirm/" + this.responseText;
-      document.location = guardian_index_url + "&guardian_identifier="+identifier;
-      // callbackFunction(this.responseText);
-    }
-  };
-  xhttp.open("GET", guardian_index_url + "&guardian_identifier=" + identifier, true);
-  xhttp.send();
+  // var xhttp = new XMLHttpRequest();
+  // xhttp.onreadystatechange = function() {
+  //   if (this.readyState == 4 && this.status == 200) {
+  //     // alert(iden)
+  //     // document.location = "/confirm/" + this.responseText;
+  //     document.location = guardian_index_url + "&guardian_identifier="+identifier;
+  //     // callbackFunction(this.responseText);
+  //   }
+  // };
+  // xhttp.open("GET", guardian_index_url + "&guardian_identifier=" + identifier, true);
+  // xhttp.send();
+
+    var idurl = new URL(location.href);
+    var patient_id = idurl.searchParams.get("patient_id");
+    guardian_id = (identifier).replace(/-/g, "");
+    // getClient(patient_id);
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_npid?npid=" + guardian_id;
+    guardian_index_url = "/views/patient/relationships/guardian_confirm.html?patient_id=" + patient_id;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+        var obj = JSON.parse(this.responseText)[0];
+        if(JSON.parse(this.responseText).length > 1) {
+          location.href = "/views/duplicates.html?health_id="+ guardian_id;
+        }else if(JSON.parse(this.responseText).length == 1) {
+          // populatePatient(obj, obj_2);
+          location.href = guardian_index_url+ "&guardian_identifier="+ obj.patient_id;
+        } else {
+          // location.href = "/";
+        }
+      }else if(this.status == 204) {
+        // window.location.href = "/";
+      }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
 }
 
 inserBarcodeScan();
