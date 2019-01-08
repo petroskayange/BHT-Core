@@ -13,6 +13,10 @@
 
 <script>
   var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+  function enroll () {
+    document.location = '/views/patient/enroll_patient_into_program.html'
+  }
 </script>
 
 <style>
@@ -21,6 +25,10 @@
 .main-table {
   display: table;
   width: 100%;
+}
+
+div {
+  overflow: scroll;
 }
 
 .table-row {
