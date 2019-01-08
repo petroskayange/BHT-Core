@@ -5,6 +5,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/assets/js/jquery.min.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/assets/js/moment.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/assets/js/birthdate_functions.js" defer="true"></script>
     <script language="javascript" type="text/javascript" src="/assets/js/generic_ajaxrequest.js" defer="true"></script>
 
@@ -448,7 +449,7 @@ function searchResults(results){
     people.push({});
     people.push({});
     
-    people[pos]["Patient National ID"]  = 'XXX';
+    people[pos]["Patient National ID"]  = null;
     people[pos]["Name"]                 = found_clients[i].given_name + " " + found_clients[i].family_name;
     people[pos]["Gender"]               = found_clients[i].gender;
     birthdate_estimated                 = found_clients[i].birthdate_estimated; 

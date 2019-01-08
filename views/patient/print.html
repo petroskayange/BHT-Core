@@ -1,11 +1,13 @@
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 <script type="text/javascript" src="/assets/js/demographics.js"></script>
+<script type="text/javascript" src="/assets/js/httpUtils.js"></script>
+<script type="text/javascript" src="/assets/js/patientState.js"></script>
 <script>
   var useFilingNumbers = false;
   var API_PATH = 'http://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
   var FILING_NUMBERS_ROUTE = '/apps/ART/views/file_numbers.html';
-  var PRE_ART_STATE_NAME = 'Pre-ART (Continue)';
+  var PRE_ART_STATE_NAME = 'Treatment never started';
   var PERSON_ID = fetchArgumentFromUrlString('person_id');
   var GUARDIAN_ID = fetchArgumentFromUrlString('guardian_id');
   var PROGRAM_ID = sessionStorage.getItem('programID');
@@ -13,8 +15,39 @@
   var GUARDIAN_FILE_LABEL = 'guardianLabel.lbl';
 
   function init() {
-    filingNumberIsActivated({
-      authToken: sessionStorage.getItem('authorization')
+    createPatientState({
+      patientId: PERSON_ID,
+      programId: PROGRAM_ID,
+      authToken: sessionStorage.getItem('authorization'),
+      stateName: PRE_ART_STATE_NAME,
+      success: function success(data) {
+        printPersonInformation({
+          personId: PERSON_ID,
+          filename: PATIENT_FILE_LABEL
+        });
+        if (GUARDIAN_ID) {
+          printPersonInformation({
+            personId: GUARDIAN_ID,
+            filename: GUARDIAN_FILE_LABEL
+          });
+        }
+        filingNumberIsActivated({
+          authToken: sessionStorage.getItem('authorization')
+        });
+      },
+      error: function (_error2) {
+        function error(_x6) {
+          return _error2.apply(this, arguments);
+        }
+
+        error.toString = function () {
+          return _error2.toString();
+        };
+
+        return error;
+      }(function (error) {
+        console.error(error);
+      })
     });
   }
 
@@ -92,7 +125,7 @@
     if (useFilingNumbers && parseInt(sessionStorage.programID) === 1) {
       document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
     } else {
-      nextEncounter(sessionStorage.patientID, 1, true);
+      nextEncounter(PERSON_ID, PROGRAM_ID, true);
     }
   }
 
@@ -107,40 +140,10 @@
       }
     }, {}, function (data) {
       useFilingNumbers = data['use.filing.numbers'] === 'true' ? true : false;
-      createPatientState({
-        patientId: PERSON_ID,
-        programId: PROGRAM_ID,
-        authToken: sessionStorage.getItem('authorization'),
-        stateName: PRE_ART_STATE_NAME,
-        success: function success(data) {
-          printPersonInformation({
-            personId: PERSON_ID,
-            filename: PATIENT_FILE_LABEL
-          });
-          if (GUARDIAN_ID) {
-            printPersonInformation({
-              personId: GUARDIAN_ID,
-              filename: GUARDIAN_FILE_LABEL
-            });
-          }
-          setTimeout(redirectPage, 5000);
-        },
-        error: function (_error2) {
-          function error(_x6) {
-            return _error2.apply(this, arguments);
-          }
-
-          error.toString = function () {
-            return _error2.toString();
-          };
-
-          return error;
-        }(function (error) {
-          console.error(error);
-        })
-      });
-    }, function (error) {
-      console.error(error);
+      setTimeout(redirectPage, 5000);
+    }, function (error, status) {
+      console.error(error)
+      setTimeout(redirectPage, 5000)
     });
   }
 

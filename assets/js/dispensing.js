@@ -297,8 +297,8 @@ function manualDispensation(order_id, amount_dispensed) {
 }
 
 function scannedMedicationBarcode(barcode) {
-  var drug_id   = barcode.split(" ")[0];
-  var quantity  = barcode.split(" ")[1];
+  var drug_id   = barcode.split("-")[0];
+  var quantity  = barcode.split("-")[1];
 
   var order_id = fetchedPrescriptions[drug_id];
   postDispensation(order_id, quantity);
