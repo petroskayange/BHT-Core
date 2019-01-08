@@ -297,7 +297,6 @@
           name="program_id"
           id="program_id"
           helpText="Please select a program"
-          condition="$('program_id').value != ''"
           validationMessage="Please select a program!"
           tt_onUnLoad=""
           tt_onLoad="__$(keyboard).style.display = none;"
@@ -362,9 +361,7 @@
           id="outcome_day"
           field_type="number"
           helpText="Outcome Day"
-          condition="($('outcome_year').value != 'Unknown') && ($('outcome_month').value != 'Unknown')"
-          tt_onLoad="getDayOfMonthPicker($('outcome_year').value, $('outcome_month').value);setUpPageForDateValidation();"
-          tt_onUnLoad=""
+          condition="$('outcome_year').value.toLowerCase() != 'unknown' && $('outcome_month').value.toLowerCase() != 'unknown'"
         />
       </form>
     </div>
