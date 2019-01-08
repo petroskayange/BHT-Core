@@ -360,28 +360,7 @@ function getTasks(encountersData) {
 }
 
 function printNPID() {
-  try {
-    showStatus();
-  } catch (e) {
-
-  }
-  
-  var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
-  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
-
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-      var obj = this.responseText;
-      console.log(obj)
-      download("label.lbl", obj)
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send();
-
+  print_and_redirect('/views/print/npid.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
 function download(filename, text) {
@@ -778,8 +757,11 @@ function GetApplicationReports() {
   obj.setAttribute("type","text/html");
   obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
 
-  //dvTable.style = "height: 430px; width: 98% !important; margin: 15px;";
   dvTable.appendChild(obj);
-
-
 }
+
+function print_and_redirect(url_forward, url_back) {
+  document.location = url_forward;
+}
+
+function redirect(url) { document.location = url; }
