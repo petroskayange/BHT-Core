@@ -7,6 +7,9 @@
 <script type="text/javascript" src="/assets/js/core.js"></script>
 <script type="text/javascript">
 var url = new URL(url);
+var apiProtocol = sessionStorage.apiProtocol;
+var apiURL = sessionStorage.apiURL;
+var apiPort = sessionStorage.apiPort;
 var id = url.searchParams.get("patient_id");
 sessionStorage.setItem("backupPatientID", id);
 
@@ -14,7 +17,7 @@ sessionStorage.setItem("backupPatientID", id);
     var iFrame = document.getElementById("inputFrame0");
     var barcodeDiv = document.createElement("div");
     barcodeDiv.setAttribute("class","barcode");
-    barcodeDiv.setAttribute("url", "/");
+    // barcodeDiv.setAttribute("url", "/");
     barcodeDiv.setAttribute("functionName", "postGuardianID");
     iFrame.appendChild(barcodeDiv);
 

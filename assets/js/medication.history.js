@@ -93,10 +93,10 @@ function addMedFooter(container) {
   container.appendChild(footer);
 
   var close_button = document.createElement('button');
-  close_button.setAttribute('class','button navButton blue');
+  close_button.setAttribute('class','button navButton red');
   close_button.setAttribute('id','med-footer-button');
   close_button.setAttribute('onmousedown','closeMedHistory();');
-  close_button.innerHTML = '<span>Close</span>';
+  close_button.innerHTML = '<span>&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</span>';
   footer.appendChild(close_button);
 }
 
