@@ -64,7 +64,7 @@
   document.location = url;
 
   function red() {
-    redirect('/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+    finishRedirect('/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
   }
     
   setTimeout('red()', 6000);

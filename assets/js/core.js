@@ -764,4 +764,4 @@ function print_and_redirect(url_forward, url_back) {
   document.location = url_forward;
 }
 
-function redirect(url) { document.location = url; }
+function finishRedirect(url) { document.location = url; }
