@@ -58,21 +58,31 @@
   function fetchPersonNationalId() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    var url = API_PATH + '/patients/' + options.personId + '/labels/national_health_id';
-    var token = options.authToken;
+    // var url = API_PATH + '/patients/' + options.personId + '/labels/national_health_id';
+    // var token = options.authToken;
 
-    var req = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MicrosoftXMLHTTP');
-    req.onload = function () {
-      if (req.status === 200) {
-        options.success(req.responseText);
-      } else if (req.status >= 400) {
-        options.error(error);
-      }
-    };
+    var url = "/patients/" + options.personId + "/labels/national_health_id"
+  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+  document.location = url;
 
-    req.open('GET', url, options.async);
-    req.setRequestHeader('Authorization', options.authToken);
-    req.send();
+  function red() {
+    redirect('/views/patient_dashboard.html?patient_id=' + options.personId);
+  }
+    
+  setTimeout('red()', 6000);
+
+    // var req = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MicrosoftXMLHTTP');
+    // req.onload = function () {
+    //   if (req.status === 200) {
+    //     options.success(req.responseText);
+    //   } else if (req.status >= 400) {
+    //     options.error(error);
+    //   }
+    // };
+
+    // req.open('GET', url, options.async);
+    // req.setRequestHeader('Authorization', options.authToken);
+    // req.send();
   }
 
   function printPersonInformation() {
