@@ -1,16 +1,16 @@
 
 function displayFormatedBirthdate(dob, est){
-  var birthdate = moment(dob).format('DD/MMM/YYY');
+  var birthdate = moment(dob).format('DD/MMM/YYYY');
   var estimated = parseInt(est);
   var year      = moment(dob).format('YYYY');
-  var month     = month(birthdate).format('MM');
+  var month     = moment(birthdate).format('MM');
   var day       = moment(birthdate).format('DD');
 
   if(estimated == 1){
     if(month == 7 && day == 1){
       return ("??/???/" + year);
     }else if(day == 15){
-      return ("??/" + month(dob).format('MMM') + "/" + year);
+      return ("??/" + month(dob).format('MMM/YYYY'));
     }else{
       return birthdate;
     }
