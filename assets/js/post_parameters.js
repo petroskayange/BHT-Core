@@ -30,7 +30,7 @@ function submitParameters(parameters, url, returnToFunction) {
 }
 
 function buildWall() {
-  var divCover = document.createElement('div');
+/*  var divCover = document.createElement('div');
   divCover.setAttribute('id','submit-cover');
   var wBody = document.getElementsByTagName('body')[0];
   
@@ -51,5 +51,5 @@ function buildWall() {
   try {
     wBody.appendChild(span);
     wBody.appendChild(divCover);
-  }catch(i) {}
+  }catch(i) {} */
 }
