@@ -61,17 +61,32 @@ function showStates(program){
   container.appendChild(table);
 
   var program_states = programsHash[program.getAttribute('program-name')];
+  var programHasStates = false
 
   for(var i = 0 ; i < program_states.length ; i++){
-    var tr = document.createElement('tr');
-    var td = document.createElement('td');
-    td.setAttribute('class','program-states');
-    //console.log(states[i]);
-    tr.appendChild(td);
-    /* ...................... */
-    buildStates(td, program_states[i]);
-    /* ...................... */
-    table.appendChild(tr);
+    if (program_states[i].length < 1) {
+      continue;
+    } else {
+      programHasStates = true
+
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
+      td.setAttribute('class','program-states');
+      tr.appendChild(td);
+      table.appendChild(tr);
+
+      buildStates(td, program_states[i]);
+    }
+  }
+
+  if (!programHasStates) {
+    var tableRow = document.createElement('tr')
+    tableRow.style.textAlign = 'center'
+    tableRow.style.fontSize = '1.4em'
+    var message = document.createElement('p')
+    message.innerText = 'This program has no states so far.'
+    tableRow.appendChild(message)
+    table.appendChild(tableRow)
   }
 
   var btns = document.getElementsByClassName('program-names');
@@ -102,45 +117,53 @@ function updateState(program_id) {
 }
 
 function buildStates(container, states) {
-  var table = document.createElement('table');
-  table.setAttribute('class','states');
-  container.appendChild(table);
+  var table = document.createElement('table')
+  table.setAttribute('class', 'states')
+  container.appendChild(table)
 
+  var headerRow = document.createElement('tr')
+
+  var stateHeader = document.createElement('th')
+  stateHeader.innerText = 'State'
+  headerRow.appendChild(stateHeader)
+
+  var startDateHeader = document.createElement('th')
+  startDateHeader.innerText = 'Start Date' 
+  headerRow.appendChild(startDateHeader)
+
+  var endDateHeader = document.createElement('th')
+  endDateHeader.innerText = 'End Date' 
+  headerRow.appendChild(endDateHeader)
+
+  table.style.padding = '4%'
+  table.setAttribute('cellpadding', '10px')
+
+  table.appendChild(headerRow)
+  
   for(var i = 0 ; i < states.length ; i++){
-    var tr = document.createElement('tr');
-    var th = document.createElement('th');
-    th.innerHTML = 'State:';
-    tr.appendChild(th);
-    var td = document.createElement('td');
-    td.innerHTML = stateName(states[i].state);
-    tr.appendChild(td);
-    table.appendChild(tr);
+    var dataRow = document.createElement('tr')
+    if (i % 2 == 0) {
+      dataRow.style.backgroundColor = 'grey'
+      dataRow.style.color = 'white'
+    }
 
-    var tr = document.createElement('tr');
-    var th = document.createElement('th');
-    th.innerHTML = 'Start date:';
-    tr.appendChild(th);
-    var td = document.createElement('td');
-    td.innerHTML = moment(states[i].start_date).format('DD/MMM/YYYY');
-    tr.appendChild(td);
-    table.appendChild(tr);
+    var statesName = document.createElement('td')
+    statesName.innerText = stateName(states[i].name)
+    dataRow.appendChild(statesName)
 
-    var tr = document.createElement('tr');
-    var th = document.createElement('th');
-    th.innerHTML = 'End date:';
-    tr.appendChild(th);
-    var td = document.createElement('td');
-    try {
-      if(states[i].end_date != null)
-        td.innerHTML = moment(states[i].end_date).format('DD/MMM/YYYY');
+    var startDate = document.createElement('td')
+    startDate.innerText = moment(states[i].start_date).format('DD/MMM/YYYY')
+    dataRow.appendChild(startDate)
 
-    }catch(z) {}
-    tr.appendChild(td);
-    table.appendChild(tr);
+    var endDate = document.createElement('td')
+    if (states[i].end_date != null) {
+      endDate.innerText = moment(states[i].end_date).format('DD/MMM/YYYY')
+    } else {
+      endDate.innerText = 'Current'
+    }
+    dataRow.appendChild(endDate)
 
-
-
-
+    table.appendChild(dataRow);
   }
 }
 
