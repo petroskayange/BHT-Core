@@ -24,7 +24,6 @@ function POST(config) {
   };
 
   request.open('POST', config.url, config.async);
-
   Object.keys(config.headers).forEach(function (key) {
     request.setRequestHeader(key, config.headers[key]);
   });

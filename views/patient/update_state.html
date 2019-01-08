@@ -30,8 +30,7 @@
 <script>
   tt_cancel_destination = '/views/patient/programs.html';
 
-function passURL() {
-}
+function passURL() {}
 
 function setAbsoluteMaxOutcomeYear(){
   var element = document.getElementById('touchscreenInput' + tstCurrentPage);
@@ -174,9 +173,9 @@ function transferringOut() {
   var i = document.getElementById('states');
   transferring_out = false;
 
-  if(parseInt(i.value) == 1744)
+  if(parseInt(i.value) == 1744) {
     transferring_out = true;
-
+  }
 }
 
 function validateLocation() {
@@ -278,7 +277,10 @@ function estimateOutcomeDate() {
     gotoNextPage();
   }else{
   }
+}
 
+function fetchStatesUrl () {
+  return '/programs/' + fetchArgumentFromUrlString('program_id') + '/workflows'
 }
 </script>
 
@@ -287,7 +289,7 @@ function estimateOutcomeDate() {
     <div id="content">
 
       <form>
-        <input type="text" name="states" id="states" field_type="alpha" xhelpText="State" helpText="States" ajaxURL="/programs/1/workflows"
+        <input type="text" name="states" id="states" field_type="alpha" xhelpText="State" helpText="States" ajaxURL="fetchStatesUrl()" 
           setvalue="" tt_pageStyleClass="NoKeyboard" tt_onLoad="passURL();" tt_onUnload="" objectType="states" />
 
         <input type="text" name="state_year" id="outcome_year" helpText="Outcome year" field_type="number" absoluteMin="1900"
