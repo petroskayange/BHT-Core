@@ -1,1248 +1,1329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Baobab Health Trust</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
-  <link rel="stylesheet" href="/assets/css/custom.css">
-  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
-  <link rel="stylesheet" href="/assets/css/demographics-header.css">
-  <script src="/assets/js/jquery.min.js"></script>
-  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-  <script src="/assets/js/moment.js"></script>
-  
-  <! -- ...................... -->
-  <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
-  <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
+    <title>Baobab Health Trust</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+    <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+    <link rel="stylesheet" href="/assets/css/demographics-header.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/js/moment.js"></script>
 
-  <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
-  <script src="/assets/js/medication.history.js"></script>
-  <! -- ...................... -->
-  
-  <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
+    <! -- ...................... -->
+    <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
+
+    <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+    <script src="/assets/js/medication.history.js"></script>
+    <! -- ...................... -->
+
+    <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
 </head>
 <body>
-  <script src="/assets/js/generic_ajaxrequest.js">
-      // checkIfEnconterCaptured("vitals");   
-      var encDate = "null";
-  </script>    
+<script src="/assets/js/generic_ajaxrequest.js">
+    // checkIfEnconterCaptured("vitals");
+    var encDate = "null";
+</script>
 
-  <style>
-  .modal-body {
-    overflow-y: auto;
-}
+<style>
+    .modal-body {
+        overflow-y: auto;
+    }
 
-.modal-open #modal-btn-no, .modal-open #modal-btn-si {
-  width: 110px;
-  height: 70px;
-}
+    .modal-open #modal-btn-no, .modal-open #modal-btn-si {
+        width: 110px;
+        height: 70px;
+    }
 
-  .list-group-links {
-    width: 94%;
-    margin-left: 10px;
-    /*background-color: transparent !important;
-    color: white !important; */
-  }
+    .list-group-links {
+        width: 94%;
+        margin-left: 10px;
+        /*background-color: transparent !important;
+        color: white !important; */
+    }
 
-  .badge {
-    background-color: #007bff;
-  }
+    .badge {
+        background-color: #007bff;
+    }
 
-  .tasks-table {
-    border-collapse: separate;
-    border-spacing: 10px;
-  }
+    .tasks-table {
+        border-collapse: separate;
+        border-spacing: 10px;
+    }
 
-  .tasks-table-cell {
-    border-style: solid;
+    .tasks-table-cell {
+        border-style: solid;
 
-    border-style: solid;
-    border: 1px solid #5ca6c4;
-    cursor: pointer;
-    box-shadow: inset 2px -4px 2px 0px;
-    background-color: #5480a8;
-    border-radius: 7px;
-    border: solid black 3px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    -moz-box-shadow: inset 0 0 10px #000000;
-    -webkit-box-shadow: inset 0 0 10px #5ca6c4;
-    box-shadow: inset 0 0 10px #000000;
-    width: 300px;
-    color: #fff;
-  }
+        border-style: solid;
+        border: 1px solid #5ca6c4;
+        cursor: pointer;
+        box-shadow: inset 2px -4px 2px 0px;
+        background-color: #5480a8;
+        border-radius: 7px;
+        border: solid black 3px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -moz-box-shadow: inset 0 0 10px #000000;
+        -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+        box-shadow: inset 0 0 10px #000000;
+        width: 300px;
+        color: #fff;
+    }
 
-  .alerts {
-    border-radius: 4px;
-    font-size: 16px;
-    padding: 15px;
-    margin-top: 5px;  
-  }
-  </style>
-  
-  <!-- container -->
-  <div class="container" style="width: 100%; margin-bottom: 1%;">
+    .alerts {
+        border-radius: 4px;
+        font-size: 16px;
+        padding: 15px;
+        margin-top: 5px;
+    }
 
-   <!-- .............................................................................................................. -->
-   <div class="demo-header">
-      <div class="demo-header-row">
+    .todays-date {
 
-      <div class="demo-header-cell demo-left">
-        <div id="name-title"><img src="" class="gender-icon" id="gender" /><span id="patient_name"></span></div>
-        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
-        <span id="DOB"></span>&nbsp;<span id="age"></span>
-        &nbsp;(<span id="npid"></span>)
+    }
+</style>
+
+<!-- container -->
+<div class="container" style="width: 100%; margin-bottom: 1%;">
+
+    <!-- .............................................................................................................. -->
+    <div class="demo-header">
+        <div class="demo-header-row">
+
+            <div class="demo-header-cell demo-left">
+                <div id="name-title"><img src="" class="gender-icon" id="gender"/><span id="patient_name"></span></div>
+                <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
+                    <span id="DOB"></span>&nbsp;<span id="age"></span>
+                    &nbsp;(<span id="npid"></span>)
+                </div>
+                <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="addressl1"></span>
+                </div>
+                <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="phone_number"></span></div>
+                <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span
+                        id="addressl3"></span></div>
+            </div>
+
+            <div class="demo-header-cell demo-middle" id="appInfo">
+            </div>
+
+            <div class="demo-header-cell demo-right">
+                <img src="/assets/images/BaobabHealth.png" id="application-icon"
+                     style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 10%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
+                <h3 style="text-align: center" id="application-name"></h3>
+                <h5 style="text-align: center"></h5>
+            </div>
+            <!-- <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
+
+          </div> -->
+
         </div>
-        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="addressl1"></span></div>
-        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="phone_number"></span></div>
-        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="addressl3"></span></div>
-      </div>
+        <!-- /left card -->
 
-      <div class="demo-header-cell demo-middle" id="appInfo">
-      </div>
+        <!-- right card-->
 
-      <div class="demo-header-cell demo-right">
-          <img src="/assets/images/BaobabHealth.png" id="application-icon" style="height: 80%; border:solid 1px;border-radius: 50%; margin-top: 10%;;margin-left: 1%; width: 30%; float: left; box-shadow: 0 10px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);">
-          <h3 style="text-align: center" id="application-name"></h3>
-          <h5 style="text-align: center"> </h5>
-      </div>
-      <!-- <div class="col-sm-4 col-lg-4 col-md-4 col-xs-4 cards" style="margin-top: 0.7%; border: solid 1px;border-radius: 1%; height: 115px; padding: 0;margin-left: 2%; width: 30%;">
-       
-    </div> -->
-  
     </div>
-    <!-- /left card -->
-  
-    <!-- right card-->
-    
-   </div>
-   <!-- .............................................................................................................. -->
-
+    <!-- .............................................................................................................. -->
 
 
     <!-- /right card-->
 
 
     <!-- visits div -->
-    <div class="col-sm-2 col-lg-2 col-xl-2 cards"  style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
-        <div style="display: flex; margin-left: 35px;"> <h4 id="numberOfVisits">  </h4></h4><h4 class="headers">Visit(s) </h4></div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; border-bottom: solid 2px black; background-color: white;" id="up" disabled> <img src="/assets/images/drop-up-arrow.svg" /></button>
-        <div id="dates" style="height: 65%; margin-top: 20%;"> </div>
-        <button class="btn" style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; border-top: solid 2px black; background-color: white;" id="down" disabled> <img src="/assets/images/drop-down-arrow.svg" /></button>
-     </div>
+    <div class="col-sm-2 col-lg-2 col-xl-2 cards"
+         style="margin-top: 1%; margin-left: 2%; border: solid 1px;overflow: auto; padding: 0; height: 520px; overflow: hidden;">
+        <div style="display: flex; margin-left: 35px;"><h4 id="numberOfVisits"></h4></h4><h4 class="headers">
+            Visit(s) </h4></div>
+        <button class="btn"
+                style="width: 90%; margin-left: 5%; height: 50px; border-bottom: solid 2px black; background-color: white;"
+                id="up" disabled><img src="/assets/images/drop-up-arrow.svg"/></button>
+        <div id="dates" style="height: 65%; margin-top: 20%;"></div>
+        <button class="btn"
+                style="width: 90%; margin-left: 5%; height: 50px; bottom: 0; border-top: solid 2px black; background-color: white;"
+                id="down" disabled><img src="/assets/images/drop-down-arrow.svg"/></button>
+    </div>
     <!-- /visits div-->
 
     <!-- visit details div-->
-    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 78%;" id="generic_tabs">
-        <div class="row" style="display: flex;"> <h4 class="headers" style="margin-left: 40px; "> Date Selected: <span id="selectedDate"></span></h4><h4 class="headers"> Next Encounter: <span id="nextEncounter"></span></h4></div>
+    <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards"
+         style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 78%;"
+         id="generic_tabs">
+        <div class="row" style="display: flex;"><h4 class="headers" style="margin-left: 40px; "> Date Selected: <span
+                id="selectedDate"></span> | </h4>
+            <h4 class="headers"> Next Encounter: <span id="nextEncounter"></span> | </h4>
+            <h4 class="headers todays-date"> Today&apos;s Date: <span id="todaysDate"></span></h4>
+        </div>
         <div class="row">
-           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#myModal" onclick="populateModal();">
-                 <div class="card-header h4 btn-primary" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
-                 
-                 <div class="list-group" id="encounters">
-                 </div> 
+            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6"
+                 style="margin-left: 2%;border: solid 0px; width: 47%; margin-left: 3%;">
+                <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;"
+                     data-toggle="modal" data-target="#myModal" onclick="populateModal();">
+                    <div class="card-header h4 btn-primary" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
 
-                 <!--table class="table" style="border: 0;">
-                    <tbody id="encounters">
-                    </tbody>
-                 </table-->
+                    <div class="list-group" id="encounters">
+                    </div>
+
+                    <!--table class="table" style="border: 0;">
+                       <tbody id="encounters">
+                       </tbody>
+                    </table-->
 
 
-                 <div class="card-footer" style="margin: 1%;">
-                 </div>
-              </div>
-           </div>
-           
-           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;" >
-              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#programModal" onclick="populateProgramsModal();">
-                 <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Lab Orders</div>
-                 <div class="list-group" id="programs" style="height: 100%; overflow: scroll;">
-                </div> 
-                 <!-- <table class="table ">
-                    <tbody id="programs">
-                    </tbody>
-                 </table> -->
-                 <div class="card-footer" style="margin: 1%;">
-                 </div>
-              </div>
-           </div>  
+                    <div class="card-footer" style="margin: 1%;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;">
+                <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;"
+                     data-toggle="modal" data-target="#programModal" onclick="populateProgramsModal();">
+                    <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Lab Orders</div>
+                    <div class="list-group" id="programs" style="height: 100%; overflow: scroll;">
+                    </div>
+                    <!-- <table class="table ">
+                       <tbody id="programs">
+                       </tbody>
+                    </table> -->
+                    <div class="card-footer" style="margin: 1%;">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row" style="margin-top:10px;">
-           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
-              <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;">
-                 <div class="card-header h4 btn-danger" style="margin: 3%; padding: 1%;">Alerts</div>
-                 <table class="table ">
-                    <tbody id="alerts">
-                    </tbody>
-                 </table>
-                 <div class="card-footer" style="margin: 1%;">
-                 </div>
-              </div>
-           </div>
-           <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
-              <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;" data-toggle="modal" data-target="#medicationModal" onmousedown="populateMedicationHistory();">
-                 <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Medication</div>
-                 <table class="table ">
-                    <tbody id="medication">
-                    </tbody>
-                 </table>
-                 <div class="card-footer" style="margin: 1%;">
-                 </div>
-              </div>
-           </div>
+            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 47%; margin-left: 3%;">
+                <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;">
+                    <div class="card-header h4 btn-danger" style="margin: 3%; padding: 1%;">Alerts</div>
+                    <table class="table ">
+                        <tbody id="alerts">
+                        </tbody>
+                    </table>
+                    <div class="card-footer" style="margin: 1%;">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%; ">
+                <div class="card text-white mb-3" style="width: 98%; height: 225px; overflow: hidden;"
+                     data-toggle="modal" data-target="#medicationModal" onmousedown="populateMedicationHistory();">
+                    <div class="card-header h4 btn-warning" style="margin: 3%; padding: 1%;">Medication</div>
+                    <table class="table ">
+                        <tbody id="medication">
+                        </tbody>
+                    </table>
+                    <div class="card-footer" style="margin: 1%;">
+                    </div>
+                </div>
+            </div>
         </div>
-     </div>
+    </div>
     <!-- /visit details div-->
-    
+
     <!-- footer -->
     <footer class="footer">
-      <div class="container-footer">
-        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-        </button>
-        <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#appModal">
-        <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
-        </button>
-        <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#activitiesModal" onmousedown="showActivities(this);" >
-        <span>&nbsp; &nbsp; &nbsp; Printouts/Other &nbsp; &nbsp; &nbsp;</span>
-        </button>
-        <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#tasksModal" onmousedown="showTasks(this);">
-        <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
-        </button>
-      </div>
-    </footer>   
+        <div class="container-footer">
+            <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
+                    onclick="finish();">
+                <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+            </button>
+            <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+                    data-target="#appModal">
+                <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
+            </button>
+            <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+                    data-target="#activitiesModal" onmousedown="showActivities(this);">
+                <span>&nbsp; &nbsp; &nbsp; Printouts/Other &nbsp; &nbsp; &nbsp;</span>
+            </button>
+            <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+                    data-target="#tasksModal" onmousedown="showTasks(this);">
+                <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+            </button>
+        </div>
+    </footer>
     <!-- /footer -->
-  
+
     <!-- encounters details modal -->
     <div id="myModal" class="modal fade" role="dialog" style="height: 100%;">
-        <div class="modal-dialog" >     
-          <div class="modal-content" style="margin: 0; max-height: 100%;">
-              
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
-            </div>  
-  
-            <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
-              <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2" style="border-right: solid 1px;"></div>
-              
-              <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="height: 100%;overflow:scroll;">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Observation</th>
-                      <th>Value</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody id="observationsTable">
-                  </tbody>
-                </table>
-              </div>
-              
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin: 0; max-height: 100%;">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
+                </div>
+
+                <div class="modal-body"
+                     style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
+                    <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2"
+                         style="border-right: solid 1px;"></div>
+
+                    <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="height: 100%;overflow:scroll;">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Observation</th>
+                                <th>Value</th>
+                                <th>Time</th>
+                            </tr>
+                            </thead>
+                            <tbody id="observationsTable">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <!-- <button class="btn btn-danger" id="btn-confirm">Void Encounter</button> -->
+                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+                    <button type="button" class="button blue navButton" id="btn-confirm" style="visibility:hidden;">Void
+                        Encounter
+                    </button>
+                    <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+
             </div>
-                
-            <div class="modal-footer">
-              <!-- <button class="btn btn-danger" id="btn-confirm">Void Encounter</button> -->
-              <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-              <button type="button" class="button blue navButton" id="btn-confirm" style="visibility:hidden;">Void Encounter</button>
-              <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
-            </div>
-            
-          </div>
         </div>
-      </div>
+    </div>
     <!-- /encounters details modal -->
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; " aria-hidden="true" id="mi-modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Are You sure you want to void this encounter?</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-lg" id="modal-btn-si">yes</button>
-            <button type="button" class="btn btn-primary btn-lg" id="modal-btn-no">No</button>
-          </div>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; "
+         aria-hidden="true" id="mi-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Are You sure you want to void this encounter?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-lg" id="modal-btn-si">yes</button>
+                    <button type="button" class="btn btn-primary btn-lg" id="modal-btn-no">No</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
 
     <!-- programs details modal -->
     <div id="programModal" class="modal fade" role="dialog" style="height: 100%;">
-      <div class="modal-dialog" >     
-        <div class="modal-content" style="margin: 0; max-height: 100%;">
-            
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
-          </div>  
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin: 0; max-height: 100%;">
 
-          <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
-            <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="programs2" style="border-right: solid 1px;"></div>
-            
-            <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Program Name</th>
-                    <th>State</th>
-                    <th>Date Enrolled</th>
-                  </tr>
-                </thead>
-                <tbody id="programsTable">
-                </tbody>
-              </table>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Encounter Date: <span id="encounterDate"> </span></h4>
+                </div>
+
+                <div class="modal-body"
+                     style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
+                    <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="programs2"
+                         style="border-right: solid 1px;"></div>
+
+                    <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Program Name</th>
+                                <th>State</th>
+                                <th>Date Enrolled</th>
+                            </tr>
+                            </thead>
+                            <tbody id="programsTable">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="button blue navButton" data-dismiss="modal"
+                            onmousedown="updateOutcomeRedirect();">Update outcome
+                    </button>
+                    <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+
             </div>
-            
-          </div>
-              
-          <div class="modal-footer">
-            <button type="button" class="button blue navButton" data-dismiss="modal" onmousedown="updateOutcomeRedirect();">Update outcome</button>
-            <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
-          </div>
-          
         </div>
-      </div>
     </div>
-   <!-- /programs details modal -->
-    
-   <!-- Medication details modal -->
-   <div id="medicationModal" class="modal fade" role="dialog" style="height: 100%;">
-    <div class="modal-dialog" >     
-      <div class="modal-content" style="margin: 0; max-height: 100%;">
-          
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title"> Medication History <span id="encounterDate"> </span></h4>
-        </div>  
+    <!-- /programs details modal -->
 
-        <div class="modal-body" style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
-          <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="medications2" style="border-right: solid 1px;"></div>
-          
-          <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Medication Name</th>
-                  <th>Date Started</th>
-                </tr>
-              </thead>
-              <tbody id="medicationsTable">
-              </tbody>
-            </table>
-          </div>
-          
+    <!-- Medication details modal -->
+    <div id="medicationModal" class="modal fade" role="dialog" style="height: 100%;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin: 0; max-height: 100%;">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Medication History <span id="encounterDate"> </span></h4>
+                </div>
+
+                <div class="modal-body"
+                     style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
+                    <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="medications2"
+                         style="border-right: solid 1px;"></div>
+
+                    <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="overflow:scroll;">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Medication Name</th>
+                                <th>Date Started</th>
+                            </tr>
+                            </thead>
+                            <tbody id="medicationsTable">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+
+            </div>
         </div>
-            
-        <div class="modal-footer">
-          <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
-        </div>
-        
-      </div>
     </div>
-  </div>
- <!-- /programs details modal -->
-   <!-- applications modal-->
+    <!-- /programs details modal -->
+    <!-- applications modal-->
     <div class="modal fade" id="appModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select module</h4>
-                 </div>
-                 <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <div class="container">
-                       <div class="row" id="modal-div">
-                          <template id="card_template">
-                             <!-- <div class="" > -->
-                             <a href="#" class="card-block clearfix" id="moduleButton" onclick="$('#appModal').modal('hide');">
-                                <div class="app-btn" id="cardDiv" style="margin: 10px;" >
-                                   <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
-                                   <div class="middle">
-                                      <div class="text">
-                                         <p id="apptext"></p>
-                                      </div>
-                                   </div>
-                                   <div class="card-container">
-                                      <h4>
-                                         <b id="appName"></b>
-                                      </h4>
-                                      <p id="appDescription"></p>
-                                   </div>
-                                </div>
-                             </a>
-                          </template>
-                       </div>
+                        <div class="row" id="modal-div">
+                            <template id="card_template">
+                                <!-- <div class="" > -->
+                                <a href="#" class="card-block clearfix" id="moduleButton"
+                                   onclick="$('#appModal').modal('hide');">
+                                    <div class="app-btn" id="cardDiv" style="margin: 10px;">
+                                        <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;"
+                                             id="cardImage">
+                                        <div class="middle">
+                                            <div class="text">
+                                                <p id="apptext"></p>
+                                            </div>
+                                        </div>
+                                        <div class="card-container">
+                                            <h4>
+                                                <b id="appName"></b>
+                                            </h4>
+                                            <p id="appDescription"></p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </template>
+                        </div>
                     </div>
+                </div>
+                <!-- <div id="cover">
                  </div>
-                 <!-- <div id="cover">
-                  </div>
-                  <div class="confirm">
-                     <h1>Confirm your action</h1>
-                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
-                     <button onclick="hidePopup();">Cancel</button>
-                     <button autofocus onclick="confirmAction();">Confirm</button>
-                  </div> -->
+                 <div class="confirm">
+                    <h1>Confirm your action</h1>
+                    <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                    <button onclick="hidePopup();">Cancel</button>
+                    <button autofocus onclick="confirmAction();">Confirm</button>
+                 </div> -->
             </div>
         </div>
     </div>
     <!-- /applications modal-->
 
-        <!-- activities modal-->
+    <!-- activities modal-->
     <div class="modal fade" id="activitiesModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px; height: 87vh;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select activity</h4>
+                </div>
+                <div class="modal-body" id="activities-body">
+                </div>
+                <!-- <div id="cover">
                  </div>
-                 <div class="modal-body" id="activities-body">
-                 </div>
-                 <!-- <div id="cover">
-                  </div>
-                  <div class="confirm">
-                     <h1>Confirm your action</h1>
-                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
-                     <button onclick="hidePopup();">Cancel</button>
-                     <button autofocus onclick="confirmAction();">Confirm</button>
-                  </div> -->
+                 <div class="confirm">
+                    <h1>Confirm your action</h1>
+                    <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                    <button onclick="hidePopup();">Cancel</button>
+                    <button autofocus onclick="confirmAction();">Confirm</button>
+                 </div> -->
             </div>
         </div>
     </div>
     <!-- /activities modal-->
 
-<!-- tasks modal-->
+    <!-- tasks modal-->
     <div class="modal fade" id="tasksModal" data-backdrop="static" data-keyboard="false" role="dialog">
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px; height: 85vh !important;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select Task</h4>
-                 </div>
-                 <div class="modal-body" id="tasks-body">
+                </div>
+                <div class="modal-body" id="tasks-body">
                     <div class="container" id="tasks-container" style="width: 100% !important;">
-                      <!-- <div class="row" id="tasks-modal-div">
-                          <template id="tasks_template">
-                             <div class="app-btn" id="tasksCard" style="margin: 10px;" >
-                             <a href="#" class="card-block clearfix" id="encounterButton" onclick="$('#tasksModal').modal('hide');">
-                                <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
-                                 <!--  <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
-                                   <div class="middle">
-                                      <div class="text">
-                                         <p id="taskstext"></p>
-                                      </div>
-                                   </div>
-                                   <div class="card-container">
-                                      <h4>
-                                         <b id="encounter_name"></b>
-                                      </h4>
-                                   </div>
-                             </a>
+                        <!-- <div class="row" id="tasks-modal-div">
+                            <template id="tasks_template">
+                               <div class="app-btn" id="tasksCard" style="margin: 10px;" >
+                               <a href="#" class="card-block clearfix" id="encounterButton" onclick="$('#tasksModal').modal('hide');">
+                                  <!-- <div class="app-btn" id="cardDiv" style="margin: 10px;" > -->
+                        <!--  <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;" id="cardImage">
+                          <div class="middle">
+                             <div class="text">
+                                <p id="taskstext"></p>
                              </div>
-                          </template>
-                       </div> -->
+                          </div>
+                          <div class="card-container">
+                             <h4>
+                                <b id="encounter_name"></b>
+                             </h4>
+                          </div>
+                    </a>
                     </div>
+                 </template>
+              </div> -->
+                    </div>
+                </div>
+                <!-- <div id="cover">
                  </div>
-                 <!-- <div id="cover">
-                  </div>
-                  <div class="confirm">
-                     <h1>Confirm your action</h1>
-                     <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
-                     <button onclick="hidePopup();">Cancel</button>
-                     <button autofocus onclick="confirmAction();">Confirm</button>
-                  </div> -->
+                 <div class="confirm">
+                    <h1>Confirm your action</h1>
+                    <p>Are you really <em>really</em> <strong>really</strong> sure that you want to void the selected encounter?</p>
+                    <button onclick="hidePopup();">Cancel</button>
+                    <button autofocus onclick="confirmAction();">Confirm</button>
+                 </div> -->
             </div>
         </div>
     </div>
     <!-- /tasks modal-->
-   <!-- Use Hanging Pills Modal-->
-   <div class="modal fade" tabindex="-1"  id="hangingPillModal" role="dialog">
-    <div class="modal-dialog" id="thedialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h2 class="modal-title">Prescription</h2>
+    <!-- Use Hanging Pills Modal-->
+    <div class="modal fade" tabindex="-1" id="hangingPillModal" role="dialog">
+        <div class="modal-dialog" id="thedialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Prescription</h2>
+                </div>
+                <div class="modal-body">
+                    <p>
+                    <h3>Use patient's hanging pills?</h3></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
+                </div>
+            </div>
+
         </div>
-        <div class="modal-body">
-          <p><h3>Use patient's hanging pills?</h3></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Yes</button>
-          <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
-        </div>
-      </div>
-      
     </div>
-  </div>
-   <!---/Use Hanging Pills-->
-  <!-- /container -->
-  </div>
+    <!---/Use Hanging Pills-->
+    <!-- /container -->
+</div>
 <!-- /body -->
 </body>
 
 <script src="/assets/js/core.js "></script>
 
 <script>
-  var currentEncounter = null;
-  var modalConfirm = function(callback){
-  
-  $("#btn-confirm").on("click", function(){
-    $("#mi-modal").modal('show');
-  });
+    var currentEncounter = null;
+    var modalConfirm = function (callback) {
 
-  $("#modal-btn-si").on("click", function(){
-    callback(true);
-    voidEncounter(currentEncounter);
-    $("#mi-modal").modal('hide');
-  });
-  
-  $("#modal-btn-no").on("click", function(){
-    callback(false);
-    $("#mi-modal").modal('hide');
-  });
-};
+        $("#btn-confirm").on("click", function () {
+            $("#mi-modal").modal('show');
+        });
 
-modalConfirm(function(confirm){
-  if(confirm){
-    //Acciones si el usuario confirma
-    $("#result").html("CONFIRMADO");
-  }else{
-    //Acciones si el usuario no confirma
-    $("#result").html("NO CONFIRMADO");
-  }
-}); 
-  var patientID = "";
-  var selectedEncounterID = "";  
-  sessionStorage.showWeightChart = true;
-  sessionStorage.showPregnantQuestion = true;
-  function finish() {
-    window.location = "/";
-  }
-  var nextEnc = "";
-  nextEncounter(sessionStorage.patientID, 1, false);
-  if (sessionStorage.nextEncounter != null) {
-    nextEnc = sessionStorage.nextEncounter;
-  }else {
-    nextEnc = "None"
-  }
-  document.getElementById("nextEncounter").innerHTML = nextEnc;
-    
-  function changeIcon(gender) {
-    var img = document.getElementById('gender');
-    if (gender === "M") {
-      img.setAttribute("src", "/assets/images/male.gif");
-    } else {
-      img.setAttribute("src", "/assets/images/female.gif");
-    }
-  }
-  
-  generateTemplate();
+        $("#modal-btn-si").on("click", function () {
+            callback(true);
+            voidEncounter(currentEncounter);
+            $("#mi-modal").modal('hide');
+        });
 
-  var url = new URL(url);
-  var apiURL = sessionStorage.getItem("apiURL");
-  var apiPort = sessionStorage.getItem("apiPort");
-  var apiProtocol = sessionStorage.getItem("apiProtocol");
-  var id = url.searchParams.get("patient_id");
-  sessionStorage.setItem("patientID", id);
-  (document.getElementsByClassName("overview-btns ")[0]);
-  (document.getElementsByClassName("activities-btns ")[0]);
-  (document.getElementsByClassName("tasks-btns ")[0]);
-  changeModule();
-  url = new URL(url);
-  var d = new Date();
-
-  function ajaxRequest() {
-    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-
-      if (this.readyState == 4 && this.status == 200) {
-      
-        var results = JSON.parse(this.responseText);
-        var age = results.person.birthdate;
-        var gender = results.person.gender;
-        var identifier = "";
-        var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
-        
-        try {
-          var addressl1 = results.person.addresses[0].city_village ;
-        var addressl2 = results.person.addresses[0].address2;
-        var phone_number = results.person.person_attributes[1].value;
-        }
-        catch (e){
-          var addressl1 = "";
-        var addressl2 = "";
-        var phone_number = "";
-        }
-        try {
-          identifier = results.patient_identifiers[0].identifier || "no value available";
-        } catch (e) {
-
-        }
-
-        setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
-      }
+        $("#modal-btn-no").on("click", function () {
+            callback(false);
+            $("#mi-modal").modal('hide');
+        });
     };
-    try {
-      req.open('GET', url, true);
-      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
-      req.send(null);
-    } catch (e) {}
-  }
+
+    modalConfirm(function (confirm) {
+        if (confirm) {
+            //Acciones si el usuario confirma
+            $("#result").html("CONFIRMADO");
+        } else {
+            //Acciones si el usuario no confirma
+            $("#result").html("NO CONFIRMADO");
+        }
+    });
+    var patientID = "";
+    var selectedEncounterID = "";
+    sessionStorage.showWeightChart = true;
+    sessionStorage.showPregnantQuestion = true;
 
     function finish() {
-      window.location = "/";
+        window.location = "/";
+    }
+
+    var nextEnc = "";
+    nextEncounter(sessionStorage.patientID, 1, false);
+    if (sessionStorage.nextEncounter != null) {
+        nextEnc = sessionStorage.nextEncounter;
+    } else {
+        nextEnc = "None"
+    }
+    document.getElementById("nextEncounter").innerHTML = nextEnc;
+
+    function changeIcon(gender) {
+        var img = document.getElementById('gender');
+        if (gender === "M") {
+            img.setAttribute("src", "/assets/images/male.gif");
+        } else {
+            img.setAttribute("src", "/assets/images/female.gif");
+        }
+    }
+
+    generateTemplate();
+
+    var url = new URL(url);
+    var apiURL = sessionStorage.getItem("apiURL");
+    var apiPort = sessionStorage.getItem("apiPort");
+    var apiProtocol = sessionStorage.getItem("apiProtocol");
+    var id = url.searchParams.get("patient_id");
+    sessionStorage.setItem("patientID", id);
+    (document.getElementsByClassName("overview-btns ")[0]);
+    (document.getElementsByClassName("activities-btns ")[0]);
+    (document.getElementsByClassName("tasks-btns ")[0]);
+    changeModule();
+    url = new URL(url);
+    var d = new Date();
+
+    function ajaxRequest() {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+
+                var results = JSON.parse(this.responseText);
+                var age = results.person.birthdate;
+                var gender = results.person.gender;
+                var identifier = "";
+                var patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+
+                try {
+                    var addressl1 = results.person.addresses[0].city_village;
+                    var addressl2 = results.person.addresses[0].address2;
+                    var phone_number = results.person.person_attributes[1].value;
+                }
+                catch (e) {
+                    var addressl1 = "";
+                    var addressl2 = "";
+                    var phone_number = "";
+                }
+                try {
+                    identifier = results.patient_identifiers[0].identifier || "no value available";
+                } catch (e) {
+
+                }
+
+                setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+            req.send(null);
+        } catch (e) {
+        }
+    }
+
+    function finish() {
+        window.location = "/";
     }
 
     function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
-      document.getElementById("patient_name").innerHTML = patient_name;
-      var roundedAge = Math.floor(moment().diff(age, 'years', true));
-      document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
-      document.getElementById("npid").innerHTML = formatNIPD(identifier);
-      document.getElementById("age").innerHTML = "(" + roundedAge + ")";
-      sessionStorage.patientAge = roundedAge; 
-      sessionStorage.patientGender = gender;
-      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
-      //sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
-      document.getElementById("addressl1").innerHTML = addressl1;
-      document.getElementById("addressl3").innerHTML = addressl2;
-      document.getElementById("phone_number").innerHTML = phone_number;
-      changeIcon(gender);
+        document.getElementById("patient_name").innerHTML = patient_name;
+        var roundedAge = Math.floor(moment().diff(age, 'years', true));
+        document.getElementById("DOB").innerHTML = moment(age).format("DD/MMM/YYYY");
+        ;
+        document.getElementById("npid").innerHTML = formatNIPD(identifier);
+        document.getElementById("age").innerHTML = "(" + roundedAge + ")";
+        sessionStorage.patientAge = roundedAge;
+        sessionStorage.patientGender = gender;
+        sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
+        //sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
+        document.getElementById("addressl1").innerHTML = addressl1;
+        document.getElementById("addressl3").innerHTML = addressl2;
+        document.getElementById("phone_number").innerHTML = phone_number;
+        changeIcon(gender);
     }
 
     function formatNIPD(identifier) {
-      if(identifier.length < 1)
-        return identifier;
+        if (identifier.length < 1)
+            return identifier;
 
-      if(identifier.length == 6){
-        return (identifier.substring(0,3) + "-" + identifier.substring(3,6));
-      }else if(identifier.length == 13){
-        return (identifier.substring(0,5) + "-" + identifier.substring(5,9) + "-" + identifier.substring(9, 13));
-      }else{
-        return identifier;
-      }
-    }
-    function getDates(patient_id, index, pageNumber) {
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits';
-      var div = document.getElementById("dates");
-      div.innerHTML = "";
-      var req = new XMLHttpRequest();
-      var counter = 0;
-      id = patient_id;
-      getPrograms(patient_id, "table", "programs");
-      if (index < 0) {
-        index = 0;
-      }
-      req.onreadystatechange = function () {
-
-        if (this.readyState == 4 && this.status == 200) {
-          var results = JSON.parse(this.responseText);
-          document.getElementById("numberOfVisits").innerHTML = results.length;
-          var lastPage = (results.length % 5);
-          for (var x = index; x < results.length; x++) {
-            if (counter == 0) {
-              var prev = index - 5;
-              document.getElementById("up").setAttribute('onClick', 'getDates('+patient_id +',' + prev +');');
-
-              getValue(results[0], patient_id, "encounters", "h4", "table");
-              if (index == 0 || index % 5 == 0) {
-                document.getElementById("up").setAttribute("disabled", "");
-                document.getElementById("down").removeAttribute("disabled", "");
-              }
-              if (counter == results.length) {
-                document.getElementById("down").setAttribute("disabled", "");
-              } 
-
-            }
-            div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
-              '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="activateButton(this);changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
-              moment(results[x]).format("DD/MMM/YYYY"); + '</button>';
-              encDate =  moment(results[0]).format("DD/MMM/YYYY");
-              getMedication(patient_id, "table", "medication");
-              activateButton(document.getElementsByClassName("app-btn btn btn-primary")[0]);
-              // getMedication(patient_id ,"encounters", "h4"034, &#034table&#034);
-            if (counter == 4 || (results.length - (index + counter) == 1)) {
-
-              var next = index + counter + 1;
-              var nextPage = pageNumber + 1;
-
-              document.getElementById("down").setAttribute('onClick', 'getDates('+patient_id +',' + next +');');
-              if ((results.length - (index + counter) == 1)) {
-                document.getElementById("down").setAttribute("disabled", "");
-              }if (index != 0)  {
-                document.getElementById("up").removeAttribute("disabled", "");
-                
-              }
-
-              break;
-
-            }
-
-            counter = ++counter;
-          }
+        if (identifier.length == 6) {
+            return (identifier.substring(0, 3) + "-" + identifier.substring(3, 6));
+        } else if (identifier.length == 13) {
+            return (identifier.substring(0, 5) + "-" + identifier.substring(5, 9) + "-" + identifier.substring(9, 13));
+        } else {
+            return identifier;
         }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
     }
+
+    function getDates(patient_id, index, pageNumber) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits';
+        var div = document.getElementById("dates");
+        div.innerHTML = "";
+        var req = new XMLHttpRequest();
+        var counter = 0;
+        id = patient_id;
+        getPrograms(patient_id, "table", "programs");
+        if (index < 0) {
+            index = 0;
+        }
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+                var results = JSON.parse(this.responseText);
+                document.getElementById("numberOfVisits").innerHTML = results.length;
+                var lastPage = (results.length % 5);
+                for (var x = index; x < results.length; x++) {
+                    if (counter == 0) {
+                        var prev = index - 5;
+                        document.getElementById("up").setAttribute('onClick', 'getDates(' + patient_id + ',' + prev + ');');
+
+                        getValue(results[0], patient_id, "encounters", "h4", "table");
+                        if (index == 0 || index % 5 == 0) {
+                            document.getElementById("up").setAttribute("disabled", "");
+                            document.getElementById("down").removeAttribute("disabled", "");
+                        }
+                        if (counter == results.length) {
+                            document.getElementById("down").setAttribute("disabled", "");
+                        }
+
+                    }
+                    div.innerHTML += '<button type="button" id="' + x + '" value="' + results[x] +
+                        '" class="app-btn btn btn-primary" style="width: 90%;  margin-left: 5%;margin-top: 6%; margin-bottom: 6%; border-radius: 0%; color:black;"  onclick="activateButton(this);changeDate(this);getValue(this.value,' + patient_id + ',&#034encounters&#034, &#034h4&#034, &#034table&#034); getMedication(' + patient_id + ',&#034table&#034, &#034medication&#034);getPrograms(' + patient_id + ', &#034table&#034, &#034programs&#034);">' +
+                        moment(results[x]).format("DD/MMM/YYYY");
+                    +'</button>';
+                    encDate = moment(results[0]).format("DD/MMM/YYYY");
+                    getMedication(patient_id, "table", "medication");
+                    activateButton(document.getElementsByClassName("app-btn btn btn-primary")[0]);
+                    // getMedication(patient_id ,"encounters", "h4"034, &#034table&#034);
+                    if (counter == 4 || (results.length - (index + counter) == 1)) {
+
+                        var next = index + counter + 1;
+                        var nextPage = pageNumber + 1;
+
+                        document.getElementById("down").setAttribute('onClick', 'getDates(' + patient_id + ',' + next + ');');
+                        if ((results.length - (index + counter) == 1)) {
+                            document.getElementById("down").setAttribute("disabled", "");
+                        }
+                        if (index != 0) {
+                            document.getElementById("up").removeAttribute("disabled", "");
+
+                        }
+
+                        break;
+
+                    }
+
+                    counter = ++counter;
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
+    }
+
     function changeDate(element) {
-      encDate = element.innerHTML;
+        encDate = element.innerHTML;
     }
+
     getDates(id, 0);
 
     function getValue(value, id, div, className, itemType) {
-      var encounters = document.getElementById(div);
-      var selectedDate = document.getElementById("selectedDate");
-      selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
-      document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
-      sessionStorage.setItem("value", value);
-      if (encounters.innerHTML != null) {
-        encounters.innerHTML = "";
-      } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?patient_id=' + id + '&date=' + value;
-      var req = new XMLHttpRequest();
-      var counter = 0;
-      req.onreadystatechange = function () {
-
-        if (this.readyState == 4 && this.status == 200) {
-
-          var results = JSON.parse(this.responseText);
-          document.getElementById("encounterHeader").innerHTML = results.length + " Activities";
-
-          var listGroup = document.createElement("div");
-          listGroup.setAttribute("class","list-group");
-          encounters.appendChild(listGroup);
-
-          for (var x = 0; x < results.length; x++) {
-            var d = new Date(results[x].encounter_datetime);
-            var f = moment(d).format("HH:mm A");
-
-            if (itemType == "table") {
-              var a = document.createElement("a");
-              var aclass = "list-group-item d-flex justify-content-between";
-              aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-              a.setAttribute("class", aclass);
-              a.setAttribute("href","#");
-              //a.setAttribute("onmousedown","getEncounter('" + results[x].encounter_id + "')");
-              a.innerHTML = results[x].type.name;
-
-              var s = document.createElement("span");
-              s.setAttribute("class","badge badge-primary badge-pill");
-              s.innerHTML = f;
-              a.appendChild(s);
-              listGroup.appendChild(a);
-              if (x == 2 || (results.length == 2 && x == 1)) {
-                var a = document.createElement("a");
-                var aclass = "list-group-item d-flex justify-content-between";
-                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-                a.setAttribute("class", aclass);
-                a.setAttribute("href","#");
-                a.innerHTML = "Click to show more ..."
-                listGroup.appendChild(a);
-                break;
-              }
-            } else if (itemType == "button") {
-              encounters.innerHTML +=
-                '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
-                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
-                '<span class="h5">' + results[x].type.name + '</span></button>';
-            }
-
-          }
+        var encounters = document.getElementById(div);
+        var selectedDate = document.getElementById("selectedDate");
+        selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
+        document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
+        sessionStorage.setItem("value", value);
+        if (encounters.innerHTML != null) {
+            encounters.innerHTML = "";
+        } else {
         }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?patient_id=' + id + '&date=' + value;
+        var req = new XMLHttpRequest();
+        var counter = 0;
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+
+                var results = JSON.parse(this.responseText);
+                document.getElementById("encounterHeader").innerHTML = results.length + " Activities";
+
+                var listGroup = document.createElement("div");
+                listGroup.setAttribute("class", "list-group");
+                encounters.appendChild(listGroup);
+
+                for (var x = 0; x < results.length; x++) {
+                    var d = new Date(results[x].encounter_datetime);
+                    var f = moment(d).format("HH:mm A");
+
+                    if (itemType == "table") {
+                        var a = document.createElement("a");
+                        var aclass = "list-group-item d-flex justify-content-between";
+                        aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                        a.setAttribute("class", aclass);
+                        a.setAttribute("href", "#");
+                        //a.setAttribute("onmousedown","getEncounter('" + results[x].encounter_id + "')");
+                        a.innerHTML = results[x].type.name;
+
+                        var s = document.createElement("span");
+                        s.setAttribute("class", "badge badge-primary badge-pill");
+                        s.innerHTML = f;
+                        a.appendChild(s);
+                        listGroup.appendChild(a);
+                        if (x == 2 || (results.length == 2 && x == 1)) {
+                            var a = document.createElement("a");
+                            var aclass = "list-group-item d-flex justify-content-between";
+                            aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                            a.setAttribute("class", aclass);
+                            a.setAttribute("href", "#");
+                            a.innerHTML = "Click to show more ..."
+                            listGroup.appendChild(a);
+                            break;
+                        }
+                    } else if (itemType == "button") {
+                        encounters.innerHTML +=
+                            '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
+                            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
+                            '<span class="h5">' + results[x].type.name + '</span></button>';
+                    }
+
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
 
     }
 
     function populateModal() {
-      getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
+        getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
-    
+
     function populateProgramsModal() {
-      getPrograms(sessionStorage.patientID, "button", "programs2");
+        getPrograms(sessionStorage.patientID, "button", "programs2");
     }
-    
-    function useHangingPillsDialog(){
-        
-        if(sessionStorage.getItem("medsPrescribed")){
-           $('#hangingPillModal').find(".modal-dialog").css("max-width", 900);
-           $('#hangingPillModal').modal('show');
+
+    function useHangingPillsDialog() {
+
+        if (sessionStorage.getItem("medsPrescribed")) {
+            $('#hangingPillModal').find(".modal-dialog").css("max-width", 900);
+            $('#hangingPillModal').modal('show');
         }
     }
 
     function getPrograms(id, itemType, div) {
-      
-      var programs = document.getElementById(div);
-      if (programs.innerHTML != null) {
-        programs.innerHTML = "";
-      } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/programs/1/lab_tests/orders?patient_id='+id;
-      var req = new XMLHttpRequest();
 
-      var listGroup = document.createElement("div");
-      listGroup.setAttribute("class","list-group");
-      programs.appendChild(listGroup);
-      req.onreadystatechange = function () {
-
-        if (this.readyState == 4 && this.status == 200) {
-          var results = JSON.parse(this.responseText);
-          for (var x = 0; x < results.length; x++) {
-            var d = new Date(results[x].date_enrolled);
-            var f = moment(results[x].OrderDate).format("DD/MMM/YYYY");
-            var name = results[x].lab_sample.lab_parameter.test_type.TestName.replace(/_/g, " ");
-            if (itemType == "table") {
-              var a = document.createElement("a");
-              var aclass = "list-group-item d-flex justify-content-between";
-              aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-              a.setAttribute("class", aclass);
-              a.setAttribute("href","#");
-              a.innerHTML = name;
-
-              var s = document.createElement("span");
-              s.setAttribute("class","badge badge-primary badge-pill");
-              s.innerHTML = f;
-              a.appendChild(s);
-              listGroup.appendChild(a);
-              if (x == 2 || (results.length == 2 && x == 1)) {
-                var a = document.createElement("a");
-                var aclass = "list-group-item d-flex justify-content-between";
-                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-                a.setAttribute("class", aclass);
-                a.setAttribute("href","#");
-                a.innerHTML = "Click to show more ..."
-                listGroup.appendChild(a);
-                break;
-              }
-
-            } else if (itemType == "button") {
-              programs.innerHTML +=
-                '<button type="button" id="' + x + '" value="' + x +
-                '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="">' +
-                '<span class="h5">' + name.toUpperCase(); + '</span></button>';
-            }
-          }
+        var programs = document.getElementById(div);
+        if (programs.innerHTML != null) {
+            programs.innerHTML = "";
+        } else {
         }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/programs/1/lab_tests/orders?patient_id=' + id;
+        var req = new XMLHttpRequest();
+
+        var listGroup = document.createElement("div");
+        listGroup.setAttribute("class", "list-group");
+        programs.appendChild(listGroup);
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+                var results = JSON.parse(this.responseText);
+                for (var x = 0; x < results.length; x++) {
+                    var d = new Date(results[x].date_enrolled);
+                    var f = moment(results[x].OrderDate).format("DD/MMM/YYYY");
+                    var name = results[x].lab_sample.lab_parameter.test_type.TestName.replace(/_/g, " ");
+                    if (itemType == "table") {
+                        var a = document.createElement("a");
+                        var aclass = "list-group-item d-flex justify-content-between";
+                        aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                        a.setAttribute("class", aclass);
+                        a.setAttribute("href", "#");
+                        a.innerHTML = name;
+
+                        var s = document.createElement("span");
+                        s.setAttribute("class", "badge badge-primary badge-pill");
+                        s.innerHTML = f;
+                        a.appendChild(s);
+                        listGroup.appendChild(a);
+                        if (x == 2 || (results.length == 2 && x == 1)) {
+                            var a = document.createElement("a");
+                            var aclass = "list-group-item d-flex justify-content-between";
+                            aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                            a.setAttribute("class", aclass);
+                            a.setAttribute("href", "#");
+                            a.innerHTML = "Click to show more ..."
+                            listGroup.appendChild(a);
+                            break;
+                        }
+
+                    } else if (itemType == "button") {
+                        programs.innerHTML +=
+                            '<button type="button" id="' + x + '" value="' + x +
+                            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="">' +
+                            '<span class="h5">' + name.toUpperCase();
+                        +'</span></button>';
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
 
     }
 
 
-     function getMedication(id, itemType, div) {
-      var programs = document.getElementById(div);
-      if (programs.innerHTML != null) {
-        programs.innerHTML = "";
-      } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&paginate=false";
-      var req = new XMLHttpRequest();
+    function getMedication(id, itemType, div) {
+        var programs = document.getElementById(div);
+        if (programs.innerHTML != null) {
+            programs.innerHTML = "";
+        } else {
+        }
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&paginate=false";
+        var req = new XMLHttpRequest();
 
-      var listGroup = document.createElement("div");
-      listGroup.setAttribute("class","list-group");
-      programs.appendChild(listGroup);
-      req.onreadystatechange = function () {
+        var listGroup = document.createElement("div");
+        listGroup.setAttribute("class", "list-group");
+        programs.appendChild(listGroup);
+        req.onreadystatechange = function () {
 
-        if (this.readyState == 4 && this.status == 200) {
-          var results = JSON.parse(this.responseText);
-          var dates = {};
-          for (var x = 0; x < results.length; x++) {
-            dates[results[x].order.start_date] = "added";
-            if(((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
-              var d = new Date(results[x].order.start_date);
-              var f = moment(d).format("HH:mm");
-              var name = results[x].drug.name;
-              if(itemType === "table") {
-                    var a = document.createElement("a");
-                    var aclass = "list-group-item d-flex justify-content-between";
-                    aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-                    a.setAttribute("class", aclass);
-                    a.setAttribute("href","#");
-                    a.innerHTML = name;
+            if (this.readyState == 4 && this.status == 200) {
+                var results = JSON.parse(this.responseText);
+                var dates = {};
+                for (var x = 0; x < results.length; x++) {
+                    dates[results[x].order.start_date] = "added";
+                    if (((moment(new Date(results[x].order.start_date))).format("DD/MM/YYYY")) == moment(new Date(encDate)).format("DD/MM/YYYY")) {
+                        var d = new Date(results[x].order.start_date);
+                        var f = moment(d).format("HH:mm");
+                        var name = results[x].drug.name;
+                        if (itemType === "table") {
+                            var a = document.createElement("a");
+                            var aclass = "list-group-item d-flex justify-content-between";
+                            aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                            a.setAttribute("class", aclass);
+                            a.setAttribute("href", "#");
+                            a.innerHTML = name;
 
-                    var s = document.createElement("span");
-                    s.setAttribute("class","badge badge-primary badge-pill");
-                    s.innerHTML = f;
-                    a.appendChild(s);
-                    listGroup.appendChild(a);
-                    if (x == 2 || (results.length == 2 && x == 1)) {
-                      var a = document.createElement("a");
-                      var aclass = "list-group-item d-flex justify-content-between";
-                      aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
-                      a.setAttribute("class", aclass);
-                      a.setAttribute("href","#");
-                      a.innerHTML = "Click to show more ..."
-                      listGroup.appendChild(a);
-                      break;
-                    }    
+                            var s = document.createElement("span");
+                            s.setAttribute("class", "badge badge-primary badge-pill");
+                            s.innerHTML = f;
+                            a.appendChild(s);
+                            listGroup.appendChild(a);
+                            if (x == 2 || (results.length == 2 && x == 1)) {
+                                var a = document.createElement("a");
+                                var aclass = "list-group-item d-flex justify-content-between";
+                                aclass += " align-items-center list-group-item-action list-group-item- primary list-group-links";
+                                a.setAttribute("class", aclass);
+                                a.setAttribute("href", "#");
+                                a.innerHTML = "Click to show more ..."
+                                listGroup.appendChild(a);
+                                break;
+                            }
+                        }
+
+
+                    }
+
                 }
-                
+                if (itemType == "button") {
+                    var dateKeys = Object.keys(dates);
+                    for (let index = 0; index < dateKeys.length; index++) {
+                        programs.innerHTML +=
+                            '<button type="button" id="' + x + '" value="' + index +
+                            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
+                            '<span class="h5">' + moment(dateKeys[index]).format("DD/MMM/YYYY") + '</span></button>';
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
 
-              }
-              
-        }
-        if (itemType == "button") {
-          var dateKeys = Object.keys(dates);
-          for (let index = 0; index < dateKeys.length; index++) {
-            programs.innerHTML +=
-            '<button type="button" id="' + x + '" value="' +index+  
-            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="' +
-            '<span class="h5">' + moment(dateKeys[index]).format("DD/MMM/YYYY") + '</span></button>';
-          }
-        }
-        }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
-
-    }   
+    }
 
     function getEncounter(id) {
-      currentEncounter = id;
-      document.getElementById("btn-confirm").style.visibility = "visible";
-      var obsDiv = document.getElementById("observationsTable");
-      if (obsDiv.innerHTML != null) {
-        obsDiv.innerHTML = "";
-      } else {}
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
-      var req = new XMLHttpRequest();
-      req.onreadystatechange = function () {
+        currentEncounter = id;
+        document.getElementById("btn-confirm").style.visibility = "visible";
+        var obsDiv = document.getElementById("observationsTable");
+        if (obsDiv.innerHTML != null) {
+            obsDiv.innerHTML = "";
+        } else {
+        }
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
 
-        if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState == 4 && this.status == 200) {
 
-          var results = JSON.parse(this.responseText);
+                var results = JSON.parse(this.responseText);
 
-          for (var x = 0; x < results.observations.length; x++) {
-            var d = new Date(results.observations[x].obs_datetime);
-            var f = moment(d).format("HH:mm A");
-            var value = "";
-            var modifier = results.observations[x].value_modifier;
-            if (modifier !== "%") {
-              modifier = "";
-            }
-            if (results.observations[x].value_text != null) {
-              value = results.observations[x].value_text;
-            }else if (results.observations[x].value_numeric != null) {
-              value = results.observations[x].value_numeric;
-            }else if (results.observations[x].value_coded != null) {
-               value = results.observations[x].value_coded;
-              sessionStorage.removeItem("value_coded");
-                var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/concepts/' + results.observations[x].value_coded;
-                var req = new XMLHttpRequest();
-                req.onreadystatechange = function () {
-
-                  if (this.readyState == 4) {
-                    if (this.status == 200) {
-                      var results = JSON.parse(this.responseText);  
-                      value  = results.concept_names[0].name;
-                      sessionStorage.setItem("value_coded", value);
+                for (var x = 0; x < results.observations.length; x++) {
+                    var d = new Date(results.observations[x].obs_datetime);
+                    var f = moment(d).format("HH:mm A");
+                    var value = "";
+                    var modifier = results.observations[x].value_modifier;
+                    if (modifier !== "%") {
+                        modifier = "";
                     }
-                  }
-                };
-                try {
-                  req.open('GET', url, false);
-                  req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-                  req.send(null);
-                } catch (e) {
+                    if (results.observations[x].value_text != null) {
+                        value = results.observations[x].value_text;
+                    } else if (results.observations[x].value_numeric != null) {
+                        value = results.observations[x].value_numeric;
+                    } else if (results.observations[x].value_coded != null) {
+                        value = results.observations[x].value_coded;
+                        sessionStorage.removeItem("value_coded");
+                        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/concepts/' + results.observations[x].value_coded;
+                        var req = new XMLHttpRequest();
+                        req.onreadystatechange = function () {
+
+                            if (this.readyState == 4) {
+                                if (this.status == 200) {
+                                    var results = JSON.parse(this.responseText);
+                                    value = results.concept_names[0].name;
+                                    sessionStorage.setItem("value_coded", value);
+                                }
+                            }
+                        };
+                        try {
+                            req.open('GET', url, false);
+                            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+                            req.send(null);
+                        } catch (e) {
+                        }
+                        value = sessionStorage.getItem("value_coded");
+                        sessionStorage.removeItem("value_coded");
+
+                    } else if (results.observations[x].value_datetime != null) {
+                        value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:mm A");
+                    } else {
+
+                    }
+                    obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + modifier + '</td>  <td>' + f + '</td> </tr>'
                 }
-                value = sessionStorage.getItem("value_coded");
-                sessionStorage.removeItem("value_coded");
-              
-            }else if (results.observations[x].value_datetime != null){ 
-              value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:mm A");
-            }else {
-
             }
-            obsDiv.innerHTML += '<tr>  <td>' + results.observations[x].concept.concept_names[0].name + '</td><td>' + value + modifier + '</td>  <td>' + f + '</td> </tr>'
-          }
-        }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
-
-    }
-
-function voidEncounter(id) {
-      currentEncounter = id;
-      var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
-      var req = new XMLHttpRequest();
-      req.onreadystatechange = function () {
-
-        if (this.readyState == 4 && this.status == 204) {
-          populateModal();
-          document.getElementById("observationsTable").innerHTML = "";
-        }else {
-
-        }
-      };
-      try {
-        req.open('DELETE', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        req.send(null);
-      } catch (e) {}
-
-    }
-
-  function getProgramData(id) {
-
-  var programsTable = document.getElementById("programsTable");
-  if (programsTable.innerHTML != null) {
-    programsTable.innerHTML = "";
-  } else {}
-  var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/"+id;
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function () {
-    if (this.readyState == 4) {
-      if(this.status == 200) {
-        var results = JSON.parse(this.responseText);
+        };
         try {
-          var state = results.patient_states[0].state;
-        }catch(e) {
-          var state = "Pre ART";
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
         }
-        
-      
-        programsTable.innerHTML = "<td>"+results.program.name+"</td><td>"+state  +"</td><td>"+moment(results.date).format("DD/MMM/YYYY");+"</td>";
-      }
-    }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {}
-
-  }
-    function GetApplicationInfo() {
-    var dvTable = document.getElementById("appInfo");
-    dvTable.innerHTML = null;
-    var obj = document.createElement("object");
-    obj.setAttribute("data", "/apps/ART/views/identifiers.html");
-    obj.setAttribute("type","text/html");
-    obj.setAttribute("style","width: 97%; height: 100%; padding: 1%;");
-
-    dvTable.appendChild(obj);
 
     }
-  function buildAlerts(patient_id){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=7755';
-  var req = new XMLHttpRequest();
-  var table = document.getElementById("alerts");
-  table.setAttribute("class","info-tables");
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      var sideEffects = 0;
-      
-      if(results.length > 0) {
-          for (var index = 0; index < results.length; index++) {
-            if (results[index].children[0].value_coded == 1065){
-              sideEffects ++;
+
+    function voidEncounter(id) {
+        currentEncounter = id;
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 204) {
+                populateModal();
+                document.getElementById("observationsTable").innerHTML = "";
+            } else {
+
             }
-          }
-          var tr = document.createElement("tr");
-          tr.setAttribute("class", "alerts");
-          var td = document.createElement("td");
-          td.style.borderTop = "0";
-          tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
-          td.innerHTML = "Patient Has " +sideEffects +" Side Effect(s)";
-          td.setAttribute("colspan", 2);
-          tr.appendChild(td);
-          table.appendChild(tr);
+        };
+        try {
+            req.open('DELETE', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
+
+    }
+
+    function getProgramData(id) {
+
+        var programsTable = document.getElementById("programsTable");
+        if (programsTable.innerHTML != null) {
+            programsTable.innerHTML = "";
+        } else {
+        }
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/" + id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    try {
+                        var state = results.patient_states[0].state;
+                    } catch (e) {
+                        var state = "Pre ART";
+                    }
+
+
+                    programsTable.innerHTML = "<td>" + results.program.name + "</td><td>" + state + "</td><td>" + moment(results.date).format("DD/MMM/YYYY");
+                    +"</td>";
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
+
+    }
+
+    function GetApplicationInfo() {
+        var dvTable = document.getElementById("appInfo");
+        dvTable.innerHTML = null;
+        var obj = document.createElement("object");
+        obj.setAttribute("data", "/apps/ART/views/identifiers.html");
+        obj.setAttribute("type", "text/html");
+        obj.setAttribute("style", "width: 97%; height: 100%; padding: 1%;");
+
+        dvTable.appendChild(obj);
+
+    }
+
+    function buildAlerts(patient_id) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=7755';
+        var req = new XMLHttpRequest();
+        var table = document.getElementById("alerts");
+        table.setAttribute("class", "info-tables");
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    var sideEffects = 0;
+
+                    if (results.length > 0) {
+                        for (var index = 0; index < results.length; index++) {
+                            if (results[index].children[0].value_coded == 1065) {
+                                sideEffects++;
+                            }
+                        }
+                        var tr = document.createElement("tr");
+                        tr.setAttribute("class", "alerts");
+                        var td = document.createElement("td");
+                        td.style.borderTop = "0";
+                        tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
+                        td.innerHTML = "Patient Has " + sideEffects + " Side Effect(s)";
+                        td.setAttribute("colspan", 2);
+                        tr.appendChild(td);
+                        table.appendChild(tr);
+
+                    }
+                    if (sessionStorage.bmiResult !== "null") {
+                        var tr = document.createElement("tr");
+                        tr.style.display = "block";
+                        tr.setAttribute("class", "alerts");
+                        var td = document.createElement("td");
+                        td.innerHTML = "Patient BMI is " + sessionStorage.bmiResult;
+                        td.style.borderTop = "0";
+                        tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
+                        tr.appendChild(td);
+                        table.appendChild(tr);
+                    }
+
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
 
         }
-      if (sessionStorage.bmiResult !== "null") {
-        var tr = document.createElement("tr");
-        tr.style.display = "block";
-        tr.setAttribute("class", "alerts");
-        var td = document.createElement("td");
-        td.innerHTML = "Patient BMI is "+ sessionStorage.bmiResult; 
-        td.style.borderTop = "0";
-        tr.className = "list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links";
-        tr.appendChild(td);
-        table.appendChild(tr);
-      }
-        
-      }
+        buildDefaulter(patient_id, table)
     }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-  buildDefaulter(patient_id, table)
-}
-function buildDefaulter(patient_id, table){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=6828';
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      if(results.length > 0) {
-          var tr = document.createElement("tr");
-          tr.setAttribute("class", "alerts");
-          var td = document.createElement("td");
-          td.innerHTML = "Patient Is a Defaulter";
-          td.setAttribute("colspan", 2);
-          tr.appendChild(td);
-          table.appendChild(tr);
+
+    function buildDefaulter(patient_id, table) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=6828';
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    if (results.length > 0) {
+                        var tr = document.createElement("tr");
+                        tr.setAttribute("class", "alerts");
+                        var td = document.createElement("td");
+                        td.innerHTML = "Patient Is a Defaulter";
+                        td.setAttribute("colspan", 2);
+                        tr.appendChild(td);
+                        table.appendChild(tr);
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+
         }
-      }
     }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-}
-function buildProgramInfo(patient_id){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/'+patient_id+'/next_appointment_date';
-  var req = new XMLHttpRequest();
-  var table = document.createElement("table");
-  table.setAttribute("class","info-tables");
-  var container = document.getElementById("section-body-3");
-  container.appendChild(table);
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-        var results = JSON.parse(this.responseText);
-        var tr = document.createElement("tr");
-          tr.setAttribute("class", "alerts");
-        var td = document.createElement("td");
-        td.innerHTML = "Next Appointment Date";
-        tr.appendChild(td);
-        var td = document.createElement("td");
-        td.innerHTML = moment(results).format("DD/MMM/YYYY");
-        tr.appendChild(td);
-        table.appendChild(tr);
 
-      }else {
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        td.innerHTML = "No Appointment Date Available";
-        tr.appendChild(td);
-        table.appendChild(tr);
-      }
-    }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-  buildFT(patient_id, table);
-}
+    function buildProgramInfo(patient_id) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/next_appointment_date';
+        var req = new XMLHttpRequest();
+        var table = document.createElement("table");
+        table.setAttribute("class", "info-tables");
+        var container = document.getElementById("section-body-3");
+        container.appendChild(table);
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    var tr = document.createElement("tr");
+                    tr.setAttribute("class", "alerts");
+                    var td = document.createElement("td");
+                    td.innerHTML = "Next Appointment Date";
+                    tr.appendChild(td);
+                    var td = document.createElement("td");
+                    td.innerHTML = moment(results).format("DD/MMM/YYYY");
+                    tr.appendChild(td);
+                    table.appendChild(tr);
 
-function buildFT(patient_id, table){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/observations?person_id='+patient_id+'&concept_id=9561';
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      if(results.length > 0) {
-          buildFTAssessment(table, results[0].encounter_id);
+                } else {
+                    var tr = document.createElement("tr");
+                    var td = document.createElement("td");
+                    td.innerHTML = "No Appointment Date Available";
+                    tr.appendChild(td);
+                    table.appendChild(tr);
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+
         }
-      }
+        buildFT(patient_id, table);
     }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-}
-function buildFTAssessment(table, encounter_id){
-  var url = 'http://'+apiURL+':'+apiPort+'/api/v1/encounters/'+encounter_id;
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function(){
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-      var results = JSON.parse(this.responseText);
-      if(results.observations[0].value_coded == 1065) {
-          var tr = document.createElement("tr");
-          tr.setAttribute("class", "alerts");
-          var td = document.createElement("td");
-          td.setAttribute("colspan", 2);
-          td.innerHTML = "Patient Is on fast track";
-          td.style.color = "green";
-          tr.appendChild(td);
-          table.appendChild(tr);
+
+    function buildFT(patient_id, table) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=9561';
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    if (results.length > 0) {
+                        buildFTAssessment(table, results[0].encounter_id);
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+
         }
-      }
     }
-  };
-  try {
-    req.open('GET', url, true);
-    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
-    req.send(null);
-  } catch (e) {
-  
-  }
-}
 
-function activateButton(button) {
-  var buttons = document.getElementsByClassName("app-btn btn btn-primary");
+    function buildFTAssessment(table, encounter_id) {
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + encounter_id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    if (results.observations[0].value_coded == 1065) {
+                        var tr = document.createElement("tr");
+                        tr.setAttribute("class", "alerts");
+                        var td = document.createElement("td");
+                        td.setAttribute("colspan", 2);
+                        td.innerHTML = "Patient Is on fast track";
+                        td.style.color = "green";
+                        tr.appendChild(td);
+                        table.appendChild(tr);
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
 
-  for (let index = 0; index < buttons.length; index++) {
-    buttons[index].style.backgroundColor = "white";
-  }
+        }
+    }
 
-  button.style.backgroundColor = "#204d74";
-}
+    function loadTodaysDate() {
+        var todays_date = sessionStorage.sessionDate;
+        if (sessionStorage.session) {
+            jQuery("#todaysDate").html("<span style='color: red; font-weight: bold;'>" + todays_date + "</span>")
+        } else {
+            jQuery("#todaysDate").html("<span style='color: green; font-weight: bold;'>" + todays_date + "</span>")
+        }
+    }
+
+    loadTodaysDate();
+
+    function activateButton(button) {
+        var buttons = document.getElementsByClassName("app-btn btn btn-primary");
+
+        for (let index = 0; index < buttons.length; index++) {
+            buttons[index].style.backgroundColor = "white";
+        }
+
+        button.style.backgroundColor = "#204d74";
+    }
+
     GetApplicationInfo();
 
     ajaxRequest();
-      
-   </script>
-   <script>
-      generateActivities();
-      changeActivities();
-      generateTasks();
-      buildAlerts(sessionStorage.patientID);
-      useHangingPillsDialog();
 
-      // loadAlerts();
-    </script>
+</script>
+<script>
+    generateActivities();
+    changeActivities();
+    generateTasks();
+    buildAlerts(sessionStorage.patientID);
+    useHangingPillsDialog();
+
+    // loadAlerts();
+</script>
 </html>
 <script src="/assets/js/generic_ajaxrequest.js"></script> 

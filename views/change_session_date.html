@@ -1,116 +1,121 @@
-
-<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+        defer="true"></script>
 <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/moment.js"></script>
 
-  <script src="/assets/js/generic_ajaxrequest.js"></script>
+<script src="/assets/js/generic_ajaxrequest.js"></script>
 <style>
-#tt_page_month #viewport {
-  height: 80%;
-}
+    #tt_page_month #viewport {
+        height: 80%;
+    }
 
-.inputFrameClass {
-  width: 95.5%;
-}
+    .inputFrameClass {
+        width: 95.5%;
+    }
 
-.tt_controls_month #keyboard {
-  display: none !important;
-}
+    .tt_controls_month #keyboard {
+        display: none !important;
+    }
 
 
 </style>
 
 <script>
 
-if(sessionStorage.patientID == null || sessionStorage.patientID == 'null') {
-  var tt_cancel_destination = "/";
-}else{
-  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
-}
+    if (sessionStorage.patientID == null || sessionStorage.patientID == 'null') {
+        var tt_cancel_destination = "/";
+    } else {
+        var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+    }
 
-function setAbsoluteMaxYear() {
-  var y = document.getElementById('touchscreenInput' + tstCurrentPage);
-  y.setAttribute('absoluteMax', (new Date().getFullYear()));
-}
+    function setAbsoluteMaxYear() {
+        var y = document.getElementById('touchscreenInput' + tstCurrentPage);
+        y.setAttribute('absoluteMax', (new Date().getFullYear()));
+    }
 
-function setSubmit() {
-  var b = document.getElementById('nextButton');
-  b.setAttribute('onmousedown','submitDate();');
-}
+    function setSubmit() {
+        var b = document.getElementById('nextButton');
+        b.setAttribute('onmousedown', 'submitDate();');
+    }
 
-function resetSubmitButton() {
-  var b = document.getElementById('nextButton');
-  b.setAttribute('onmousedown','gotoNextPage();');
-}
+    function resetSubmitButton() {
+        var b = document.getElementById('nextButton');
+        b.setAttribute('onmousedown', 'gotoNextPage();');
+    }
 
-function submitDate() {
-  var year = document.getElementById('session_year').value;
-  var month = document.getElementById('session_month').value;
-  var day = document.getElementById('touchscreenInput' + tstCurrentPage).value;
-  
-  if(parseInt(month) < 10)
-    month = '0' + month;
+    function submitDate() {
+        var year = document.getElementById('session_year').value;
+        var month = document.getElementById('session_month').value;
+        var day = document.getElementById('touchscreenInput' + tstCurrentPage).value;
 
-  if(parseInt(day) < 10)
-    day = '0' + day;
+        if (parseInt(month) < 10)
+            month = '0' + month;
 
-  var set_date = (year + '-' + month + '-' + day);
-  set_date = moment(new Date(set_date)).format('YYYY-MM-DD');
-  
-  if(set_date > moment(new Date()).format('YYYY-MM-DD')) {
-    showMessage('Date is greater than current date');
-    return;
-  }
+        if (parseInt(day) < 10)
+            day = '0' + day;
 
-  sessionStorage.sessionDate = moment(set_date).format('YYYY-MM-DD');
-  if(parseInt(sessionStorage.patientID) > 0){
-    nextEncounter(sessionStorage.patientID, 1, true);
-  }else{
-    document.location = tt_cancel_destination; 
-  }
-}
+        var set_date = (year + '-' + month + '-' + day);
+        set_date = moment(new Date(set_date)).format('YYYY-MM-DD');
+        var todays_date = moment(new Date()).format('YYYY-MM-DD');
+
+        if (set_date > todays_date) {
+            showMessage('Date is greater than current date');
+            return;
+        }
+
+        if (set_date != todays_date) {
+            sessionStorage.session = "true";
+        } else {
+            sessionStorage.removeItem("session");
+        }
+
+        sessionStorage.sessionDate = moment(set_date).format('YYYY-MM-DD');
+        if (parseInt(sessionStorage.patientID) > 0) {
+            nextEncounter(sessionStorage.patientID, 1, true);
+        } else {
+            document.location = tt_cancel_destination;
+        }
+    }
 </script>
 
 <body id="mateme">
-  <div id="container">
+<div id="container">
     <div id="content">
 
-      <form>
-      
-        <input type="text" name="session_year" id="session_year" helpText="Year" field_type="number" 
-          absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxYear()" 
-          tt_pageStyleClass="Numeric NumbersOnly" />
+        <form>
 
-        <select name="session_month" id="session_month" helpText="Month" 
-          tt_onLoad="__$(keyboard).style.display = none;">
-          <option value=""></option>
-          <option value="1">Jan</option>
-          <option value="2">Feb</option>
-          <option value="3">Mar</option>
-          <option value="4">Apr</option>
-          <option value="5">May</option>
-          <option value="6">Jun</option>
-          <option value="7">Jul</option>
-          <option value="8">Aug</option>
-          <option value="9">Sep</option>
-          <option value="10">Oct</option>
-          <option value="11">Nov</option>
-          <option value="12">Dec</option>
-        </select>
+            <input type="text" name="session_year" id="session_year" helpText="Year" field_type="number"
+                   absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxYear()"
+                   tt_pageStyleClass="Numeric NumbersOnly"/>
 
-        <input type="text" name="session_day" 
-          id="session_day" 
-          field_type="number" helpText="Day" 
-          tt_onLoad="setSubmit();" 
-          tt_onUnLoad="resetSubmitButton();"/> 
-            
-      
-      
-      
-      </form>
+            <select name="session_month" id="session_month" helpText="Month"
+                    tt_onLoad="__$(keyboard).style.display = none;">
+                <option value=""></option>
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Aug</option>
+                <option value="9">Sep</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+            </select>
 
-   </div>
- </div>
+            <input type="text" name="session_day"
+                   id="session_day"
+                   field_type="number" helpText="Day"
+                   tt_onLoad="setSubmit();"
+                   tt_onUnLoad="resetSubmitButton();"/>
+
+
+        </form>
+
+    </div>
+</div>
 </body>
 
