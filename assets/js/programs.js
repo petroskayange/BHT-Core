@@ -159,7 +159,7 @@ function buildStates(container, states) {
     if (states[i].end_date != null) {
       endDate.innerText = moment(states[i].end_date).format('DD/MMM/YYYY')
     } else {
-      endDate.innerText = 'Current'
+      endDate.innerText = 'N/A'
     }
     dataRow.appendChild(endDate)
 
