@@ -756,20 +756,20 @@ function postVitalsObs(encounter) {
       continue;
 
     if(name.match(/weight/i)) {
-      vitals_observations.push({concept_id: 5089, value_numeric: vital, value_modifier: "kg"})
+      vitals_observations.push({concept_id: 5089, value_numeric: vital});
       sessionStorage.currentWeight = vital;
     }else if(name.match(/height/i)) {
-      vitals_observations.push({concept_id: 5090,  value_numeric: vital, value_modifier: "cm"})
+      vitals_observations.push({concept_id: 5090,  value_numeric: vital})
     }else if(name.match(/BP/i)) {
       var bp_systolic = vital.split("/")[0];
       var bp_diastolic = vital.split("/")[1];
 
-      vitals_observations.push({concept_id: 5085,  value_numeric: bp_systolic})
+      vitals_observations.push({concept_id: 5085,  value_numeric: bp_systolic});
       vitals_observations.push({concept_id: 5086,  value_numeric: bp_diastolic})
     }else if(name.match(/Temp/i)) {
-      vitals_observations.push({concept_id: 5088,  value_numeric: vital, value_modifier: "C"})
+      vitals_observations.push({concept_id: 5088,  value_numeric: vital})
     }else if(name.match(/SPO2/i)) {
-      vitals_observations.push({concept_id: 5092,  value_numeric: vital, value_modifier: "o2"})
+      vitals_observations.push({concept_id: 5092,  value_numeric: vital})
     }else if(name.match(/Pulse/i)) {
       vitals_observations.push({concept_id: 5087,  value_numeric: vital})
     } 
