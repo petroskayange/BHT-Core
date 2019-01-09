@@ -13,6 +13,9 @@
   var PROGRAM_ID = sessionStorage.getItem('programID');
   var PATIENT_FILE_LABEL = 'personData.lbl';
   var GUARDIAN_FILE_LABEL = 'guardianLabel.lbl';
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
 
   function init() {
     createPatientState({
@@ -61,8 +64,8 @@
     // var url = API_PATH + '/patients/' + options.personId + '/labels/national_health_id';
     // var token = options.authToken;
 
-    var url = "/patients/" + options.personId + "/labels/national_health_id"
-  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+    var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
+  url = sessionStorage.apiProtocol + "://" + sessionStorage.apiURL + ":" + sessionStorage.apiPort + "/api/v1" + url;
   document.location = url;
 
   function red() {

@@ -1,0 +1,369 @@
+<script
+  type="text/javascript"
+  src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+  defer="true"
+></script>
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+<link rel="stylesheet" href="/assets/css/yes_no_ctrls.css" type="text/css" />
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/moment.js"></script>
+<script type="text/javascript" src="/assets/js/httpUtils.js"></script>
+
+<style>
+  #Unknown {
+    display: inline !important;
+  }
+
+  .tt_controls_outcome_month #keyboard {
+    display: none !important;
+  }
+
+  #tt_page_outcome_month #viewport {
+    height: 95%;
+  }
+
+  #tt_page_outcome_month .inputFrameClass {
+    height: 88%;
+    width: 96%;
+  }
+</style>
+
+<script>
+  tt_cancel_destination = "/views/patient/programs.html";
+
+  function setAbsoluteMaxOutcomeYear() {
+    var element = document.getElementById("touchscreenInput" + tstCurrentPage);
+    element.setAttribute("absoluteMax", new Date().getFullYear());
+    element.setAttribute("min", new Date().getFullYear() - 100);
+    element.setAttribute("absoluteMin", new Date().getFullYear() - 120);
+  }
+
+  function setUpPageForDateValidation() {
+    var nextBtn = __$("nextButton");
+    nextBtn.setAttribute("onmousedown", "validateOutcomeDate();");
+    nextBtn.setAttribute("onclick", "");
+
+    nextBtn.innerHTML = "<span>Finish</span>";
+  }
+
+  var set_dob;
+
+  function validateOutcomeDate() {
+    setOutcomeDate();
+    var valid_date = validateEnteredDate(set_dob);
+
+    if (!valid_date) {
+      showMessage("Invalid Date");
+      return;
+    }
+
+    currDate = new Date();
+    currDate = new Date(
+      currDate.getFullYear() +
+        "-" +
+        (currDate.getMonth() + 1) +
+        "-" +
+        currDate.getDate()
+    );
+    setDate = new Date(set_dob);
+
+    if (setDate > currDate) {
+      showMessage("Outcome date can not be more than the current date");
+      return;
+    }
+
+    submitOutcome();
+  }
+
+  function setOutcomeDate() {
+    try {
+      dob_year = document.getElementById("outcome_year").value; //getElementsByTagName("input")[0].value
+    } catch (e) {
+      dob_year = dob_year;
+    }
+    try {
+      dob_month = document.getElementById("outcome_month").value; //getElementsByTagName("input")[0].getAttribute('tstvalue')
+      if (dob_month.length == 1) dob_month = 0 + dob_month;
+    } catch (e) {
+      dob_month = dob_month;
+    }
+    try {
+      dob_day = document.getElementById("outcome_day").value; //getElementsByTagName("input")[0].value
+      if (dob_day.length < 1)
+        dob_day = document.getElementById("touchscreenInput" + tstCurrentPage)
+          .value; //getElementsByTagName("input")[0].value
+
+      if (dob_day.length == 1) dob_day = 0 + dob_day;
+    } catch (e) {
+      dob_day = dob_day;
+    }
+
+    set_dob = dob_year + "-" + dob_month + "-" + dob_day;
+  }
+
+  function validateMonth() {
+    var nextBtn = __$("nextButton");
+    nextBtn.setAttribute("onmousedown", "validateOutcomeYearMonth();");
+    nextBtn.setAttribute("onclick", "");
+  }
+
+  function validateOutcomeYearMonth() {
+    setYear = parseInt(document.getElementById("outcome_year").value);
+    if (setYear == new Date().getFullYear()) {
+      var element = document.getElementById(
+        "touchscreenInput" + tstCurrentPage
+      );
+      var selectedMonth = parseInt(element.getAttribute("tstValue"));
+      var currMonth = parseInt(new Date().getMonth() + 1);
+      if (selectedMonth > currMonth) {
+        showMessage("Selected month is greater than current month");
+        return;
+      }
+    }
+
+    gotoNextPage();
+  }
+
+  function validateEnteredDate(inputText) {
+    // Match the date format through regular expression
+    if (inputText.match(/-/i)) {
+      //Test which seperator is used '/' or '-'
+      var pdate = inputText.split("-");
+
+      var dd = parseInt(pdate[2]);
+      var mm = parseInt(pdate[1]);
+      var yy = parseInt(pdate[0]);
+
+      if (dd == 0) {
+        return false;
+      }
+
+      // Create list of days of a month [assume there is no leap year by default]
+      var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      if (mm == 1 || mm > 2) {
+        if (dd > ListofDays[mm - 1]) {
+          //alert('Invalid date format!');
+          return false;
+        }
+      }
+
+      if (mm == 2) {
+        var lyear = false;
+        if ((!(yy % 4) && yy % 100) || !(yy % 400)) {
+          lyear = true;
+        }
+
+        if (lyear == false && dd >= 29) {
+          //alert('Invalid date format!');
+          return false;
+        }
+
+        if (lyear == true && dd > 29) {
+          //alert('Invalid date format!');
+          return false;
+        }
+      }
+    } else {
+      //alert("Invalid date format!");
+      //document.form1.text1.focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  function submitOutcome() {
+    var outcome_date = getOutcomeDate();
+    program = {
+      program_id: document.getElementById("program_id").value,
+      date_enrolled: outcome_date
+    };
+
+    postProgram(program);
+  }
+
+  function getOutcomeDate() {
+    if (estimated_outcome_date != null || estimated_outcome_date != undefined) {
+      return moment(estimated_outcome_date).format("YYYY-MM-DD");
+    } else {
+      return moment(set_dob).format("YYYY-MM-DD");
+    }
+  }
+
+  function postProgram(program) {
+    var patientId = sessionStorage.getItem("patientID");
+    var path = sessionStorage.getItem('apiProtocol') + '://' +
+      sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') +
+      '/api/v1/patients/' + patientId + '/programs'
+
+    var req = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('MicrosoftXMLHTTP')
+    req.onreadystatechange = function () {
+      if (req.readyState === 4 && req.status === 201) {
+        showMessage('The patient was successfully enrolled into the program.')
+        setTimeout(function () {
+          document.location = '/views/patient/update_state.html?program_id=' + program.program_id
+        }, 3000)
+      } else if (req.readyState === 4 && req.status === 409) {
+        console.error(req.responseText)
+        showMessage('The patient is already enrolled into the program.')
+        setTimeout(function () {
+          document.location = '/views/patient/programs.html'
+        }, 3000)
+      } else if (req.readyState === 4 && req.status >= 400) {
+        showMessage('There was an error enrolling the patient.')
+        setTimeout(function () {
+          document.location = '/views/patient/programs.html'
+        }, 3000)
+      }
+    }
+
+    req.open('POST', path, true)
+    req.setRequestHeader('Content-Type', 'application/json')
+    req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'))
+    req.send(JSON.stringify(program))    
+  }
+
+  var estimated_outcome_date;
+
+  function calculatePeriod() {
+    var nextBtn = document.getElementById("nextButton");
+    nextBtn.setAttribute("onmousedown", "estimateOutcomeDate();");
+    estimated_outcome_date = null;
+
+    nextBtn.innerHTML = "<span>Finish</span>";
+  }
+
+  function estimateOutcomeDate() {
+    var outcome_period_estimated = $("outcome_period_estimated").value;
+    if (outcome_period_estimated.length < 1) {
+      showMessage("Please estimate the outcome date");
+      return;
+    }
+
+    var curr_date = sessionStorage.sessionDate;
+    curr_date = new Date(curr_date);
+    curr_date.setDate(curr_date.getDate() - outcome_period_estimated);
+    estimated_outcome_date = curr_date;
+    
+    submitOutcome()
+  }
+
+  function fetchPrograms() {
+    var path =
+      sessionStorage.getItem("apiProtocol") +
+      "://" +
+      sessionStorage.getItem("apiURL") +
+      ":" +
+      sessionStorage.getItem("apiPort") +
+      "/api/v1/programs";
+    GET(
+      {
+        url: path,
+        async: true,
+        headers: {
+          Authorization: sessionStorage.getItem("authorization")
+        }
+      },
+      {},
+      function(data) {
+        data.forEach(function (program) {
+          document.getElementById('program_id').appendChild(createProgramOptions(program))
+        })
+      },
+      function(error) {
+        console.error(error);
+        showMessage("There was a problem fetching the programs.");
+      }
+    );
+  }
+
+  function createProgramOptions (program) {
+    var programOption = document.createElement('option')
+    programOption.setAttribute('value', program.program_id)
+    programOption.innerText = program.name
+    return programOption
+  } 
+
+  fetchPrograms()
+</script>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <form>
+        <select
+          name="program_id"
+          id="program_id"
+          helpText="Please select a program"
+          validationMessage="Please select a program!"
+          tt_onUnLoad=""
+          tt_onLoad="__$(keyboard).style.display = none;"
+        >
+        </select>
+
+        <input
+          type="text"
+          name="state_year"
+          id="outcome_year"
+          helpText="Outcome year"
+          field_type="number"
+          absoluteMin="1900"
+          min="1900"
+          tt_onLoad="setAbsoluteMaxOutcomeYear();"
+          tt_pageStyleClass="Numeric NumbersOnly"
+        />
+
+        <select
+          name="outcome_period_estimated"
+          id="outcome_period_estimated"
+          helpText="Outcome estimated period"
+          condition="$('outcome_year').value.toLowerCase() == 'unknown'"
+          tt_onLoad="calculatePeriod();__$(keyboard).style.display = none;"
+        >
+          <option value=""></option>
+          <option value="168">6 months ago</option>
+          <option value="336">12 months ago</option>
+          <option value="504">18 months ago</option>
+          <option value="672">24 months ago</option>
+          <option value="1344">Over 2 years ago</option>
+        </select>
+
+        <select
+          name="outcome_month"
+          id="outcome_month"
+          helpText="Outcome month"
+          condition="$('outcome_year').value.toLowerCase() != 'unknown'"
+          validationMessage="Please enter a valid date"
+          tt_onUnLoad=""
+          tt_onLoad="validateMonth();__$(keyboard).style.display = none;"
+        >
+          <option value=""></option>
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+          <!-- option value="Unknown">Unknown</option -->
+        </select>
+
+        <input
+          type="text"
+          name="outcome_day"
+          id="outcome_day"
+          field_type="number"
+          helpText="Outcome Day"
+          condition="$('outcome_year').value.toLowerCase() != 'unknown' && $('outcome_month').value.toLowerCase() != 'unknown'"
+        />
+      </form>
+    </div>
+  </div>
+</body>
