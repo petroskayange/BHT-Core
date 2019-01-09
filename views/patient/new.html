@@ -732,7 +732,7 @@
   <input name="commit" type="submit" value="Create person" /> -->
   
   <input type="text" name="summary" id="summary"
-    tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
+    tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();document.getElementById('nextButton').style.display = 'none';"
     tt_onUnLoad ="resetFinishBtn();" optional = "true" tt_pageStyleClass = "NoControls" /> 
 
 
@@ -786,6 +786,7 @@ function getObjects(td, attribute, element_name, aUrl) {
         for(var x = 0 ; x < villages.length; x++){
           if(villages[x].village_id == attribute){
             td.innerHTML = villages[x].name;
+            document.getElementById('nextButton').style.display= "block";
             break;
           }
         }
