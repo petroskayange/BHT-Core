@@ -59,6 +59,10 @@
 </div>
 
 <script>
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
+
   var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
   url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
   document.location = url;
