@@ -363,6 +363,10 @@ function printNPID() {
   print_and_redirect('/views/print/npid.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
+function printFilingNumber() {
+    print_and_redirect('/views/print/filing.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
 function download(filename, text) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
@@ -405,7 +409,10 @@ function buildDashboardButtons(tasks, container) {
     containerTableCell.setAttribute("style","display: table-cell;");
     if(tasks[i][0].match(/National Health ID/i)){
       containerTableCell.setAttribute("onmousedown","printNPID();");
-    }else{
+    }else if(tasks[i][0].match(/Filing Number/i)){
+        containerTableCell.setAttribute("onmousedown","printFilingNumber();");
+      }
+    else{
       containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
     }
 
