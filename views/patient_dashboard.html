@@ -1291,7 +1291,7 @@
     }
 
     function loadTodaysDate() {
-        var todays_date = sessionStorage.sessionDate;
+        var todays_date = moment(sessionStorage.sessionDate).format("DD/MMM/YYYY");
         if (sessionStorage.session) {
             jQuery("#todaysDate").html("<span style='color: red; font-weight: bold;'>" + todays_date + "</span>")
         } else {
