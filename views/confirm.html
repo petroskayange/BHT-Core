@@ -238,7 +238,8 @@ function getClient(patient_id) {
       }else if(JSON.parse(this.responseText).length == 1) {
         populatePatient(obj, obj_2);
       } else {
-        location.href = "/";
+        noPatient();
+        // location.href = "/";
       }
     }else if(this.status == 204) {
       window.location.href = "/";
@@ -719,6 +720,20 @@ function populateOnFastTrack(options, patient_id) {
   </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal-2"
+  style="width: 60%; margin-left:20%;margin-right: 20%; margin-top: 20%;">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="margin: 0; ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel" style="text-align:center;">Patient Not Found. Please scan again or search by name</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="button red" id="modal-btn-si-2" style="float:right; text-align: center; width: 100px;">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="buttonsDIV">
   <button class="red" style="float: left; margin-left: 10px;" onmousedown="location='/'">Cancel</button>
   <button class="blue" style="float: right;" id="continue">Continue</button>
@@ -766,6 +781,34 @@ function populateOnFastTrack(options, patient_id) {
     }
 
   }
+
+ function noPatient() {
+      $("#mi-modal-2").modal('show');
+      var modalConfirm = function (callback) {
+        $("#continue").on("click", function () {
+          $("#mi-modal-2").modal('show');
+        });
+
+        $("#modal-btn-si-2").on("click", function () {
+          callback(true);
+          $("#mi-modal-2").modal('hide');
+        });
+
+        $("#modal-btn-no-2").on("click", function () {
+          callback(false);
+          $("#mi-modal-2").modal('hide');
+        });
+      };
+
+      modalConfirm(function (confirm) {
+        if (confirm) {
+          window.location.href = "/";
+        } 
+      });
+    
+
+  } 
+
 
   function formatIdentifier(identifier) {
     if (identifier.length == 6) {
