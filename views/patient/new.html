@@ -732,9 +732,12 @@
   <input name="commit" type="submit" value="Create person" /> -->
   
   <input type="text" name="summary" id="summary"
-    tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();document.getElementById('nextButton').style.display = 'none';"
+    tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
     tt_onUnLoad ="resetFinishBtn();" optional = "true" tt_pageStyleClass = "NoControls" /> 
 
+<!-- commented code: ttonload for next button to appear when all districts are loaded -->
+<!-- document.getElementById('nextButton').style.display = 'none';-->
+<!-- commented code: ttonload for next button to appear when all districts are loaded -->
 
   <!-- <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
 

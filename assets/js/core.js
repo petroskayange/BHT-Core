@@ -367,6 +367,9 @@ function printFilingNumber() {
     print_and_redirect('/views/print/filing.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
+function printVisitSummary() {
+    print_and_redirect('/views/print/visit.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
 function download(filename, text) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
@@ -411,7 +414,9 @@ function buildDashboardButtons(tasks, container) {
       containerTableCell.setAttribute("onmousedown","printNPID();");
     }else if(tasks[i][0].match(/Filing Number/i)){
         containerTableCell.setAttribute("onmousedown","printFilingNumber();");
-      }
+    }else if(tasks[i][0].match(/Visit Summary/i)){
+        containerTableCell.setAttribute("onmousedown","printVisitSummary();");
+    }
     else{
       containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
     }

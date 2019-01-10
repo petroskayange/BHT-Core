@@ -232,7 +232,7 @@ function postState(state) {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     },
-    state,
+    state,setUpProgramPage
     function (data) {
       showMessage('The patient\'s state was updated successfully.')
       setTimeout(function() {
@@ -276,6 +276,7 @@ function estimateOutcomeDate() {
   if(transferring_out == true){
     gotoNextPage();
   }else{
+      submitOutcome();
   }
 }
 
