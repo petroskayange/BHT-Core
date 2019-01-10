@@ -598,8 +598,8 @@ function buildDefaulter(patient_id, table){
 }
 
 function buildProgramInfo(patient_id) {
-  document.getElementById('section-body-3').innerHTML += '<table class=\'info-tables\'><tr><td>Next Appointment Date:</td><td id=\'nextAptDate\'>N/A</td>' +
-    '</tr><tr><td>ART Duration:</td><td id=\'artDuration\'>N/A</td></tr><tr><td>On Fast Track:</td><td id=\'onFastTrack\'>N/A</td></tr></table>';
+  document.getElementById('section-body-3').innerHTML += '<table class=\'info-tables\'><tr><td style="color:blue; font-weight:bold;">Next Appointment Date:</td><td id=\'nextAptDate\'>N/A</td>' +
+    '</tr><tr><td>ART Duration:</td><td id=\'artDuration\'>N/A</td></tr><tr><td style="color:blue; font-weight:bold;">ON FAST TRACK:</td><td id=\'onFastTrack\'>N/A</td></tr></table>';
   populateNextAppointmentDate({ elementToUse: 'nextAptDate' }, patient_id);
   populateArtDuration({ elementToUse: 'artDuration' }, patient_id);
   populateOnFastTrack({ elementToUse: 'onFastTrack' }, patient_id);
@@ -619,10 +619,14 @@ function populateNextAppointmentDate(options, patient_id) {
     }catch(e) {
       date = "Not Available";
     }
-    document.getElementById(options.elementToUse).innerText = date;
+    var el = document.getElementById(options.elementToUse);
+      el.innerText = date;
+      el.style.color = 'blue';
   }, function (error, status) {
     if (status === 404) {
-      document.getElementById(options.elementToUse).innerText = 'Not Available';
+      var el = document.getElementById(options.elementToUse);
+        el.innerText = 'Not Available';
+        el.style.color = 'blue';
     } else {
       console.error(error);
     }
@@ -654,10 +658,14 @@ function populateOnFastTrack(options, patient_id) {
     }
   }, {}, function (data) {
     if (data['continue FT'] === true) {
-      document.getElementById(options.elementToUse).innerText = 'Yes';
+      var el = document.getElementById(options.elementToUse);
+        el.innerText = 'YES';
+        el.style.color = 'blue';
       setUpFTalert(document.getElementById('continue'));
     } else {
-      document.getElementById(options.elementToUse).innerText = 'No';
+        var el = document.getElementById(options.elementToUse);
+        el.innerText = 'NO';
+        el.style.color = 'blue';
     }
   }, function (error, status) {
     console.error(error);

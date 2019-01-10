@@ -173,19 +173,19 @@
           td.innerHTML = attributes[i][1];
 
           if(attributes[i][0].match(/Current District/i)){
-            getObjects(td, attributes[i][1], "District", "/districts?region_id=" + document.getElementById('current_region').value);
+            getObjects(td, attributes[i][1], "District", "/districts?paginate=false&region_id=" + document.getElementById('current_region').value);
           }else if(attributes[i][0].match(/Current TA/i)){
-            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?district_id=" + document.getElementById('current_district').value);
+            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?paginate=false&district_id=" + document.getElementById('current_district').value);
           }else if(attributes[i][0].match(/Current Village/i)){
-            getObjects(td, attributes[i][1], "Village", "/villages?traditional_authority_id=" + document.getElementById('current_ta').value);
+            getObjects(td, attributes[i][1], "Village", "/villages?paginate=false&traditional_authority_id=" + document.getElementById('current_ta').value);
           }    
           
           if(attributes[i][0].match(/Home District/i)){
-            getObjects(td, attributes[i][1], "District", "/districts?region_id=" + document.getElementById('home_region').value);
+            getObjects(td, attributes[i][1], "District", "/districts?paginate=false&region_id=" + document.getElementById('home_region').value);
           }else if(attributes[i][0].match(/Home TA/i)){
-            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?district_id=" + document.getElementById('home_district').value);
+            getObjects(td, attributes[i][1], "TA", "/traditional_authorities?paginate=false&district_id=" + document.getElementById('home_district').value);
           }else if(attributes[i][0].match(/Home Village/i)){
-            getObjects(td, attributes[i][1], "Village", "/villages?traditional_authority_id=" + document.getElementById('home_ta').value);
+            getObjects(td, attributes[i][1], "Village", "/villages?paginate=false&traditional_authority_id=" + document.getElementById('home_ta').value);
           }    
           
 
@@ -734,10 +734,6 @@
   <input type="text" name="summary" id="summary"
     tt_onLoad = "summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
     tt_onUnLoad ="resetFinishBtn();" optional = "true" tt_pageStyleClass = "NoControls" /> 
-
-<!-- commented code: ttonload for next button to appear when all districts are loaded -->
-<!-- document.getElementById('nextButton').style.display = 'none';-->
-<!-- commented code: ttonload for next button to appear when all districts are loaded -->
 
   <!-- <input type="text" name="person[guardian_cell_phone_number]" id="guardian_cellphone" field_type="number" helpText="Next of Kin Cell Phone Number" tt_onUnload="getInput();" validationRule="^0\d{7}$|Unknown|Not Available|N/A|^0\d{9}$" validationMessage="Not a valid phone number" tt_pageStyleClass="nota NumbersOnlyWithUnknown" /> -->
 
