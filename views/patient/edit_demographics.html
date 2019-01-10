@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
   <link rel="stylesheet" href="/assets/css/custom.css">
+  <script src="/assets/js/moment.js"></script>
   </head>
   <body>
 <script>
@@ -244,7 +245,7 @@
             <tr>
               <th class="data_header"><h2>Name</h2></th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p>
+                <p id="name">
                   &nbsp;
                 </p>
               </td>
@@ -261,7 +262,7 @@
                 <h2>Gender</h2>
               </th>
               <td class='data'>
-                <p>
+                <p id="gender">
                    &nbsp;
                 </p>
               </td>
@@ -278,7 +279,7 @@
                 <h2>Birthdate</h2>
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p>
+                <p id="birthdate">
                    &nbsp;
                 </p>
               </td>
@@ -295,7 +296,7 @@
                 <h2>District of residence</h2>
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p>
+                <p id="district">
                    &nbsp;
                 </p>
               </td>
@@ -312,7 +313,7 @@
                 <h2>Region of origin</h2>
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p>
+                <p id="region">
                    &nbsp;
                 </p>
               </td>
@@ -329,7 +330,7 @@
                 <h2>Home district</h2>
               </th>
               <td class='data'>
-                <p>
+                <p id="home-district">
                      &nbsp;
                 </p>
               </td>
@@ -345,7 +346,7 @@
                 <h2>Home TA</h2>
               </th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p>
+                <p id="home-ta">
                    &nbsp;
                 </p>
               </td>
@@ -362,7 +363,7 @@
                 <h2>Home village</h2>
               </th>
               <td class='data'>
-                <p>
+                <p id="home-village">
                      &nbsp;
                 </p>
               </td>
@@ -378,7 +379,7 @@
                 <h2>Cell Phone Number</h2>
               </th>
               <td class='data'>
-                <p>
+                <p id="cellphone-number">
                      &nbsp;
                 </p>
               </td>
@@ -401,6 +402,48 @@
     </div>
     </div>
     </div>
+    <script type="text/javascript">
+    var apiProtocol = sessionStorage.apiProtocol;
+    var apiURL = sessionStorage.apiURL;
+    var apiPort = sessionStorage.apiPort;
+    
+    function ajaxRequest(){
+      var url = 'http://'+apiURL+':'+apiPort+'/api/v1/patients/' + sessionStorage.patientID;
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function(){
+      if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        document.getElementById("name").innerHTML = results.person.names[0].given_name + " " + results.person.names[0].family_name;
+        document.getElementById("gender").innerHTML = results.person.gender;
+        document.getElementById("birthdate").innerHTML = moment(results.person.birthdate).format("DD/MMM/YYYY");
+        document.getElementById("district").innerHTML = results.person.addresses[0].state_province + ", " + results.person.addresses[0].township_division + ", " + results.person.addresses[0].neighborhood_cell;
+        document.getElementById("home-district").innerHTML = results.person.addresses[0].address2;
+        document.getElementById("home-ta").innerHTML = results.person.addresses[0].city_village;
+        document.getElementById("home-village").innerHTML = results.person.addresses[0].county_district;
+        document.getElementById("region").innerHTML = results.person.addresses[0].address2 + ", " + results.person.addresses[0].city_village + ", " + results.person.addresses[0].county_district;
+        var identifiers = results.person.person_attributes;
+        for (var x = 0; x < identifiers.length; x++) {
+          if(identifiers[x].person_attribute_type_id == "12") {
+            document.getElementById("cellphone-number").innerHTML = identifiers[x].value;
+          }else {
+            document.getElementById("cellphone-number").innerHTML = "unknown";
+          }
+          
+        }
+          console.log(results);
+      }
+      }
+      };
+      try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+        req.send(null);
+      } catch (e) {
+      }
+    }
+    
+    </script>
     </body>
     </html>
 <!--           </table>
