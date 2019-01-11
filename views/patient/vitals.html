@@ -9,7 +9,7 @@
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 <script type="text/javascript" src="/assets/js/bmi.js"></script>
 <script type="text/javascript" src="/assets/js/moment.js"></script>
-
+<script type="text/javascript" src="/assets/js/demographics.js"></script>
 <style>
 
 .main-table-div {
@@ -193,7 +193,9 @@ img {
 <script type="text/javascript">
   var patientID = sessionStorage.getItem("patientID");
   var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patientID;
-  
+  if(sessionStorage.patientAge === "null") {
+      getDemographics(patientID);
+  }
   function getHeight(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort;
     url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
