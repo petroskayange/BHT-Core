@@ -293,40 +293,6 @@
             </tr>
             <tr>
               <th class="data_header">
-                <h2>District of residence</h2>
-              </th>
-              <td class='data' style='border-width:1px 1px 1px'>
-                <p id="district">
-                   &nbsp;
-                </p>
-              </td>
-              <td class='anchor_class'>
-                <a onmousedown="editAddresses();">
-                    <span>
-                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
-                    </span>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th class="data_header">
-                <h2>Region of origin</h2>
-              </th>
-              <td class='data' style='border-width:1px 1px 1px'>
-                <p id="region">
-                   &nbsp;
-                </p>
-              </td>
-              <td class='anchor_class'>
-                <a onmousedown="editAddresses();">
-                    <span>
-                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
-                    </span>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <th class="data_header">
                 <h2>Home district</h2>
               </th>
               <td class='data'>
@@ -345,8 +311,24 @@
               <th class="data_header">
                 <h2>Home TA</h2>
               </th>
+              <td class='data'>
+                <p id="home-village">
+                     &nbsp;
+                </p>
+              </td>
+              <td class='anchor_class'>
+                <a onmousedown="editAddresses();">
+                <span>
+                  <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
+                </span></a>
+              </td>
+            </tr>
+            <tr>
+              <th class="data_header">
+                <h2>Home village</h2>
+              </th>
               <td class='data' style='border-width:1px 1px 1px'>
-                <p id="home-ta">
+                <p id="district">
                    &nbsp;
                 </p>
               </td>
@@ -360,18 +342,53 @@
             </tr>
             <tr>
               <th class="data_header">
-                <h2>Home village</h2>
+                <h2>Current district</h2>
               </th>
-              <td class='data'>
-                <p id="home-village">
-                     &nbsp;
+              <td class='data' style='border-width:1px 1px 1px'>
+                <p id="current-district">
+                   &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
                 <a onmousedown="editAddresses();">
-                <span>
-                  <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
-                </span></a>
+                    <span>
+                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
+                    </span>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th class="data_header">
+                <h2>Current T/A</h2>
+              </th>
+              <td class='data' style='border-width:1px 1px 1px'>
+                <p id="current-ta">
+                   &nbsp;
+                </p>
+              </td>
+              <td class='anchor_class'>
+                <a onmousedown="editAddresses();">
+                    <span>
+                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
+                    </span>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th class="data_header">
+                <h2>Current village</h2>
+              </th>
+              <td class='data' style='border-width:1px 1px 1px'>
+                <p id="current-village">
+                   &nbsp;
+                </p>
+              </td>
+              <td class='anchor_class'>
+                <a onmousedown="editAddresses();">
+                    <span>
+                      <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
+                    </span>
+                </a>
               </td>
             </tr>
             <tr>
@@ -417,11 +434,12 @@
         document.getElementById("name").innerHTML = results.person.names[0].given_name + " " + results.person.names[0].family_name;
         document.getElementById("gender").innerHTML = results.person.gender;
         document.getElementById("birthdate").innerHTML = moment(results.person.birthdate).format("DD/MMM/YYYY");
-        document.getElementById("district").innerHTML = results.person.addresses[0].state_province + ", " + results.person.addresses[0].township_division + ", " + results.person.addresses[0].neighborhood_cell;
+        document.getElementById("district").innerHTML = results.person.addresses[0].neighborhood_cell;
         document.getElementById("home-district").innerHTML = results.person.addresses[0].address2;
-        document.getElementById("home-ta").innerHTML = results.person.addresses[0].city_village;
+        document.getElementById("current-village").innerHTML = results.person.addresses[0].city_village;
+        document.getElementById("current-ta").innerHTML = results.person.addresses[0].township_division;
         document.getElementById("home-village").innerHTML = results.person.addresses[0].county_district;
-        document.getElementById("region").innerHTML = results.person.addresses[0].address2 + ", " + results.person.addresses[0].city_village + ", " + results.person.addresses[0].county_district;
+        document.getElementById("current-district").innerHTML = results.person.addresses[0].state_province;
         var identifiers = results.person.person_attributes;
         for (var x = 0; x < identifiers.length; x++) {
           if(identifiers[x].person_attribute_type_id == "12") {
