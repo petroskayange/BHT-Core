@@ -2,7 +2,9 @@ var apiProtocol = sessionStorage.apiProtocol;
 var apiURL = sessionStorage.apiURL;
 var apiPort = sessionStorage.apiPort;
 var patient_id = sessionStorage.patientID;
-
+var patient_age = null;
+var age = null;
+var ageInMonths = null;
 function getDemographics(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id;
 
@@ -16,7 +18,10 @@ function getDemographics(patient_id) {
             sessionStorage.given_name = names["given_name"];
             sessionStorage.patientGender = obj["gender"];
             var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
+            ageInMonths = roundedAge * 12
             sessionStorage.patientAge = roundedAge;
+            patient_age = roundedAge;
+            age = roundedAge;
             sessionStorage.patientGender = obj["gender"];
             sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
             //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
