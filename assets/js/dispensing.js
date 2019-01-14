@@ -382,11 +382,15 @@ function submiFastTracktDispensationEncounter() {
 
 function postFastTrackObs(encounter) {
     var fast_track_concept_id = 8471; //TODO change concept_id
+    var fast_track_visit_concept_id = 9688;
+    var yes_concept_id = 1065;
     var no_concept_id = 1066;
+
     var obs = {
         encounter_id: encounter["encounter_id"],
         observations: [
-            {concept_id: fast_track_concept_id, value_coded: no_concept_id, comments: "fast track done"}
+            {concept_id: fast_track_concept_id, value_coded: no_concept_id, comments: "fast track done"},
+            {concept_id: fast_track_visit_concept_id, value_coded: yes_concept_id}
         ]
     };
 
