@@ -35,7 +35,7 @@
 </style>
 
 <script>
-  tt_cancel_destination = "/views/patient/programs.html";
+  tt_cancel_destination = "/views/patient/programs.html?patient_id=" + sessionStorage.patientID;
 
   function setAbsoluteMaxOutcomeYear() {
     var element = document.getElementById("touchscreenInput" + tstCurrentPage);
