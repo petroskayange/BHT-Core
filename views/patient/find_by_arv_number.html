@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+            defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/assets/js/yes_no_ctrls.js"></script>
+    <link rel="stylesheet" href="/assets/css/yes_no_ctrls.css" type="text/css">
+    <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+    <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+    <script type="text/javascript" src="/assets/js/moment.js"></script>
+    <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+    <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+    <script type="text/javascript">
+        var tt_cancel_destination = "/";
+
+        function loadSitePrefix() {
+            var inputElement = document.getElementById('tt_page_enter_arv_number').getElementsByTagName("input")[0];
+            var prefix = document.createElement("span");
+            var style = document.createAttribute("style");
+            style.value = "position: absolute; z-index: 100; left: 0px; font-size: 35px;"
+            prefix.setAttributeNode(style);
+            inputElement.setAttribute("style", "text-align:right;width:99%;");
+
+            prefix.innerHTML = site_prefix + "-ARV";
+
+            inputElement.parentNode.insertBefore(prefix, inputElement);
+            style.value += 'left:30px;';
+            prefix.setAttributeNode(style);
+
+            var other_identifiers = document.getElementById('Unknown')
+            other_identifiers.innerHTML = '<span>Search by other</span>';
+            other_identifiers.setAttribute('onmousedown', 'searchByOther()')
+        }
+
+        function searchByOther() {
+            document.location = '/views/patient/find_by_menu.html';
+        }
+
+        var site_prefix;
+
+        function initializeVariables() {
+
+            jQuery(".loader").show();
+            jQuery('#keyboard').hide();
+            jQuery("#buttons").hide(); //inputFrame0
+            jQuery("#inputFrame" + tstCurrentPage).hide();
+
+            var property_name = "site_prefix";
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=" + property_name;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    try {
+                        site_prefix = JSON.parse(this.responseText)["site_prefix"];
+                        gotoNextPage();
+                    } catch (e) {
+                        site_prefix = "?"; //something is not right here
+                    }
+                }
+            };
+
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+        }
+
+        function resetPage() {
+            jQuery('#keyboard').show();
+            jQuery("#buttons").show();
+            jQuery("#innerPop").show()
+            jQuery("#inputFrame" + tstCurrentPage).show();
+            jQuery(".loader").hide();
+        }
+
+        function changeFinishButton() {
+            __$('nextButton').onmousedown = function () {
+                var value = __$('touchscreenInput' + tstCurrentPage).value;
+                if (!value) {
+                    showMessage("You must enter a value to continue");
+                    return;
+                }
+
+                var arv_number = site_prefix + "-ARV-" + value;
+                console.log(arv_number);
+
+
+            }
+        }
+
+        function searchPatientsByARVNumber() {
+
+            jQuery(".loader").show();
+            jQuery('#keyboard').hide();
+            jQuery("#buttons").hide(); //inputFrame0
+            jQuery("#inputFrame" + tstCurrentPage).hide();
+
+            arv_number = __$("arv_number").value;
+            var arv_number_type_id = 4;
+            var pt_identifier = site_prefix + "-ARV-" + arv_number;
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_identifier?type_id=" + arv_number_type_id + "&identifier=" + pt_identifier;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    jQuery(".loader").hide();
+                    var people = JSON.parse(this.responseText);
+
+                    if (people.length == 0) {
+                        alertify
+                            .alert("Patient not found", "Patient with identifier <b>" + pt_identifier + "</b> was not found", function () {
+                                window.location = "/views/patient/find_by_menu.html";
+                            })
+                    }
+
+                    var patient_identifier;
+                    if (people.length == 1) {
+                        var patient_identifiers = people[0]["patient_identifiers"];
+                        for (key in patient_identifiers){
+                            var identifier = patient_identifiers[key]["identifier"];
+                            var type =  patient_identifiers[key]["type"];
+                            if (type.name.match(/National ID/i)){
+                                patient_identifier = identifier;
+                                break;
+                            }
+                        }
+                     if (patient_identifier){
+                         window.location = "/views/confirm.html?patient_id=" + identifier;
+                     } else{
+                         alertify
+                             .alert("Missing National ID", "Patient was found BUT has no National ID", function () {
+                                 window.location = "/views/patient/find_by_menu.html";
+                             })
+                     }
+
+                    }
+
+                    if (people.length > 1) {
+                        alert("Duplicates")
+                    }
+                }
+            };
+
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+        }
+
+    </script>
+
+    <style type="text/css">
+
+        #qwerty, #date, #star, #abc, #slash, #percent, #comma, #minus, #plus, #decimal {
+            display: none;
+        }
+
+        .loader {
+            position: absolute;
+            display: none;
+            top: 30%;
+            left: 40%;
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            z-index: 9999999999999;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ajs-buttons button{
+            background: inherit !important;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block !important;;
+            font-size: 16px;
+            color: black;
+            background-color: #e7e7e7 !important;;
+
+        }
+    </style>
+</head>
+
+<body id="mateme">
+<div id="container">
+    <div id="content">
+
+        <form>
+            <input type="text" name="initialize"
+                   tt_onLoad="initializeVariables();"
+                   tt_onUnLoad="resetPage();"
+                   tt_pageStyleClass="NoControls" optional="true"/>
+
+            <input field_type="number" helpText="Enter ARV Number" id="arv_number" name="arv_number"
+                   tt_onLoad="loadSitePrefix();" type="text"/>
+
+            <input type="text" name="initialize"
+                   tt_onLoad="searchPatientsByARVNumber();"
+                   tt_onUnLoad="resetPage();"
+                   tt_pageStyleClass="NoControls" optional="true"/>
+        </form>
+
+        <div class="loader"></div>
+    </div>
+</div>
+</body>
+</html>

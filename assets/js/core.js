@@ -544,6 +544,10 @@ function registerPatientRedirect() {
     window.location.href = '/views/patient/search.html';
 }
 
+function gotoFindByMenu(){
+    window.location.href = '/views/patient/find_by_menu.html';
+}
+
 function updateOutcomeRedirect() {
     window.location.href = '/views/outcome.html';
 }
