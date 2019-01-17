@@ -3,7 +3,7 @@
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
 <script src="/assets/js/generic_ajaxrequest.js"></script>
-
+<script src="/assets/js/moment.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,7 +16,7 @@
     var age = "";
     var current_residence = "";
     var closest_landmark = "";
-    var occupation;
+    var occupation = "";
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -81,14 +81,19 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var weight_observations = JSON.parse(this.responseText);
-                var keys = Object.keys(weight_observations);
-                var old_key = keys[keys.length - 1];
-                var observation = weight_observations[old_key];
-                var weight = observation.value_numeric;
-                if (!weight) {
-                    var weight = observation.value_text;
+                if (weight_observations.length > 0) {
+                    var keys = Object.keys(weight_observations);
+                    var old_key = keys[keys.length - 1];
+
+                    var observation = weight_observations[old_key];
+                    var weight = observation.value_numeric;
+                    if (!weight) {
+                        var weight = observation.value_text;
+                    }
+
+                    initial_weight = weight;
                 }
-                initial_weight = weight;
+
                 jQuery("#initial_weight").html("<a href='#'>" + initial_weight + "</a>");
             }
         };
@@ -110,14 +115,17 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var height_observations = JSON.parse(this.responseText);
-                var keys = Object.keys(height_observations);
-                var old_key = keys[keys.length - 1];
-                var observation = height_observations[old_key];
-                var height = observation.value_numeric;
-                if (!height) {
-                    var height = observation.value_text;
+                if (height_observations.length > 0) {
+                    var keys = Object.keys(height_observations);
+                    var old_key = keys[keys.length - 1];
+                    var observation = height_observations[old_key];
+                    var height = observation.value_numeric;
+                    if (!height) {
+                        var height = observation.value_text;
+                    }
+                    initial_height = height;
                 }
-                initial_height = height;
+
                 jQuery("#initial_height").html("<a href='#'>" + initial_height + "</a>");
             }
         };
@@ -142,7 +150,7 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var ever_received_observations = JSON.parse(this.responseText);
-                if (ever_received_observations.length > 0){
+                if (ever_received_observations.length > 0) {
                     ever_received_art = "Yes";
                 }
                 jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
@@ -156,6 +164,7 @@
     }
 
     var bmi_concept_id = 2137;
+
     function loadBMI() {
         var bmi_url = apiProtocol + "://" + apiURL + ":" + apiPort;
         bmi_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
@@ -164,14 +173,16 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var bmi_observations = JSON.parse(this.responseText);
-                var keys = Object.keys(bmi_observations);
-                var old_key = keys[keys.length - 1];
-                var observation = bmi_observations[old_key];
-                var bmi = observation.value_numeric;
-                if (!bmi) {
-                    var bmi = observation.value_text;
+                if (bmi_observations.length > 0) {
+                    var keys = Object.keys(bmi_observations);
+                    var old_key = keys[keys.length - 1];
+                    var observation = bmi_observations[old_key];
+                    var bmi = observation.value_numeric;
+                    if (!bmi) {
+                        var bmi = observation.value_text;
+                    }
+                    jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
                 }
-                jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
             }
         };
 
@@ -181,10 +192,64 @@
         xhttp.send();
     }
 
+    var confirmatory_hiv_test_location_concept_id = 7881;
+    var confirmatory_hiv_test_date_concept_id = 7882;
+    var hiv_test_date = "N/A";
+    var hiv_test_location = "";
+
+    function loadConfirmatoryHIVTestLocationAndDate() {
+        var confimatory_hiv_test_location_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        confimatory_hiv_test_location_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        confimatory_hiv_test_location_url += "&concept_id=" + confirmatory_hiv_test_location_concept_id;
+
+        var confimatory_hiv_test_date_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        confimatory_hiv_test_date_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        confimatory_hiv_test_date_url += "&concept_id=" + confirmatory_hiv_test_date_concept_id;
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var confimatory_hiv_test_location_observations = JSON.parse(this.responseText);
+                console.log(confimatory_hiv_test_location_observations)
+                if (confimatory_hiv_test_location_observations.length > 0) {
+                    hiv_test_location = confimatory_hiv_test_location_observations[0].value_text;
+                    var xhttp2 = new XMLHttpRequest();
+                    xhttp2.onreadystatechange = function () {
+                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                            var confimatory_hiv_test_date_observations = JSON.parse(this.responseText);
+                            if (confimatory_hiv_test_date_observations.length > 0) {
+                                var confirmatory_test_date = confimatory_hiv_test_date_observations[0].value_datetime;
+                                if (!confirmatory_test_date) {
+                                    var confirmatory_test_date = confimatory_hiv_test_date_observations[0].value_text;
+                                }
+
+                                //hiv_test_date = confirmatory_test_date;
+                                hiv_test_date = moment(confirmatory_test_date).format("DD/MMM/YYYY")
+                            }
+
+                            jQuery("#hiv_test").html("<a href='#'>" + hiv_test_date + " / " + hiv_test_location + "</a>");
+                        }
+                    };
+                    xhttp2.open("GET", confimatory_hiv_test_date_url, true);
+                    xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp2.setRequestHeader('Content-type', "application/json");
+                    xhttp2.send();
+                }
+
+            }
+        };
+
+        xhttp1.open("GET", confimatory_hiv_test_location_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
     loadTransferInData();
+    loadConfirmatoryHIVTestLocationAndDate();
     loadDemographics();
 
     function getAge(dateString) {
@@ -313,7 +378,7 @@
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4">&nbsp;</td>
-            <td colspan="4">&nbsp;</td>
+            <td colspan="4" id="hiv_test">&nbsp;</td>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
