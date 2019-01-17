@@ -140,6 +140,7 @@
     var ever_received_art = "No";
     var ever_received_concept_id = 7754;
     var yes_concept_id = 1065;
+    var no_concept_id = 1066;
 
     function loadTransferInData() {
         var ever_received_url = apiProtocol + "://" + apiURL + ":" + apiPort;
@@ -279,7 +280,6 @@
                         xhttp2.setRequestHeader('Content-type', "application/json");
                         xhttp2.send();
                     } else{
-                        console.log("No")
                         reason_for_starting = reason_for_starting_observations[0].value_text;
                         jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
                     }
@@ -295,12 +295,44 @@
         xhttp1.send();
     }
 
+    var agrees_to_follow_up_concept_id = 2552;
+    var agrees_to_follow_up = "";
+    function loadAgreesToFollowUp(){
+        var agrees_to_follow_up_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        agrees_to_follow_up_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        agrees_to_follow_up_url += "&concept_id=" + agrees_to_follow_up_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var agrees_to_follow_up_observations = JSON.parse(this.responseText);
+                if (agrees_to_follow_up_observations.length > 0) {
+                    var observation = agrees_to_follow_up_observations[0];
+                    if (observation.value_coded == yes_concept_id){
+                        agrees_to_follow_up = "Yes"
+                    }
+                    if (observation.value_coded == no_concept_id){
+                        agrees_to_follow_up = "No"
+                    }
+                    jQuery("#agrees_to_follow_up").html("<a href='#'>" + agrees_to_follow_up + "</a>");
+                } else{
+
+                }
+            }
+        };
+
+        xhttp.open("GET", agrees_to_follow_up_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
     loadTransferInData();
     loadConfirmatoryHIVTestLocationAndDate();
     loadReasonForStartingART();
+    loadAgreesToFollowUp();
     loadDemographics();
 
     function getAge(dateString) {
@@ -430,7 +462,7 @@
         <tr class="toggler toggler1">
             <td colspan="4">&nbsp;</td>
             <td colspan="4" id="hiv_test">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
