@@ -2,10 +2,84 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+<script src="/assets/js/generic_ajaxrequest.js"></script>
+
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript">
 
+    var name = "";
+    var gender = "";
+    var arv_number = "";
+    var national_id = "";
+    var age = "";
+    var current_residence = "";
+    var closest_landmark = ""
+
+    function loadDemographics() {
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var personObj = JSON.parse(this.responseText);
+                var person = personObj["person"];
+                var person_name = person["names"][0];
+                var person_address = person["addresses"][0];
+                var patient_identifiers = personObj["patient_identifiers"];
+                var person_attributes = person["person_attributes"];
+                name = person_name["given_name"] + " " + person_name["family_name"];
+                age = getAge(person["birthdate"]);
+
+                gender = person["gender"];
+                current_residence = person_address["city_village"];
+                closest_landmark = person_address["neighborhood_cell"];
+
+                for (var key in patient_identifiers) {
+                    var type = patient_identifiers[key]["type"];
+                    if (type.name.match(/National id/i)) {
+                        national_id = patient_identifiers[key]["identifier"];
+                    }
+                    if (type.name.match(/ARV Number/i)) {
+                        arv_number = patient_identifiers[key]["identifier"];
+                    }
+                }
+
+                for (var person_attribute in person_attributes){
+                    person_attributes[person_attribute]
+                }
+
+                jQuery("#arv_number").html( "<a href='#'>"  + arv_number + "</a>");
+                jQuery("#national_id").html("<a href='#'>"  + national_id + "</a>");
+                jQuery("#name").html("<a href='#'>"  + name + "</a>");
+                jQuery("#age").html("<a href='#'>"  + age + "</a>");
+                jQuery("#sex").html("<a href='#'>"  + gender + "</a>");
+                jQuery("#current_residence").html("<a href='#'>"  + current_residence + "</a>");
+                jQuery("#land_mark").html("<a href='#'>"  + closest_landmark + "</a>");
+
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    loadDemographics();
+
+    function getAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+</script>
 <style type="text/css">
     .custom-table {
         border-collapse: collapse;
@@ -60,17 +134,19 @@
     .page-header {
         background-color: #eee;
     }
+
+    .header-table tr {
+        line-height: 0.3em;
+    }
+
+    a {
+      font-weight: bold;
+    }
 </style>
 
 
-
-
-
-
-
-
 <div class="container">
-    <br />
+    <br/>
     <table class="custom-table header-table">
         <tbody>
         <tr class="toggler toggler1">
@@ -78,8 +154,8 @@
             <td colspan="5"><b>National Patient ID</b></td>
         </tr>
         <tr class="toggler toggler1">
-            <td colspan="5">&nbsp;</td>
-            <td colspan="5">&nbsp;</td>
+            <td colspan="5" id="arv_number">&nbsp;</td>
+            <td colspan="5" id="national_id">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4">
@@ -93,9 +169,9 @@
             <td><b>TI</b></td>
         </tr>
         <tr class="toggler toggler1">
-            <td colspan="4">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td colspan="4" id="name">&nbsp;</td>
+            <td id="age">&nbsp;</td>
+            <td id="sex">&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -107,9 +183,9 @@
             <td colspan="2"><b>Occupation</b></td>
         </tr>
         <tr class="toggler toggler1">
-            <td colspan="4">&nbsp;</td>
-            <td colspan="4">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="4" id="current_residence">&nbsp;</td>
+            <td colspan="4" id="land_mark">&nbsp;</td>
+            <td colspan="2" id="occupation">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4"><b>Name of guardian</b></td>
@@ -147,7 +223,7 @@
 
         </tbody>
     </table>
-<br />
+    <br/>
     <table class="custom-table">
         <thead>
         <tr>
@@ -214,9 +290,3 @@
         </tbody>
     </table>
 </div>
-
-<style>
-    .header-table tr {
-line-height: 0.3em;
-    }
-</style>
