@@ -15,7 +15,8 @@
     var national_id = "";
     var age = "";
     var current_residence = "";
-    var closest_landmark = ""
+    var closest_landmark = "";
+    var occupation;
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -31,7 +32,6 @@
                 var person_attributes = person["person_attributes"];
                 name = person_name["given_name"] + " " + person_name["family_name"];
                 age = getAge(person["birthdate"]);
-
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
                 closest_landmark = person_address["neighborhood_cell"];
@@ -46,17 +46,21 @@
                     }
                 }
 
-                for (var person_attribute in person_attributes){
-                    person_attributes[person_attribute]
+                for (var person_attribute in person_attributes) {
+                    var person_attribute_type = person_attributes[person_attribute]["type"];
+                    if (person_attribute_type.name.match(/occupation/i)) {
+                        occupation = person_attributes[person_attribute]["value"];
+                    }
                 }
 
-                jQuery("#arv_number").html( "<a href='#'>"  + arv_number + "</a>");
-                jQuery("#national_id").html("<a href='#'>"  + national_id + "</a>");
-                jQuery("#name").html("<a href='#'>"  + name + "</a>");
-                jQuery("#age").html("<a href='#'>"  + age + "</a>");
-                jQuery("#sex").html("<a href='#'>"  + gender + "</a>");
-                jQuery("#current_residence").html("<a href='#'>"  + current_residence + "</a>");
-                jQuery("#land_mark").html("<a href='#'>"  + closest_landmark + "</a>");
+                jQuery("#arv_number").html("<a href='#'>" + arv_number + "</a>");
+                jQuery("#national_id").html("<a href='#'>" + national_id + "</a>");
+                jQuery("#name").html("<a href='#'>" + name + "</a>");
+                jQuery("#age").html("<a href='#'>" + age + "</a>");
+                jQuery("#sex").html("<a href='#'>" + gender + "</a>");
+                jQuery("#current_residence").html("<a href='#'>" + current_residence + "</a>");
+                jQuery("#land_mark").html("<a href='#'>" + closest_landmark + "</a>");
+                jQuery("#occupation").html("<a href='#'>" + occupation + "</a>");
 
             }
         };
@@ -66,6 +70,93 @@
         xhttp.send();
     }
 
+    var weight_concept_id = 5089;
+    var initial_weight = "";
+
+    function loadInitialWeight() {
+        var weight_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        weight_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        weight_url += "&concept_id=" + weight_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var weight_observations = JSON.parse(this.responseText);
+                var keys = Object.keys(weight_observations);
+                var old_key = keys[keys.length - 1];
+                var observation = weight_observations[old_key];
+                var weight = observation.value_numeric;
+                if (!weight) {
+                    var weight = observation.value_text;
+                }
+                initial_weight = weight;
+                jQuery("#initial_weight").html("<a href='#'>" + initial_weight + "</a>");
+            }
+        };
+
+        xhttp.open("GET", weight_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    var height_concept_id = 5090;
+    var initial_height = "";
+
+    function loadInitialHeight() {
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + height_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                var keys = Object.keys(height_observations);
+                var old_key = keys[keys.length - 1];
+                var observation = height_observations[old_key];
+                var height = observation.value_numeric;
+                if (!height) {
+                    var height = observation.value_text;
+                }
+                initial_height = height;
+                jQuery("#initial_height").html("<a href='#'>" + initial_height + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    var bmi_concept_id = 2137;
+    function loadBMI() {
+        var bmi_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        bmi_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        bmi_url += "&concept_id=" + bmi_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var bmi_observations = JSON.parse(this.responseText);
+                var keys = Object.keys(bmi_observations);
+                var old_key = keys[keys.length - 1];
+                var observation = bmi_observations[old_key];
+                var bmi = observation.value_numeric;
+                if (!bmi) {
+                    var bmi = observation.value_text;
+                }
+                jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
+            }
+        };
+
+        xhttp.open("GET", bmi_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    loadInitialWeight();
+    loadInitialHeight();
+    loadBMI();
     loadDemographics();
 
     function getAge(dateString) {
@@ -140,7 +231,7 @@
     }
 
     a {
-      font-weight: bold;
+        font-weight: bold;
     }
 </style>
 
@@ -164,7 +255,7 @@
             <td><b>Age</b></td>
             <td><b>Sex</b></td>
             <td><b>Int Wt(Kg)</b></td>
-            <td><b>Int Ht(Kg)</b></td>
+            <td><b>Int Ht(cm)</b></td>
             <td><b>BMI</b></td>
             <td><b>TI</b></td>
         </tr>
@@ -172,10 +263,10 @@
             <td colspan="4" id="name">&nbsp;</td>
             <td id="age">&nbsp;</td>
             <td id="sex">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td id="initial_weight">&nbsp;</td>
+            <td id="initial_height">&nbsp;</td>
+            <td id="bmi">&nbsp;</td>
+            <td id="transfer_in">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4"><b>Location</b></td>
