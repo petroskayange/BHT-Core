@@ -245,11 +245,62 @@
         xhttp1.send();
     }
 
+    var reason_for_starting_concept_id = 7563;
+    var reason_for_starting = "";
+
+    function loadReasonForStartingART(){
+        var reason_for_starting_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        reason_for_starting_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        reason_for_starting_url += "&concept_id=" + reason_for_starting_concept_id;
+
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var reason_for_starting_observations = JSON.parse(this.responseText);
+                if (reason_for_starting_observations.length > 0) {
+                    var value_coded = reason_for_starting_observations[0].value_coded;
+                    if (value_coded){
+                        var concept_name_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+                        concept_name_url += "/api/v1/concepts/" + value_coded;
+
+                        var xhttp2 = new XMLHttpRequest();
+                        xhttp2.onreadystatechange = function () {
+                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                var concept = JSON.parse(this.responseText);
+                                if (concept){
+                                    reason_for_starting = concept["concept_names"][0]["name"];
+                                    jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
+                                }
+                            }
+                        }
+                        xhttp2.open("GET", concept_name_url, true);
+                        xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                        xhttp2.setRequestHeader('Content-type', "application/json");
+                        xhttp2.send();
+                    } else{
+                        console.log("No")
+                        reason_for_starting = reason_for_starting_observations[0].value_text;
+                        jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
+                    }
+
+                }
+
+            }
+        };
+
+        xhttp1.open("GET", reason_for_starting_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
     loadTransferInData();
     loadConfirmatoryHIVTestLocationAndDate();
+    loadReasonForStartingART();
     loadDemographics();
 
     function getAge(dateString) {
@@ -387,7 +438,7 @@
         </tr>
         <tr class="toggler toggler1">
             <td colspan="6">&nbsp;</td>
-            <td colspan="4">&nbsp;</td>
+            <td colspan="4" id="start_reason">&nbsp;</td>
         </tr>
 
         <tr class="toggler toggler1">
