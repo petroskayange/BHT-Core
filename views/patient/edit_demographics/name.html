@@ -23,12 +23,28 @@
     function addInput(field_name) {
       __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
     }
+
+    function validateName() {
+    __$("nextButton").removeAttribute("onmousedown");
+    __$("nextButton").onmousedown = function(){
+
+        validRegEx = /^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
+        value = $('touchscreenInput' + tstCurrentPage).value;
+       if(value.match(validRegEx) == null) {
+         showMessage("Invalid name input");
+       }else if (value.match(validRegEx) != null) {
+        gotoNextPage();
+       }
+      }
+    }
   </script>
 
   <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
 <!--   <script type="text/javascript" src="/assets/js/jquery.min.js"></script> -->
   <script type="text/javascript" src="/assets/js/data.js"></script>
   <script type="text/javascript" src="/assets/js/core.js"></script>
+  <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+  <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
 
 </head>
 
@@ -37,9 +53,9 @@
     <div id="content">
       <form method='PUT'>
         <input helpText="First Name" value="" allowFreeText="true" type="text" key="given_name" name="given_name" id="given_name"
-          tt_onLoad="addInput('given_name');" tt_onUnload="getInput();" ajaxURL="/search/given_name?search_string=" />
+          tt_onLoad="validateName();addInput('given_name');" tt_onUnload="getInput();" ajaxURL="/search/given_name?search_string=" />
 
-        <input helpText="Last Name" key="family_name" value="" tt_onLoad="editName();addInput('family_name');"
+        <input helpText="Last Name" key="family_name" value="" tt_onLoad="validateName();editName();addInput('family_name');"
           field_type="alpha" allowFreeText="true" type="text" name="family_name" id="family_name" tt_onUnload="getInput();"
           ajaxURL="/search/family_name?search_string=" />
       </form>

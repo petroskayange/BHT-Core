@@ -26,7 +26,7 @@
   </script>
 
   <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-<!--   <script type="text/javascript" src="/assets/js/jquery.min.js"></script> -->
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="/assets/js/data.js"></script>
   <script type="text/javascript" src="/assets/js/core.js"></script>
 
@@ -36,7 +36,7 @@
   <div id="container">
     <div id="content">
       <form method='PUT'>
-        <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="editGender();addInput('gender');" key="gender" ><option value=""></option>
+        <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="validateInput();editGender();addInput('gender');" key="gender" ><option value=""></option>
           <option value="M">Male</option>
           <option value="F">Female</option></select>
       </form>
@@ -71,31 +71,18 @@
 
   }
 
-  // function postEdit() {
-  //   getInput();
-  //   gender = sessionStorage.getItem("gender")
-  //   var http = new XMLHttpRequest();
-  //   var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people' + sessionStorage.patientID;
-  //   var params = JSON.stringify({
-  //     gender: sessionStorage.getItem("gender"),
-  //   });
-  //   http.open('PUT', url, true);
-  //   http.setRequestHeader('Content-type', 'application.json');
-  //   http.onreadystatechange = function () {
-  //     if (http.readyState == 4) {
+  function validateInput(){
+    __$("nextButton").removeAttribute("onmousedown")
+    __$("nextButton").onmousedown = function(){
 
-  //       if (http.status == 200) {
-  //         document.location = '/views/patient/edit_demographics/gender.html?patient_id=' + sessionStorage.patientID;
-  //       } else if (http.status == 400) {
-  //         showMessage("Bad Request");
-  //       } else {
-  //         showMessage("error" + http.status);
-  //       }
-  //     }
-  //   }
-  //   http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  //   http.send(params);
-  // }
+    value = $('touchscreenInput' + tstCurrentPage).value;
+     if (value.length  > 0) {
+               postGender();
+     }else{
+       showMessage("You must enter a value to continue");
+     }
+    }
+  }
 
   function postGender() {
     getInput();
