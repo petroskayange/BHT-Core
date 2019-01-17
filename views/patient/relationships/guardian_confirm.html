@@ -107,7 +107,7 @@
   sessionStorage.guardian_options = elementId;
 
   function finish() {
-    window.location = "/";
+    window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.backupPatientID;
   }
 
   function cancel_redirect() {
@@ -150,13 +150,9 @@
   function dashboard_redirect(e) {
   
     if(guardian_options.length == 0) {
-       // alert("select a relationship");
-        //Pop div
-        showMessage("Select relationship type to continue");
- 
+        showMessage("Select relationship type to continue"); 
     }else {
       assignRelationShip(relationship_type_id);
-
     }
     
   }
