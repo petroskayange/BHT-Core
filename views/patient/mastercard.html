@@ -3,7 +3,7 @@
 <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
 <script src="/assets/js/generic_ajaxrequest.js"></script>
-
+<script src="/assets/js/moment.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -15,7 +15,8 @@
     var national_id = "";
     var age = "";
     var current_residence = "";
-    var closest_landmark = ""
+    var closest_landmark = "";
+    var occupation = "";
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -31,7 +32,6 @@
                 var person_attributes = person["person_attributes"];
                 name = person_name["given_name"] + " " + person_name["family_name"];
                 age = getAge(person["birthdate"]);
-
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
                 closest_landmark = person_address["neighborhood_cell"];
@@ -46,17 +46,21 @@
                     }
                 }
 
-                for (var person_attribute in person_attributes){
-                    person_attributes[person_attribute]
+                for (var person_attribute in person_attributes) {
+                    var person_attribute_type = person_attributes[person_attribute]["type"];
+                    if (person_attribute_type.name.match(/occupation/i)) {
+                        occupation = person_attributes[person_attribute]["value"];
+                    }
                 }
 
-                jQuery("#arv_number").html( "<a href='#'>"  + arv_number + "</a>");
-                jQuery("#national_id").html("<a href='#'>"  + national_id + "</a>");
-                jQuery("#name").html("<a href='#'>"  + name + "</a>");
-                jQuery("#age").html("<a href='#'>"  + age + "</a>");
-                jQuery("#sex").html("<a href='#'>"  + gender + "</a>");
-                jQuery("#current_residence").html("<a href='#'>"  + current_residence + "</a>");
-                jQuery("#land_mark").html("<a href='#'>"  + closest_landmark + "</a>");
+                jQuery("#arv_number").html("<a href='#'>" + arv_number + "</a>");
+                jQuery("#national_id").html("<a href='#'>" + national_id + "</a>");
+                jQuery("#name").html("<a href='#'>" + name + "</a>");
+                jQuery("#age").html("<a href='#'>" + age + "</a>");
+                jQuery("#sex").html("<a href='#'>" + gender + "</a>");
+                jQuery("#current_residence").html("<a href='#'>" + current_residence + "</a>");
+                jQuery("#land_mark").html("<a href='#'>" + closest_landmark + "</a>");
+                jQuery("#occupation").html("<a href='#'>" + occupation + "</a>");
 
             }
         };
@@ -66,6 +70,186 @@
         xhttp.send();
     }
 
+    var weight_concept_id = 5089;
+    var initial_weight = "";
+
+    function loadInitialWeight() {
+        var weight_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        weight_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        weight_url += "&concept_id=" + weight_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var weight_observations = JSON.parse(this.responseText);
+                if (weight_observations.length > 0) {
+                    var keys = Object.keys(weight_observations);
+                    var old_key = keys[keys.length - 1];
+
+                    var observation = weight_observations[old_key];
+                    var weight = observation.value_numeric;
+                    if (!weight) {
+                        var weight = observation.value_text;
+                    }
+
+                    initial_weight = weight;
+                }
+
+                jQuery("#initial_weight").html("<a href='#'>" + initial_weight + "</a>");
+            }
+        };
+
+        xhttp.open("GET", weight_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    var height_concept_id = 5090;
+    var initial_height = "";
+
+    function loadInitialHeight() {
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + height_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                if (height_observations.length > 0) {
+                    var keys = Object.keys(height_observations);
+                    var old_key = keys[keys.length - 1];
+                    var observation = height_observations[old_key];
+                    var height = observation.value_numeric;
+                    if (!height) {
+                        var height = observation.value_text;
+                    }
+                    initial_height = height;
+                }
+
+                jQuery("#initial_height").html("<a href='#'>" + initial_height + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+
+    var ever_received_art = "No";
+    var ever_received_concept_id = 7754;
+    var yes_concept_id = 1065;
+
+    function loadTransferInData() {
+        var ever_received_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        ever_received_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        ever_received_url += "&concept_id=" + ever_received_concept_id;
+        ever_received_url += "&value_coded=" + yes_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var ever_received_observations = JSON.parse(this.responseText);
+                if (ever_received_observations.length > 0) {
+                    ever_received_art = "Yes";
+                }
+                jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+            }
+        };
+
+        xhttp.open("GET", ever_received_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    var bmi_concept_id = 2137;
+
+    function loadBMI() {
+        var bmi_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        bmi_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        bmi_url += "&concept_id=" + bmi_concept_id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var bmi_observations = JSON.parse(this.responseText);
+                if (bmi_observations.length > 0) {
+                    var keys = Object.keys(bmi_observations);
+                    var old_key = keys[keys.length - 1];
+                    var observation = bmi_observations[old_key];
+                    var bmi = observation.value_numeric;
+                    if (!bmi) {
+                        var bmi = observation.value_text;
+                    }
+                    jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
+                }
+            }
+        };
+
+        xhttp.open("GET", bmi_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    var confirmatory_hiv_test_location_concept_id = 7881;
+    var confirmatory_hiv_test_date_concept_id = 7882;
+    var hiv_test_date = "N/A";
+    var hiv_test_location = "";
+
+    function loadConfirmatoryHIVTestLocationAndDate() {
+        var confimatory_hiv_test_location_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        confimatory_hiv_test_location_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        confimatory_hiv_test_location_url += "&concept_id=" + confirmatory_hiv_test_location_concept_id;
+
+        var confimatory_hiv_test_date_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        confimatory_hiv_test_date_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        confimatory_hiv_test_date_url += "&concept_id=" + confirmatory_hiv_test_date_concept_id;
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var confimatory_hiv_test_location_observations = JSON.parse(this.responseText);
+                console.log(confimatory_hiv_test_location_observations)
+                if (confimatory_hiv_test_location_observations.length > 0) {
+                    hiv_test_location = confimatory_hiv_test_location_observations[0].value_text;
+                    var xhttp2 = new XMLHttpRequest();
+                    xhttp2.onreadystatechange = function () {
+                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                            var confimatory_hiv_test_date_observations = JSON.parse(this.responseText);
+                            if (confimatory_hiv_test_date_observations.length > 0) {
+                                var confirmatory_test_date = confimatory_hiv_test_date_observations[0].value_datetime;
+                                if (!confirmatory_test_date) {
+                                    var confirmatory_test_date = confimatory_hiv_test_date_observations[0].value_text;
+                                }
+
+                                //hiv_test_date = confirmatory_test_date;
+                                hiv_test_date = moment(confirmatory_test_date).format("DD/MMM/YYYY")
+                            }
+
+                            jQuery("#hiv_test").html("<a href='#'>" + hiv_test_date + " / " + hiv_test_location + "</a>");
+                        }
+                    };
+                    xhttp2.open("GET", confimatory_hiv_test_date_url, true);
+                    xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp2.setRequestHeader('Content-type', "application/json");
+                    xhttp2.send();
+                }
+
+            }
+        };
+
+        xhttp1.open("GET", confimatory_hiv_test_location_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    loadInitialWeight();
+    loadInitialHeight();
+    loadBMI();
+    loadTransferInData();
+    loadConfirmatoryHIVTestLocationAndDate();
     loadDemographics();
 
     function getAge(dateString) {
@@ -140,7 +324,7 @@
     }
 
     a {
-      font-weight: bold;
+        font-weight: bold;
     }
 </style>
 
@@ -164,7 +348,7 @@
             <td><b>Age</b></td>
             <td><b>Sex</b></td>
             <td><b>Int Wt(Kg)</b></td>
-            <td><b>Int Ht(Kg)</b></td>
+            <td><b>Int Ht(cm)</b></td>
             <td><b>BMI</b></td>
             <td><b>TI</b></td>
         </tr>
@@ -172,10 +356,10 @@
             <td colspan="4" id="name">&nbsp;</td>
             <td id="age">&nbsp;</td>
             <td id="sex">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td id="initial_weight">&nbsp;</td>
+            <td id="initial_height">&nbsp;</td>
+            <td id="bmi">&nbsp;</td>
+            <td id="transfer_in">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4"><b>Location</b></td>
@@ -194,7 +378,7 @@
         </tr>
         <tr class="toggler toggler1">
             <td colspan="4">&nbsp;</td>
-            <td colspan="4">&nbsp;</td>
+            <td colspan="4" id="hiv_test">&nbsp;</td>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
