@@ -77,6 +77,19 @@
             document.location = tt_cancel_destination;
         }
     }
+
+    function addReset() {
+        var refer_to_clinician_html = '<button id="referButton" class="button blue navButton" style="float: right" ' +
+                        'onmousedown="resetDate();"><span>Reset Date</span></button>';
+        document.getElementById("buttons").innerHTML += refer_to_clinician_html;
+    }
+
+    function resetDate() {
+        var todays_date = moment(new Date()).format('YYYY-MM-DD');
+        sessionStorage.sessionDate = moment(todays_date).format('YYYY-MM-DD');
+        sessionStorage.removeItem("session");
+        document.location = tt_cancel_destination;   
+    }
 </script>
 
 <body id="mateme">
@@ -86,7 +99,7 @@
         <form>
 
             <input type="text" name="session_year" id="session_year" helpText="Year" field_type="number"
-                   absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxYear()"
+                   absoluteMin="1900" min="1900" tt_onLoad="setAbsoluteMaxYear();addReset();"
                    tt_pageStyleClass="Numeric NumbersOnly"/>
 
             <select name="session_month" id="session_month" helpText="Month"

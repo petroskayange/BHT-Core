@@ -225,7 +225,12 @@
     loc = loc.slice(0, loc.length);
     document.getElementById("location-name").innerHTML = loc;
     var date = moment().format("DD/MMM/YY");
-    document.getElementById("app-date").innerHTML = date;
+    document.getElementById("app-date").innerHTML = moment(sessionStorage.sessionDate).format("DD/MMM/YYYY");
+    if (sessionStorage.session) {
+        document.getElementById("app-date").style.color = "red";
+    } else {
+        document.getElementById("app-date").style.color = "green";
+    }
 </script>
 
 </html>
