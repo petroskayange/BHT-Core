@@ -269,7 +269,14 @@
                             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                                 var concept = JSON.parse(this.responseText);
                                 if (concept) {
-                                    reason_for_starting = concept["concept_names"][0]["name"];
+                                    var concept_names = concept["concept_names"];
+                                    for (var key in concept_names){
+                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)){
+                                            reason_for_starting = concept_names[key]["name"];
+                                            break;
+                                        }
+                                    }
+
                                     jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
                                 }
                             }
@@ -388,6 +395,100 @@
         xhttp2.send();
     }
 
+    var who_stages_criteria_present_concept_id = 2743;
+    var who_stages_criteria_present = [];
+
+    var last_2_yrs  = 'N/A';
+    var eptb        = 'N/A';
+    var tb_current  = 'N/A';
+    var ks          = 'N/A';
+
+    function getTbstats(){
+        var who_stages_criteria_present_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        who_stages_criteria_present_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        who_stages_criteria_present_url += "&concept_id=" + who_stages_criteria_present_concept_id;
+        who_stages_criteria_present_url += "&paginate=false";
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var observations = JSON.parse(this.responseText);
+                for (var i=0; i<=observations.length - 1; i++){
+                    var value_coded = observations[i].value_coded;
+                    if (!value_coded){
+                        var value_text = observations[i].value_text;
+                        if (value_text.match(/last/i)){
+                            last_2_yrs = 'Yes';
+                            jQuery("#last_2_yrs").html("<a href='#'>" + last_2_yrs + "</a>");
+                        }
+                        if (value_text.match(/eptb/i)){
+                            eptb = 'Yes';
+                            jQuery("#eptb").html("<a href='#'>" + eptb + "</a>");
+                        }
+                        if (value_text.match(/current/i)){
+                            tb_current = 'Yes';
+                            jQuery("#tb_current").html("<a href='#'>" + tb_current + "</a>");
+                        }
+                        if (value_text.match(/kapos/i)){
+                            ks = 'Yes';
+                            jQuery("#ks").html("<a href='#'>" + ks + "</a>");
+                        }
+
+                    } else{
+                        var concept_name_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+                        concept_name_url += "/api/v1/concepts/" + value_coded;
+
+                        var xhttp2 = new XMLHttpRequest();
+                        xhttp2.onreadystatechange = function () {
+                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                var concept = JSON.parse(this.responseText);
+                                if (concept) {
+                                    var concept_name = "";
+                                    var concept_names = concept["concept_names"];
+                                    for (var key in concept_names){
+                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)){
+                                            concept_name = concept_names[key]["name"];
+                                            break;
+                                        }
+                                    }
+
+
+
+                                    if (concept_name.match(/last/i)){
+                                        last_2_yrs = 'Yes';
+                                        jQuery("#last_2_yrs").html("<a href='#'>" + last_2_yrs + "</a>");
+                                    }
+                                    if (concept_name.match(/eptb/i)){
+                                        eptb = 'Yes';
+                                        jQuery("#eptb").html("<a href='#'>" + eptb + "</a>");
+                                    }
+                                    if (concept_name.match(/current/i)){
+                                        tb_current = 'Yes';
+                                        jQuery("#tb_current").html("<a href='#'>" + tb_current + "</a>");
+                                    }
+                                    if (concept_name.match(/kapos/i)){
+                                        ks = 'Yes';
+                                        jQuery("#ks").html("<a href='#'>" + ks + "</a>");
+                                    }
+                                }
+                            }
+                        };
+                        xhttp2.open("GET", concept_name_url, true);
+                        xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                        xhttp2.setRequestHeader('Content-type', "application/json");
+                        xhttp2.send();
+                    }
+                }
+                    //jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
+            }
+        };
+
+        xhttp1.open("GET", who_stages_criteria_present_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
@@ -395,6 +496,7 @@
     loadConfirmatoryHIVTestLocationAndDate();
     loadReasonForStartingART();
     loadAgreesToFollowUp();
+    getTbstats();
     loadDemographics();
 
     function getAge(dateString) {
@@ -543,10 +645,10 @@
         </tr>
 
         <tr class="toggler toggler1">
-            <td colspan="3">&nbsp;</td>
-            <td colspan="3">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="3" id="last_2_yrs">&nbsp;</td>
+            <td colspan="3" id="eptb">&nbsp;</td>
+            <td colspan="2" id="tb_current">&nbsp;</td>
+            <td colspan="2" id="ks">&nbsp;</td>
         </tr>
 
 
