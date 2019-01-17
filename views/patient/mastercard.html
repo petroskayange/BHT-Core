@@ -140,6 +140,7 @@
     var ever_received_art = "No";
     var ever_received_concept_id = 7754;
     var yes_concept_id = 1065;
+    var no_concept_id = 1066;
 
     function loadTransferInData() {
         var ever_received_url = apiProtocol + "://" + apiURL + ":" + apiPort;
@@ -210,7 +211,6 @@
         xhttp1.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var confimatory_hiv_test_location_observations = JSON.parse(this.responseText);
-                console.log(confimatory_hiv_test_location_observations)
                 if (confimatory_hiv_test_location_observations.length > 0) {
                     hiv_test_location = confimatory_hiv_test_location_observations[0].value_text;
                     var xhttp2 = new XMLHttpRequest();
@@ -245,11 +245,156 @@
         xhttp1.send();
     }
 
+    var reason_for_starting_concept_id = 7563;
+    var reason_for_starting = "";
+
+    function loadReasonForStartingART() {
+        var reason_for_starting_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        reason_for_starting_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        reason_for_starting_url += "&concept_id=" + reason_for_starting_concept_id;
+
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var reason_for_starting_observations = JSON.parse(this.responseText);
+                if (reason_for_starting_observations.length > 0) {
+                    var value_coded = reason_for_starting_observations[0].value_coded;
+                    if (value_coded) {
+                        var concept_name_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+                        concept_name_url += "/api/v1/concepts/" + value_coded;
+
+                        var xhttp2 = new XMLHttpRequest();
+                        xhttp2.onreadystatechange = function () {
+                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                var concept = JSON.parse(this.responseText);
+                                if (concept) {
+                                    reason_for_starting = concept["concept_names"][0]["name"];
+                                    jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
+                                }
+                            }
+                        }
+                        xhttp2.open("GET", concept_name_url, true);
+                        xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                        xhttp2.setRequestHeader('Content-type', "application/json");
+                        xhttp2.send();
+                    } else {
+                        reason_for_starting = reason_for_starting_observations[0].value_text;
+                        jQuery("#start_reason").html("<a href='#'>" + reason_for_starting + "</a>");
+                    }
+
+                }
+
+            }
+        };
+
+        xhttp1.open("GET", reason_for_starting_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    var agrees_to_follow_up_concept_id = 2552;
+    var phone_only_concept_id = 9685;
+    var visit_only_concept_id = 9686;
+
+    var agrees_to_follow_up = "";
+
+    var agrees_by_phone = true;
+    var agrees_by_visit = true;
+
+    function loadAgreesToFollowUp() {
+        var phone_only_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        phone_only_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        phone_only_url += "&concept_id=" + phone_only_concept_id;
+
+        var visit_only_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        visit_only_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        visit_only_url += "&concept_id=" + visit_only_concept_id;
+
+        var xhttp2 = new XMLHttpRequest();
+        xhttp2.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var phone_only_observations = JSON.parse(this.responseText);
+                if (phone_only_observations.length > 0) {
+                    var observation = phone_only_observations[0];
+                    if (observation.value_coded == yes_concept_id) {
+                        agrees_to_follow_up = "Yes";
+                        jQuery("#agrees_to_follow_up").html("<a href='#'>" + agrees_to_follow_up + "</a>");
+                    }
+                    if (observation.value_coded == no_concept_id) {
+                        agrees_by_phone = false;
+                    }
+                }
+
+                var xhttp3 = new XMLHttpRequest();
+                xhttp3.onreadystatechange = function () {
+                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                        var visit_only_observations = JSON.parse(this.responseText);
+                        if (visit_only_observations.length > 0) {
+                            var observation = phone_only_observations[0];
+                            if (observation.value_coded == yes_concept_id) {
+                                agrees_to_follow_up = "Yes";
+                                jQuery("#agrees_to_follow_up").html("<a href='#'>" + agrees_to_follow_up + "</a>");
+                            }
+                            if (observation.value_coded == no_concept_id) {
+                                agrees_by_visit = false;
+                            }
+                            if (!agrees_by_phone) {
+                                if (!agrees_by_visit) {
+                                    agrees_to_follow_up = "No";
+                                    jQuery("#agrees_to_follow_up").html("<a href='#'>" + agrees_to_follow_up + "</a>");
+                                }
+                            }
+
+                        } else {
+                            var agrees_to_follow_up_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+                            agrees_to_follow_up_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                            agrees_to_follow_up_url += "&concept_id=" + agrees_to_follow_up_concept_id;
+                            var xhttp1 = new XMLHttpRequest();
+                            xhttp1.onreadystatechange = function () {
+                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                    var agrees_to_follow_up_observations = JSON.parse(this.responseText);
+                                    if (agrees_to_follow_up_observations.length > 0) {
+                                        var observation = agrees_to_follow_up_observations[0];
+                                        if (observation.value_coded == yes_concept_id) {
+                                            agrees_to_follow_up = "Yes"
+                                        }
+                                        if (observation.value_coded == no_concept_id) {
+                                            agrees_to_follow_up = "No"
+                                        }
+                                        jQuery("#agrees_to_follow_up").html("<a href='#'>" + agrees_to_follow_up + "</a>");
+                                    }
+
+                                }
+                            }
+
+                            xhttp1.open("GET", agrees_to_follow_up_url, true);
+                            xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                            xhttp1.setRequestHeader('Content-type', "application/json");
+                            xhttp1.send();
+                        }
+                    }
+                };
+                xhttp3.open("GET", visit_only_url, true);
+                xhttp3.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                xhttp3.setRequestHeader('Content-type', "application/json");
+                xhttp3.send();
+            }
+        };
+        xhttp2.open("GET", phone_only_url, true);
+        xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp2.setRequestHeader('Content-type', "application/json");
+        xhttp2.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
     loadTransferInData();
     loadConfirmatoryHIVTestLocationAndDate();
+    loadReasonForStartingART();
+    loadAgreesToFollowUp();
     loadDemographics();
 
     function getAge(dateString) {
@@ -379,7 +524,7 @@
         <tr class="toggler toggler1">
             <td colspan="4">&nbsp;</td>
             <td colspan="4" id="hiv_test">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
         </tr>
         <tr class="toggler toggler1">
             <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
@@ -387,7 +532,7 @@
         </tr>
         <tr class="toggler toggler1">
             <td colspan="6">&nbsp;</td>
-            <td colspan="4">&nbsp;</td>
+            <td colspan="4" id="start_reason">&nbsp;</td>
         </tr>
 
         <tr class="toggler toggler1">
