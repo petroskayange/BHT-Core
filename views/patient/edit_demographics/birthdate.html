@@ -1,93 +1,11 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <script language="javascript" defer="true">
-
-      tstUsername = "";
-      tstUserKeyboardPref = "qwerty";
-
-      var d = new Date();
-      d.toDateString();
-
-    </script>
-
-    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/assets/js/data.js"></script>
-    <script type="text/javascript" src="/assets/js/core.js"></script>
-
-  </head>
-  <body id="mateme">
-    <div id="container">
-      <div id="content">
-        <style type="text/css">
-
-  .tt_controls_year_of_birth #qwerty { display:none; }
-  .tt_controls_age_estimate #qwerty { display:none; }
-  .tt_controls_cell_phone_number #qwerty { display:none; }
-  .tt_controls_ground_phone_number #qwerty { display:none; }
-  .tt_controls_office_phone_number #qwerty { display:none; }
-
-  .tt_controls_year_of_birth #Unknown { display:block; }
-  .tt_controls_age_estimate #Unknown { display:none; }
-
-  .tt_controls_middle_name  #na { display: block; }
-  .tt_controls_ground_phone_number #Unknown { display:block; }
-
-  .tt_controls_region_of_origin .keyboard{display:none;}
-  .tt_controls_current_region .keyboard{display:none;}
-
-  .tt_controls_month_of_birth .keyboard{display:none;}
-  #tt_page_month_of_birth .options{height:570px;}
-  #tt_page_month_of_birth .options li{font-size:30px;}
-
-  .tt_controls_home_village #space , #apostrophe { display:inline; }
-  .tt_controls_home_district #num  { display:none; }
-
-  .tt_controls_current_traditional_authority_ta #space { display:inline; }
-
-  .tt_controls_current_village_residence #space { display:inline; }
-
-  .tt_controls_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
-
-  .tt_controls_home_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
-
-  .tt_controls_office_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
-
-  .tt_controls_occupation .keyboard{display:none;}
-  #tt_page_occupation .options{height:500px;}
-  #tt_page_occupation .options li{font-size:30px;}
-  #space {display:inline;}
-
-  .nota #na {
-    display: block;
-  }
-
-  #num{ display:block; }
-  #char{ display:none; }
-  #apostrophe { display:inline; }
-
-  .tt_controls_home_district #num{ display:none; }
-  .tt_controls_current_district #num{ display:none; }
-
-  .tt_controls_current_city_place_or_area_of_residence #num{ display:block; }
-  .tt_controls_current_city_place_or_area_of_residence #char{ display:block; }
-
-  .tt_controls_closest_landmark_or_plot_number #num{ display:block; }
-  .tt_controls_closest_landmark_or_plot_number #char{ display:block; }
-
-  .azButton .numericKeyboard #char {
-    display: block;
-  }
-
-</style>
-
-<script type="text/javascript">
-  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+  <script language="javascript" defer="true">
 
     tstUsername = "";
     tstUserKeyboardPref = "qwerty";
@@ -95,128 +13,249 @@
     var d = new Date();
     d.toDateString();
 
-    function getInput() {
-      key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-      value = $('touchscreenInput' + tstCurrentPage).value;
-      sessionStorage.setItem(key, value);
-      var d = new Date();
-      sessionStorage.setItem("date_created", d.toDateString())
-    }
+  </script>
 
-    function addInput(field_name) {
-      __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
-    }
+  <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/js/data.js"></script>
+  <script type="text/javascript" src="/assets/js/core.js"></script>
+  <script type="text/javascript" src="/assets/js/moment.js"></script>
 
-  function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
-    listSuggestions(tstCurrentPage);
+</head>
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <style type="text/css">
+
+.tt_controls_year_of_birth #qwerty { display:none; }
+.tt_controls_age_estimate #qwerty { display:none; }
+.tt_controls_cell_phone_number #qwerty { display:none; }
+.tt_controls_ground_phone_number #qwerty { display:none; }
+.tt_controls_office_phone_number #qwerty { display:none; }
+
+.tt_controls_year_of_birth #Unknown { display:block; }
+.tt_controls_age_estimate #Unknown { display:none; }
+
+.tt_controls_middle_name  #na { display: block; }
+.tt_controls_ground_phone_number #Unknown { display:block; }
+
+.tt_controls_region_of_origin .keyboard{display:none;}
+.tt_controls_current_region .keyboard{display:none;}
+
+.tt_controls_month_of_birth .keyboard{display:none;}
+#tt_page_month_of_birth .options{height:570px;}
+#tt_page_month_of_birth .options li{font-size:30px;}
+
+.tt_controls_home_village #space , #apostrophe { display:inline; }
+.tt_controls_home_district #num  { display:none; }
+
+.tt_controls_current_traditional_authority_ta #space { display:inline; }
+
+.tt_controls_current_village_residence #space { display:inline; }
+
+.tt_controls_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+.tt_controls_home_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+.tt_controls_office_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+.tt_controls_occupation .keyboard{display:none;}
+#tt_page_occupation .options{height:500px;}
+#tt_page_occupation .options li{font-size:30px;}
+#space {display:inline;}
+
+.nota #na {
+  display: block;
+}
+
+#num{ display:block; }
+#char{ display:none; }
+#apostrophe { display:inline; }
+
+.tt_controls_home_district #num{ display:none; }
+.tt_controls_current_district #num{ display:none; }
+
+.tt_controls_current_city_place_or_area_of_residence #num{ display:block; }
+.tt_controls_current_city_place_or_area_of_residence #char{ display:block; }
+
+.tt_controls_closest_landmark_or_plot_number #num{ display:block; }
+.tt_controls_closest_landmark_or_plot_number #char{ display:block; }
+
+.azButton .numericKeyboard #char {
+  display: block;
+}
+
+</style>
+
+<script type="text/javascript">
+var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+  tstUsername = "";
+  tstUserKeyboardPref = "qwerty";
+
+  var d = new Date();
+  d.toDateString();
+
+  function getInput() {
+    key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+    value = $('touchscreenInput' + tstCurrentPage).value;
+    sessionStorage.setItem(key, value);
+    var d = new Date();
+    sessionStorage.setItem("date_created", d.toDateString())
   }
 
-  function setAbsoluteMaxYear(){
-    var element = document.getElementById('touchscreenInput' + tstCurrentPage);
-    element.setAttribute("absoluteMax", (new Date().getFullYear()));
-    element.setAttribute("min", (new Date().getFullYear() - 100)); 
-    element.setAttribute("absoluteMin", (new Date().getFullYear() - 120)); 
+  function addInput(field_name) {
+    __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
   }
+
+function set_ajaxURL_for_suggestions(url, filter_value) {
+  $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&search_string=");
+  listSuggestions(tstCurrentPage);
+}
+
+function setAbsoluteMaxYear(){
+  var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+  element.setAttribute("absoluteMax", (new Date().getFullYear()));
+  element.setAttribute("min", (new Date().getFullYear() - 100)); 
+  element.setAttribute("absoluteMin", (new Date().getFullYear() - 120)); 
+}
 </script>
 
 <form method="PUT">
 
-    <input type="text" name="person_birth_year" id="person_birth_year" key="person_birth_year" helpText="Year of Birth" field_type="number" absoluteMin="1890" min="1940" tt_pageStyleClass="Numeric NumbersOnly" tt_onLoad ="addInput('person_birth_year');setAbsoluteMaxYear()" tt_onUnload="getInput();" />
+  <input type="text" name="person_birth_year" id="person_birth_year" key="person_birth_year" 
+    helpText="Year of Birth" field_type="number" absoluteMin="1890" min="1940" 
+    tt_pageStyleClass="Numeric NumbersOnly" tt_onLoad ="addInput('person_birth_year');setAbsoluteMaxYear()" 
+    tt_onUnload="getInput();" />
 
-    <select name="person_birth_month" id="person_birth_month" key="person_birth_month" helpText="Month of Birth" condition="$('person_birth_year').value.toLowerCase() != 'unknown'" validationMessage="Please enter a valid date" tt_onLoad="__$('keyboard').style.display = 'none';addInput('person_birth_month');" tt_onUnload="getInput();"><option value=""></option>
-      <option value="1">Jan</option>
-      <option value="2">Feb</option>
-      <option value="3">Mar</option>
-      <option value="4">Apr</option>
-      <option value="5">May</option>
-      <option value="6">Jun</option>
-      <option value="7">Jul</option>
-      <option value="8">Aug</option>
-      <option value="9">Sep</option>
-      <option value="10">Oct</option>
-      <option value="11">Nov</option>
-      <option value="12">Dec</option>
-    <option value="Unknown">Unknown</option></select>
+  <select name="person_birth_month" id="person_birth_month" key="person_birth_month" helpText="Month of Birth" 
+    condition="$('person_birth_year').value.toLowerCase() !== 'unknown'" validationMessage="Please enter a valid date" 
+    tt_onLoad="__$('keyboard').style.display = 'none';addInput('person_birth_month');changeMonthButton();" tt_onUnload="getInput();">
+    
+    <option value=""></option>
+    <option value="1">Jan</option>
+    <option value="2">Feb</option>
+    <option value="3">Mar</option>
+    <option value="4">Apr</option>
+    <option value="5">May</option>
+    <option value="6">Jun</option>
+    <option value="7">Jul</option>
+    <option value="8">Aug</option>
+    <option value="9">Sep</option>
+    <option value="10">Oct</option>
+    <option value="11">Nov</option>
+    <option value="12">Dec</option>
+    <option value="Unknown">Unknown</option>
+  
+  </select>
 
-    <input type="text" name="person_age_estimate" id="person_age_estimate" key="person_age_estimate" helpText="Age Estimate" absoluteMin="1" absoluteMax="120" field_type="number" condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$('nextButton').style.display = 'block';addInput('person_age_estimate');editBirthdate();changeNextButton();" tt_pageStyleClass="Numeric NumbersOnly" tt_onUnload="getInput();" />
+  <input type="text" name="person_age_estimate" id="person_age_estimate" key="person_age_estimate" 
+    helpText="Age Estimate" absoluteMin="1" absoluteMax="120" field_type="number" 
+    condition="$('person_birth_year').value == 'Unknown'" tt_onLoad="$('nextButton').style.display = 'block';addInput('person_age_estimate');editBirthdate();changeNextButton();"
+    tt_pageStyleClass="Numeric NumbersOnly" tt_onUnload="getInput();" />
 
-    <input type="text" name="person_birth_day" id="person_birth_day" key="person_birth_day" field_type="number" helpText="Birth Day" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')" tt_onLoad="editBirthdate();addInput('person_birth_day');" tt_onUnload="getInput();" />
+  <input type="text" name="person_birth_day" id="person_birth_day" key="person_birth_day" 
+    field_type="number" helpText="Birth Day" condition="($('person_birth_year').value != 'Unknown') && ($('person_birth_month').value != 'Unknown')"
+    tt_onLoad="editBirthdate();addInput('person_birth_day');" tt_onUnload="getInput();" />
 
-    <input type="hidden" name="field" id="field" value="date_of_birth" />
+  <input type="hidden" name="field" id="field" value="date_of_birth" />
 
 </form>
 
-        <div id="footer">
-        </div>
+      <div id="footer">
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>
 
 <script type="text/javascript">
-  var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
-  var url = new URL(url);
-  var apiURL = sessionStorage.getItem("apiURL");
-  var apiPort = sessionStorage.getItem("apiPort");
-  var apiProtocol = sessionStorage.getItem("apiProtocol");
-  var patient_id = sessionStorage.patientID;
-  getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
+var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
+var url = new URL(url);
+var apiURL = sessionStorage.getItem("apiURL");
+var apiPort = sessionStorage.getItem("apiPort");
+var apiProtocol = sessionStorage.getItem("apiProtocol");
+var patient_id = sessionStorage.patientID;
+getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
 
-  function editBirthdate() {
-    __$("nextButton").removeAttribute("onmousedown");
-    __$("nextButton").setAttribute("onmousedown", "postBirthdate();");
-    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
-    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
-      event.preventDefault();
-      if (event.keyCode === 13) {
-        postBirthdate();
+function editBirthdate() {
+  __$("nextButton").removeAttribute("onmousedown");
+  __$("nextButton").setAttribute("onmousedown", "postBirthdate();");
+  document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
+  document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      postBirthdate();
+    }
+  });
+
+}
+
+function postBirthdate() {
+  getInput();
+  var birth_date = "";
+  var estimated = 0;
+      if (__$('person_birth_year').value === "Unknown") {
+        birth_date = moment().subtract(parseInt(sessionStorage.person_age_estimate), "years").format("YYYY");
+        birth_date = "01/07/" + birth_date;
+        estimated = 1;
+      }if (__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value === "Unknown") {
+        birth_date = "01/07/" + __$('person_birth_year').value;
+      }if(__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value !== "Unknown" && sessionStorage.getItem('person_birth_day') === "Unknown") {
+        birth_date = "15/" + __$('person_birth_month').value + "/" + __$('person_birth_year').value;
+      }if(__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value !== "Unknown" && sessionStorage.getItem('person_birth_day') !== "Unknown") {
+        birth_date = sessionStorage.getItem("person_birth_day") + "/" + sessionStorage.getItem("person_birth_month") + "/" + sessionStorage.getItem("person_birth_year");
       }
-    });
-
-  }
-
-  function postBirthdate() {
-    getInput();
-    person_birth_year = sessionStorage.getItem("person_birth_day") + "/" + sessionStorage.getItem("person_birth_month") + "/" + sessionStorage.getItem("person_birth_year");
-    person_age_estimate = sessionStorage.getItem("person_age_estimate");
-    
-    var http = new XMLHttpRequest();
-    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
-    var params = JSON.stringify({
-      birthdate: person_birth_year,
-      birthdate_estimated: 0
-    });
-    http.open('PUT', url, true);
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange = function () { //Call a function when the state changes.
-      if (http.readyState == 4) {
-
-        if (http.status == 200 || http.status == 201) {
-          document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
-        } else if (http.status == 400) {
-          showMessage("Bad Request");
-        } else {
-          showMessage("error" + http.status);
-        }
-      }
-    }
-    http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-    http.send(params);
-  }
-
-  function changeNextButton(){
-    __$("nextButton").removeAttribute("onmousedown")
-    __$("nextButton").onmousedown = function(){
-
-  value = $('touchscreenInput' + tstCurrentPage).value;
-    if (value.length  > 0) {
-      submitSearchResults();
-    }else {
-      showMessage("You must enter a value to continue");
-    }
-    }
-  }
   
+  person_birth_year = sessionStorage.getItem("person_birth_day") + "/" + sessionStorage.getItem("person_birth_month") + "/" + sessionStorage.getItem("person_birth_year");
+  person_age_estimate = sessionStorage.getItem("person_age_estimate");
+  var http = new XMLHttpRequest();
+  var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
+  var params = JSON.stringify({
+    birthdate: birth_date,
+    birthdate_estimated: estimated
+  });
+  http.open('PUT', url, true);
+  http.setRequestHeader('Content-type', 'application/json');
+  http.onreadystatechange = function () { //Call a function when the state changes.
+    if (http.readyState == 4) {
+
+      if (http.status == 200 || http.status == 201) {
+        document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
+      } else if (http.status == 400) {
+        showMessage("Bad Request");
+      } else {
+        showMessage("error" + http.status);
+      }
+    }
+  }
+  http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  http.send(params);
+}
+
+function changeMonthButton(){
+  __$("nextButton").removeAttribute("onmousedown")
+  __$("nextButton").onmousedown = function(){
+
+    value = $('touchscreenInput' + tstCurrentPage).value;
+    if (value === "Unknown" ) {
+      postBirthdate();
+    }else {
+      gotoNextPage();
+    }
+  }
+}
+function changeNextButton(){
+  __$("nextButton").removeAttribute("onmousedown")
+  __$("nextButton").onmousedown = function(){
+
+value = $('touchscreenInput' + tstCurrentPage).value;
+  if (value.length  > 0) {
+    submitSearchResults();
+  }else {
+    showMessage("You must enter a value to continue");
+  }
+  }
+}
+
 </script>
