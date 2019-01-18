@@ -131,8 +131,8 @@ function PersistData(data, res) {
 
 function loadConfigurations () {
     $.getJSON('/config/config.json')
-        .done((applications) => {
-            loadApplicationsIntoMenu(applications.apps)
+        .done((configurations) => {
+            loadApplicationsIntoMenu(configurations.apps)
         })
         .fail((error) => {
             console.error(error)
