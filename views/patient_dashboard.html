@@ -88,6 +88,10 @@
     .todays-date {
 
     }
+
+    .mastercard{
+        float: left !important;
+    }
 </style>
 
 <!-- container -->
@@ -241,6 +245,10 @@
             <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#tasksModal" onmousedown="showTasks(this);">
                 <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+            </button>
+            <button id="tasks" class="btn btn-success buttons blue mastercard" style="margin-right: 5px;" data-toggle="modal"
+                    data-target="#tasksModal" onmousedown="gotoMastercard();">
+                <span>&nbsp; &nbsp; &nbsp; Mastercard &nbsp; &nbsp; &nbsp;</span>
             </button>
         </div>
     </footer>
@@ -1309,6 +1317,10 @@
         }
 
         button.style.backgroundColor = "#204d74";
+    }
+
+    function gotoMastercard(){
+        window.location = "/views/patient/mastercard.html";
     }
 
     GetApplicationInfo();

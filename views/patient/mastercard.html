@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
 <script src="/assets/js/generic_ajaxrequest.js"></script>
 <script src="/assets/js/moment.js"></script>
+<link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+<link rel="stylesheet" href="/assets/css/custom.css">
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -816,6 +818,7 @@
                     loadWeight(visit_date);
                     loadBMIOnVisitDate(visit_date);
                     getRegimen(visit_date);
+                    getMastercardData(visit_date);
                 }
 
             }
@@ -925,7 +928,6 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var data = JSON.parse(this.responseText);
-                console.log(data)
                 if (data) {
                     var current_regimen = data["current_regimen"];
                     var current_outcome = data["current_outcome"];
@@ -939,6 +941,68 @@
         };
 
         xhttp.open("GET", regimen_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function getMastercardData(visit_date) {
+        var mastercard_data_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
+        mastercard_data_url += "programs/1/patients/" + sessionStorage.patientID + "/mastercard_data?date=";
+        mastercard_data_url += visit_date;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var mastercard_data = JSON.parse(this.responseText);
+                var adherence = mastercard_data["adherence"];
+                if (adherence.length > 0) {
+                    var adherence_id = "#" + visit_date + "_adherence";
+                }
+                var pills_brought = mastercard_data["pills_brought"];
+                console.log(pills_brought)
+                if (pills_brought.length > 0) {
+                    var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+                    var pills_brought_data = [];
+                    for (var key in pills_brought) {
+                        var drug_name = pills_brought[key]["short_name"];
+                        var quantity = pills_brought[key]["quantity"];
+                        if (!quantity) {
+                            quantity = "?";
+                        }
+                        pills_brought_data.push(drug_name + " (" + quantity + ")")
+                    }
+                    pills_brought_data = pills_brought_data.join("<br />");
+                    jQuery(pills_remaining_id).html("<a href='#'>" + pills_brought_data + "</a>");
+                }
+
+                var pills_given = mastercard_data["pills_given"];
+                if (pills_given.length > 0) {
+                    var pills_given_data = [];
+                    var pills_gave_id = "#" + visit_date + "_pills_gave";
+                    for (var key in pills_given) {
+                        var drug_name = pills_given[key]["short_name"];
+                        var quantity = pills_given[key]["quantity"];
+                        if (!quantity) {
+                            quantity = "?";
+                        }
+                        pills_given_data.push(drug_name + " (" + quantity + ")")
+                    }
+                    pills_given_data = pills_given_data.join("<br />");
+                    jQuery(pills_gave_id).html("<a href='#'>" + pills_given_data + "</a>");
+                }
+
+                var side_effects = mastercard_data["side_effects"];
+                if (side_effects.length > 0) {
+                    var side_effects_id = "#" + visit_date + "_side_effects";
+                    side_effects = side_effects.join(", ");
+                    jQuery(side_effects_id).html("<a href='#'>" + side_effects + "</a>");
+                }
+
+            }
+        };
+
+        xhttp.open("GET", mastercard_data_url, true);
         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send();
@@ -965,6 +1029,10 @@
             age--;
         }
         return age;
+    }
+
+    function gotoPatientDashboard() {
+        window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
     }
 
 </script>
@@ -1030,110 +1098,126 @@
     a {
         font-weight: bold;
     }
+
+
 </style>
+<body>
+<div id="container">
+    <div id="content">
+        <div style="width: 98%; margin-left: 1%;">
+            <br/>
+            <table class="custom-table header-table">
+                <tbody>
+                <tr class="toggler toggler1">
+                    <td colspan="5"><b>ARV #</b></td>
+                    <td colspan="5"><b>National Patient ID</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="5" id="arv_number">&nbsp;</td>
+                    <td colspan="5" id="national_id">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4">
+                        <b>Name</b>
+                    </td>
+                    <td><b>Age</b></td>
+                    <td><b>Sex</b></td>
+                    <td><b>Int Wt(Kg)</b></td>
+                    <td><b>Int Ht(cm)</b></td>
+                    <td><b>BMI</b></td>
+                    <td><b>TI</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4" id="name">&nbsp;</td>
+                    <td id="age">&nbsp;</td>
+                    <td id="sex">&nbsp;</td>
+                    <td id="initial_weight">&nbsp;</td>
+                    <td id="initial_height">&nbsp;</td>
+                    <td id="bmi">&nbsp;</td>
+                    <td id="transfer_in">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4"><b>Location</b></td>
+                    <td colspan="4"><b>Land Mark/Address(Physical/P.O Box):</b></td>
+                    <td colspan="2"><b>Occupation</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4" id="current_residence">&nbsp;</td>
+                    <td colspan="4" id="land_mark">&nbsp;</td>
+                    <td colspan="2" id="occupation">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4"><b>Name of guardian</b></td>
+                    <td colspan="4"><b>Date place of + HIV test</b></td>
+                    <td colspan="2"><b>Agrees to followup</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4">&nbsp;</td>
+                    <td colspan="4" id="hiv_test">&nbsp;</td>
+                    <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
+                    <td colspan="4"><b>Reason for starting ART:</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="6" id="first_line_start_date">&nbsp;</td>
+                    <td colspan="4" id="start_reason">&nbsp;</td>
+                </tr>
+
+                <tr class="toggler toggler1">
+                    <td colspan="3"><b>Pulmonary tuberculosis within the last 2 years</b></td>
+                    <td colspan="3"><b>Extra pulmonary tuberculosis (EPTB):</b></td>
+                    <td colspan="2"><b>pulmonary tuberculosis (current):</b></td>
+                    <td colspan="2"><b>Kaposi's sarcoma:</b></td>
+                </tr>
+
+                <tr class="toggler toggler1">
+                    <td colspan="3" id="last_2_yrs">&nbsp;</td>
+                    <td colspan="3" id="eptb">&nbsp;</td>
+                    <td colspan="2" id="tb_current">&nbsp;</td>
+                    <td colspan="2" id="ks">&nbsp;</td>
+                </tr>
 
 
-<div class="container">
-    <br/>
-    <table class="custom-table header-table">
-        <tbody>
-        <tr class="toggler toggler1">
-            <td colspan="5"><b>ARV #</b></td>
-            <td colspan="5"><b>National Patient ID</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="5" id="arv_number">&nbsp;</td>
-            <td colspan="5" id="national_id">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4">
-                <b>Name</b>
-            </td>
-            <td><b>Age</b></td>
-            <td><b>Sex</b></td>
-            <td><b>Int Wt(Kg)</b></td>
-            <td><b>Int Ht(cm)</b></td>
-            <td><b>BMI</b></td>
-            <td><b>TI</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4" id="name">&nbsp;</td>
-            <td id="age">&nbsp;</td>
-            <td id="sex">&nbsp;</td>
-            <td id="initial_weight">&nbsp;</td>
-            <td id="initial_height">&nbsp;</td>
-            <td id="bmi">&nbsp;</td>
-            <td id="transfer_in">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4"><b>Location</b></td>
-            <td colspan="4"><b>Land Mark/Address(Physical/P.O Box):</b></td>
-            <td colspan="2"><b>Occupation</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4" id="current_residence">&nbsp;</td>
-            <td colspan="4" id="land_mark">&nbsp;</td>
-            <td colspan="2" id="occupation">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4"><b>Name of guardian</b></td>
-            <td colspan="4"><b>Date place of + HIV test</b></td>
-            <td colspan="2"><b>Agrees to followup</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4">&nbsp;</td>
-            <td colspan="4" id="hiv_test">&nbsp;</td>
-            <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
-            <td colspan="4"><b>Reason for starting ART:</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="6" id="first_line_start_date">&nbsp;</td>
-            <td colspan="4" id="start_reason">&nbsp;</td>
-        </tr>
+                </tbody>
+            </table>
+            <br/>
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>Visit Date</th>
+                    <th>HT</th>
+                    <th>WT</th>
+                    <th>BMI</th>
+                    <th>Reg</th>
+                    <th>Outcome</th>
+                    <th>Adh</th>
+                    <th>S.Eff</th>
+                    <th>Pills remaining</th>
+                    <th>Gave</th>
+                </tr>
+                </thead>
+                <tbody id="mastercard">
+                <tr>
+                    <td colspan="20" class="page-header">
+                        <button type="button" class="tbtn">  &nbsp;</button>
+                    </td>
+                </tr>
 
-        <tr class="toggler toggler1">
-            <td colspan="3"><b>Pulmonary tuberculosis within the last 2 years</b></td>
-            <td colspan="3"><b>Extra pulmonary tuberculosis (EPTB):</b></td>
-            <td colspan="2"><b>pulmonary tuberculosis (current):</b></td>
-            <td colspan="2"><b>Kaposi's sarcoma:</b></td>
-        </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <tr class="toggler toggler1">
-            <td colspan="3" id="last_2_yrs">&nbsp;</td>
-            <td colspan="3" id="eptb">&nbsp;</td>
-            <td colspan="2" id="tb_current">&nbsp;</td>
-            <td colspan="2" id="ks">&nbsp;</td>
-        </tr>
+        <footer class="footer">
+            <div class="container-footer">
+                <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
+                        onclick="gotoPatientDashboard();"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+                </button>
+            </div>
+        </footer>
 
-
-        </tbody>
-    </table>
-    <br/>
-    <table class="custom-table">
-        <thead>
-        <tr>
-            <th>Visit Date</th>
-            <th>HT</th>
-            <th>WT</th>
-            <th>BMI</th>
-            <th>Reg</th>
-            <th>Outcome</th>
-            <th>Adh</th>
-            <th>S.Eff</th>
-            <th>Pills remaining</th>
-            <th>Gave</th>
-        </tr>
-        </thead>
-        <tbody id="mastercard">
-        <tr>
-            <td colspan="20" class="page-header">
-                <button type="button" class="tbtn">  &nbsp;</button>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
+    </div>
 </div>
+
+</body>
