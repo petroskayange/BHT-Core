@@ -757,6 +757,164 @@
         xhttp1.send();
     }
 
+    function getVisitDates() {
+        /*
+        <tr class="toggler toggler1">
+            <td>
+                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
+            </td>
+            <td>162</td>
+            <td>56.8</td>
+            <td>22.6</td>
+            <td>5A</td>
+            <td>On ART</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        *
+        * */
+        var visits_dates_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + '/visits';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var visits = JSON.parse(this.responseText);
+                var html = ""
+                for (var i = 0; i <= visits.length - 1; i++) {
+                    var visit_date = visits[i];
+                    var weight_id = visit_date + "_weight";
+                    var height_id = visit_date + "_height";
+                    var bmi_id = visit_date + "_bmi";
+                    var regimen_id = visit_date + "_regimen";
+                    var outcome_id = visit_date + "_outcome";
+                    var adherence_id = visit_date + "_adherence";
+                    var side_effects_id = visit_date + "_side_effects";
+                    var pills_remaining_id = visit_date + "_pills_remaining";
+                    var pills_gave_id = visit_date + "_pills_gave";
+
+                    html += "<tr class=\"toggler toggler1\">\n" +
+                        "            <td>\n" +
+                        "                <button class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
+                        "            </td>\n" +
+                        "            <td id='" + height_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + weight_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + bmi_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + regimen_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + outcome_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + adherence_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + side_effects_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_remaining_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_gave_id + "'>&nbsp;</td>\n" +
+                        "        </tr>"
+                }
+
+                jQuery("#mastercard").append(html);
+                for (var i = 0; i <= visits.length - 1; i++) {
+                    var visit_date = visits[i];
+                    loadHeight(visit_date);
+                    loadWeight(visit_date);
+                    loadBMIOnVisitDate(visit_date);
+                }
+
+            }
+        };
+
+        xhttp.open("GET", visits_dates_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadHeight(visit_date) {
+        var height = "";
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + height_concept_id;
+        height_url += "&obs_datetime=" + visit_date;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                if (height_observations.length > 0) {
+                    var observation = height_observations[0];
+
+                    height = observation.value_numeric;
+                    if (!height) {
+                        height = observation.value_text;
+                    }
+                }
+
+                var field_id = "#" + visit_date + "_height"
+                jQuery(field_id).html("<a href='#'>" + height + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadWeight(visit_date) {
+        var weight = "";
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + weight_concept_id;
+        height_url += "&obs_datetime=" + visit_date;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                if (height_observations.length > 0) {
+                    var observation = height_observations[0];
+
+                    weight = observation.value_numeric;
+                    if (!weight) {
+                        weight = observation.value_text;
+                    }
+                }
+
+                var field_id = "#" + visit_date + "_weight"
+                jQuery(field_id).html("<a href='#'>" + weight + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadBMIOnVisitDate(visit_date) {
+        var bmi_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        bmi_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        bmi_url += "&concept_id=" + bmi_concept_id;
+        bmi_url += "&obs_datetime=" + visit_date;
+
+        var bmi = ""
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var bmi_observations = JSON.parse(this.responseText);
+                if (bmi_observations.length > 0) {
+                    var observation = bmi_observations[0];
+                    bmi = observation.value_numeric;
+                    if (!bmi) {
+                        bmi = observation.value_text;
+                    }
+                    var field_id = "#" + visit_date + "_bmi";
+                    jQuery(field_id).html("<a href='#'>" + bmi + "</a>");
+                }
+            }
+        };
+
+        xhttp.open("GET", bmi_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
     loadInitialWeight();
     loadInitialHeight();
     loadBMI();
@@ -767,6 +925,7 @@
     getTbstats();
     loadDateStartedFirstLineRegmen();
     loadDemographics();
+    getVisitDates();
 
     function getAge(dateString) {
         var today = new Date();
@@ -939,54 +1098,13 @@
             <th>Gave</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="mastercard">
         <tr>
             <td colspan="20" class="page-header">
                 <button type="button" class="tbtn">  &nbsp;</button>
             </td>
         </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>162</td>
-            <td>56.8</td>
-            <td>22.6</td>
-            <td>5A</td>
-            <td>On ART</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>182</td>
-            <td>67.8</td>
-            <td>23.8</td>
-            <td>0</td>
-            <td>Defaulter</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>172</td>
-            <td>64.8</td>
-            <td>24.6</td>
-            <td>0</td>
-            <td>Defaulter</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
+
         </tbody>
     </table>
 </div>
