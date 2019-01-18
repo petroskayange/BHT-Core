@@ -958,9 +958,22 @@
                 var adherence = mastercard_data["adherence"];
                 if (adherence.length > 0) {
                     var adherence_id = "#" + visit_date + "_adherence";
+
+
+                    var adherence_data = [];
+                    var adherence_id = "#" + visit_date + "_adherence";
+                    for (var key in adherence) {
+                        var drug_name = adherence[key]["short_name"];
+                        var adherence = adherence[key]["adherence"];
+                        if (!adherence) {
+                            adherence = "?";
+                        }
+                        adherence_data.push(drug_name + " (" + adherence + ")")
+                    }
+                    adherence_data = adherence_data.join("<br />");
+                    jQuery(adherence_id).html("<a href='#'>" + adherence_data + "</a>");
                 }
                 var pills_brought = mastercard_data["pills_brought"];
-                console.log(pills_brought)
                 if (pills_brought.length > 0) {
                     var pills_remaining_id = "#" + visit_date + "_pills_remaining";
                     var pills_brought_data = [];
