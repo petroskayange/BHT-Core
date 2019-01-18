@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+  <script language="javascript" defer="true">
+    tstUsername = "";
+    tstUserKeyboardPref = "qwerty";
+
+    var d = new Date();
+    d.toDateString();
+
+    function getInput() {
+      key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+      value = $('touchscreenInput' + tstCurrentPage).value;
+      sessionStorage.setItem(key, value);
+      var d = new Date();
+      sessionStorage.setItem("date_created", d.toDateString())
+    }
+
+    function addInput(field_name) {
+      __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+    }
+  </script>
+
+  <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/js/data.js"></script>
+  <script type="text/javascript" src="/assets/js/core.js"></script>
+
+</head>
+
+<body id="mateme">
+  <div id="container">
+    <div id="content">
+      <style>
+  .tt_controls_cell_phone_number #qwerty { display:none; }
+  .tt_controls_ground_phone_number #qwerty { display:none; }
+  .tt_controls_office_phone_number #qwerty { display:none; }
+
+  .tt_controls_ground_phone_number #Unknown { display:block; }
+
+  .tt_controls_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_guardian_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_home_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  .tt_controls_office_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+
+  #space {display:inline;}
+
+  .nota #na {
+    display: block;
+  }
+
+  #num{ display:block; }
+  #char{ display:none; }
+  #apostrophe { display:inline; }
+
+
+  .azButton .numericKeyboard #char {
+    display: block;
+  }
+      </style>
+
+      <form method='PUT'>
+        <input type="text" name="cellphone" id="cellphone" key="cellphone"
+          helpText="Cell phone number"     
+          field_type="number"
+          tt_pageStyleClass="nota"
+          validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available|N\/A"
+          validationMessage="Not a valid phone number" 
+          tt_onUnLoad="getInput();"
+          tt_onLoad="$(nextButton).style.display = block;editCellphone();validateInput();" />
+      </form>
+      <div id="footer">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+<script type="text/javascript">
+  var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
+  var url = new URL(url);
+  var apiURL = sessionStorage.getItem("apiURL");
+  var apiPort = sessionStorage.getItem("apiPort");
+  var apiProtocol = sessionStorage.getItem("apiProtocol");
+  var patient_id = sessionStorage.patientID;
+  getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
+
+  function editCellphone() {
+    __$("nextButton").removeAttribute("onmousedown");
+    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
+    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        postCellphone();
+      }
+    });
+    __$("nextButton").onmousedown = function () {
+      postCellphone();
+    }
+
+  }
+
+  function postCellphone() {
+    getInput();
+    cell_phone_number = sessionStorage.getItem("cellphone")
+    var http = new XMLHttpRequest();
+    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
+    var params = JSON.stringify({
+      cell_phone_number: sessionStorage.getItem("cellphone"),
+    });
+    http.open('PUT', url, true);
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function () { //Call a function when the state changes.
+      if (http.readyState == 4) {
+
+        if (http.status == 200) {
+          document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
+        } else if (http.status == 400) {
+          showMessage("Bad Request");
+        } else {
+          showMessage("error" + http.status);
+        }
+      }
+    }
+    http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    http.send(params);
+
+  }
+
+  function validateInput(){
+    __$("nextButton").removeAttribute("onmousedown")
+    __$("nextButton").onmousedown = function(){
+
+    value = $('touchscreenInput' + tstCurrentPage).value;
+     if (value.length  > 0) {
+               postCellphone();
+     }else{
+       showMessage("You must enter a value to continue");
+     }
+    }
+  }
+</script>
