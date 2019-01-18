@@ -815,6 +815,7 @@
                     loadHeight(visit_date);
                     loadWeight(visit_date);
                     loadBMIOnVisitDate(visit_date);
+                    getRegimen(visit_date);
                 }
 
             }
@@ -910,6 +911,34 @@
         };
 
         xhttp.open("GET", bmi_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function getRegimen(visit_date) {
+        var regimen_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
+        regimen_url += "programs/1/patients/" + sessionStorage.patientID + "?date=";
+        regimen_url += visit_date;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var data = JSON.parse(this.responseText);
+                console.log(data)
+                if (data) {
+                    var current_regimen = data["current_regimen"];
+                    var current_outcome = data["current_outcome"];
+
+                    var regimen_id = "#" + visit_date + "_regimen";
+                    var outcome_id = "#" + visit_date + "_outcome";
+                    jQuery(regimen_id).html("<a href='#'>" + current_regimen + "</a>");
+                    jQuery(outcome_id).html("<a href='#'>" + current_outcome + "</a>");
+                }
+            }
+        };
+
+        xhttp.open("GET", regimen_url, true);
         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send();
