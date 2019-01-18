@@ -23,6 +23,7 @@
     function addInput(field_name) {
       __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
     }
+
   </script>
 
   <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
@@ -74,7 +75,7 @@
           validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available|N\/A"
           validationMessage="Not a valid phone number" 
           tt_onUnLoad="getInput();"
-          tt_onLoad="$(nextButton).style.display = block;editCellphone();validateInput();" />
+          tt_onLoad="prepNextButton();" />
       </form>
       <div id="footer">
       </div>
@@ -84,6 +85,10 @@
 </html>
 
 <script type="text/javascript">
+  function prepNextButton () {
+    document.getElementById('nextButton').setAttribute('onmousedown', 'validateInput()');
+  }
+
   var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
   var url = new URL(url);
   var apiURL = sessionStorage.getItem("apiURL");
@@ -105,6 +110,19 @@
       postCellphone();
     }
 
+  }
+
+  function validateInput(){
+    __$("nextButton").removeAttribute("onmousedown")
+    __$("nextButton").onmousedown = function(){
+
+    value = $('touchscreenInput' + tstCurrentPage).value;
+     if (value.length  > 0) {
+               postCellphone();
+     }else{
+       showMessage("You must enter a value to continue");
+     }
+    }
   }
 
   function postCellphone() {
@@ -133,18 +151,5 @@
     http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
     http.send(params);
 
-  }
-
-  function validateInput(){
-    __$("nextButton").removeAttribute("onmousedown")
-    __$("nextButton").onmousedown = function(){
-
-    value = $('touchscreenInput' + tstCurrentPage).value;
-     if (value.length  > 0) {
-               postCellphone();
-     }else{
-       showMessage("You must enter a value to continue");
-     }
-    }
   }
 </script>
