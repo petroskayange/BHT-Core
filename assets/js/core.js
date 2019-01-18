@@ -129,21 +129,57 @@ function PersistData(data, res) {
 
 }
 
-function generateTemplate() {
-    if (document.createElement("template").content) {
-        /*Code for browsers that supports the TEMPLATE element*/
-
-        $.getJSON("/config/config.json")
-            .done(function (data, status) {
-                parser(data);
-            })
-            .fail(function () {
-                console.log("config.json is missing from the apps/config folder");
-            });
-    } else {
-        /*Alternative code for browsers that do not support the TEMPLATE element*/
-    }
+function loadConfigurations () {
+    $.getJSON('/config/config.json')
+        .done((applications) => {
+            loadApplicationsIntoMenu(applications.apps)
+        })
+        .fail((error) => {
+            console.error(error)
+            showMessage('There was an error bootstrapping the application.')
+        })
 }
+
+function loadApplicationsIntoMenu (applications) {
+    applications.forEach((application, idx) => {
+        const configFilePath = `/apps/${application.applicationFolder}/application.json`;
+        $.getJSON(configFilePath)
+            .done(() => {
+                createApplicationCard(application, idx)
+            })
+            .fail((error) => {
+                console.error(error)
+            })
+    })
+}
+
+
+function createApplicationCard (applicationData, idx) {
+    $("#modal-div").append($('#card_template').html())
+    $("#appDescription").text(applicationData.applicationDescription).attr('id', `appDescription${idx}`)
+    $("#apptext").text(applicationData.applicationName).attr('id', `apptext${idx}`)
+    $("#appName").text(applicationData.applicationName).attr('id', `appName${idx}`)
+    $("#moduleButton").attr('id', `moduleButton${idx}`)
+
+    if (applicationData.url == "") {
+        $(`#moduleButton${idx}`).attr("href", "#")
+    } else {
+        $(`#moduleButton${idx}`).attr("href", applicationData.url)
+    }
+
+    $("#cardImage")
+        .on('error', () => {
+            $(this).attr('src', "/assets/images/no_image.png")
+        }).attr('src', applicationData.applicationIcon).attr('id', `cardImage${idx}`)
+
+    $(`#moduleButton${idx}`).click(() => {
+        sessionStorage.setItem("applicationImage", applicationData.applicationIcon)
+        sessionStorage.setItem("applicationName", applicationData.applicationName)
+        sessionStorage.setItem("programID", applicationData.programID)
+        changeModule()
+    })
+}
+
 function generateActivities() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
@@ -193,33 +229,6 @@ function _foo(data, resource) {
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.setRequestHeader("Authorization", sessionStorage.getItem("authorization"));
     xhr.send(null);
-
-}
-
-function newModuleCard(applicationName, applicationDescription, applicationImage, counter, url) {
-    $("#modal-div").append($('#card_template').html());
-    $("#appDescription").text(applicationDescription).attr('id', "appDescription" + counter);
-    $("#apptext").text(applicationName).attr('id', "apptext" + counter);
-    $("#appName").text(applicationName).attr('id', "appName" + counter);
-    $("#moduleButton").attr('id', "moduleButton" + counter);
-    if (url == "") {
-        $("#moduleButton"+counter).attr("href", "#");
-    }else {
-        $("#moduleButton"+counter).attr("href", url);
-    }
-
-
-    // $("#apptext").text(l("applicationName"));
-    $("#cardImage")
-        .on('error', function () {
-            $(this).attr('src', "/assets/images/no_image.png");
-        }).attr('src', applicationImage).attr('id', "cardImage" + counter);
-    $("#moduleButton" + counter).click(function () {
-        sessionStorage.setItem("applicationImage", applicationImage);
-        sessionStorage.setItem("applicationName", applicationName);
-        sessionStorage.setItem("programID", programID);
-        changeModule();
-    });
 
 }
 
@@ -290,44 +299,12 @@ function setUser() {
     sessionStorage.setItem("username", username);
 }
 
-function checkJson(applicationJsonUrl, applicationName, applicationDescription, counter, applicationIconUrl, programID, redirectUrl) {
-    $.getJSON(applicationJsonUrl)
-        .done(function (data) {
-        newModuleCard(applicationName, applicationDescription, applicationIconUrl, counter, redirectUrl);
-
-        })
-        .fail(function () {
-            console.log("The application " + applicationName + "'s application.json file is not available");
-        });
-}
-
 function checkActivities(applicationJsonUrl, activitiesName, activitiesDescription, counter, activitiesIconUrl) {
     // $.getJSON(applicationJsonUrl)
     //     .done(function (data) {
         newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
 
 
-}
-
-function parser(applicationData) {
-
-    for (var i = 0; i < applicationData.apps.length; i++) {
-
-        applicationName[i] = applicationData.apps[i].applicationName || "Application Name Not Defined!!";
-        applicationDescription[i] = applicationData.apps[i].applicationDescription || "No Description Available";
-        applicationIcon[i] = applicationData.apps[i].applicationIcon;
-        applicationFolder[i] = applicationData.apps[i].applicationFolder;
-        programID[i]  = applicationData.apps[i].programID;
-        redirectUrl[i]  = applicationData.apps[i].url;
-
-        if (applicationData.apps[i].applicationFolder) {
-            applicationJsonUrl[i] = "/apps/" + applicationFolder[i] + "application.json";
-            checkJson(applicationJsonUrl[i], applicationName[i], applicationDescription[i], i, applicationIcon[i], programID[i], redirectUrl[i]);
-        } else {
-            console.log("no Application folder specified for " + applicationName[i]);
-        }
-
-    }
 }
 
 function getActivities(activitiesData) {
