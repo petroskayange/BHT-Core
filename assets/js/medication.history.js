@@ -150,6 +150,7 @@ function initiateDataTable() {
     fixedHeader: true,
     searching: false,
     paging: false,
+    scrollY: 555,
     scroller: {
       loadingIndicator: true
     }
@@ -159,6 +160,7 @@ function initiateDataTable() {
 function fetchMedicationOrders() {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
   url +="/api/v1/drug_orders?patient_id=" + sessionStorage.patientID;
+  url += "&page_size=100000";
   //url += "&date=" + sessionStorage.sessionDate;
 
   var xhttp = new XMLHttpRequest();
