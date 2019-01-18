@@ -29,6 +29,10 @@
     document.location = '/views/patient/edit_demographics/gender.html?patient_id='+ sessionStorage.patientID;
   }
 
+  function editCellphone() {
+    document.location = '/views/patient/edit_demographics/cellphone.html?patient_id='+ sessionStorage.patientID;
+  }
+
   function editBirthdate() {
     document.location = '/views/patient/edit_demographics/birthdate.html?patient_id='+ sessionStorage.patientID;
   }
@@ -406,7 +410,7 @@
                 </p>
               </td>
               <td class='anchor_class'>
-                <a href="/demographic_modify/phone_numbers/4">
+                <a onmousedown="editCellphone();">
                     <span>
                       <img alt="Edit demographic" class="edit-icons" src="/assets/images/edit-demographic.png" />
                     </span>

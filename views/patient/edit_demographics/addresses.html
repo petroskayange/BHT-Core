@@ -25,16 +25,20 @@
         finishButton.setAttribute('onclick',"");
       }
 
+      function addInput(field_name) {
+        __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+      }
+
     </script>    
 
     <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
     <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
     <script type="text/javascript" src="/assets/js/moment.js"></script>
     <script type="text/javascript" src="/assets/js/demographics.js"></script>
     <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+    <script type="text/javascript" src="/assets/js/data.js"></script>
 
   </head>
   <body id="mateme">
@@ -197,7 +201,7 @@
     ajaxURL = "/regions"
     setvalue = ""
     tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('home_region');"
-    tt_onUnload ="jQuery('#nextButton').show(); "
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
     tt_requireNextClick = 'false'
     tt_pageStyleClass = "NoKeyboard"
     objectType="region" />
@@ -211,31 +215,31 @@
     tt_pageStyleClass = "NoKeyboard"
     tt_requireNextClick = 'false'
     tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);addInput('home_district');"
-    tt_onUnload =" jQuery('#nextButton').show();"
+    tt_onUnload =" jQuery('#nextButton').show();getInput();"
     objectType="districts" />
 
   <input type="text" name="home_ta" key="home_ta"
-  id="home_ta" field_type="alpha" 
-  helpText="Home TA" 
-  condition="$('home_region').value != '4'"
-  tt_requireNextClick = 'false'
-  tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);addInput('home_ta');"
-  tt_onUnLoad =" jQuery('#nextButton').show();"
-  objectType="traditional_authority" />
+    id="home_ta" field_type="alpha" 
+    helpText="Home TA" 
+    condition="$('home_region').value != '4'"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);addInput('home_ta');"
+    tt_onUnLoad =" jQuery('#nextButton').show();getInput();"
+    objectType="traditional_authority" />
 
   <input type="text" name="home_village" key="home_village"
-  id="home_village" field_type="alpha" 
-  helpText="Home Village" 
-  condition="$('home_region').value != '4'"
-  tt_requireNextClick = 'false'
-  tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);addInput('home_village');"
-  tt_onUnload ="jQuery('#nextButton').show();"
-  objectType="village" />
+    id="home_village" field_type="alpha" 
+    helpText="Home Village" 
+    condition="$('home_region').value != '4'"
+    tt_requireNextClick = 'false'
+    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);addInput('home_village');"
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
+    objectType="village" />
 
   <!-- Home Address ............................................. -->
 
     <!-- ................... Current Address ........................... -->
-  <input type="text" name="region[region_name]" key="current_region"
+<!--   <input type="text" name="region[region_name]" key="current_region"
     id="current_region" 
     field_type="alpha" 
     xhelpText="Region"
@@ -245,8 +249,24 @@
     tt_requireNextClick = 'false'
     tt_pageStyleClass = "NoKeyboard"
     tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');"
-    tt_onUnload ="jQuery('#nextButton').show();"
-    objectType="region" />
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
+    objectType="region" /> -->
+
+
+  <select name="region[region_name]" id="current_region" 
+    key="current_region" helpText="Current Region" 
+    tt_requireNextClick = 'false'
+    tt_pageStyleClass = "NoKeyboard"
+    field_type="alpha"
+    setvalue = ""
+    objectType="region"
+    tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');" 
+    tt_onUnload ="jQuery('#nextButton').show();getInput();" tt_onUnload="getInput();">
+    <option value=""></option>
+    <option value="1">Central Region</option>
+    <option value="2">Northern Region</option>
+    <option value="3">Southern Region</option>  
+  </select>
   
   <input type="text" name="current_district" key="current_district"
     id="current_district" 
@@ -257,7 +277,7 @@
     tt_pageStyleClass = "NoKeyboard"
     tt_requireNextClick = 'false'
     tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);addInput('current_district');"
-    tt_onUnload ="jQuery('#nextButton').show();"
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
     objectType="districts" />
 
   <input type="text" name="current_ta" key="current_ta"
@@ -266,7 +286,7 @@
     condition="$('current_region').value != '4'"
     tt_requireNextClick = 'false'
     tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);addInput('current_ta');"
-    tt_onUnload ="jQuery('#nextButton').show();"
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
     objectType="traditional_authority" />
 
   <input type="text" name="current_village" key="current_village"
@@ -274,9 +294,9 @@
     helpText="Current Village" 
     ajaxURL="" 
     condition="$('current_region').value != '4'"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);addInput('current_village');"
-    tt_onUnload ="jQuery('#nextButton').show();"
+    tt_requireNextClick = 'true'
+    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);addInput('current_village');validateInput();"
+    tt_onUnload ="jQuery('#nextButton').show();getInput();"
     objectType="village" />
 
     <!-- ................... Current Address ends ........................... -->
@@ -290,7 +310,7 @@
 </html>
 
 <script type="text/javascript">
-var patientID = sessionStorage.getItem("patientID");
+// var patientID = sessionStorage.getItem("patientID");
 var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
 var url = new URL(url);
 var apiURL = sessionStorage.getItem("apiURL");
@@ -314,26 +334,36 @@ getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"),
 
   }
 
+  function validateInput(){
+    __$("nextButton").removeAttribute("onmousedown")
+    __$("nextButton").onmousedown = function(){
+
+    value = $('touchscreenInput' + tstCurrentPage).value;
+     if (value.length  > 0) {
+               postAddresses();
+     }else{
+       showMessage("You must enter a value to continue");
+     }
+    }
+  }
+
   function postAddresses() {
     getInput();
-    home_region = sessionStorage.getItem("home_region")
-    home_district = sessionStorage.getItem("home_district");
-    home_ta = sessionStorage.getItem("home_ta");
+    home_district = sessionStorage.getItem("home_district")
+    home_traditional_authority = sessionStorage.getItem("home_ta");
     home_village = sessionStorage.getItem("home_village");
-    current_region = sessionStorage.getItem("current_region");
     current_district = sessionStorage.getItem("current_district");
-    current_ta = sessionStorage.getItem("current_ta");
+    current_traditional_authority = sessionStorage.getItem("current_ta");
     current_village = sessionStorage.getItem("current_village");
     var http = new XMLHttpRequest();
     var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
     var params = JSON.stringify({
-      home_region: sessionStorage.getItem("home_region"),
       home_district: sessionStorage.getItem("home_district"),
-      home_ta: sessionStorage.getItem("home_ta"),
+      home_traditional_authority: sessionStorage.getItem("home_ta"),
       home_village: sessionStorage.getItem("home_village"),
       current_region: sessionStorage.getItem("current_region"),
       current_district: sessionStorage.getItem("current_district"),
-      current_ta: sessionStorage.getItem("current_ta"),
+      current_traditional_authority: sessionStorage.getItem("current_ta"),
       current_village: sessionStorage.getItem("current_village"),
     });
     http.open('PUT', url, true);
@@ -341,7 +371,6 @@ getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"),
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function () { //Call a function when the state changes.
       if (http.readyState == 4) {
-
         if (http.status == 200) {
           document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
         } else if (http.status == 400) {
