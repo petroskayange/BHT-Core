@@ -195,7 +195,7 @@
     http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
     http.send(params);
   }
-  generateTemplate();
+  loadConfigurations();
 
   var url = new URL(url);
   var apiURL = sessionStorage.getItem("apiURL");
