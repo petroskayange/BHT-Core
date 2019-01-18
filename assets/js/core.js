@@ -347,6 +347,10 @@ function printFilingNumber() {
 function printVisitSummary() {
     print_and_redirect('/views/print/visit.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
+
+function printTransferOut() {
+    print_and_redirect('/views/print/transfer.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
 function download(filename, text) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
@@ -393,6 +397,8 @@ function buildDashboardButtons(tasks, container) {
         containerTableCell.setAttribute("onmousedown","printFilingNumber();");
     }else if(tasks[i][0].match(/Visit Summary/i)){
         containerTableCell.setAttribute("onmousedown","printVisitSummary();");
+    }else if(tasks[i][0].match(/Transfer Out/i)){
+        containerTableCell.setAttribute("onmousedown","printTransferOut();");
     }
     else{
       containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
