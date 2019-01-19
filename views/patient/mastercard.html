@@ -797,7 +797,7 @@
 
                     html += "<tr class=\"toggler toggler1\">\n" +
                         "            <td>\n" +
-                        "                <button class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
+                        "                <button onclick='printPatientVisitSummary(&#39;" + visit_date + "&#39;)' class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
                         "            </td>\n" +
                         "            <td id='" + height_id + "'>&nbsp;</td>\n" +
                         "            <td id='" + weight_id + "'>&nbsp;</td>\n" +
@@ -959,16 +959,15 @@
                 if (adherence.length > 0) {
                     var adherence_id = "#" + visit_date + "_adherence";
 
-
                     var adherence_data = [];
                     var adherence_id = "#" + visit_date + "_adherence";
                     for (var key in adherence) {
                         var drug_name = adherence[key]["short_name"];
-                        var adherence = adherence[key]["adherence"];
-                        if (!adherence) {
-                            adherence = "?";
+                        var adherence_percent = adherence[key]["adherence"];
+                        if (!adherence_percent) {
+                            adherence_percent = "?";
                         }
-                        adherence_data.push(drug_name + " (" + adherence + ")")
+                        adherence_data.push(drug_name + " (" + adherence_percent + ")")
                     }
                     adherence_data = adherence_data.join("<br />");
                     jQuery(adherence_id).html("<a href='#'>" + adherence_data + "</a>");
@@ -1046,6 +1045,16 @@
 
     function gotoPatientDashboard() {
         window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+    }
+
+    function  printPatientVisitSummary(visit_date) {
+        var apiURL = sessionStorage.getItem("apiURL");
+        var apiPort = sessionStorage.getItem("apiPort");
+        var apiProtocol = sessionStorage.getItem("apiProtocol");
+
+        var url = "/programs/1/patients/" + sessionStorage.patientID + "/labels/visits?date=" + visit_date;
+        var visit_label_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+        document.location = visit_label_url;
     }
 
 </script>
