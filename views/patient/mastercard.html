@@ -1113,6 +1113,20 @@
     }
 
 
+    .mastercard-table tbody {
+        display: block;
+        height: 52vh;
+        overflow:auto;
+    }
+    .mastercard-table thead, .mastercard-table tbody tr {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+    }
+    .mastercard-table thead {
+        width: calc( 100% - 1em )
+    }
+
 </style>
 <body>
 <div id="container">
@@ -1196,7 +1210,7 @@
                 </tbody>
             </table>
             <br/>
-            <table class="custom-table">
+            <table class="custom-table mastercard-table">
                 <thead>
                 <tr>
                     <th>Visit Date</th>
