@@ -12,13 +12,26 @@
 <script type="text/javascript">
 
     var name = "";
+    var name_edit_url = "/views/patient/edit_demographics/name.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var gender = "";
+    var gender_edit_url = "/views/patient/edit_demographics/gender.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+
     var arv_number = "";
+    var arv_number_edit_url = "/views/patient/edit_demographics/arv_number.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var national_id = "";
     var age = "";
+    var age_edit_url = "/views/patient/edit_demographics/birthdate.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var current_residence = "";
     var closest_landmark = "";
+    var landmark_edit_url = "/views/patient/edit_demographics/landmark.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+    var address_edit_url = "/views/patient/edit_demographics/addresses.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
     var occupation = "";
+    var occupation_edit_url = "/views/patient/edit_demographics/occupation.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -55,14 +68,14 @@
                     }
                 }
 
-                jQuery("#arv_number").html("<a href='#'>" + arv_number + "</a>");
+                jQuery("#arv_number").html("<a href='" + arv_number_edit_url + "'>" + arv_number + "</a>");
                 jQuery("#national_id").html("<a href='#'>" + national_id + "</a>");
-                jQuery("#name").html("<a href='#'>" + name + "</a>");
-                jQuery("#age").html("<a href='#'>" + age + "</a>");
-                jQuery("#sex").html("<a href='#'>" + gender + "</a>");
-                jQuery("#current_residence").html("<a href='#'>" + current_residence + "</a>");
-                jQuery("#land_mark").html("<a href='#'>" + closest_landmark + "</a>");
-                jQuery("#occupation").html("<a href='#'>" + occupation + "</a>");
+                jQuery("#name").html("<a href='" + name_edit_url+ "'>" + name + "</a>");
+                jQuery("#age").html("<a href='" + age_edit_url + "'>" + age + "</a>");
+                jQuery("#sex").html("<a href='" + gender_edit_url + "'>" + gender + "</a>");
+                jQuery("#current_residence").html("<a href='" + address_edit_url + "'>" + current_residence + "</a>");
+                jQuery("#land_mark").html("<a href='" + landmark_edit_url + "'>" + closest_landmark + "</a>");
+                jQuery("#occupation").html("<a href='" + occupation_edit_url + "'>" + occupation + "</a>");
 
             }
         };
