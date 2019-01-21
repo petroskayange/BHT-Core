@@ -18,20 +18,52 @@
     var apiPort = sessionStorage.apiPort;
     var patientID = sessionStorage.patientID;
 
+    var patient_has_arv_number = false;
+
     var tt_cancel_destination = "/views/patient/mastercard.html";
 
     function postARVNumber() {
-        var identifier_type = 4;
-        var value = __$('touchscreenInput' + tstCurrentPage).value;
-        var selected_arv_number = site_prefix + "-ARV-" + value;
+        if (patient_has_arv_number){
+            console.log("Patient has ARV number");
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
 
-        var identifier_data = {
-            identifier: selected_arv_number,
-            identifier_type: identifier_type,
-            patient_id: patientID
-        };
-        var url = "/patients/" + sessionStorage.getItem("patientID") + "/patient_identifiers"
-        submitParameters(identifier_data, url, "gotoMastercard")
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var personObj = JSON.parse(this.responseText);
+                    var patient_identifiers = personObj["patient_identifiers"];
+                    var patient_identifier_id = "";
+
+                    for (var key in patient_identifiers) {
+                        var type = patient_identifiers[key]["type"];
+                        if (type.name.match(/ARV Number/i)) {
+                            patient_identifier_id = patient_identifiers[key]["type"]["identifier_type_id"];
+                            console.log("patient_identifier_id = " + patient_identifier_id)
+                            break;
+                        }
+                    }
+                    console.log(patient_identifier_id)
+
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+        } else{
+            var identifier_type = 4;
+            var value = __$('touchscreenInput' + tstCurrentPage).value;
+            var selected_arv_number = site_prefix + "-ARV-" + value;
+
+            var identifier_data = {
+                identifier: selected_arv_number,
+                identifier_type: identifier_type,
+                patient_id: patientID
+            };
+            var url = "/patients/" + sessionStorage.getItem("patientID") + "/patient_identifiers";
+            submitParameters(identifier_data, url, "gotoMastercard")
+            return
+        }
     }
 
     function gotoMastercard() {
@@ -69,6 +101,7 @@
                             arv_number = data["arv_number"];
                             var arv_number_check = arv_number.replace( /^\D+/g, '');
                             if (arv_number_check.length > 0) {
+                                patient_has_arv_number = true;
                                 arv_number = arv_number.replace(/^\D+/g, '');
                                 gotoNextPage();
                             }
