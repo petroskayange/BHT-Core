@@ -225,7 +225,7 @@ var global_property = GlobalProperty({
   path: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1'
 });
 
-window.onload = function () {
+function checkIfFilingNumberIsNotValid () {
   global_property.isEnabled('use.filing.numbers', function (predicate) {
     if (predicate) {
       getFilingNumberType({
@@ -373,7 +373,7 @@ window.onload = function () {
     sessionStorage.patientID = patient_id;
     document
       .getElementById("continue")
-      .setAttribute("onmousedown", "finish(" + patient_id + ")");
+      .setAttribute("onmousedown", "checkIfFilingNumberIsNotValid()");
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
     client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -1080,7 +1080,10 @@ function getFilingNumberType() {
           removePrompt();
           redirectToFilingNumberPage(sessionStorage.patientID);
         },
-        noCallback: removePrompt
+        noCallback: function () {
+          removePrompt()
+          finish(sessionStorage.patientID)
+        }
       });
     }
 
