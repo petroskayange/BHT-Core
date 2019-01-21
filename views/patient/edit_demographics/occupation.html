@@ -1,0 +1,63 @@
+<html>
+<head>
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+            defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/assets/js/yes_no_ctrls.js"></script>
+    <link rel="stylesheet" href="/assets/css/yes_no_ctrls.css" type="text/css">
+    <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+    <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+    <script type="text/javascript" src="/assets/js/moment.js"></script>
+    <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+    <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+    <script type="text/javascript">
+        var tt_cancel_destination = "/views/patient/mastercard.html";
+
+        function changeSubmitButton() {
+            __$('nextButton').onmousedown = function () {
+                var occupation = __$('touchscreenInput' + tstCurrentPage).value;
+                var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/1/person_attribute/" + occupation;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                        var exists = JSON.parse(this.responseText);
+
+                    }
+                };
+
+                xhttp.open("GET", url, true);
+                xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                xhttp.setRequestHeader('Content-type', "application/json");
+                xhttp.send();
+            }
+        }
+
+    </script>
+
+
+</head>
+
+<body id="mateme">
+<div id="container">
+    <div id="content">
+        <form>
+            <select helpText="Occupation" name="occupation" tt_onLoad="changeSubmitButton()">
+                <option value=" "></option>
+                <option value="Business">Business</option>
+                <option value="Farmer">Farmer</option>
+                <option value="Healthcare Worker">Healthcare Worker</option>
+                <option value="Housewife">Housewife</option>
+                <option value="Police">Police</option>
+                <option value="Soldier">Soldier</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Other">Other</option>
+            </select>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,37 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 
     <script language="javascript">
-      tstUsername = "";
-      tstUserKeyboardPref = "qwerty";
+        tstUsername = "";
+        tstUserKeyboardPref = "qwerty";
 
-      var d = new Date();
-      d.toDateString();
+        var d = new Date();
+        d.toDateString();
 
-      function getInput(){
-         key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
-         value = $('touchscreenInput' + tstCurrentPage).value
-         sessionStorage.setItem(key, value);
-         var d = new Date();
-         sessionStorage.setItem("date_created", d.toDateString());
-      }
+        function getInput() {
+            key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+            value = $('touchscreenInput' + tstCurrentPage).value
+            sessionStorage.setItem(key, value);
+            var d = new Date();
+            sessionStorage.setItem("date_created", d.toDateString());
+        }
 
-      function resetFinishBtn() {
-        var finishButton =  __$("nextButton");
-        finishButton.setAttribute('onmousedown',"gotoNextPage();");
-        finishButton.setAttribute('onclick',"");
-      }
+        function resetFinishBtn() {
+            var finishButton = __$("nextButton");
+            finishButton.setAttribute('onmousedown', "gotoNextPage();");
+            finishButton.setAttribute('onclick', "");
+        }
 
-      function addInput(field_name) {
-        __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
-      }
+        function addInput(field_name) {
+            __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+        }
 
-    </script>    
+    </script>
 
-    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+            defer="true"></script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
     <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
@@ -40,392 +41,493 @@
     <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
     <script type="text/javascript" src="/assets/js/data.js"></script>
 
-  </head>
-  <body id="mateme">
-    <div id="container">
-      <div id="content">
+</head>
+<body id="mateme">
+<div id="container">
+    <div id="content">
         <style>
 
-  .tt_controls_year_of_birth #qwerty { display:none; }
-  .tt_controls_age_estimate #qwerty { display:none; }
-  .tt_controls_cell_phone_number #qwerty { display:none; }
-  .tt_controls_ground_phone_number #qwerty { display:none; }
-  .tt_controls_office_phone_number #qwerty { display:none; }
+            .tt_controls_year_of_birth #qwerty {
+                display: none;
+            }
 
-  .tt_controls_year_of_birth #Unknown { display:block; }
-  .tt_controls_age_estimate #Unknown { display:none; }
+            .tt_controls_age_estimate #qwerty {
+                display: none;
+            }
 
-  .tt_controls_ground_phone_number #Unknown { display:block; }
+            .tt_controls_cell_phone_number #qwerty {
+                display: none;
+            }
 
-  .tt_controls_region_of_origin .keyboard{display:none;}
-  .tt_controls_current_region .keyboard{display:none;}
+            .tt_controls_ground_phone_number #qwerty {
+                display: none;
+            }
 
-  .tt_controls_month_of_birth .keyboard{display:none;}
-  #tt_page_month_of_birth .options{height:570px;}
-  #tt_page_month_of_birth .options li{font-size:30px;}
+            .tt_controls_office_phone_number #qwerty {
+                display: none;
+            }
 
-  .tt_controls_home_village #space , #apostrophe { display:inline; }
+            .tt_controls_year_of_birth #Unknown {
+                display: block;
+            }
 
-  .tt_controls_current_traditional_authority_ta #space { display:inline; }
+            .tt_controls_age_estimate #Unknown {
+                display: none;
+            }
 
-  .tt_controls_current_village_residence #space { display:inline; }
+            .tt_controls_ground_phone_number #Unknown {
+                display: block;
+            }
 
-  .tt_controls_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+            .tt_controls_region_of_origin .keyboard {
+                display: none;
+            }
 
-  .tt_controls_guardian_cell_phone_number #num , #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+            .tt_controls_current_region .keyboard {
+                display: none;
+            }
 
-  .tt_controls_home_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+            .tt_controls_month_of_birth .keyboard {
+                display: none;
+            }
 
-  .tt_controls_office_phone_number #num , #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal { display:none; }
+            #tt_page_month_of_birth .options {
+                height: 570px;
+            }
 
-  .tt_controls_occupation .keyboard{display:none;}
-  #tt_page_occupation .options{height:500px;}
-  #tt_page_occupation .options li{font-size:30px;}
-  #space {display:inline;}
+            #tt_page_month_of_birth .options li {
+                font-size: 30px;
+            }
 
-  .nota #na {
-    display: block;
-  }
+            .tt_controls_home_village #space, #apostrophe {
+                display: inline;
+            }
 
-  #num{ display:block; }
-  #char{ display:none; }
-  #apostrophe { display:inline; }
+            .tt_controls_current_traditional_authority_ta #space {
+                display: inline;
+            }
 
-  .tt_controls_current_district #num{ display:none; }
+            .tt_controls_current_village_residence #space {
+                display: inline;
+            }
 
-  .tt_controls_current_city_place_or_area_of_residence #num{ display:block; }
-  .tt_controls_current_city_place_or_area_of_residence #char{ display:block; }
+            .tt_controls_cell_phone_number #num, #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+                display: none;
+            }
 
-  .tt_controls_closest_landmark_or_plot_number #num{ display:block; }
-  .tt_controls_closest_landmark_or_plot_number #char{ display:block; }
+            .tt_controls_guardian_cell_phone_number #num, #plus, #apostrophe, #star, #char, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+                display: none;
+            }
 
-  .azButton .numericKeyboard #char {
-    display: block;
-  }
+            .tt_controls_home_phone_number #num, #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+                display: none;
+            }
 
-  .tt_controls_home_district #viewport { display:inline; }
-  .tt_controls_home_district #num { display:none; }
+            .tt_controls_office_phone_number #num, #plus, #apostrophe, #star, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+                display: none;
+            }
 
-  #tt_page_home_district #viewport { display: inline !important; }
-  #tt_page_home_ta #viewport { display: inline !important; }
-  #tt_page_home_village #viewport { display: inline !important; }
+            .tt_controls_occupation .keyboard {
+                display: none;
+            }
 
-  #tt_page_current_district #viewport { display: inline !important; }
-  
-  #tt_page_current_ta #viewport { 
-    display: inline !important; 
-    height: 55%;
-  }
+            #tt_page_occupation .options {
+                height: 500px;
+            }
+
+            #tt_page_occupation .options li {
+                font-size: 30px;
+            }
+
+            #space {
+                display: inline;
+            }
+
+            .nota #na {
+                display: block;
+            }
+
+            #num {
+                display: block;
+            }
+
+            #char {
+                display: none;
+            }
+
+            #apostrophe {
+                display: inline;
+            }
+
+            .tt_controls_current_district #num {
+                display: none;
+            }
+
+            .tt_controls_current_city_place_or_area_of_residence #num {
+                display: block;
+            }
+
+            .tt_controls_current_city_place_or_area_of_residence #char {
+                display: block;
+            }
+
+            .tt_controls_closest_landmark_or_plot_number #num {
+                display: block;
+            }
+
+            .tt_controls_closest_landmark_or_plot_number #char {
+                display: block;
+            }
+
+            .azButton .numericKeyboard #char {
+                display: block;
+            }
+
+            .tt_controls_home_district #viewport {
+                display: inline;
+            }
+
+            .tt_controls_home_district #num {
+                display: none;
+            }
+
+            #tt_page_home_district #viewport {
+                display: inline !important;
+            }
+
+            #tt_page_home_ta #viewport {
+                display: inline !important;
+            }
+
+            #tt_page_home_village #viewport {
+                display: inline !important;
+            }
+
+            #tt_page_current_district #viewport {
+                display: inline !important;
+            }
+
+            #tt_page_current_ta #viewport {
+                display: inline !important;
+                height: 55%;
+            }
+
+            #tt_page_home_ta .inputFrameClass {
+                height: 50%;
+                overflow: auto;
+            }
+
+            #tt_page_home_village .inputFrameClass {
+                height: 50%;
+                overflow: auto;
+            }
+
+            #tt_page_current_ta .inputFrameClass {
+                height: 50%;
+                overflow: auto;
+            }
+
+            #tt_page_current_village .inputFrameClass {
+                height: 50%;
+                overflow: auto;
+            }
+
+            .summary-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .summary-table th {
+                border-style: solid;
+                border-width: 0px 0px 1px 0px;
+                text-align: left;
+                padding-left: 5px 0px 10px 0px;
+                width: 20%;
+                height: 30px;
+            }
+
+            .summary-table td {
+                border-style: solid;
+                border-width: 0px 0px 1px 0px;
+                text-align: left;
+                padding-left: 5px 0px 10px 0px;
+                height: 30px;
+            }
+
+            .tt_controls_month_of_birth .keyboard {
+                display: none !important;
+            }
+
+            .tt_controls_birth_day #qwerty {
+                display: none;
+            }
+
+        </style>
+
+        <script type="text/javascript">
+            //var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+            tstUsername = "";
+            tstUserKeyboardPref = "qwerty";
+
+            var d = new Date();
+            d.toDateString();
+
+            function set_ajaxURL_for_suggestions(url, filter_value) {
+                $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=1000&name=");
+                listSuggestions(tstCurrentPage);
+            }
+
+            function setOverFow() {
+                var element = document.getElementById("inputFrame" + tstCurrentPage);
+                element.style = "overflow: auto;";
+            }
+        </script>
+
+        <form method="PUT">
+
+            <!-- Home Address ............................................. -->
+            <input type="text" name="region[region_name]" key="home_region"
+                   id="home_region"
+                   field_type="alpha"
+                   xhelpText="Region"
+                   helpText="Region of origin"
+                   ajaxURL="/regions"
+                   setvalue=""
+                   tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('home_region');"
+                   tt_onUnload="jQuery('#nextButton').show();getInput();"
+                   tt_requireNextClick='false'
+                   tt_pageStyleClass="NoKeyboard"
+                   objectType="region"/>
+
+            <input type="text" name="home_district" key="home_district"
+                   id="home_district"
+                   field_type="alpha"
+                   xhelpText="District"
+                   helpText="Home District"
+                   setvalue=""
+                   tt_pageStyleClass="NoKeyboard"
+                   tt_requireNextClick='false'
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);addInput('home_district');"
+                   tt_onUnload=" jQuery('#nextButton').show();getInput();"
+                   objectType="districts"/>
+
+            <input type="text" name="home_ta" key="home_ta"
+                   id="home_ta" field_type="alpha"
+                   helpText="Home TA"
+                   condition="$('home_region').value != '4'"
+                   tt_requireNextClick='false'
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);addInput('home_ta');"
+                   tt_onUnLoad=" jQuery('#nextButton').show();getInput();"
+                   objectType="traditional_authority"/>
+
+            <input type="text" name="home_village" key="home_village"
+                   id="home_village" field_type="alpha"
+                   helpText="Home Village"
+                   condition="$('home_region').value != '4'"
+                   tt_requireNextClick='false'
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);addInput('home_village');"
+                   tt_onUnload="jQuery('#nextButton').show();getInput();"
+                   objectType="village"/>
+
+            <!-- Home Address ............................................. -->
+
+            <!-- ................... Current Address ........................... -->
+            <!--   <input type="text" name="region[region_name]" key="current_region"
+                id="current_region"
+                field_type="alpha"
+                xhelpText="Region"
+                helpText="Current Region"
+                ajaxURL = "/regions"
+                setvalue = ""
+                tt_requireNextClick = 'false'
+                tt_pageStyleClass = "NoKeyboard"
+                tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');"
+                tt_onUnload ="jQuery('#nextButton').show();getInput();"
+                objectType="region" /> -->
 
 
-  #tt_page_home_ta .inputFrameClass {
-    height: 50%;
-    overflow: auto;
-  }
+            <select name="region[region_name]" id="current_region"
+                    key="current_region" helpText="Current Region"
+                    tt_requireNextClick='false'
+                    tt_pageStyleClass="NoKeyboard"
+                    field_type="alpha"
+                    setvalue=""
+                    objectType="region"
+                    tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');"
+                    tt_onUnload="jQuery('#nextButton').show();getInput();" tt_onUnload="getInput();">
+                <option value=""></option>
+                <option value="1">Central Region</option>
+                <option value="2">Northern Region</option>
+                <option value="3">Southern Region</option>
+            </select>
 
-  #tt_page_home_village .inputFrameClass {
-    height: 50%;
-    overflow: auto;
-  }
+            <input type="text" name="current_district" key="current_district"
+                   id="current_district"
+                   field_type="alpha"
+                   xhelpText="District"
+                   helpText="Current District"
+                   setvalue=""
+                   tt_pageStyleClass="NoKeyboard"
+                   tt_requireNextClick='false'
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);addInput('current_district');"
+                   tt_onUnload="jQuery('#nextButton').show();getInput();"
+                   objectType="districts"/>
 
-  #tt_page_current_ta .inputFrameClass {
-    height: 50%;
-    overflow: auto;
-  }
+            <input type="text" name="current_ta" key="current_ta"
+                   id="current_ta" field_type="alpha"
+                   helpText="Current TA"
+                   condition="$('current_region').value != '4'"
+                   tt_requireNextClick='false'
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);addInput('current_ta');"
+                   tt_onUnload="jQuery('#nextButton').show();getInput();"
+                   objectType="traditional_authority"/>
 
-  #tt_page_current_village .inputFrameClass {
-    height: 50%;
-    overflow: auto;
-  }
+            <input type="text" name="current_village" key="current_village"
+                   id="current_village" field_type="alpha"
+                   helpText="Current Village"
+                   ajaxURL=""
+                   condition="$('current_region').value != '4'"
+                   tt_requireNextClick='true'
+                   tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);addInput('current_village');validateInput();"
+                   tt_onUnload="jQuery('#nextButton').show();getInput();"
+                   objectType="village"/>
 
- .summary-table {
-   width: 100%;
-   border-collapse: collapse;
- }
-
- .summary-table th {
-   border-style: solid;
-   border-width: 0px 0px 1px 0px;
-   text-align: left;
-   padding-left: 5px 0px 10px 0px;
-   width: 20%;
-   height: 30px;
- }
-
- .summary-table td {
-   border-style: solid;
-   border-width: 0px 0px 1px 0px;
-   text-align: left;
-   padding-left: 5px 0px 10px 0px;
-   height: 30px;
- }
-
- .tt_controls_month_of_birth .keyboard {
-   display: none !important;
- }
-
- .tt_controls_birth_day #qwerty {
-   display: none;
- }
-
-</style>
-
-<script type="text/javascript">
-  var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
-
-      tstUsername = "";
-      tstUserKeyboardPref = "qwerty";
-
-      var d = new Date();
-      d.toDateString();
-
-  function set_ajaxURL_for_suggestions(url, filter_value) {
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url + filter_value + "&page_size=1000&name=");
-    listSuggestions(tstCurrentPage);
-  }
-
-  function setOverFow() {
-    var element = document.getElementById("inputFrame" + tstCurrentPage);
-    element.style="overflow: auto;";
-  }
-</script>
-
-<form method="PUT">
-
-  <!-- Home Address ............................................. -->
-  <input type="text" name="region[region_name]" key="home_region"
-    id="home_region" 
-    field_type="alpha"
-    xhelpText="Region"
-    helpText="Region of origin"
-    ajaxURL = "/regions"
-    setvalue = ""
-    tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('home_region');"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    tt_requireNextClick = 'false'
-    tt_pageStyleClass = "NoKeyboard"
-    objectType="region" />
-  
-  <input type="text" name="home_district" key="home_district" 
-    id="home_district" 
-    field_type="alpha" 
-    xhelpText="District"
-    helpText="Home District"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);addInput('home_district');"
-    tt_onUnload =" jQuery('#nextButton').show();getInput();"
-    objectType="districts" />
-
-  <input type="text" name="home_ta" key="home_ta"
-    id="home_ta" field_type="alpha" 
-    helpText="Home TA" 
-    condition="$('home_region').value != '4'"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);addInput('home_ta');"
-    tt_onUnLoad =" jQuery('#nextButton').show();getInput();"
-    objectType="traditional_authority" />
-
-  <input type="text" name="home_village" key="home_village"
-    id="home_village" field_type="alpha" 
-    helpText="Home Village" 
-    condition="$('home_region').value != '4'"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);addInput('home_village');"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    objectType="village" />
-
-  <!-- Home Address ............................................. -->
-
-    <!-- ................... Current Address ........................... -->
-<!--   <input type="text" name="region[region_name]" key="current_region"
-    id="current_region" 
-    field_type="alpha" 
-    xhelpText="Region"
-    helpText="Current Region"
-    ajaxURL = "/regions"
-    setvalue = ""
-    tt_requireNextClick = 'false'
-    tt_pageStyleClass = "NoKeyboard"
-    tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    objectType="region" /> -->
-
-
-  <select name="region[region_name]" id="current_region" 
-    key="current_region" helpText="Current Region" 
-    tt_requireNextClick = 'false'
-    tt_pageStyleClass = "NoKeyboard"
-    field_type="alpha"
-    setvalue = ""
-    objectType="region"
-    tt_onLoad="clearInput(); jQuery('#nextButton').hide();addInput('current_region');" 
-    tt_onUnload ="jQuery('#nextButton').show();getInput();" tt_onUnload="getInput();">
-    <option value=""></option>
-    <option value="1">Central Region</option>
-    <option value="2">Northern Region</option>
-    <option value="3">Southern Region</option>  
-  </select>
-  
-  <input type="text" name="current_district" key="current_district"
-    id="current_district" 
-    field_type="alpha" 
-    xhelpText="District"
-    helpText="Current District"
-    setvalue = "" 
-    tt_pageStyleClass = "NoKeyboard"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('current_region').value);addInput('current_district');"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    objectType="districts" />
-
-  <input type="text" name="current_ta" key="current_ta"
-    id="current_ta" field_type="alpha" 
-    helpText="Current TA" 
-    condition="$('current_region').value != '4'"
-    tt_requireNextClick = 'false'
-    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);addInput('current_ta');"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    objectType="traditional_authority" />
-
-  <input type="text" name="current_village" key="current_village"
-    id="current_village" field_type="alpha" 
-    helpText="Current Village" 
-    ajaxURL="" 
-    condition="$('current_region').value != '4'"
-    tt_requireNextClick = 'true'
-    tt_onLoad="clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);addInput('current_village');validateInput();"
-    tt_onUnload ="jQuery('#nextButton').show();getInput();"
-    objectType="village" />
-
-    <!-- ................... Current Address ends ........................... -->
-</form>
+            <!-- ................... Current Address ends ........................... -->
+        </form>
 
         <div id="footer">
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>
 
 <script type="text/javascript">
-// var patientID = sessionStorage.getItem("patientID");
-var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
-var url = new URL(url);
-var apiURL = sessionStorage.getItem("apiURL");
-var apiPort = sessionStorage.getItem("apiPort");
-var apiProtocol = sessionStorage.getItem("apiProtocol");
-var patient_id = sessionStorage.patientID;
-getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
+    // var patientID = sessionStorage.getItem("patientID");
+    var tt_cancel_destination = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
+    if (window.location.search.indexOf("source=mastercard") != -1) {
+        tt_cancel_destination = "/views/patient/mastercard.html";
+    }
+    var url = new URL(url);
+    var apiURL = sessionStorage.getItem("apiURL");
+    var apiPort = sessionStorage.getItem("apiPort");
+    var apiProtocol = sessionStorage.getItem("apiProtocol");
+    var patient_id = sessionStorage.patientID;
+    getName(id, sessionStorage.getItem("apiURL"), sessionStorage.getItem("apiPort"), sessionStorage.getItem("apiProtocol"));
 
-  function editAddresses() {
-    __$("nextButton").removeAttribute("onmousedown");
-    document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
-    document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
-      event.preventDefault();
-      if (event.keyCode === 13) {
-        postAddresses();
-      }
-    });
-    __$("nextButton").onmousedown = function () {
-        postAddresses();
+    function editAddresses() {
+        __$("nextButton").removeAttribute("onmousedown");
+        document.getElementById('touchscreenInput1').removeEventListener('keyup', checkKey, false);
+        document.getElementById('touchscreenInput1').addEventListener('keyup', function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                postAddresses();
+            }
+        });
+        __$("nextButton").onmousedown = function () {
+            postAddresses();
+        }
+
     }
 
-  }
+    function validateInput() {
+        __$("nextButton").removeAttribute("onmousedown")
+        __$("nextButton").onmousedown = function () {
 
-  function validateInput(){
-    __$("nextButton").removeAttribute("onmousedown")
-    __$("nextButton").onmousedown = function(){
-
-    value = $('touchscreenInput' + tstCurrentPage).value;
-     if (value.length  > 0) {
-               postAddresses();
-     }else{
-       showMessage("You must enter a value to continue");
-     }
+            value = $('touchscreenInput' + tstCurrentPage).value;
+            if (value.length > 0) {
+                postAddresses();
+            } else {
+                showMessage("You must enter a value to continue");
+            }
+        }
     }
-  }
 
-  function postAddresses() {
-    getInput();
-    home_district = sessionStorage.getItem("home_district")
-    home_traditional_authority = sessionStorage.getItem("home_ta");
-    home_village = sessionStorage.getItem("home_village");
-    current_district = sessionStorage.getItem("current_district");
-    current_traditional_authority = sessionStorage.getItem("current_ta");
-    current_village = sessionStorage.getItem("current_village");
-    var http = new XMLHttpRequest();
-    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
-    var params = JSON.stringify({
-      home_district: sessionStorage.getItem("home_district"),
-      home_traditional_authority: sessionStorage.getItem("home_ta"),
-      home_village: sessionStorage.getItem("home_village"),
-      current_region: sessionStorage.getItem("current_region"),
-      current_district: sessionStorage.getItem("current_district"),
-      current_traditional_authority: sessionStorage.getItem("current_ta"),
-      current_village: sessionStorage.getItem("current_village"),
-    });
-    http.open('PUT', url, true);
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange = function () { //Call a function when the state changes.
-      if (http.readyState == 4) {
-        if (http.status == 200) {
-          document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
-        } else if (http.status == 400) {
-          showMessage("Bad Request");
-        } else {
-          showMessage("error" + http.status);
+    function postAddresses() {
+        getInput();
+        home_district = sessionStorage.getItem("home_district")
+        home_traditional_authority = sessionStorage.getItem("home_ta");
+        home_village = sessionStorage.getItem("home_village");
+        current_district = sessionStorage.getItem("current_district");
+        current_traditional_authority = sessionStorage.getItem("current_ta");
+        current_village = sessionStorage.getItem("current_village");
+        var http = new XMLHttpRequest();
+        var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/' + sessionStorage.patientID;
+        var params = JSON.stringify({
+            home_district: sessionStorage.getItem("home_district"),
+            home_traditional_authority: sessionStorage.getItem("home_ta"),
+            home_village: sessionStorage.getItem("home_village"),
+            current_region: sessionStorage.getItem("current_region"),
+            current_district: sessionStorage.getItem("current_district"),
+            current_traditional_authority: sessionStorage.getItem("current_ta"),
+            current_village: sessionStorage.getItem("current_village"),
+        });
+        http.open('PUT', url, true);
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function () { //Call a function when the state changes.
+            if (http.readyState == 4) {
+                if (http.status == 200) {
+                    if (window.location.search.indexOf("source=mastercard") != -1) {
+                        document.location = "/views/patient/mastercard.html";
+                    }
+                    else {
+                        document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
+                    }
+                } else if (http.status == 400) {
+                    showMessage("Bad Request");
+                } else {
+                    showMessage("error" + http.status);
+                }
+            }
         }
-      }
+        http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        http.send(params);
+
     }
-    http.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-    http.send(params);
 
-  }
+    function getObjects(td, attribute, element_name, aUrl) {
+        var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1' + aUrl;
 
-function getObjects(td, attribute, element_name, aUrl) {
-  var url = apiProtocol+'://'+apiURL+':'+apiPort+'/api/v1' + aUrl;
-
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var obj = JSON.parse(this.responseText);
-      if(element_name.match(/District/i)){
-        districts = obj;
-        for(var x = 0 ; x < districts.length; x++){
-          if(districts[x].district_id == attribute){
-            td.innerHTML = districts[x].name;
-            break;
-          }
-        }
-      }else if(element_name.match(/TA/i)){
-        traditional_authorities = obj;
-        for(var x = 0 ; x < traditional_authorities.length; x++){
-          if(traditional_authorities[x].traditional_authority_id == attribute){
-            td.innerHTML = traditional_authorities[x].name;
-            break;
-          }
-        }
-      }else if(element_name.match(/Village/i)){
-        villages = obj;
-        for(var x = 0 ; x < villages.length; x++){
-          if(villages[x].village_id == attribute){
-            td.innerHTML = villages[x].name;
-            break;
-          }
-        }
-      }
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var obj = JSON.parse(this.responseText);
+                if (element_name.match(/District/i)) {
+                    districts = obj;
+                    for (var x = 0; x < districts.length; x++) {
+                        if (districts[x].district_id == attribute) {
+                            td.innerHTML = districts[x].name;
+                            break;
+                        }
+                    }
+                } else if (element_name.match(/TA/i)) {
+                    traditional_authorities = obj;
+                    for (var x = 0; x < traditional_authorities.length; x++) {
+                        if (traditional_authorities[x].traditional_authority_id == attribute) {
+                            td.innerHTML = traditional_authorities[x].name;
+                            break;
+                        }
+                    }
+                } else if (element_name.match(/Village/i)) {
+                    villages = obj;
+                    for (var x = 0; x < villages.length; x++) {
+                        if (villages[x].village_id == attribute) {
+                            td.innerHTML = villages[x].name;
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.send();
     }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization',sessionStorage.getItem("authorization"));
-  xhttp.send();
-}
 
-function setUrl(e, name) {
-  __$(e).setAttribute('ajaxURL', "/districts?region_id=2");
-}
+    function setUrl(e, name) {
+        __$(e).setAttribute('ajaxURL', "/districts?region_id=2");
+    }
 
 </script>
