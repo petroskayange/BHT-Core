@@ -67,11 +67,30 @@
                         var data = JSON.parse(this.responseText);
                         if (data) {
                             arv_number = data["arv_number"];
-                            if (arv_number) {
+                            var arv_number_check = arv_number.replace( /^\D+/g, '');
+                            if (arv_number_check.length > 0) {
                                 arv_number = arv_number.replace(/^\D+/g, '');
+                                gotoNextPage();
                             }
                         }
-                        gotoNextPage();
+
+                        if (arv_number_check.length == 0){
+                            var suggested_arv_number_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/1/next_available_arv_number";
+                            var xhttp3 = new XMLHttpRequest();
+                            xhttp3.onreadystatechange = function() {
+                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                    var suggested_arv_number = JSON.parse(this.responseText)["arv_number"];
+                                    var suggested_arv_number = suggested_arv_number.replace( /^\D+/g, '');
+                                    arv_number = suggested_arv_number;
+                                    gotoNextPage();
+                                }
+                            };
+
+                            xhttp3.open("GET", suggested_arv_number_url, true);
+                            xhttp3.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                            xhttp3.setRequestHeader('Content-type', "application/json");
+                            xhttp3.send();
+                        }
                     }
                 };
 
