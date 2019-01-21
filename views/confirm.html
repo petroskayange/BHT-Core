@@ -1101,7 +1101,8 @@
     path: `${apiProtocol}://${apiURL}:${apiPort}/api/v1`
   })
 
-  window.onload = global_property.isEnabled(
+  window.onload = () => {
+    global_property.isEnabled(
     'use.filing.numbers',
     (predicate) => {
       if (predicate) {
@@ -1116,4 +1117,5 @@
       console.error(error)
     }
   )
+}
 </script>
