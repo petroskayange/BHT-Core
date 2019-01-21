@@ -3,9 +3,7 @@ function showPrompt() {
 
   var prompt = document.createElement('div');
   prompt.setAttribute('id', 'dankPrompt');
-  prompt.style =
-    'background-color: white;font-size: 1.5em;font-family: Ubuntu;position: fixed;width: 50%;height: auto;top: 25%;left: 25%;padding: 2%;' +
-    'border-radius: 4px;z-index: 9000;';
+  prompt.style = 'background-color: white;font-size: 1.5em;font-family: Ubuntu;position: fixed;width: 50%;height: auto;top: 25%;left: 25%;padding: 2%;' + 'border-radius: 4px;z-index: 9000;';
 
   var promptMessage = document.createElement('h3');
   promptMessage.innerText = options.message;
@@ -42,15 +40,13 @@ function createScreenOverlay() {
 
   var overlay = document.createElement('div');
   overlay.setAttribute('id', 'dankOverlay');
-  overlay.style = 'background-color: ' +
-    options.color + ';\nopacity: ' +
-    options.opacity + ';position: fixed;width: 100%;height: 100%;top: 0;bottom: 0;left: 0;right: 0;z-index: 9000;';
+  overlay.style = 'background-color: ' + options.color + ';\nopacity: ' + options.opacity + ';position: fixed;width: 100%;height: 100%;top: 0;bottom: 0;left: 0;right: 0;z-index: 9000;';
   return overlay;
 }
 
 function removePrompt() {
-  document.body.removeChild(document.getElementById('dankOverlay'))
-  document.body.removeChild(document.getElementById('dankPrompt'))
+  document.body.removeChild(document.getElementById('dankOverlay'));
+  document.body.removeChild(document.getElementById('dankPrompt'));
 }
 
 function createToolkitButton() {
