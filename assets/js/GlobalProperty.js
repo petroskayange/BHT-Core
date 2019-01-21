@@ -1,7 +1,7 @@
-const GlobalProperty = function (options = {}) {
+var GlobalProperty = function (options = {}) {
   return {
-    isEnabled: (property, success, fail) => {
-      const url = `${options.path}/global_properties?property=${property}`
+    isEnabled: function (property, success, fail) {
+      var url = `${options.path}/global_properties?property=${property}`
       GET(
         {
           url: url,
@@ -11,14 +11,14 @@ const GlobalProperty = function (options = {}) {
           }
         },
         {},
-        (data) => {
+        function (data) {
           if (data[property] === 'true') {
             success(true)
           } else {
             success(false)
           }
         },
-        (error) => {
+        function (error) {
           fail(error)
         }
       )

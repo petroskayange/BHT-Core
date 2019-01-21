@@ -220,7 +220,30 @@
 </style>
 
 <script>
-  const apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;
+    var global_property = GlobalProperty({
+      authToken: sessionStorage.authorization,
+      path: `${apiProtocol}://${apiURL}:${apiPort}/api/v1`
+    })
+
+    window.onload = function () {
+    global_property.isEnabled(
+      'use.filing.numbers',
+      function (predicate) {
+        if (predicate) {
+          getFilingNumberType({
+            programId: sessionStorage.programID,
+            patientId: sessionStorage.patientID,
+            authToken: sessionStorage.authorization
+         })
+        }
+      },
+      function (error) {
+        console.error(error)
+      }
+    )
+  }
+
+  var apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;
   var patientDead = false;
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
@@ -1054,11 +1077,11 @@
         }
       },
       {},
-      data => {
+      function (data) {
         if (isFilingNumberDormant(data.filing_number.type)) {
           showPrompt({
             message: `Patient has a dormant filing number. Would you like to assign them an active one?`,
-            yesCallback: () => {
+            yesCallback: function () {
               removePrompt();
               redirectToFilingNumberPage(sessionStorage.patientID);
             },
@@ -1069,7 +1092,7 @@
         if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
           showPrompt({
             message: `Patient does not have a filing number. Would you like to assign them one?`,
-            yesCallback: () => {
+            yesCallback: function () {
               removePrompt();
               redirectToFilingNumberPage(sessionStorage.patientID);
             },
@@ -1077,8 +1100,8 @@
           });
         }
       },
-      error => {
-        console.error(error);
+      function (error) {
+        console.error(error)
       }
     );
   }
@@ -1095,27 +1118,4 @@
     const url = `/apps/ART/views/file_numbers.html?patient_id=${patientId}`;
     document.location = url;
   }
-
-  const global_property = GlobalProperty({
-    authToken: sessionStorage.authorization,
-    path: `${apiProtocol}://${apiURL}:${apiPort}/api/v1`
-  })
-
-  window.onload = () => {
-    global_property.isEnabled(
-    'use.filing.numbers',
-    (predicate) => {
-      if (predicate) {
-        getFilingNumberType({
-          programId: sessionStorage.programID,
-          patientId: sessionStorage.patientID,
-          authToken: sessionStorage.authorization
-        })
-      }
-    },
-    (error) => {
-      console.error(error)
-    }
-  )
-}
 </script>
