@@ -50,6 +50,9 @@
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
                 closest_landmark = person_address["neighborhood_cell"];
+                if (!closest_landmark){
+                    closest_landmark = "Add";
+                }
 
                 for (var key in patient_identifiers) {
                     var type = patient_identifiers[key]["type"];
