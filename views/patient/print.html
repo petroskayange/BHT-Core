@@ -30,7 +30,7 @@
     sessionStorage.showPregnantQuestion = 'true';
     sessionStorage.showWeightChart = 'true';
 
-    if (useFilingNumbers && parseInt(sessionStorage.programID) === 1) {
+    if (useFilingNumbers) {
       document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
     } else {
       nextEncounter(PERSON_ID, PROGRAM_ID, true);
