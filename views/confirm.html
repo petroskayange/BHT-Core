@@ -233,6 +233,8 @@ function checkIfFilingNumberIsNotValid () {
         patientId: sessionStorage.patientID,
         authToken: sessionStorage.authorization
       });
+    } else {
+      finish(sessionStorage.patientID)
     }
   }, function (error) {
     console.error(error);
