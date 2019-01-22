@@ -1085,17 +1085,20 @@ function getFilingNumberType() {
           finish(sessionStorage.patientID)
         }
       });
-    }
-
-    if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
+    } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
       showPrompt({
         message: 'Patient does not have a filing number. Would you like to assign them one?',
         yesCallback: function yesCallback() {
           removePrompt();
           redirectToFilingNumberPage(sessionStorage.patientID);
         },
-        noCallback: removePrompt
+        noCallback: function () {
+          removePrompt()
+          finish(sessionStorage.patientID)
+        }
       });
+    } else {
+      finish(sessionStorage.patientID)
     }
   }, function (error) {
     console.error(error);
@@ -1103,7 +1106,7 @@ function getFilingNumberType() {
 }
 
 function isFilingNumberDormant(filingNumber) {
-  return filingNumber.match(/archived/gi);
+  return filingNumber.match(/archived/ig);
 }
 
 function patientDoesNotHaveFilingNumber(filingNumber) {
