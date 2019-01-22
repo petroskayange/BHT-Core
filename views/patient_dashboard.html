@@ -88,6 +88,7 @@
     .todays-date {
 
     }
+
 </style>
 
 <!-- container -->
@@ -230,17 +231,17 @@
                     onclick="finish();">
                 <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
             </button>
-            <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+<!--             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#appModal">
                 <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
-            </button>
+            </button> -->
             <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#activitiesModal" onmousedown="showActivities(this);">
-                <span>&nbsp; &nbsp; &nbsp; Printouts/Other &nbsp; &nbsp; &nbsp;</span>
+                <span>&nbsp; Printouts/Other &nbsp;</span>
             </button>
             <button id="tasks" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#tasksModal" onmousedown="showTasks(this);">
-                <span>&nbsp; &nbsp; &nbsp; Tasks &nbsp; &nbsp; &nbsp;</span>
+                <span>&nbsp; Tasks &nbsp;</span>
             </button>
         </div>
     </footer>
@@ -341,9 +342,9 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="button blue navButton" data-dismiss="modal"
+<!--                     <button type="button" class="button blue navButton" data-dismiss="modal"
                             onmousedown="updateOutcomeRedirect();">Update outcome
-                    </button>
+                    </button> -->
                     <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
 
@@ -443,11 +444,12 @@
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px; height: 87vh;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select activity</h4>
                 </div>
                 <div class="modal-body" id="activities-body">
                 </div>
+                <button type="button" class="button navButton red" 
+                    data-dismiss="modal" style="position: absolute; bottom: 2%; right: 2%">&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 <!-- <div id="cover">
                  </div>
                  <div class="confirm">
@@ -466,7 +468,6 @@
         <div class="modal-dialog" name="div2">
             <div class="modal-content" style="margin-left:0px; height: 85vh !important;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Select Task</h4>
                 </div>
                 <div class="modal-body" id="tasks-body">
@@ -493,6 +494,9 @@
               </div> -->
                     </div>
                 </div>
+                <button type="button" class="button navButton red" 
+                    data-dismiss="modal" style="position: absolute; bottom: 2%; right: 2%">&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                
                 <!-- <div id="cover">
                  </div>
                  <div class="confirm">
@@ -574,7 +578,7 @@
     }
 
     var nextEnc = "";
-    nextEncounter(sessionStorage.patientID, 1, false);
+    nextEncounter(sessionStorage.patientID, sessionStorage.programID, false);
     if (sessionStorage.nextEncounter != null) {
         nextEnc = sessionStorage.nextEncounter;
     } else {
@@ -591,7 +595,7 @@
         }
     }
 
-    generateTemplate();
+    loadConfigurations();
 
     var url = new URL(url);
     var apiURL = sessionStorage.getItem("apiURL");

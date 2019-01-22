@@ -4,19 +4,34 @@
 <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
 <script src="/assets/js/generic_ajaxrequest.js"></script>
 <script src="/assets/js/moment.js"></script>
+<link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+<link rel="stylesheet" href="/assets/css/custom.css">
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript">
 
     var name = "";
+    var name_edit_url = "/views/patient/edit_demographics/name.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var gender = "";
-    var arv_number = "";
+    var gender_edit_url = "/views/patient/edit_demographics/gender.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+
+    var arv_number = "Add";
+    var arv_number_edit_url = "/views/patient/edit_demographics/arv_number.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var national_id = "";
     var age = "";
+    var age_edit_url = "/views/patient/edit_demographics/birthdate.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
     var current_residence = "";
     var closest_landmark = "";
-    var occupation = "";
+    var landmark_edit_url = "/views/patient/edit_demographics/landmark.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+    var address_edit_url = "/views/patient/edit_demographics/addresses.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+    var occupation = "Add";
+    var occupation_edit_url = "/views/patient/edit_demographics/occupation.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -35,6 +50,9 @@
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
                 closest_landmark = person_address["neighborhood_cell"];
+                if (!closest_landmark){
+                    closest_landmark = "Add";
+                }
 
                 for (var key in patient_identifiers) {
                     var type = patient_identifiers[key]["type"];
@@ -53,14 +71,14 @@
                     }
                 }
 
-                jQuery("#arv_number").html("<a href='#'>" + arv_number + "</a>");
+                jQuery("#arv_number").html("<a href='" + arv_number_edit_url + "'>" + arv_number + "</a>");
                 jQuery("#national_id").html("<a href='#'>" + national_id + "</a>");
-                jQuery("#name").html("<a href='#'>" + name + "</a>");
-                jQuery("#age").html("<a href='#'>" + age + "</a>");
-                jQuery("#sex").html("<a href='#'>" + gender + "</a>");
-                jQuery("#current_residence").html("<a href='#'>" + current_residence + "</a>");
-                jQuery("#land_mark").html("<a href='#'>" + closest_landmark + "</a>");
-                jQuery("#occupation").html("<a href='#'>" + occupation + "</a>");
+                jQuery("#name").html("<a href='" + name_edit_url+ "'>" + name + "</a>");
+                jQuery("#age").html("<a href='" + age_edit_url + "'>" + age + "</a>");
+                jQuery("#sex").html("<a href='" + gender_edit_url + "'>" + gender + "</a>");
+                jQuery("#current_residence").html("<a href='" + address_edit_url + "'>" + current_residence + "</a>");
+                jQuery("#land_mark").html("<a href='" + landmark_edit_url + "'>" + closest_landmark + "</a>");
+                jQuery("#occupation").html("<a href='" + occupation_edit_url + "'>" + occupation + "</a>");
 
             }
         };
@@ -270,8 +288,8 @@
                                 var concept = JSON.parse(this.responseText);
                                 if (concept) {
                                     var concept_names = concept["concept_names"];
-                                    for (var key in concept_names){
-                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)){
+                                    for (var key in concept_names) {
+                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)) {
                                             reason_for_starting = concept_names[key]["name"];
                                             break;
                                         }
@@ -398,12 +416,12 @@
     var who_stages_criteria_present_concept_id = 2743;
     var who_stages_criteria_present = [];
 
-    var last_2_yrs  = 'N/A';
-    var eptb        = 'N/A';
-    var tb_current  = 'N/A';
-    var ks          = 'N/A';
+    var last_2_yrs = 'N/A';
+    var eptb = 'N/A';
+    var tb_current = 'N/A';
+    var ks = 'N/A';
 
-    function getTbstats(){
+    function getTbstats() {
         var who_stages_criteria_present_url = apiProtocol + "://" + apiURL + ":" + apiPort;
         who_stages_criteria_present_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
         who_stages_criteria_present_url += "&concept_id=" + who_stages_criteria_present_concept_id;
@@ -413,28 +431,28 @@
         xhttp1.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var observations = JSON.parse(this.responseText);
-                for (var i=0; i<=observations.length - 1; i++){
+                for (var i = 0; i <= observations.length - 1; i++) {
                     var value_coded = observations[i].value_coded;
-                    if (!value_coded){
+                    if (!value_coded) {
                         var value_text = observations[i].value_text;
-                        if (value_text.match(/last/i)){
+                        if (value_text.match(/last/i)) {
                             last_2_yrs = 'Yes';
                             jQuery("#last_2_yrs").html("<a href='#'>" + last_2_yrs + "</a>");
                         }
-                        if (value_text.match(/eptb/i)){
+                        if (value_text.match(/eptb/i)) {
                             eptb = 'Yes';
                             jQuery("#eptb").html("<a href='#'>" + eptb + "</a>");
                         }
-                        if (value_text.match(/current/i)){
+                        if (value_text.match(/current/i)) {
                             tb_current = 'Yes';
                             jQuery("#tb_current").html("<a href='#'>" + tb_current + "</a>");
                         }
-                        if (value_text.match(/kapos/i)){
+                        if (value_text.match(/kapos/i)) {
                             ks = 'Yes';
                             jQuery("#ks").html("<a href='#'>" + ks + "</a>");
                         }
 
-                    } else{
+                    } else {
                         var concept_name_url = apiProtocol + "://" + apiURL + ":" + apiPort;
                         concept_name_url += "/api/v1/concepts/" + value_coded;
 
@@ -445,28 +463,27 @@
                                 if (concept) {
                                     var concept_name = "";
                                     var concept_names = concept["concept_names"];
-                                    for (var key in concept_names){
-                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)){
+                                    for (var key in concept_names) {
+                                        if (concept_names[key]["concept_name_type"].match(/FULLY_SPECIFIED/i)) {
                                             concept_name = concept_names[key]["name"];
                                             break;
                                         }
                                     }
 
 
-
-                                    if (concept_name.match(/last/i)){
+                                    if (concept_name.match(/last/i)) {
                                         last_2_yrs = 'Yes';
                                         jQuery("#last_2_yrs").html("<a href='#'>" + last_2_yrs + "</a>");
                                     }
-                                    if (concept_name.match(/eptb/i)){
+                                    if (concept_name.match(/eptb/i)) {
                                         eptb = 'Yes';
                                         jQuery("#eptb").html("<a href='#'>" + eptb + "</a>");
                                     }
-                                    if (concept_name.match(/current/i)){
+                                    if (concept_name.match(/current/i)) {
                                         tb_current = 'Yes';
                                         jQuery("#tb_current").html("<a href='#'>" + tb_current + "</a>");
                                     }
-                                    if (concept_name.match(/kapos/i)){
+                                    if (concept_name.match(/kapos/i)) {
                                         ks = 'Yes';
                                         jQuery("#ks").html("<a href='#'>" + ks + "</a>");
                                     }
@@ -479,7 +496,7 @@
                         xhttp2.send();
                     }
                 }
-                    //jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
+                //jQuery("#bmi").html("<a href='#'>" + bmi + "</a>");
             }
         };
 
@@ -487,6 +504,536 @@
         xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
         xhttp1.setRequestHeader('Content-type', "application/json");
         xhttp1.send();
+    }
+
+    var art_start_date_concept_id = 2516;
+
+    function loadDateStartedFirstLineRegmen() {
+        var art_start_date_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        art_start_date_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        art_start_date_url += "&concept_id=" + art_start_date_concept_id;
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var art_start_date_observations = JSON.parse(this.responseText);
+                if (art_start_date_observations.length > 0) {
+                    var first_line_art_start_date = art_start_date_observations[0].value_datetime;
+                    first_line_art_start_date = moment(first_line_art_start_date).format("DD/MMM/YYYY");
+                    jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                } else {
+                    var regimens = ['5A', '6A', '4P', '4A', '3P', '3A', '2A', '2P', '1A', '1P', '0A', '0P'];
+                    var url_1 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_1 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_1 += "&value_text=5A";
+
+                    var url_2 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_2 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_2 += "&value_text=6A";
+
+                    var url_3 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_3 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_3 += "&value_text=4P";
+
+                    var url_4 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_4 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_4 += "&value_text=4A";
+
+                    var url_5 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_5 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_5 += "&value_text=3P";
+
+                    var url_6 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_6 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_6 += "&value_text=3A";
+
+                    var url_7 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_7 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_7 += "&value_text=2A";
+
+                    var url_8 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_8 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_8 += "&value_text=2P";
+
+                    var url_9 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_9 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_9 += "&value_text=1A";
+
+                    var url_10 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_10 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_10 += "&value_text=1P";
+
+                    var url_11 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_11 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_11 += "&value_text=0A";
+
+                    var url_12 = apiProtocol + "://" + apiURL + ":" + apiPort;
+                    url_12 += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+                    url_12 += "&value_text=0P";
+
+                    var xhttp2 = new XMLHttpRequest();
+                    xhttp2.onreadystatechange = function () {
+                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                            var observations = JSON.parse(this.responseText);
+                            if (observations.length > 0) {
+                                var observation = observations[observations.length - 1];
+                                first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                            } else {
+                                var xhttp3 = new XMLHttpRequest();
+                                xhttp3.onreadystatechange = function () {
+                                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                        var observations = JSON.parse(this.responseText);
+                                        if (observations.length > 0) {
+                                            var observation = observations[observations.length - 1];
+                                            first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                            jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                        } else {
+                                            var xhttp4 = new XMLHttpRequest();
+                                            xhttp4.onreadystatechange = function () {
+                                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                    var observations = JSON.parse(this.responseText);
+                                                    if (observations.length > 0) {
+                                                        var observation = observations[observations.length - 1];
+                                                        first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                        jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                    } else {
+                                                        var xhttp5 = new XMLHttpRequest();
+                                                        xhttp5.onreadystatechange = function () {
+                                                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                var observations = JSON.parse(this.responseText);
+                                                                if (observations.length > 0) {
+                                                                    var observation = observations[observations.length - 1];
+                                                                    first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                    jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                } else {
+                                                                    var xhttp6 = new XMLHttpRequest();
+                                                                    xhttp6.onreadystatechange = function () {
+                                                                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                            var observations = JSON.parse(this.responseText);
+                                                                            if (observations.length > 0) {
+                                                                                var observation = observations[observations.length - 1];
+                                                                                first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                            } else {
+                                                                                var xhttp7 = new XMLHttpRequest();
+                                                                                xhttp7.onreadystatechange = function () {
+                                                                                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                        var observations = JSON.parse(this.responseText);
+                                                                                        if (observations.length > 0) {
+                                                                                            var observation = observations[observations.length - 1];
+                                                                                            first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                            jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                        } else {
+                                                                                            var xhttp8 = new XMLHttpRequest();
+                                                                                            xhttp8.onreadystatechange = function () {
+                                                                                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                    var observations = JSON.parse(this.responseText);
+                                                                                                    if (observations.length > 0) {
+                                                                                                        var observation = observations[observations.length - 1];
+                                                                                                        first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                        jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                    } else {
+                                                                                                        var xhttp9 = new XMLHttpRequest();
+                                                                                                        xhttp9.onreadystatechange = function () {
+                                                                                                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                                var observations = JSON.parse(this.responseText);
+                                                                                                                if (observations.length > 0) {
+                                                                                                                    var observation = observations[observations.length - 1];
+                                                                                                                    first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                                    jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                                } else {
+                                                                                                                    var xhttp10 = new XMLHttpRequest();
+                                                                                                                    xhttp10.onreadystatechange = function () {
+                                                                                                                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                                            var observations = JSON.parse(this.responseText);
+                                                                                                                            if (observations.length > 0) {
+                                                                                                                                var observation = observations[observations.length - 1];
+                                                                                                                                first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                                                jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                                            } else {
+                                                                                                                                var xhttp11 = new XMLHttpRequest();
+                                                                                                                                xhttp11.onreadystatechange = function () {
+                                                                                                                                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                                                        var observations = JSON.parse(this.responseText);
+                                                                                                                                        if (observations.length > 0) {
+                                                                                                                                            var observation = observations[observations.length - 1];
+                                                                                                                                            first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                                                            jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                                                        } else {
+                                                                                                                                            var xhttp12 = new XMLHttpRequest();
+                                                                                                                                            xhttp12.onreadystatechange = function () {
+                                                                                                                                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                                                                    var observations = JSON.parse(this.responseText);
+                                                                                                                                                    if (observations.length > 0) {
+                                                                                                                                                        var observation = observations[observations.length - 1];
+                                                                                                                                                        first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                                                                        jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                                                                    } else {
+                                                                                                                                                        var xhttp13 = new XMLHttpRequest();
+                                                                                                                                                        xhttp13.onreadystatechange = function () {
+                                                                                                                                                            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                                                                                                                                                                var observations = JSON.parse(this.responseText);
+                                                                                                                                                                if (observations.length > 0) {
+                                                                                                                                                                    var observation = observations[observations.length - 1];
+                                                                                                                                                                    first_line_art_start_date = moment(observation["obs_datetime"]).format("DD/MMM/YYYY");
+                                                                                                                                                                    jQuery("#first_line_start_date").html("<a href='#'>" + first_line_art_start_date + "</a>");
+                                                                                                                                                                } else {
+
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        };
+                                                                                                                                                        xhttp13.open("GET", url_12, true);
+                                                                                                                                                        xhttp13.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                                                                                        xhttp13.setRequestHeader('Content-type', "application/json");
+                                                                                                                                                        xhttp13.send();
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            };
+                                                                                                                                            xhttp12.open("GET", url_11, true);
+                                                                                                                                            xhttp12.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                                                                            xhttp12.setRequestHeader('Content-type', "application/json");
+                                                                                                                                            xhttp12.send();
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                };
+                                                                                                                                xhttp11.open("GET", url_10, true);
+                                                                                                                                xhttp11.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                                                                xhttp11.setRequestHeader('Content-type', "application/json");
+                                                                                                                                xhttp11.send();
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    };
+                                                                                                                    xhttp10.open("GET", url_9, true);
+                                                                                                                    xhttp10.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                                                    xhttp10.setRequestHeader('Content-type', "application/json");
+                                                                                                                    xhttp10.send();
+                                                                                                                }
+                                                                                                            }
+                                                                                                        };
+                                                                                                        xhttp9.open("GET", url_8, true);
+                                                                                                        xhttp9.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                                        xhttp9.setRequestHeader('Content-type', "application/json");
+                                                                                                        xhttp9.send();
+                                                                                                    }
+                                                                                                }
+                                                                                            };
+                                                                                            xhttp8.open("GET", url_7, true);
+                                                                                            xhttp8.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                            xhttp8.setRequestHeader('Content-type', "application/json");
+                                                                                            xhttp8.send();
+                                                                                        }
+                                                                                    }
+                                                                                };
+                                                                                xhttp7.open("GET", url_6, true);
+                                                                                xhttp7.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                                xhttp7.setRequestHeader('Content-type', "application/json");
+                                                                                xhttp7.send();
+                                                                            }
+                                                                        }
+                                                                    };
+                                                                    xhttp6.open("GET", url_5, true);
+                                                                    xhttp6.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                                    xhttp6.setRequestHeader('Content-type', "application/json");
+                                                                    xhttp6.send();
+                                                                }
+                                                            }
+                                                        };
+                                                        xhttp5.open("GET", url_4, true);
+                                                        xhttp5.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                                        xhttp5.setRequestHeader('Content-type', "application/json");
+                                                        xhttp5.send();
+                                                    }
+                                                }
+                                            };
+                                            xhttp4.open("GET", url_3, true);
+                                            xhttp4.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                            xhttp4.setRequestHeader('Content-type', "application/json");
+                                            xhttp4.send();
+                                        }
+                                    }
+                                };
+                                xhttp3.open("GET", url_2, true);
+                                xhttp3.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                                xhttp3.setRequestHeader('Content-type', "application/json");
+                                xhttp3.send();
+                            }
+                        }
+                    }
+                    ;
+                    xhttp2.open("GET", url_1, true);
+                    xhttp2.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp2.setRequestHeader('Content-type', "application/json");
+                    xhttp2.send();
+
+                }
+            }
+        };
+
+        xhttp1.open("GET", art_start_date_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    function getVisitDates() {
+        /*
+        <tr class="toggler toggler1">
+            <td>
+                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
+            </td>
+            <td>162</td>
+            <td>56.8</td>
+            <td>22.6</td>
+            <td>5A</td>
+            <td>On ART</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        *
+        * */
+        var visits_dates_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + '/visits';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var visits = JSON.parse(this.responseText);
+                var html = ""
+                for (var i = 0; i <= visits.length - 1; i++) {
+                    var visit_date = visits[i];
+                    var weight_id = visit_date + "_weight";
+                    var height_id = visit_date + "_height";
+                    var bmi_id = visit_date + "_bmi";
+                    var regimen_id = visit_date + "_regimen";
+                    var outcome_id = visit_date + "_outcome";
+                    var adherence_id = visit_date + "_adherence";
+                    var side_effects_id = visit_date + "_side_effects";
+                    var pills_remaining_id = visit_date + "_pills_remaining";
+                    var pills_gave_id = visit_date + "_pills_gave";
+
+                    html += "<tr class=\"toggler toggler1\">\n" +
+                        "            <td style='width: 140px;'>\n" +
+                        "                <button onclick='printPatientVisitSummary(&#39;" + visit_date + "&#39;)' class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
+                        "            </td>\n" +
+                        "            <td id='" + height_id + "' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + weight_id + "' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + bmi_id + "' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + regimen_id + "' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + outcome_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + adherence_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + side_effects_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_remaining_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_gave_id + "'>&nbsp;</td>\n" +
+                        "        </tr>"
+                }
+
+                jQuery("#mastercard").append(html);
+                for (var i = 0; i <= visits.length - 1; i++) {
+                    var visit_date = visits[i];
+                    loadHeight(visit_date);
+                    loadWeight(visit_date);
+                    loadBMIOnVisitDate(visit_date);
+                    getRegimen(visit_date);
+                    getMastercardData(visit_date);
+                }
+
+            }
+        };
+
+        xhttp.open("GET", visits_dates_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadHeight(visit_date) {
+        var height = "";
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + height_concept_id;
+        height_url += "&obs_datetime=" + visit_date;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                if (height_observations.length > 0) {
+                    var observation = height_observations[0];
+
+                    height = observation.value_numeric;
+                    if (!height) {
+                        height = observation.value_text;
+                    }
+                }
+
+                var field_id = "#" + visit_date + "_height"
+                jQuery(field_id).html("<a href='#'>" + height + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadWeight(visit_date) {
+        var weight = "";
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + weight_concept_id;
+        height_url += "&obs_datetime=" + visit_date;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var height_observations = JSON.parse(this.responseText);
+                if (height_observations.length > 0) {
+                    var observation = height_observations[0];
+
+                    weight = observation.value_numeric;
+                    if (!weight) {
+                        weight = observation.value_text;
+                    }
+                }
+
+                var field_id = "#" + visit_date + "_weight"
+                jQuery(field_id).html("<a href='#'>" + weight + "</a>");
+            }
+        };
+
+        xhttp.open("GET", height_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function loadBMIOnVisitDate(visit_date) {
+        var bmi_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        bmi_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        bmi_url += "&concept_id=" + bmi_concept_id;
+        bmi_url += "&obs_datetime=" + visit_date;
+
+        var bmi = ""
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var bmi_observations = JSON.parse(this.responseText);
+                if (bmi_observations.length > 0) {
+                    var observation = bmi_observations[0];
+                    bmi = observation.value_numeric;
+                    if (!bmi) {
+                        bmi = observation.value_text;
+                    }
+                    var field_id = "#" + visit_date + "_bmi";
+                    jQuery(field_id).html("<a href='#'>" + bmi + "</a>");
+                }
+            }
+        };
+
+        xhttp.open("GET", bmi_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function getRegimen(visit_date) {
+        var regimen_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
+        regimen_url += "programs/1/patients/" + sessionStorage.patientID + "?date=";
+        regimen_url += visit_date;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var data = JSON.parse(this.responseText);
+                if (data) {
+                    var current_regimen = data["current_regimen"];
+                    var current_outcome = data["current_outcome"];
+
+                    var regimen_id = "#" + visit_date + "_regimen";
+                    var outcome_id = "#" + visit_date + "_outcome";
+                    jQuery(regimen_id).html("<a href='#'>" + current_regimen + "</a>");
+                    jQuery(outcome_id).html("<a href='#'>" + current_outcome + "</a>");
+                }
+            }
+        };
+
+        xhttp.open("GET", regimen_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
+    }
+
+    function getMastercardData(visit_date) {
+        var mastercard_data_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
+        mastercard_data_url += "programs/1/patients/" + sessionStorage.patientID + "/mastercard_data?date=";
+        mastercard_data_url += visit_date;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var mastercard_data = JSON.parse(this.responseText);
+                var adherence = mastercard_data["adherence"];
+                if (adherence.length > 0) {
+                    var adherence_id = "#" + visit_date + "_adherence";
+
+                    var adherence_data = [];
+                    var adherence_id = "#" + visit_date + "_adherence";
+                    for (var key in adherence) {
+                        var drug_name = adherence[key]["short_name"];
+                        var adherence_percent = adherence[key]["adherence"];
+                        if (!adherence_percent) {
+                            adherence_percent = "?";
+                        }
+                        adherence_data.push(drug_name + " (" + adherence_percent + ")")
+                    }
+                    adherence_data = adherence_data.join("<br />");
+                    jQuery(adherence_id).html("<a href='#'>" + adherence_data + "</a>");
+                }
+                var pills_brought = mastercard_data["pills_brought"];
+                if (pills_brought.length > 0) {
+                    var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+                    var pills_brought_data = [];
+                    for (var key in pills_brought) {
+                        var drug_name = pills_brought[key]["short_name"];
+                        var quantity = pills_brought[key]["quantity"];
+                        if (!quantity) {
+                            quantity = "?";
+                        }
+                        pills_brought_data.push(drug_name + " (" + quantity + ")")
+                    }
+                    pills_brought_data = pills_brought_data.join("<br />");
+                    jQuery(pills_remaining_id).html("<a href='#'>" + pills_brought_data + "</a>");
+                }
+
+                var pills_given = mastercard_data["pills_given"];
+                if (pills_given.length > 0) {
+                    var pills_given_data = [];
+                    var pills_gave_id = "#" + visit_date + "_pills_gave";
+                    for (var key in pills_given) {
+                        var drug_name = pills_given[key]["short_name"];
+                        var quantity = pills_given[key]["quantity"];
+                        if (!quantity) {
+                            quantity = "?";
+                        }
+                        pills_given_data.push(drug_name + " (" + quantity + ")")
+                    }
+                    pills_given_data = pills_given_data.join("<br />");
+                    jQuery(pills_gave_id).html("<a href='#'>" + pills_given_data + "</a>");
+                }
+
+                var side_effects = mastercard_data["side_effects"];
+                if (side_effects.length > 0) {
+                    var side_effects_id = "#" + visit_date + "_side_effects";
+                    side_effects = side_effects.join(", ");
+                    jQuery(side_effects_id).html("<a href='#'>" + side_effects + "</a>");
+                }
+
+            }
+        };
+
+        xhttp.open("GET", mastercard_data_url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send();
     }
 
     loadInitialWeight();
@@ -497,7 +1044,9 @@
     loadReasonForStartingART();
     loadAgreesToFollowUp();
     getTbstats();
+    loadDateStartedFirstLineRegmen();
     loadDemographics();
+    getVisitDates();
 
     function getAge(dateString) {
         var today = new Date();
@@ -508,6 +1057,20 @@
             age--;
         }
         return age;
+    }
+
+    function gotoPatientDashboard() {
+        window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+    }
+
+    function  printPatientVisitSummary(visit_date) {
+        var apiURL = sessionStorage.getItem("apiURL");
+        var apiPort = sessionStorage.getItem("apiPort");
+        var apiProtocol = sessionStorage.getItem("apiProtocol");
+
+        var url = "/programs/1/patients/" + sessionStorage.patientID + "/labels/visits?date=" + visit_date;
+        var visit_label_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+        document.location = visit_label_url;
     }
 
 </script>
@@ -573,151 +1136,143 @@
     a {
         font-weight: bold;
     }
+
+
+    .mastercard-table tbody {
+        display: block;
+        height: 52vh;
+        overflow:auto;
+    }
+    .mastercard-table thead, .mastercard-table tbody tr {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+    }
+    .mastercard-table thead {
+        width: calc( 100% - 1em )
+    }
+
+    body{
+        overflow: hidden;
+    }
 </style>
+<body>
+<div id="container">
+    <div id="content">
+        <div style="width: 98%; margin-left: 1%;">
+            <br/>
+            <table class="custom-table header-table">
+                <tbody>
+                <tr class="toggler toggler1">
+                    <td colspan="5"><b>ARV #</b></td>
+                    <td colspan="5"><b>National Patient ID</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="5" id="arv_number">&nbsp;</td>
+                    <td colspan="5" id="national_id">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4">
+                        <b>Name</b>
+                    </td>
+                    <td><b>Age</b></td>
+                    <td><b>Sex</b></td>
+                    <td><b>Int Wt(Kg)</b></td>
+                    <td><b>Int Ht(cm)</b></td>
+                    <td><b>BMI</b></td>
+                    <td><b>TI</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4" id="name">&nbsp;</td>
+                    <td id="age">&nbsp;</td>
+                    <td id="sex">&nbsp;</td>
+                    <td id="initial_weight">&nbsp;</td>
+                    <td id="initial_height">&nbsp;</td>
+                    <td id="bmi">&nbsp;</td>
+                    <td id="transfer_in">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4"><b>Location</b></td>
+                    <td colspan="4"><b>Land Mark/Address(Physical/P.O Box):</b></td>
+                    <td colspan="2"><b>Occupation</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4" id="current_residence">&nbsp;</td>
+                    <td colspan="4" id="land_mark">&nbsp;</td>
+                    <td colspan="2" id="occupation">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4"><b>Name of guardian</b></td>
+                    <td colspan="4"><b>Date place of + HIV test</b></td>
+                    <td colspan="2"><b>Agrees to followup</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="4">&nbsp;</td>
+                    <td colspan="4" id="hiv_test">&nbsp;</td>
+                    <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
+                    <td colspan="4"><b>Reason for starting ART:</b></td>
+                </tr>
+                <tr class="toggler toggler1">
+                    <td colspan="6" id="first_line_start_date">&nbsp;</td>
+                    <td colspan="4" id="start_reason">&nbsp;</td>
+                </tr>
+
+                <tr class="toggler toggler1">
+                    <td colspan="3"><b>Pulmonary tuberculosis within the last 2 years</b></td>
+                    <td colspan="3"><b>Extra pulmonary tuberculosis (EPTB):</b></td>
+                    <td colspan="2"><b>pulmonary tuberculosis (current):</b></td>
+                    <td colspan="2"><b>Kaposi's sarcoma:</b></td>
+                </tr>
+
+                <tr class="toggler toggler1">
+                    <td colspan="3" id="last_2_yrs">&nbsp;</td>
+                    <td colspan="3" id="eptb">&nbsp;</td>
+                    <td colspan="2" id="tb_current">&nbsp;</td>
+                    <td colspan="2" id="ks">&nbsp;</td>
+                </tr>
 
 
-<div class="container">
-    <br/>
-    <table class="custom-table header-table">
-        <tbody>
-        <tr class="toggler toggler1">
-            <td colspan="5"><b>ARV #</b></td>
-            <td colspan="5"><b>National Patient ID</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="5" id="arv_number">&nbsp;</td>
-            <td colspan="5" id="national_id">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4">
-                <b>Name</b>
-            </td>
-            <td><b>Age</b></td>
-            <td><b>Sex</b></td>
-            <td><b>Int Wt(Kg)</b></td>
-            <td><b>Int Ht(cm)</b></td>
-            <td><b>BMI</b></td>
-            <td><b>TI</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4" id="name">&nbsp;</td>
-            <td id="age">&nbsp;</td>
-            <td id="sex">&nbsp;</td>
-            <td id="initial_weight">&nbsp;</td>
-            <td id="initial_height">&nbsp;</td>
-            <td id="bmi">&nbsp;</td>
-            <td id="transfer_in">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4"><b>Location</b></td>
-            <td colspan="4"><b>Land Mark/Address(Physical/P.O Box):</b></td>
-            <td colspan="2"><b>Occupation</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4" id="current_residence">&nbsp;</td>
-            <td colspan="4" id="land_mark">&nbsp;</td>
-            <td colspan="2" id="occupation">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4"><b>Name of guardian</b></td>
-            <td colspan="4"><b>Date place of + HIV test</b></td>
-            <td colspan="2"><b>Agrees to followup</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="4">&nbsp;</td>
-            <td colspan="4" id="hiv_test">&nbsp;</td>
-            <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="6"><b>Date of starting 1<sup>st</sup> Line ARV regimen:</b></td>
-            <td colspan="4"><b>Reason for starting ART:</b></td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td colspan="6">&nbsp;</td>
-            <td colspan="4" id="start_reason">&nbsp;</td>
-        </tr>
+                </tbody>
+            </table>
+            <br/>
+            <table class="custom-table mastercard-table">
+                <thead>
+                <tr>
+                    <th style='width: 140px;'>Visit Date</th>
+                    <th style='width: 70px;'>HT</th>
+                    <th style='width: 70px;'>WT</th>
+                    <th style='width: 70px;'>BMI</th>
+                    <th style='width: 70px;'>Reg</th>
+                    <th>Outcome</th>
+                    <th>Adh</th>
+                    <th>S.Eff</th>
+                    <th>Pills remaining</th>
+                    <th>Gave</th>
+                </tr>
+                </thead>
+                <tbody id="mastercard">
+                <tr>
+                    <td colspan="20" class="page-header">
+                        <button type="button" class="tbtn">  &nbsp;</button>
+                    </td>
+                </tr>
 
-        <tr class="toggler toggler1">
-            <td colspan="3"><b>Pulmonary tuberculosis within the last 2 years</b></td>
-            <td colspan="3"><b>Extra pulmonary tuberculosis (EPTB):</b></td>
-            <td colspan="2"><b>pulmonary tuberculosis (current):</b></td>
-            <td colspan="2"><b>Kaposi's sarcoma:</b></td>
-        </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <tr class="toggler toggler1">
-            <td colspan="3" id="last_2_yrs">&nbsp;</td>
-            <td colspan="3" id="eptb">&nbsp;</td>
-            <td colspan="2" id="tb_current">&nbsp;</td>
-            <td colspan="2" id="ks">&nbsp;</td>
-        </tr>
+        <footer class="footer">
+            <div class="container-footer">
+                <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
+                        onclick="gotoPatientDashboard();"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+                </button>
+            </div>
+        </footer>
 
-
-        </tbody>
-    </table>
-    <br/>
-    <table class="custom-table">
-        <thead>
-        <tr>
-            <th>Visit Date</th>
-            <th>HT</th>
-            <th>WT</th>
-            <th>BMI</th>
-            <th>Reg</th>
-            <th>Outcome</th>
-            <th>Adh</th>
-            <th>S.Eff</th>
-            <th>Pills remaining</th>
-            <th>Gave</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td colspan="20" class="page-header">
-                <button type="button" class="tbtn">  &nbsp;</button>
-            </td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>162</td>
-            <td>56.8</td>
-            <td>22.6</td>
-            <td>5A</td>
-            <td>On ART</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>182</td>
-            <td>67.8</td>
-            <td>23.8</td>
-            <td>0</td>
-            <td>Defaulter</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>172</td>
-            <td>64.8</td>
-            <td>24.6</td>
-            <td>0</td>
-            <td>Defaulter</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        </tbody>
-    </table>
+    </div>
 </div>
+
+</body>

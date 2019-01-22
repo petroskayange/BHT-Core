@@ -72,7 +72,7 @@
                             <table class="table-sm table-hover" >
                                 <tr>
                                     <th class="h4">Facility name:</th>
-                                    <td class="h4 text-muted" id="facility-name">Lighthouse clinic</td>
+                                    <td class="h4 text-muted" id="facility-name"></td>
                                     <!-- <th align="right">Application Name:</th>
                                     <td id="application-name">BHT Core </td> -->
                                 </tr>
@@ -108,6 +108,7 @@
             <button class="btn btn-info overview-btns active-btn" id="overview" onmousedown="showOptions(this); loadTabContent(this.id)">Overview</button>
             <button class="btn btn-info overview-btns" id="report" onmousedown="showOptions(this); loadTabContent(this.id);">Reports</button>
             <button class="btn btn-info overview-btns" id="admin" onmousedown="showOptions(this); loadTabContent(this.id);">Administration</button>
+            <span class="current-time"><span class="time"><span class="hours">00</span><span class="separator">:</span></span><span class="minutes">00</span></span></span>
         </div>
     </div>
 </div>
@@ -185,7 +186,43 @@
    </body>
    <script src="/assets/js/core.js "></script>
    <script>
-        generateTemplate();
+        var apiProtocol = sessionStorage.apiProtocol;
+        var apiURL = sessionStorage.apiURL;
+        var apiPort = sessionStorage.apiPort;
+       function getLocationID() {
+            var url =apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=current_health_center_id";
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var obj = JSON.parse(this.responseText);
+                getLocationName(obj.current_health_center_id);
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+        }
+
+        function getLocationName(location_id){
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/locations/"+location_id;
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var obj = JSON.parse(this.responseText);
+                document.getElementById("facility-name").innerHTML = obj.name;
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+        }
+    getLocationID()
+    loadConfigurations();
+    
     (document.getElementsByClassName("overview-btns ")[0]);
     changeModule();
     loadTabContent("overview");
@@ -233,4 +270,5 @@
     }
 </script>
 
+<script type="text/javascript" src="/assets/js/current_time.js"></script>
 </html>
