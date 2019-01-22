@@ -25,28 +25,52 @@
     function postARVNumber() {
         if (patient_has_arv_number){
             console.log("Patient has ARV number");
-            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
+            var get_patient_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    console.log("Heheheheh")
                     var personObj = JSON.parse(this.responseText);
                     var patient_identifiers = personObj["patient_identifiers"];
                     var patient_identifier_id = "";
 
+                    var value = __$('touchscreenInput' + tstCurrentPage).value;
+                    var selected_arv_number = site_prefix + "-ARV-" + value;
+
                     for (var key in patient_identifiers) {
                         var type = patient_identifiers[key]["type"];
                         if (type.name.match(/ARV Number/i)) {
-                            patient_identifier_id = patient_identifiers[key]["type"]["identifier_type_id"];
-                            console.log("patient_identifier_id = " + patient_identifier_id)
+                            patient_identifier_id = patient_identifiers[key]["patient_identifier_id"];
                             break;
                         }
                     }
-                    console.log(patient_identifier_id)
 
+                    var update_identifier_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patient_identifiers/" + patient_identifier_id;
+                    console.log(update_identifier_url)
+                    var identifier_data = {
+                        identifier: selected_arv_number,
+                    };
+
+                    var xhttp1 = new XMLHttpRequest();
+
+                    xhttp1.onreadystatechange = function () {
+                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                            gotoMastercard();
+                        }
+                    }
+
+                    xhttp1.open("PUT", update_identifier_url, true);
+                    xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp1.setRequestHeader('Content-type', "application/json");
+                    xhttp1.send(JSON.stringify(identifier_data));
+
+
+                    var url = "/patients/" + sessionStorage.getItem("patientID") + "/patient_identifiers";
+                    submitParameters(identifier_data, url, "gotoMastercard");
                 }
             };
-            xhttp.open("GET", url, true);
+            xhttp.open("GET", get_patient_url, true);
             xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
             xhttp.setRequestHeader('Content-type', "application/json");
             xhttp.send();
