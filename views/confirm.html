@@ -1092,7 +1092,10 @@ function getFilingNumberType() {
           removePrompt();
           redirectToFilingNumberPage(sessionStorage.patientID);
         },
-        noCallback: removePrompt
+        noCallback: function () {
+          removePrompt()
+          finish(sessionStorage.patientID)
+        }
       });
     } else {
       finish(sessionStorage.patientID)
@@ -1103,7 +1106,7 @@ function getFilingNumberType() {
 }
 
 function isFilingNumberDormant(filingNumber) {
-  return filingNumber.match(/archived/gi);
+  return filingNumber.match(/archived/ig);
 }
 
 function patientDoesNotHaveFilingNumber(filingNumber) {
