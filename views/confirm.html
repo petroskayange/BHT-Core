@@ -1085,9 +1085,7 @@ function getFilingNumberType() {
           finish(sessionStorage.patientID)
         }
       });
-    }
-
-    if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
+    } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
       showPrompt({
         message: 'Patient does not have a filing number. Would you like to assign them one?',
         yesCallback: function yesCallback() {
@@ -1096,6 +1094,8 @@ function getFilingNumberType() {
         },
         noCallback: removePrompt
       });
+    } else {
+      finish(sessionStorage.patientID)
     }
   }, function (error) {
     console.error(error);
