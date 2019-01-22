@@ -238,6 +238,7 @@ function checkIfFilingNumberIsNotValid () {
     }
   }, function (error) {
     console.error(error);
+    finish(sessionStorage.patientID)
   });
 };
 

@@ -2,140 +2,35 @@
 <script type="text/javascript" src="/assets/js/moment.js"></script>
 <script type="text/javascript" src="/assets/js/demographics.js"></script>
 <script type="text/javascript" src="/assets/js/httpUtils.js"></script>
-<script type="text/javascript" src="/assets/js/patientState.js"></script>
 <script>
   var useFilingNumbers = false;
   var API_PATH = 'http://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
   var FILING_NUMBERS_ROUTE = '/apps/ART/views/file_numbers.html';
-  var PRE_ART_STATE_NAME = 'Treatment never started';
   var PERSON_ID = fetchArgumentFromUrlString('person_id');
-  var GUARDIAN_ID = fetchArgumentFromUrlString('guardian_id');
   var PROGRAM_ID = sessionStorage.getItem('programID');
-  var PATIENT_FILE_LABEL = 'personData.lbl';
-  var GUARDIAN_FILE_LABEL = 'guardianLabel.lbl';
   var apiURL = sessionStorage.getItem("apiURL");
   var apiPort = sessionStorage.getItem("apiPort");
   var apiProtocol = sessionStorage.getItem("apiProtocol");
 
   function init() {
-    createPatientState({
-      patientId: PERSON_ID,
-      programId: PROGRAM_ID,
-      authToken: sessionStorage.getItem('authorization'),
-      stateName: PRE_ART_STATE_NAME,
-      success: function success(data) {
-        printPersonInformation({
-          personId: PERSON_ID,
-          filename: PATIENT_FILE_LABEL
-        });
-        if (GUARDIAN_ID) {
-          printPersonInformation({
-            personId: GUARDIAN_ID,
-            filename: GUARDIAN_FILE_LABEL
-          });
-        }
-        filingNumberIsActivated({
-          authToken: sessionStorage.getItem('authorization')
-        });
-      },
-      error: function (_error2) {
-        function error(_x6) {
-          return _error2.apply(this, arguments);
-        }
-
-        error.toString = function () {
-          return _error2.toString();
-        };
-
-        return error;
-      }(function (error) {
-        console.error(error);
-      })
+    fetchPersonNationalId();
+    filingNumberIsActivated({
+      authToken: sessionStorage.getItem('authorization')
     });
-  }
-
-  function setPatientDemographics(personId) {
-    getDemographics(personId);
   }
 
   function fetchPersonNationalId() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    // var url = API_PATH + '/patients/' + options.personId + '/labels/national_health_id';
-    // var token = options.authToken;
-
     var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
-  url = sessionStorage.apiProtocol + "://" + sessionStorage.apiURL + ":" + sessionStorage.apiPort + "/api/v1" + url;
-  document.location = url;
-
-  function red() {
-    redirect('/views/patient_dashboard.html?patient_id=' + options.personId);
-  }
-    
-  setTimeout('red()', 6000);
-
-    // var req = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MicrosoftXMLHTTP');
-    // req.onload = function () {
-    //   if (req.status === 200) {
-    //     options.success(req.responseText);
-    //   } else if (req.status >= 400) {
-    //     options.error(error);
-    //   }
-    // };
-
-    // req.open('GET', url, options.async);
-    // req.setRequestHeader('Authorization', options.authToken);
-    // req.send();
-  }
-
-  function printPersonInformation() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    setPatientDemographics(options.personId);
-
-    fetchPersonNationalId({
-      personId: options.personId,
-      authToken: sessionStorage.getItem('authorization'),
-      async: true,
-      success: function success(data) {
-        print({
-          filename: options.filename,
-          data: data
-        });
-      },
-      error: function (_error) {
-        function error(_x3) {
-          return _error.apply(this, arguments);
-        }
-
-        error.toString = function () {
-          return _error.toString();
-        };
-
-        return error;
-      }(function (error) {
-        options.error(error);
-      })
-    });
-  }
-
-  function print() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var el = document.createElement('a');
-    el.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(options.data));
-    el.setAttribute('download', options.filename);
-    el.style.display = 'none';
-    document.body.appendChild(el);
-    el.click();
-    document.body.removeChild(el);
+    url = sessionStorage.apiProtocol + "://" + sessionStorage.apiURL + ":" + sessionStorage.apiPort + "/api/v1" + url;
+    document.location = url;
   }
 
   function redirectPage() {
     sessionStorage.showPregnantQuestion = 'true';
     sessionStorage.showWeightChart = 'true';
 
-    if (useFilingNumbers && parseInt(sessionStorage.programID) === 1) {
+    if (useFilingNumbers) {
       document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
     } else {
       nextEncounter(PERSON_ID, PROGRAM_ID, true);
@@ -160,7 +55,7 @@
     });
   }
 
-  init();
+  window.onload = init;
 </script>
 
 <style>

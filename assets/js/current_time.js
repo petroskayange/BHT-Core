@@ -24,7 +24,7 @@ function currentTime() {
         }
     }
 }
-
+currentTime();
 var control = false;
 function animateSeparator(){
     if (control){
@@ -37,7 +37,7 @@ function animateSeparator(){
 
 }
 
-window.setInterval("animateSeparator();", 1000);
+//window.setInterval("animateSeparator();", 60000);
 
-connectionInterval = window.setInterval("currentTime();", 1000);
+//connectionInterval = window.setInterval("currentTime();", 60000);
 
