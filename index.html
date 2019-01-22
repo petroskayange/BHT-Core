@@ -72,7 +72,7 @@
                             <table class="table-sm table-hover" >
                                 <tr>
                                     <th class="h4">Facility name:</th>
-                                    <td class="h4 text-muted" id="facility-name">Lighthouse clinic</td>
+                                    <td class="h4 text-muted" id="facility-name"></td>
                                     <!-- <th align="right">Application Name:</th>
                                     <td id="application-name">BHT Core </td> -->
                                 </tr>
@@ -216,7 +216,9 @@
             xhttp.setRequestHeader('Content-type', "application/json");
             xhttp.send();
         }
-       loadConfigurations();
+    getLocationID()
+    loadConfigurations();
+    
     (document.getElementsByClassName("overview-btns ")[0]);
     changeModule();
     loadTabContent("overview");
