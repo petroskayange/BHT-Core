@@ -37,7 +37,7 @@ function animateSeparator(){
 
 }
 
-window.setInterval("animateSeparator();", 60000);
+//window.setInterval("animateSeparator();", 60000);
 
-connectionInterval = window.setInterval("currentTime();", 60000);
+//connectionInterval = window.setInterval("currentTime();", 60000);
 
