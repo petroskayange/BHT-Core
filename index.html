@@ -194,6 +194,8 @@
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var obj = JSON.parse(this.responseText);
                 getLocationName(obj.current_health_center_id);
+                }else {
+                    console.log(this.status);
                 }
             };
             xhttp.open("GET", url, true);
@@ -210,6 +212,8 @@
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var obj = JSON.parse(this.responseText);
                 document.getElementById("facility-name").innerHTML = obj.name;
+                }else {
+                    console.log(this.status);
                 }
             };
             xhttp.open("GET", url, true);
