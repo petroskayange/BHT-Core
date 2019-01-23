@@ -775,24 +775,40 @@
         xhttp1.send();
     }
 
+    function getRelationships(){
+        var guardian_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        guardian_url += "/api/v1/people/" + sessionStorage.patientID + "/relationships";
+        var guardian_details = "Add";
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var relationships = JSON.parse(this.responseText);
+                if (relationships.length > 0){
+                    try {
+                        var person_name = relationships[0]["relation"]["names"][0];
+                        var relationship_type = (relationships[0]["type"]["b_is_to_a"]);
+                        guardian_details = person_name["given_name"] + " " + person_name["family_name"] + " (" + relationship_type + ")";
+
+                        jQuery("#guardian").html("<a href='#'>" + guardian_details + "</a>");
+                    } catch (e) {
+                        jQuery("#guardian").html("<a href='#'>??</a>");
+                    }
+                } else {
+                    var relationship_url = "/views/patient/relationships/guardian_search.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+                    jQuery("#guardian").html("<a href='" + relationship_url + "'>" + guardian_details + "</a>");
+                }
+
+            }
+        };
+        xhttp1.open("GET", guardian_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    getRelationships();
+
     function getVisitDates() {
-        /*
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>162</td>
-            <td>56.8</td>
-            <td>22.6</td>
-            <td>5A</td>
-            <td>On ART</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        *
-        * */
         var visits_dates_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + '/visits';
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -1225,7 +1241,7 @@
                     <td colspan="2"><b>Agrees to followup</b></td>
                 </tr>
                 <tr class="toggler toggler1">
-                    <td colspan="4">&nbsp;</td>
+                    <td colspan="4" id="guardian">&nbsp;</td>
                     <td colspan="4" id="hiv_test">&nbsp;</td>
                     <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
                 </tr>
