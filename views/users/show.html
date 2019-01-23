@@ -95,6 +95,10 @@
             <th class='blue'>Date created:&nbsp;</th>
             <td class='blue' id="date_created">&nbsp;</td>
           </tr>
+          <tr>
+            <th class='blue'>Status:&nbsp;</th>
+            <td class='blue' id="status">&nbsp;</td>
+          </tr>
         </table>
 
         <div>
@@ -209,6 +213,7 @@
     document.getElementById('last_name').innerText = names.family_name
     document.getElementById('date_created').innerText = dateOfCreation
     document.getElementById('role').innerText = roles
+    document.getElementById('status').innerText = (User.isActive()) ? 'Active' : 'Inactive'
   }
 
   function saveUsernamesInSession () {
