@@ -815,19 +815,20 @@
                         "            <td style='width: 140px;'>\n" +
                         "                <button onclick='printPatientVisitSummary(&#39;" + visit_date + "&#39;)' class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
                         "            </td>\n" +
-                        "            <td id='" + height_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + weight_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + bmi_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + regimen_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + outcome_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + adherence_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + side_effects_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + pills_remaining_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + pills_gave_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + height_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + weight_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + bmi_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + regimen_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + outcome_id + "' class='loader' >&nbsp;</td>\n" +
+                        "            <td id='" + adherence_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + side_effects_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_remaining_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_gave_id + "' class='loader'>&nbsp;</td>\n" +
                         "        </tr>"
                 }
 
                 jQuery("#mastercard").append(html);
+                jQuery(".loader").html("<img src='/assets/images/ajax-loader.gif'/>");
                 for (var i = 0; i <= visits.length - 1; i++) {
                     var visit_date = visits[i];
                     loadHeight(visit_date);
@@ -1274,5 +1275,4 @@
 
     </div>
 </div>
-
 </body>
