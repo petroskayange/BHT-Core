@@ -15,76 +15,28 @@
     <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
     <script type="text/javascript">
         var tt_cancel_destination = "/views/patient/mastercard.html";
-        var patient_has_occupation = false;
 
         function changeSubmitButton() {
             __$('nextButton').onmousedown = function () {
-                if (patient_has_occupation) {
-                    console.log("Patient has occupation");
-                    var get_patient_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
-
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                            var personObj = JSON.parse(this.responseText);
-                            var person_attributes = personObj["person_attributes"];
-                            var person_attribute_id = "";
-
-                            var selected_occupation = __$('touchscreenInput' + tstCurrentPage).value;
-
-                            for (var key in person_attributes) {
-                                var type = person_attributes[key]["type"];
-                                if (type.name.match(/OCCUPATION/i)) {
-                                    person_attribute_id = person_attributes[key]["person_attribute_id"];
-                                    break;
-                                }
-                            }
-
-                            var update_identifier_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/person_attributes/" + selected_occupation;
-                            var person_attributes_data = {
-                                value: selected_occupation,
-                            };
-
-                            var xhttp1 = new XMLHttpRequest();
-
-                            xhttp1.onreadystatechange = function () {
-                                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                                    gotoMastercard();
-                                }
-                            }
-
-                            xhttp1.open("PUT", update_identifier_url, true);
-                            xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-                            xhttp1.setRequestHeader('Content-type', "application/json");
-                            xhttp1.send(JSON.stringify(identifier_data));
-
-
-                            var url = "/patients/" + sessionStorage.getItem("patientID") + "/person_attributes";
-                            submitParameters(person_attributes_data, url, "gotoMastercard");
-                        }
-                    };
-                    xhttp.open("GET", get_patient_url, true);
-                    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-                    xhttp.setRequestHeader('Content-type', "application/json");
-                    xhttp.send();
-                } else {
-                    var selected_occupation = __$('touchscreenInput' + tstCurrentPage).value;
-                    var person_attributes_data = {
-                        "Occupation": selected_occupation
-                    };
-                    var person_attributes_edit_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/people/" + sessionStorage.patientID;;
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                            gotoMastercard();
-                        }
-                    };
-                    xhttp.open("PUT", person_attributes_edit_url, true);
-                    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-                    xhttp.setRequestHeader('Content-type', "application/json");
-                    xhttp.send(JSON.stringify(person_attributes_data));
+                var selected_occupation = __$('touchscreenInput' + tstCurrentPage).value;
+                if (selected_occupation.length == 0) {
+                    showMessage("Select value to continue");
+                    return;
                 }
-
+                var person_attributes_data = {
+                    "occupation": selected_occupation
+                };
+                var person_attributes_edit_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/people/" + sessionStorage.patientID;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                        gotoMastercard();
+                    }
+                };
+                xhttp.open("PUT", person_attributes_edit_url, true);
+                xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                xhttp.setRequestHeader('Content-type', "application/json");
+                xhttp.send(JSON.stringify(person_attributes_data));
             }
         }
 
