@@ -163,12 +163,7 @@
       {},
       function (res) {
         User.init(res)
-
-        displayUserDetails(
-          User.getUsernames(),
-          User.getRoles(),
-          moment(User.getDateOfCreation()).format('DD/MM/YYYY')
-        )
+        displayUserDetails(User)
 
         if (User.isActive()) {
           addButtonToContainer(
@@ -207,12 +202,15 @@
     )
   }
 
-  function displayUserDetails (names, roles, dateOfCreation) {
+  function displayUserDetails (User) {
+    var names = User.getUsernames()
     document.getElementById('username').innerText = names.username
     document.getElementById('first_name').innerText = names.given_name
     document.getElementById('last_name').innerText = names.family_name
-    document.getElementById('date_created').innerText = dateOfCreation
-    document.getElementById('role').innerText = roles
+
+    document.getElementById('date_created').innerText = moment(User.getDateOfCreation()).format('DD/MM/YYYY')
+    document.getElementById('role').innerText = User.getRoles()
+
     document.getElementById('status').innerText = (User.isActive()) ? 'Active' : 'Inactive'
   }
 
