@@ -915,6 +915,7 @@
 
         var bmi = ""
         var xhttp = new XMLHttpRequest();
+        var field_id = "#" + visit_date + "_bmi";
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var bmi_observations = JSON.parse(this.responseText);
@@ -924,8 +925,9 @@
                     if (!bmi) {
                         bmi = observation.value_text;
                     }
-                    var field_id = "#" + visit_date + "_bmi";
                     jQuery(field_id).html("<a href='#'>" + bmi + "</a>");
+                } else{
+                    jQuery(field_id).html("<a href='#'>&nbsp;</a>");
                 }
             }
         };
@@ -941,6 +943,9 @@
         regimen_url += "programs/1/patients/" + sessionStorage.patientID + "?date=";
         regimen_url += visit_date;
 
+        var regimen_id = "#" + visit_date + "_regimen";
+        var outcome_id = "#" + visit_date + "_outcome";
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
@@ -949,10 +954,11 @@
                     var current_regimen = data["current_regimen"];
                     var current_outcome = data["current_outcome"];
 
-                    var regimen_id = "#" + visit_date + "_regimen";
-                    var outcome_id = "#" + visit_date + "_outcome";
                     jQuery(regimen_id).html("<a href='#'>" + current_regimen + "</a>");
                     jQuery(outcome_id).html("<a href='#'>" + current_outcome + "</a>");
+                } else {
+                    jQuery(regimen_id).html("<a href='#'>&nbsp;</a>");
+                    jQuery(outcome_id).html("<a href='#'>&nbsp;</a>");
                 }
             }
         };
@@ -967,6 +973,10 @@
         var mastercard_data_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
         mastercard_data_url += "programs/1/patients/" + sessionStorage.patientID + "/mastercard_data?date=";
         mastercard_data_url += visit_date;
+        var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+        var pills_gave_id = "#" + visit_date + "_pills_gave";
+        var side_effects_id = "#" + visit_date + "_side_effects";
+        var adherence_id = "#" + visit_date + "_adherence";
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -974,10 +984,7 @@
                 var mastercard_data = JSON.parse(this.responseText);
                 var adherence = mastercard_data["adherence"];
                 if (adherence.length > 0) {
-                    var adherence_id = "#" + visit_date + "_adherence";
-
                     var adherence_data = [];
-                    var adherence_id = "#" + visit_date + "_adherence";
                     for (var key in adherence) {
                         var drug_name = adherence[key]["short_name"];
                         var adherence_percent = adherence[key]["adherence"];
@@ -988,10 +995,12 @@
                     }
                     adherence_data = adherence_data.join("<br />");
                     jQuery(adherence_id).html("<a href='#'>" + adherence_data + "</a>");
+                } else{
+                    jQuery(adherence_id).html("<a href='#'>&nbsp;</a>");
                 }
                 var pills_brought = mastercard_data["pills_brought"];
                 if (pills_brought.length > 0) {
-                    var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+
                     var pills_brought_data = [];
                     for (var key in pills_brought) {
                         var drug_name = pills_brought[key]["short_name"];
@@ -1003,12 +1012,13 @@
                     }
                     pills_brought_data = pills_brought_data.join("<br />");
                     jQuery(pills_remaining_id).html("<a href='#'>" + pills_brought_data + "</a>");
+                } else{
+                    jQuery(pills_remaining_id).html("<a href='#'>&nbsp;</a>");
                 }
 
                 var pills_given = mastercard_data["pills_given"];
                 if (pills_given.length > 0) {
                     var pills_given_data = [];
-                    var pills_gave_id = "#" + visit_date + "_pills_gave";
                     for (var key in pills_given) {
                         var drug_name = pills_given[key]["short_name"];
                         var quantity = pills_given[key]["quantity"];
@@ -1019,13 +1029,16 @@
                     }
                     pills_given_data = pills_given_data.join("<br />");
                     jQuery(pills_gave_id).html("<a href='#'>" + pills_given_data + "</a>");
+                } else{
+                    jQuery(pills_gave_id).html("<a href='#'>&nbsp;</a>");
                 }
 
                 var side_effects = mastercard_data["side_effects"];
                 if (side_effects.length > 0) {
-                    var side_effects_id = "#" + visit_date + "_side_effects";
                     side_effects = side_effects.join(", ");
                     jQuery(side_effects_id).html("<a href='#'>" + side_effects + "</a>");
+                } else{
+                    jQuery(side_effects_id).html("<a href='#'>&nbsp;</a>");
                 }
 
             }
@@ -1155,6 +1168,10 @@
 
     body{
         overflow: hidden;
+    }
+    .loader img{
+        display: block;
+        margin: 0 auto; /*center image*/
     }
 </style>
 <body>
