@@ -449,7 +449,7 @@ function enrollPatient(person_id) {
     submitPatienttype(person_id);
 
   } else if (http.status == 409) {
-  alert('Username already exists');
+    nextEncounter(person_id, sessionStorage.programID);
   } else {
   alert('error' + http.status);
   }
