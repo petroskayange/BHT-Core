@@ -18,15 +18,47 @@
     <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
 
     <script type="text/javascript">
-        tt_cancel_destination = "/views/patient/mastercard.html";
+        var tt_cancel_destination = "/views/patient/mastercard.html";
+
+
+        function changeSubmitButton() {
+            __$('nextButton').onmousedown = function () {
+                var landmark = __$('touchscreenInput' + tstCurrentPage).value;
+                if (landmark.length == 0) {
+                    showMessage("Enter value to continue");
+                    return;
+                }
+                var person_attributes_data = {
+                    "landmark": landmark
+                };
+                var person_address_edit_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/people/" + sessionStorage.patientID;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                        //gotoMastercard();
+                    }
+                };
+                xhttp.open("PUT", person_address_edit_url, true);
+                xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                xhttp.setRequestHeader('Content-type', "application/json");
+                xhttp.send(JSON.stringify(person_attributes_data));
+            }
+        }
+
+        function gotoMastercard() {
+            window.location = tt_cancel_destination;
+        }
+
     </script>
+
 
 </head>
 <body id="mateme">
 <div id="container">
     <div id="content">
         <form>
-            <input allowFreeText="true" field_type="alpha" helpText="Landmark Or Plot Number" id="address1"
+            <input allowFreeText="true" field_type="alpha" helpText="Landmark Or Plot Number"
+                   tt_onLoad="changeSubmitButton();" id="address1"
                    name="landmark" type="text"/>
         </form>
     </div>

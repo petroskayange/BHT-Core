@@ -30,7 +30,6 @@
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                    console.log("Heheheheh")
                     var personObj = JSON.parse(this.responseText);
                     var patient_identifiers = personObj["patient_identifiers"];
                     var patient_identifier_id = "";
@@ -47,7 +46,6 @@
                     }
 
                     var update_identifier_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patient_identifiers/" + patient_identifier_id;
-                    console.log(update_identifier_url)
                     var identifier_data = {
                         identifier: selected_arv_number,
                     };
@@ -84,7 +82,7 @@
                 identifier_type: identifier_type,
                 patient_id: patientID
             };
-            var url = "/patients/" + sessionStorage.getItem("patientID") + "/patient_identifiers";
+            var url = "/patient_identifiers/";
             submitParameters(identifier_data, url, "gotoMastercard")
             return
         }

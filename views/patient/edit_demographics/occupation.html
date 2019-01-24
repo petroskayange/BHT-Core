@@ -18,21 +18,30 @@
 
         function changeSubmitButton() {
             __$('nextButton').onmousedown = function () {
-                var occupation = __$('touchscreenInput' + tstCurrentPage).value;
-                var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/1/person_attribute/" + occupation;
+                var selected_occupation = __$('touchscreenInput' + tstCurrentPage).value;
+                if (selected_occupation.length == 0) {
+                    showMessage("Select value to continue");
+                    return;
+                }
+                var person_attributes_data = {
+                    "occupation": selected_occupation
+                };
+                var person_attributes_edit_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/people/" + sessionStorage.patientID;
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                        var exists = JSON.parse(this.responseText);
-
+                        gotoMastercard();
                     }
                 };
-
-                xhttp.open("GET", url, true);
+                xhttp.open("PUT", person_attributes_edit_url, true);
                 xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
                 xhttp.setRequestHeader('Content-type', "application/json");
-                xhttp.send();
+                xhttp.send(JSON.stringify(person_attributes_data));
             }
+        }
+
+        function gotoMastercard() {
+            window.location = tt_cancel_destination;
         }
 
     </script>
@@ -44,7 +53,7 @@
 <div id="container">
     <div id="content">
         <form>
-            <select helpText="Occupation" name="occupation" tt_onLoad="changeSubmitButton()">
+            <select helpText="Occupation" name="occupation" tt_onLoad="changeSubmitButton();">
                 <option value=" "></option>
                 <option value="Business">Business</option>
                 <option value="Farmer">Farmer</option>
