@@ -5,12 +5,25 @@
 
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
-<script type="text/javascript" src="/assets/js/order_entry.js"></script>
 <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
 <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
 
 <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+        
+<!-- ........... VL files ....................... -->
+<link rel="stylesheet" href="/apps/ART/assets/css/vl.reminder.css" type="text/css">
+<script type="text/javascript" src="/apps/ART/assets/js/vl.reminder.js"></script> 
+<!-- ........... VL files end ....................... -->
 
+
+<link rel="stylesheet" href="/assets/css/lab.min.css" type="text/css">
+<script type="text/javascript" src="/assets/js/lab.min.js"></script>
+        
+        
+        
+<script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="/apps/ART/assets/js/generic-keyboard.js"></script>
 <style>
 #nextButton { display: none; }
 </style>
@@ -28,7 +41,7 @@
       <form>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none'; buildOrderEntry();" 
+          tt_onLoad="__$('keyboard').style.display = 'none';buildLabOrderDisplay();" 
           tt_pageStyleClass= "NoControls" helpText="Lab orders" optional = "true"/>
 
       
