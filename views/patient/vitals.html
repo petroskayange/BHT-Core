@@ -843,7 +843,14 @@
                 obs.observations.push({concept_id: height_for_age_concept_id, value_text: current_height_percentile});
             } else {
                 height = sessionStorage.currentHeight;
+                if (currentHeight){
+                    height = currentHeight;
+                }
                 var currentBmi = (weight / (height * height) * 10000).toFixed(1);
+                if (isNaN(currentBmi)){
+                    currentBmi = "";
+                }
+
                 obs.observations.push({concept_id: bmi_concept_id, value_numeric: currentBmi})
             }
 
@@ -862,6 +869,8 @@
         nextBtn.setAttribute("onclick", "");
     }
 
+    var currentHeight;
+    var height_concept_id = 5090;
     function initializeVariables() {
         jQuery(".loader").show();
         jQuery('#keyboard').hide();
@@ -876,6 +885,10 @@
         patient_weight_for_height_values_url += "/api/v1/patient_weight_for_height_values"; //NOT patient specific
 
         var get_person_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id;
+
+        var height_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        height_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+        height_url += "&concept_id=" + height_concept_id;
 
         var xhttp1 = new XMLHttpRequest();
         xhttp1.onreadystatechange = function () {
@@ -907,7 +920,24 @@
                     xhttp2.setRequestHeader('Content-type', "application/json");
                     xhttp2.send();
                 } else {
-                    gotoNextPage();
+                    var xhttp4 = new XMLHttpRequest();
+                    xhttp4.onreadystatechange = function () {
+                        if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                            var height_obs = JSON.parse(this.responseText);
+                            if (height_obs.length > 0) {
+                                currentHeight = height_obs[0].value_numeric;
+                                if (!currentHeight) {
+                                    currentHeight = height_obs[0].value_text;
+                                }
+                            }
+                            gotoNextPage();
+                        }
+                    }
+                    xhttp4.open("GET", height_url, true);
+                    xhttp4.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp4.setRequestHeader('Content-type', "application/json");
+                    xhttp4.send();
+
                 }
             }
         };
