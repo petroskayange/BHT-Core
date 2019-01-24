@@ -688,7 +688,11 @@ function checkCredentials(username, password) {
                 alert('no connection to EMR API');
                 window.location = "/views/config.html";
             }else {
-                showMessage('error' + http.status);
+                try {
+                  showMessage('error: ' + http.status);
+                }catch(s) {
+                  alert('error: ' + http.status);
+                }
             }
         }
     }

@@ -23,6 +23,8 @@
     <script src="/assets/js/medication.history.js"></script>
     <! -- ...................... -->
 
+    <script src="/assets/js/lab.history.js"></script>
+
     <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
 </head>
@@ -183,7 +185,7 @@
 
             <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 48%; margin-left: 0%;">
                 <div class="card text-white mb-3 cards" style="width: 98%; height: 225px; overflow: hidden;"
-                     data-toggle="modal" data-target="#programModal" onclick="populateProgramsModal();">
+                   onmousedown="document.location='/views/patient/labs.html';">
                     <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Lab Orders</div>
                     <div class="list-group" id="programs" style="height: 100%; overflow: hidden;">
                     </div>
@@ -833,10 +835,6 @@
 
     function populateModal() {
         getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
-    }
-
-    function populateProgramsModal() {
-        getPrograms(sessionStorage.patientID, "button", "programs2");
     }
 
     function useHangingPillsDialog() {
