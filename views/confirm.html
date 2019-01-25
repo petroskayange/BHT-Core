@@ -801,7 +801,7 @@ function checkIfFilingNumberIsNotValid () {
       function(data) {
         if (data.art_duration !== "N/A") {
           document.getElementById(options.elementToUse).innerText =
-            data.art_duration + " Month(s)";
+            calculateMonthsOnART(data.art_start_date) + " month(s)";
         }
       },
       function(error, status) {
@@ -1113,6 +1113,25 @@ function patientDoesNotHaveFilingNumber(filingNumber) {
 function redirectToFilingNumberPage(patientId) {
   var url = '/apps/ART/views/file_numbers.html?patient_id=' + patientId;
   document.location = url;
+}
+
+function calculateMonthsOnART(art_start_date) {
+  var year = art_start_date.split('/')[2];
+  var month = art_start_date.split('/')[1];
+  var day = art_start_date.split('/')[0];
+  art_start_date = (year + '-' + month + '-' + day);
+                               
+  var date1 = new Date(sessionStorage.sessionDate);
+  var date2 = new Date(moment(art_start_date).format('YYYY-MM-DD'));
+  return dateDiffInMonths(date1, date2);
+}            
+
+function dateDiffInMonths(dt2, dt1) {
+  var months;
+  months = (dt2.getFullYear() - dt1.getFullYear()) * 12;
+  months -= dt1.getMonth() + 1;
+  months += dt2.getMonth();
+  return months <= 0 ? 0 : months;
 }
 </script>
 
