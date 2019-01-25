@@ -596,15 +596,9 @@ function checkIfFilingNumberIsNotValid () {
     var table = document.createElement("table");
     table.setAttribute("class", "info-tables");
 
-    var tr = document.createElement("tr");
-    var td = document.createElement("td");
-    td.innerHTML = identifiers;
-    tr.appendChild(td);
-
-    var td = document.createElement("td");
-    td.innerHTML = " Previous Lab Orders";
-    tr.appendChild(td);
-    table.appendChild(tr);
+    var tbody = document.createElement('tbody');
+    tbody.setAttribute('id','vl-orders');
+    table.appendChild(tbody);
 
     var container = document.getElementById("section-body-2");
     container.appendChild(table);
@@ -1121,3 +1115,5 @@ function redirectToFilingNumberPage(patientId) {
   document.location = url;
 }
 </script>
+
+<script src="/assets/js/show.lab.orders.js"></script>
