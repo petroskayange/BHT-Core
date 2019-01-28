@@ -18,6 +18,7 @@ admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="c
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="data_inconsistent_checks" onclick="redirect(this.id); "><img src="/assets/images/delete.png" class="btn-icons"/><span>Data cleaning tool</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -514,6 +515,12 @@ function redirect(id) {
       dvTable.appendChild(obj);
     if (id === "report-1") {}
 }
+
+
+if (id === "view-data-inconsistent-checks") {
+    window.location.href = '.views/data_inconsistent_checks.html';
+}
+
 function activitiesRedirect(id) {
     if (id === "demographics-edit") {
         window.location.href = './views/patient/activities.html';
