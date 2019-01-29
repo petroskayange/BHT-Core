@@ -1,0 +1,123 @@
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+        defer="true"></script>
+<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
+<script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+<script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+<link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+<script src="/assets/js/moment.js"></script>
+<link rel="stylesheet" href="/assets/css/lab.min.css" type="text/css">
+
+<style>
+    #nextButton {
+        display: none;
+    }
+
+    #past-filing-numbers{
+        width: 100%;
+    }
+
+    #past-filing-numbers th {
+        background-color: teal;
+        color: white;
+        text-align: center;
+        line-height: 2em;
+    }
+
+    #past-filing-numbers tbody {
+        text-align: center;
+        line-height: 2em;
+        letter-spacing: 1;
+    }
+
+</style>
+
+<script type="text/javascript">
+    var patient_id = sessionStorage.patientID;
+    var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patient_id;
+
+    function showPastFillingNumbers() {
+        html = "<table>";
+        html += "</html>";
+        jQuery("#keyboard").hide();
+        jQuery("#clearButton").hide();
+        jQuery("#cancelButton").hide();
+
+        jQuery(".inputFrameClass").css("width", "96%");
+        jQuery(".inputFrameClass").css("height", "80%");
+
+        finishButtonHtml = '<button class="button navButton green"  onmousedown="gotoPatientDashboard();"><span>Finish</span></button>'
+        jQuery("#buttons").append(finishButtonHtml);
+
+        var past_filling_numbers_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        past_filling_numbers_url += "/api/v1/patients/" + sessionStorage.patientID + "/past_filing_numbers";
+
+
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var past_filling_numbers = JSON.parse(this.responseText);
+                var html = "<table id='past-filing-numbers'>";
+                html += "<thead>";
+                html += "<th>&nbsp;</th>";
+                html += "<th>Filing #</th>";
+                html += "<th>Date created</th>";
+                html += "<th>Date voided</th>";
+                html += "</thead>";
+                html += "<tbody>";
+                var count = 1;
+                for (var key in past_filling_numbers) {
+                    var identifier = past_filling_numbers[key]["identifier"];
+                    var date_created = past_filling_numbers[key]["date_created"];
+                    date_created = moment(date_created).format('DD/MMM/YYYY');
+                    var date_voided = past_filling_numbers[key]["date_voided"];
+                    date_voided = moment(date_voided).format('DD/MMM/YYYY');
+
+                    html += "<tr>";
+                    html += "<td>" + count + "</td>";
+                    html += "<td>" + identifier + "</td>";
+                    html += "<td>" + date_created + "</td>";
+                    html += "<td>" + date_voided + "</td>"
+                    html += "</tr>";
+                    count = count + 1;
+                }
+
+                html += "</tbody>";
+                html += "<table>";
+                jQuery(".inputFrameClass").append(html)
+            }
+        };
+
+        xhttp1.open("GET", past_filling_numbers_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    function gotoPatientDashboard() {
+        window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+    }
+
+</script>
+
+<body id="mateme">
+<div id="container">
+    <div id="content">
+        <form>
+
+            <input type="text" name="summary"
+                   tt_onLoad="showPastFillingNumbers();"
+                   tt_pageStyleClass="NoControls" helpText="Possible filling numbers" optional="true"/>
+
+
+        </form>
+
+    </div>
+</div>
+</body>
+
