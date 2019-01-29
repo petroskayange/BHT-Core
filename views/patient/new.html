@@ -193,8 +193,14 @@
                 } else if (attributes[i][0].match(/Home Village/i)) {
                     getObjects(td, attributes[i][1], "Village", "/villages?paginate=false&traditional_authority_id=" + document.getElementById('home_ta').value);
                 }
-
-
+                if (attributes[i][0].match(/Birthdate Estimated/i)) {
+                    if(parameter.birthdate_estimated == 1) {
+                        td.innerHTML = "Yes";
+                    }else {
+                        td.innerHTML = "No";
+                        getObjects(td, attributes[i][1], "Birthdate", "No");
+                    }
+                }
                 row.appendChild(td);
 
 
@@ -1049,6 +1055,11 @@
 
     function postClientParamaters(parametersPassed) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people';
+        if (parametersPassed.birthdate_estimated === "Yes") {
+            parametersPassed.birthdate_estimated = 1;
+        }else {
+            parametersPassed.birthdate_estimated = 0;
+        }
         var parametersPassed = JSON.stringify(parametersPassed);
         showStatus();
 
