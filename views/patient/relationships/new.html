@@ -103,15 +103,19 @@
       }
 
       function summary() {
+      var date_estimated = 0;
       if(__$('person_birth_year').value !== "Unknown") {
         birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
         birth_date = moment(birth_date).format("DD/MMM/YYYY");
       }else if (__$('person_birth_year').value === "Unknown") {
+        date_estimated = 1;
         birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY");
         birth_date = birth_date + "-07-01";
       }if (__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value === "Unknown") {
+        date_estimated = 1;
         birth_date = __$('person_birth_year').value + "-07-01";
       }if(__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value !== "Unknown" && __$('person_birth_day').value === "Unknown") {
+        date_estimated = 1;
         birth_date = __$('person_birth_year').value + "-" + __$('person_birth_month').value + "-15";
       }
         parameter = {
