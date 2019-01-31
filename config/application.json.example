@@ -64,6 +64,31 @@
       "available": true,
       "activitiesIcon": "/assets/images/dispensing.png",
       "url": "/apps/ART/views/htn/bp_alert.html"
+    },
+        "Outcome status": {
+      "available": true,
+      "activitiesIcon": "/assets/images/outcomes.png",
+      "url": "/apps/OPD/views/encounters/outcome_status.html"
+    },
+    "Clinical notes": {
+      "available": true,
+      "activitiesIcon": "/assets/images/clinical-notes.png",
+      "url": "/apps/OPD/views/encounters/clinical_notes.html"
+    },
+    "Visit attributes": {
+      "available": true,
+      "activitiesIcon": "/assets/images/attributes.png",
+      "url": "/apps/OPD/views/encounters/clinic_visit_attributes.html"
+    },
+    "Presenting complaints": {
+      "available": true,
+      "activitiesIcon": "/assets/images/complaints.png",
+      "url": "/apps/OPD/views/encounters/presenting_complaints.html"
+    },
+    "Social history": {
+      "available": true,
+      "activitiesIcon": "/assets/images/medical-report.png",
+      "url": "/apps/OPD/views/encounters/social_history.html"
     }
   },
   "activities": {
