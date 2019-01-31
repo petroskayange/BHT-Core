@@ -510,29 +510,6 @@
         </div>
     </div>
     <!-- /tasks modal-->
-    <!-- Use Hanging Pills Modal-->
-    <div class="modal fade" tabindex="-1" id="hangingPillModal" role="dialog">
-        <div class="modal-dialog" id="thedialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Prescription</h2>
-                </div>
-                <div class="modal-body">
-                    <p>
-                    <h3>Use patient's hanging pills?</h3></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!---/Use Hanging Pills-->
     <!-- /container -->
 </div>
 <!-- /body -->
@@ -833,14 +810,6 @@
 
     function populateModal() {
         getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
-    }
-
-    function useHangingPillsDialog() {
-
-        if (sessionStorage.getItem("medsPrescribed")) {
-            $('#hangingPillModal').find(".modal-dialog").css("max-width", 900);
-            $('#hangingPillModal').modal('show');
-        }
     }
 
     function getMedication(id, itemType, div) {
@@ -1254,8 +1223,6 @@
     changeActivities();
     generateTasks();
     buildAlerts(sessionStorage.patientID);
-    useHangingPillsDialog();
-
     // loadAlerts();
 </script>
 
