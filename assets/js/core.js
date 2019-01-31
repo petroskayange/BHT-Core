@@ -799,7 +799,7 @@ function GetApplicationReports() {
     dvTable.style = "width: 97% !important;";
 
     var obj = document.createElement("object");
-    obj.setAttribute("data", "/apps/ART/views/reports.html");
+    obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/reports.html");
     obj.setAttribute("type", "text/html");
     obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
 

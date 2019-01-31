@@ -1045,7 +1045,7 @@
         var dvTable = document.getElementById("appInfo");
         dvTable.innerHTML = null;
         var obj = document.createElement("object");
-        obj.setAttribute("data", "/apps/ART/views/identifiers.html");
+        obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/identifiers.html");
         obj.setAttribute("type", "text/html");
         obj.setAttribute("style", "width: 97%; height: 100%; padding: 1%;");
 

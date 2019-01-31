@@ -80,7 +80,7 @@
                 } else if (title.match(/Register guardian/i)) {
                     parametersPassed.relationship = data;
                 } else if (title.match(/Patient Type/i)) {
-                    parametersPassed.patient_type = data;
+                    parametersPassed.patient_type = (showTypeOfPatient() == true ? data : 'New');
                 } else if (title.match(/Facility name/i)) {
                     parametersPassed.facility_name = data;
                 }
@@ -142,7 +142,7 @@
                 cell_phone_number: __$('cellphone').value,
                 patient_type: __$('patient_type').value,
                 facility_name: __$('facility_name').value,
-                relationship: __$('guardian_present').value,
+                relationship: (showTypeOfPatient() == true ? __$('guardian_present').value : 'No'),
             }
 
             var table = document.createElement('table');
@@ -813,6 +813,7 @@
             <select allowFreeText="false" helpText="Type of patient"
                     name="patient_type"
                     id="patient_type"
+                    condition="showTypeOfPatient() == true;"
                     tt_onLoad="setNextButtonToGetInputValue('patient_type')"
                     tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
                     key="gender">
@@ -823,7 +824,7 @@
 
             <select objectType="location" ajaxURL="/locations?name="
                     allowFreeText="true"
-                    condition="$('patient_type').value != 'New patient'"
+                    condition="$('patient_type').value != 'New patient' && showTypeOfPatient() == true"
                     field_type="alpha"
                     helpText="Please select facility name"
                     id="facility_name"
@@ -832,6 +833,7 @@
             <select allowFreeText="false" helpText="Register guardian?"
                     id="guardian_present"
                     name="guardian_present"
+                    condition="showTypeOfPatient() == true;"
                     ttMatchFromBeginning="true">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -1097,7 +1099,7 @@
         var http = new XMLHttpRequest();
         var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + person_id + "/programs/";
         var params = JSON.stringify({
-            program_id: 1,
+            program_id: sessionStorage.programID,
         });
         http.open('POST', url, true);
         //Send the proper header information along with the request
@@ -1119,4 +1121,7 @@
         http.send(params);
     }
 
+  function showTypeOfPatient() {
+    return sessionStorage.programID == '1' ? true : false;
+  }
 </script>
