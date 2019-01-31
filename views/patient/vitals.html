@@ -746,6 +746,9 @@
         if (document.getElementById("td-Height").innerHTML.length < 1 && sessionStorage.patientAge < 18) {
             showMessage("Height can not be empty");
             return;
+        }if (document.getElementById("td-Height").innerHTML.length < 1 && sessionStorage.currentHeight == 0) {
+            showMessage("Height can not be empty");
+            return;
         }
 
         submitVitals();

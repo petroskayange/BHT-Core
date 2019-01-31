@@ -18,6 +18,7 @@ admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="c
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -536,6 +537,8 @@ function redirect(id) {
     }
     if (id === "view-change-date") {
         window.location.href = './views/change_session_date.html';
+    }if (id === "print-location") {
+        window.location.href = '/views/print_location.html';
     }
     if (id === "view-sys-settings") {
     }

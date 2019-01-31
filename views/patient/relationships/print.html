@@ -62,7 +62,7 @@ function printFile(filename, text) {
 function redirectPage() {
   sessionStorage.showPregnantQuestion= 'true';
   sessionStorage.showWeightChart = 'true';
-  nextEncounter(sessionStorage.patientID, 1, true);
+  nextEncounter(sessionStorage.patientID, sessionStorage.programID, true);
 }
 
 printID();

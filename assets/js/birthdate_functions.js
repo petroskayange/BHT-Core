@@ -10,7 +10,7 @@ function displayFormatedBirthdate(dob, est){
     if(month == 7 && day == 1){
       return ("??/???/" + year);
     }else if(day == 15){
-      return ("??/" + month(dob).format('MMM/YYYY'));
+      return ("??/" + moment(dob).format('MMM/YYYY'));
     }else{
       return birthdate;
     }

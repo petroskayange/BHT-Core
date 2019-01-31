@@ -108,6 +108,8 @@ function nextEncounter(patient_id, program_id, redirect) {
         }
       }else if ((this.status == 500 || this.status == 0) && redirect == undefined) {
         window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+      }else if((this.status == 500 || this.status == 404) && redirect != false) {
+        window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       }
 
     }
