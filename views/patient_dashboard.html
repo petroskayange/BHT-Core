@@ -930,7 +930,6 @@
             if (this.readyState == 4 && this.status == 200) {
 
                 var results = JSON.parse(this.responseText);
-
                 for (var x = 0; x < results.observations.length; x++) {
                     var d = new Date(results.observations[x].obs_datetime);
                     var f = moment(d).format("HH:mm A");
@@ -939,7 +938,7 @@
                     if (modifier !== "%") {
                         modifier = "";
                     }
-                    if (results.observations[x].value_text != null) {
+                    if (results.observations[x].value_text != null && results.observations[x].value_text.length > 0 ) {
                         value = results.observations[x].value_text;
                     } else if (results.observations[x].value_numeric != null) {
                         value = results.observations[x].value_numeric;
@@ -968,7 +967,7 @@
                         sessionStorage.removeItem("value_coded");
 
                     } else if (results.observations[x].value_datetime != null) {
-                        value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY HH:mm A");
+                        value = moment(results.observations[x].value_datetime).format("DD/MMM/YYYY");
                     } else {
 
                     }
