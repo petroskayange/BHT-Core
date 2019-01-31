@@ -437,7 +437,8 @@ function enrollPatient(person_id) {
   var http = new XMLHttpRequest();
   var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/'+person_id +"/programs/";
   var params = JSON.stringify({
-  program_id: 1,
+    program_id: sessionStorage.programID,
+    date_enrolled: moment(sessionStorage.sessionDate).format("YYYY-MM-DD")
   });
   http.open('POST', url, true);
   //Send the proper header information along with the request
