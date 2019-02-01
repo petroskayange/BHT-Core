@@ -1011,7 +1011,7 @@ function checkIfFilingNumberIsNotValid () {
     } else {
       sessionStorage.showWeightChart = true;
       sessionStorage.showPregnantQuestion = true;
-      nextEncounter(sessionStorage.patientID, 1);
+      nextEncounter(sessionStorage.patientID, sessionStorage.programID);
     }
   }
 

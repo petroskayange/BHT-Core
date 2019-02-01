@@ -69,3 +69,7 @@ function buildParametersString(params) {
   });
   return paramsString;
 }
+
+function redirectToUrl (url) {
+  document.location = url
+}
