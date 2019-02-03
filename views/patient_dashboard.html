@@ -578,7 +578,7 @@
     }
 
     var nextEnc = "";
-    nextEncounter(sessionStorage.patientID, 1, false);
+    nextEncounter(sessionStorage.patientID, sessionStorage.programID, false);
     if (sessionStorage.nextEncounter != null) {
         nextEnc = sessionStorage.nextEncounter;
     } else {
