@@ -175,6 +175,7 @@ function createApplicationCard (applicationData, idx) {
     $(`#moduleButton${idx}`).click(() => {
         sessionStorage.setItem("applicationImage", applicationData.applicationIcon)
         sessionStorage.setItem("applicationName", applicationData.applicationName)
+        sessionStorage.setItem("applicationFolder", applicationData.applicationFolder)
         sessionStorage.setItem("programID", applicationData.programID)
         changeModule()
     })
@@ -577,7 +578,7 @@ function GenerateTable() {
 
   //<object data="framed.html" type="text/html"><p>This is the fallback code!</p></object>
   var obj = document.createElement("object");
-  obj.setAttribute("data", "/apps/ART/views/overview.html");
+  obj.setAttribute("data", "/apps/"+sessionStorage.applicationFolder+"/views/overview.html");
   obj.setAttribute("type","text/html");
   obj.setAttribute("style","width: 99%; height: 430px; text-align: left;");
 
