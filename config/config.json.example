@@ -12,6 +12,24 @@
 			"applicationIcon": "/assets/images/aids.png",
 			"applicationDescription": "Application for HIV treatment",
 			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
+		},
+		{
+			"applicationName": "ANC",
+	      	"programID": "12",
+			"applicationFolder": "ANC/",
+			"url": "apps/ANC/views/activities.html",
+			"applicationIcon": "/assets/images/anc.png",
+			"applicationDescription": "Application for HIV treatment",
+			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
+		},
+		{
+			"applicationName": "TB",
+	      	"programID": "2",
+			"applicationFolder": "TB/",
+			"url": "apps/TB/views/activities.html",
+			"applicationIcon": "/assets/images/tb.png",
+			"applicationDescription": "Application for HIV treatment",
+			"comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
 		}
 		
 	]
