@@ -633,6 +633,93 @@
                 var element = document.getElementById("inputFrame" + tstCurrentPage);
                 element.style = "overflow: auto;";
             }
+            var potential_duplicates_arr = [];
+
+            function potentialduplicateCheck() {
+                var inputFrame = document.getElementById('inputFrame' + tstCurrentPage);
+
+                helpText = __$('helpText' + tstCurrentPage);
+                helpText.innerHTML = "<b>Name:</b> " +  __$('given_name').value;
+                helpText.innerHTML += " " + __$('family_name').value;
+                helpText.innerHTML += " (" + __$('gender').value + ")";
+                helpText.innerHTML += "<br />";
+                helpText.innerHTML += "<b style='margin-left: 1.9%;'>Home district:</b> " + __$('home_district').value;
+                helpText.innerHTML += " <b>Home Ta:</b> " + __$('home_ta').value;
+                helpText.innerHTML += " <b>Home village:</b> " +__$('home_village').value;
+                helpText.setAttribute("style","font-size: 20px;");
+
+                tabs = new ttTabsPlugin();
+                inputView = document.getElementById('inputFrame' + tstCurrentPage);
+                tabs.load(inputView, potential_duplicates_arr);
+            }
+            function searchForPotentialDuplicates() {
+            /*
+            */ 
+                client =   "given_name="   + __$('given_name').value;
+                client +=  "&family_name="  + __$('family_name').value;
+
+                client +=  "&gender=" +  __$('gender').value;
+                // client +=  "&person[birthdate]=" + culBirthdate()[0];
+                // client +=  "&person[birthdate_estimated]=" + culBirthdate()[1];
+
+                client +=  "&home_district=" + __$('home_district').value;
+                client +=  "&home_traditional_authority=" + __$('home_ta').value;
+                client +=  "&home_village=" + __$('home_village').value;  
+                var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/find_by_name_and_gender?' + client;
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    potential_duplicates_arr = JSON.parse(this.responseText);
+                }
+                };
+                xhttp.open("GET", url+client, true);
+                xhttp.send();
+
+            }
+                function getNames(attribute, element_name, aUrl) {
+                    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1' + aUrl;
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var obj = JSON.parse(this.responseText);
+                            
+                            if (element_name.match(/District/i)) {
+                                districts = obj;
+                                console.log(districts);
+                                for (var x = 0; x < districts.length; x++) {
+                                    if (districts[x].district_id == attribute) {
+                                        alert(districts[x].name);
+                                        return districts[x].name;
+                                    }
+                                }
+                            } else if (element_name.match(/TA/i)) {
+                                traditional_authorities = obj;
+                                for (var x = 0; x < traditional_authorities.length; x++) {
+                                    if (traditional_authorities[x].traditional_authority_id == attribute) {
+                                        alert(traditional_authorities[x].name);
+                                        return traditional_authorities[x].name;
+                                    }
+                                }
+                            } else if (element_name.match(/Village/i)) {
+                                villages = obj;
+                                for (var x = 0; x < villages.length; x++) {
+                                    if (villages[x].village_id == attribute) {
+                                        alert(villages[x].name);
+                                        return villages[x].name;
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    xhttp.open("GET", url, true);
+                    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+                    xhttp.send();
+                }
+                // getNames(__$('home_district').value, "District", "/districts?paginate=false&region_id=" + document.getElementById('current_region').value);
+
+           
         </script>
 
         <form action="/views/patient_dashboard.html" method="POST">
@@ -712,7 +799,7 @@
                    tt_pageStyleClass="NoKeyboard"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
-                   tt_onUnload=" jQuery('#nextButton').show();"
+                   tt_onUnload="jQuery('#nextButton').show();getNames(__$('home_district').value, 'District', '/districts?paginate=false&district_id=' + document.getElementById('home_district').value);"
                    objectType="districts"/>
 
             <input type="text" name="home_ta"
@@ -721,16 +808,16 @@
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
-                   tt_onUnLoad=" jQuery('#nextButton').show();"
+                   tt_onUnLoad="jQuery('#nextButton').show();getNames(__$('home_ta').value, 'TA', '/traditional_authorities?paginate=false&region_id=' + document.getElementById('home_ta').value);"
                    objectType="traditional_authority"/>
-
+                 
             <input type="text" name="home_village"
                    id="home_village" field_type="alpha"
                    helpText="Home Village"
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
-                   tt_onUnload="jQuery('#nextButton').show();"
+                   tt_onUnload="jQuery('#nextButton').show();getNames(__$('home_village').value, 'Village', '/villages?paginate=false&traditional_authority_id=' + document.getElementById('home_ta').value);"
                    objectType="village"/>
 
             <!-- Home Address ............................................. -->
@@ -777,7 +864,7 @@
                    condition="$('current_region').value != '4'"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
-                   tt_onUnload="jQuery('#nextButton').show();"
+                   tt_onUnload="jQuery('#nextButton').show();searchForPotentialDuplicates();"
                    objectType="village"/>
 
             <!-- ................... Current Address ends ........................... -->
@@ -810,7 +897,8 @@
                    helpText="Closest Landmark or Plot Number<br /><span style='font-size:0.7em;font-style:italic'>(Please do not include these words: Next to, close, in front of, behind)</span>"
                    allowFreeText="true"
                    field_type="password"
-                   tt_onLoad="$(nextButton).style.display = block;"/>
+                   tt_onLoad="$(nextButton).style.display = block;"
+                   />
 
             <input type="text" name="cellphone" id="cellphone"
                    helpText="Cell phone number"
@@ -858,6 +946,9 @@
             <input id="identifier" name="identifier" type="hidden" value="" />
 
             <input name="commit" type="submit" value="Create person" /> -->
+             <input  helpText="" id="duplicates" name="duplicates" 
+             optional="true" tt_onLoad="__$('keyboard').style.display = 'none'; potentialduplicateCheck();  disablebutton();" 
+             tt_onUnLoad="" tt_pageStyleClass="NoControls" type="text" />           
 
             <input type="text" name="summary" id="summary"
                    tt_onLoad="summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
