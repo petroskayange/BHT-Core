@@ -15,7 +15,7 @@ function POST(config) {
 
   request.onreadystatechange = function () {
     if (request.readyState === 4 && request.status >=200 && request.status < 400) {
-      successCallback(JSON.parse(request.responseText), request.status);
+      successCallback(request.responseText, request.status);
     } else if (request.readyState === 4 && request.status >= 400) {
       failureCallback(request.responseText, request.status);
     }
