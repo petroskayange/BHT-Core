@@ -14,6 +14,9 @@
 
         var d = new Date();
         d.toDateString();
+        var homeVillage = "";
+        var homeDistrict = "";
+        var homeTA = "";
 
         function getInput() {
             key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
@@ -650,7 +653,8 @@
 
                 tabs = new ttTabsPlugin();
                 inputView = document.getElementById('inputFrame' + tstCurrentPage);
-                tabs.load(inputView, potential_duplicates_arr);
+                console.log(inputView);
+                tabs.load(inputView, potential_duplicates_arr.locals);
             }
             function searchForPotentialDuplicates() {
             /*
@@ -665,6 +669,7 @@
                 client +=  "&home_district=" + __$('home_district').value;
                 client +=  "&home_traditional_authority=" + __$('home_ta').value;
                 client +=  "&home_village=" + __$('home_village').value;  
+                
                 var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/find_by_name_and_gender?' + client;
 
                 var xhttp = new XMLHttpRequest();
@@ -674,6 +679,7 @@
                 }
                 };
                 xhttp.open("GET", url+client, true);
+                xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
                 xhttp.send();
 
             }
@@ -686,10 +692,9 @@
                             
                             if (element_name.match(/District/i)) {
                                 districts = obj;
-                                console.log(districts);
+                                
                                 for (var x = 0; x < districts.length; x++) {
                                     if (districts[x].district_id == attribute) {
-                                        alert(districts[x].name);
                                         return districts[x].name;
                                     }
                                 }
@@ -697,7 +702,6 @@
                                 traditional_authorities = obj;
                                 for (var x = 0; x < traditional_authorities.length; x++) {
                                     if (traditional_authorities[x].traditional_authority_id == attribute) {
-                                        alert(traditional_authorities[x].name);
                                         return traditional_authorities[x].name;
                                     }
                                 }
@@ -705,9 +709,7 @@
                                 villages = obj;
                                 for (var x = 0; x < villages.length; x++) {
                                     if (villages[x].village_id == attribute) {
-                                        alert(villages[x].name);
                                         return villages[x].name;
-                                        
                                     }
                                 }
                             }
@@ -799,7 +801,7 @@
                    tt_pageStyleClass="NoKeyboard"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
-                   tt_onUnload="jQuery('#nextButton').show();getNames(__$('home_district').value, 'District', '/districts?paginate=false&district_id=' + document.getElementById('home_district').value);"
+                   tt_onUnload="jQuery('#nextButton').show();homeDistrict = getNames(__$('home_district').value, 'District', '/districts?paginate=false&district_id=' + document.getElementById('home_district').value);"
                    objectType="districts"/>
 
             <input type="text" name="home_ta"
@@ -808,7 +810,7 @@
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
-                   tt_onUnLoad="jQuery('#nextButton').show();getNames(__$('home_ta').value, 'TA', '/traditional_authorities?paginate=false&region_id=' + document.getElementById('home_ta').value);"
+                   tt_onUnLoad="jQuery('#nextButton').show();homeTA = getNames(__$('home_ta').value, 'TA', '/traditional_authorities?paginate=false&region_id=' + document.getElementById('home_ta').value);"
                    objectType="traditional_authority"/>
                  
             <input type="text" name="home_village"
@@ -817,7 +819,7 @@
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
                    tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
-                   tt_onUnload="jQuery('#nextButton').show();getNames(__$('home_village').value, 'Village', '/villages?paginate=false&traditional_authority_id=' + document.getElementById('home_ta').value);"
+                   tt_onUnload="jQuery('#nextButton').show();homeVillage = getNames(__$('home_village').value, 'Village', '/villages?paginate=false&traditional_authority_id=' + document.getElementById('home_ta').value);"
                    objectType="village"/>
 
             <!-- Home Address ............................................. -->
@@ -947,7 +949,7 @@
 
             <input name="commit" type="submit" value="Create person" /> -->
              <input  helpText="" id="duplicates" name="duplicates" 
-             optional="true" tt_onLoad="__$('keyboard').style.display = 'none'; potentialduplicateCheck();  disablebutton();" 
+             optional="true" tt_onLoad="potentialduplicateCheck();  disablebutton();" 
              tt_onUnLoad="" tt_pageStyleClass="NoControls" type="text" />           
 
             <input type="text" name="summary" id="summary"
