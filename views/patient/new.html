@@ -246,7 +246,7 @@
         }
         function setDOCID(doc_id) {
 		var nextbtn = document.getElementById("nextButton");
-		nextbtn.setAttribute("onmousedown","importID("+doc_id+")");
+		nextbtn.setAttribute("onmousedown","window.location.href = '/views/confirm.html?person_id="+doc_id+"';");
 		nextbtn.setAttribute("class","button navButton green");
 		nextbtn.innerHTML = "<span>Select</span>";
 	}
@@ -693,6 +693,10 @@
                 element.style = "overflow: auto;";
             }
             var potential_duplicates_arr = [];
+            
+            function duplicatesAvailable() {
+                return (potential_duplicates_arr.length > 0);
+            }
 
             function potentialduplicateCheck() {
                 var inputFrame = document.getElementById('inputFrame' + tstCurrentPage);
@@ -1045,6 +1049,7 @@
 
             <input name="commit" type="submit" value="Create person" /> -->
              <input  helpText="" id="duplicates" name="duplicates" 
+             condition="duplicatesAvailable() == true;"
              optional="true" tt_onLoad="potentialduplicateCheck(); __$('keyboard').style.display = 'none'; disablebutton();" 
              tt_onUnLoad="" tt_pageStyleClass="NoControls" type="text" />           
 
