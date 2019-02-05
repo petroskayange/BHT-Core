@@ -5,6 +5,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
     <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
     
     <script language="javascript" defer="true">
@@ -421,7 +422,7 @@
 xhelptext="District" helptext="Home District" setvalue="" tt_pagestyleclass="NoKeyboard" 
 tt_requirenextclick="false" 
 tt_onload="jQuery('#nextButton').hide(); clearInput();setOverFow();set_ajaxURL_for_suggestions('/districts?region_id=', document.getElementById('home_region').value);"
- tt_onunload=" jQuery('#nextButton').show();getNames(__$('home_district').value, 'District', '/districts?paginate=false&amp;region_id=' + document.getElementById('home_district').value);"
+ tt_onunload=" jQuery('#nextButton').show();"
   objecttype="districts" referstotouchscreeninputid="7" page="7" class="touchscreenTextInput" v="null" ajaxurl="/districts?region_id=1&amp;page_size=1000&amp;name=" tstvalue="12">
 
   <input absoluteMax="129" absoluteMin="1" condition="$(&quot;person_birth_year&quot;).value == &quot;Unknown&quot;" field_type="number" helpText="Age Estimate" id="person_age_estimate" name="person[age_estimate]" tt_onLoad="$('nextButton').style.display = 'block';" tt_pageStyleClass="Numeric NumbersOnly" type="text" />
