@@ -16,9 +16,12 @@ sessionStorage.setItem("backupPatientID", id);
 // })
 admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="data_inconsistent_checks" onclick="redirect(this.id); "><img src="/assets/images/delete.png" class="btn-icons"/><span>Data cleaning tool</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -272,7 +275,7 @@ function getName(user_id, url, port, protocol) {
                 allRoles = result.roles[index].role + ", " + allRoles;
             }
             var role = result.roles.role;
-            var date_created = result.date_created;
+            var date_created = result.date_created;system_settings
             var given_name = result.person.names[0].given_name;
             var family_name = result.person.names[0].family_name;
             showUser(username, given_name, family_name, allRoles, date_created);
@@ -503,7 +506,7 @@ function redirect(id) {
     if (id === "view-change-date") {
         window.location.href = './views/change_session_date.html';
     }
-    if (id === "view-sys-settings") {}
+    if (id === "view-sys-settings") {
       var dvTable = document.getElementById("generic_tabs");
       dvTable.innerHTML = null;
       dvTable.style = "width: 97% !important;";
@@ -514,11 +517,19 @@ function redirect(id) {
       obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
       dvTable.appendChild(obj);
     if (id === "report-1") {}
-}
-
-
-if (id === "view-data-inconsistent-checks") {
-    window.location.href = '.views/data_inconsistent_checks.html';
+    }
+    if (id === "cleaner") {
+        // window.location.href = './views/reports/data_inconsistent/cleaner.html';
+        var dvTable = document.getElementById("generic_tabs");
+        dvTable.innerHTML = null;
+        dvTable.style = "width: 97% !important;";
+  
+        var obj = document.createElement("object");
+        obj.setAttribute("data", "/apps/ART/views/reports/data_inconsistent/cleaner.html");
+        obj.setAttribute("type","text/html");
+        obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+        dvTable.appendChild(obj);
+    }
 }
 
 function activitiesRedirect(id) {
@@ -655,6 +666,8 @@ function loadTabContent(id) {
     } else {
         GenerateTable();
     }
+
+    
 }
 
 // function loadActivitiesContent(id) {
