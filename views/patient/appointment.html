@@ -583,6 +583,11 @@ function selectDate(e) {
     return;
   } 
   
+  if(clinic_holidays.indexOf(selected_date) >= 0){
+    showMessage(moment().format('DD/MMM/YYYY') + ' is a clinic holiday');
+    return;
+  } 
+  
   selected_date = selected_date.split("-")[2];
     
   if(selected_date.length < 2)
@@ -712,6 +717,7 @@ function getSuggestedAppointmentDate() {
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send();
 }
+
 function getLimit() {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=clinic.appointment.limit";
 
@@ -755,6 +761,27 @@ function showAppointmentBadge(obj, total_appointments){
 
 }
 
+var clinic_holidays = [];
+
+function getHolidays() {
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=clinic.holidays";
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      if(obj['clinic.holidays'].length > 0){
+        clinic_holidays = obj['clinic.holidays'].split(',');
+      }
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader('Content-type', "application/json");
+  xhttp.send();
+}
+
+getHolidays();
 </script>
 
 
