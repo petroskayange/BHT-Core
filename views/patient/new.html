@@ -1036,8 +1036,14 @@
     }
 
     function postPatienttypeObs(encounter) {
-        var patient_type = $('patient_type');
-        var ans = patient_type_map[patient_type.value];
+        if(showTypeOfPatient() == true) {
+          var patient_type = $('patient_type');
+          var ans = patient_type_map[patient_type.value];
+        }else{
+          var ans = 'New patient';
+          ans = patient_type_map[ans];
+        }
+
         var obs = {
             encounter_id: encounter.encounter_id,
             observations: [
@@ -1094,7 +1100,7 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 201) {
                 var obj = JSON.parse(this.responseText);
-                if (__$('guardian_present').value == 'Yes') {
+                if (__$('guardian_present').value == 'Yes' && showTypeOfPatient() == true) {
                     document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
                 } else {
                     // document.location = "../patient_dashboard.html?patient_id=" + person_id;
