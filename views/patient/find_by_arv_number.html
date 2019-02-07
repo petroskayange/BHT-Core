@@ -132,7 +132,7 @@
                             }
                         }
                      if (patient_identifier){
-                         window.location = "/views/confirm.html?patient_id=" + identifier;
+                         window.location = "/views/confirm.html?person_id=" + people[0].patient_id;
                      } else{
                          alertify
                              .alert("Missing National ID", "Patient was found BUT has no National ID", function () {

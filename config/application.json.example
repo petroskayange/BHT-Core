@@ -75,17 +75,17 @@
       "activitiesIcon": "/assets/images/clinical-notes.png",
       "url": "/apps/OPD/views/encounters/clinical_notes.html"
     },
-    "Visit attributes": {
+    "patient registration": {
       "available": true,
       "activitiesIcon": "/assets/images/attributes.png",
       "url": "/apps/OPD/views/encounters/clinic_visit_attributes.html"
     },
-    "Presenting complaints": {
+    "presenting complaints": {
       "available": true,
       "activitiesIcon": "/assets/images/complaints.png",
       "url": "/apps/OPD/views/encounters/presenting_complaints.html"
     },
-    "Social history": {
+    "social history": {
       "available": true,
       "activitiesIcon": "/assets/images/medical-report.png",
       "url": "/apps/OPD/views/encounters/social_history.html"
