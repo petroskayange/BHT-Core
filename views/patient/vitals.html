@@ -565,6 +565,17 @@
     }
 
     function validateWeight(weight) {
+        var minValue = 2;
+        var absMinValue = 1;
+        var maxValue = 250;
+        var absMaxValue = 300;
+
+        if(sessionStorage.programID == 12) {
+            minValue = 40;
+            absMinValue = 35;
+            maxValue = 250;
+            absMaxValue = 300;
+        }
         if (weight.trim().length < 1)
             return true;
 
@@ -588,9 +599,14 @@
             return false;
         }
 
-        if (weight < 2 || weight > 300) {
-            showMessage("Weight readings are outside the parameters.");
-            return false;
+        if (weight < minValue || weight < absMinValue) {
+            showMessage("Weight entered is less than minimum " + minValue + ".0");
+            return true;
+        }
+
+        if (weight > maxValue || weight > absMaxValue) {
+            showMessage("Weight entered is greater than maximum " + maxValue + ".0");
+            return true;
         }
 
         var afterDecimal = [];
