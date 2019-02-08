@@ -297,7 +297,7 @@ function reassignID(reassign_link) {
     if (http.readyState == 4) {
         if (http.status == 201 || http.status == 200) {
                 var v = JSON.parse(http.responseText);
-                window.location.href = "/views/confirm.html?person_id=" + v.patient_id;
+                document.location = "/views/patient/print.html?person_id=" + v.patient_id;
             } else if (http.status == 409) {
                 alert('Username already exists');
             } else {
