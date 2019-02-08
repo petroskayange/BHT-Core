@@ -816,3 +816,34 @@ function print_and_redirect(url_forward, url_back) {
 function finishRedirect(url) {
     document.location = url;
 }
+
+function getDDEStatus(){
+    var property_name = "dde_enabled";
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=" + property_name;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 ) {
+            if(this.status == 201 || this.status == 200) {
+                try{
+                    site_prefix = JSON.parse(this.responseText)["dde_enabled"];
+                    if (site_prefix === "true") {
+                        sessionStorage.dde_enabled = true;
+                    }else {
+                        sessionStorage.dde_enabled = false;
+                    } 
+                } catch(e){
+                        sessionStorage.dde_enabled = false;
+                }
+            }else if(this.status == 404) {
+                sessionStorage.dde_enabled = false;
+            } 
+            
+        }
+    };
+
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp.setRequestHeader('Content-type', "application/json");
+    xhttp.send();
+}
+  

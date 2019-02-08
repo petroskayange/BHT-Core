@@ -4,11 +4,9 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
 
     
     <script language="javascript" defer="true">
-      <!--
       tstUsername = "";
       tstUserKeyboardPref = "abc";
 
@@ -50,10 +48,8 @@
   //-->
     </script>
 
-    <script language="javascript" type="text/javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
   <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
             defer="true"></script>
-    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
 
     
   </head>
@@ -178,7 +174,7 @@ var patientID = null;
 var url_string  = window.location;
 var url_value         = new URL(url_string);
 var patient_id  = url_value.searchParams.get("health_id");
-
+patient_id = (patient_id).replace(/-/g, "");
 function getClient() {
  
   document.getElementById("helpText0").innerHTML = "Duplicate identifier ("+patient_id + ")";

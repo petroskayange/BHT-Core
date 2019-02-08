@@ -314,7 +314,7 @@ function postDispensation(order_id, amount_dispensed) {
     }
 
     var drug_order = {
-        dispensations: [{date: sessionStorage.sessionDate, drug_order_id: order_id, quantity: amount_dispensed}]
+        dispensations: [{date: sessionStorage.sessionDate, drug_order_id: order_id, quantity: amount_dispensed,program_id: sessionStorage.programID }],
     }
     submitParameters(drug_order, "/dispensations", "doneDispensing");
 
