@@ -325,7 +325,7 @@ function checkIfFilingNumberIsNotValid () {
         if (sessionStorage.dde_enabled === "true") {
           var remotes = JSON.parse(this.responseText)["remotes"];
           var locals = JSON.parse(this.responseText)["locals"];
-          if (remotes.length >= 1 || locals.length >= 1) {
+          if (remotes.length > 1 || locals.length > 1) {
             location.href = "/views/npid_duplicates.html?health_id=" + patient_id;
           } else if (locals.length == 1) {
             populatePatient(locals[0], locals[0]);
