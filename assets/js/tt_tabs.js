@@ -29,8 +29,7 @@ class ttTabsPlugin {
             li2.style.marginLeft = "10%";
             li2.setAttribute("class", "list2");
             li.setAttribute("id", "duplicate_" + person.id);
-            console.log(person);
-            li.setAttribute("onmousedown", "setDOCID('" + person.patient_id + "')");
+            li.setAttribute("onmousedown", "setDOCID('" + person.id + "')");
             li2.setAttribute("id", person.given_name);
             li2.innerHTML= "<strong>DOB:</strong> " + person.birthdate + " <br> <strong>home village:</strong>" + person.home_village;
             // li2.innerHTML = person.home_village;

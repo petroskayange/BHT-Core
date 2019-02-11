@@ -231,13 +231,34 @@
         }
         
         
-        function setDOCID(doc_id) {
+    function setDOCID(doc_id) {
 		var nextbtn = document.getElementById("nextButton");
-		nextbtn.setAttribute("onmousedown","window.location.href = '/views/confirm.html?person_id="+doc_id+"';");
+		nextbtn.setAttribute("onmousedown","importPatient('"+doc_id+"')");
 		nextbtn.setAttribute("class","button navButton green");
 		nextbtn.innerHTML = "<span>Select</span>";
-	}
-    
+    }
+   
+    function importPatient(doc_id) {
+        console.log(doc_id);
+        url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/import_by_doc_id?doc_id='+doc_id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(){
+        
+            if (this.readyState == 4) {
+            if (this.status == 200) {
+                var results = JSON.parse(this.responseText);
+                window.location.href = "/views/confirm.html?person_id=" + results.patient_id;
+                }
+            }
+        };
+        try {
+        req.open('GET', url, true);
+        req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+        req.send(null);
+        } catch (e) {
+        
+        }
+    }
     function addButton() {
         if(document.getElementById("newBtn") == null) {
             var footer = document.getElementById('buttons');
@@ -245,7 +266,7 @@
             newbutton.setAttribute('id', 'newBtn');
             newbutton.setAttribute('onmousedown', 'gotoNextPage(); resetButtons();');
             newbutton.innerHTML="<span>Not a duplicate</span>";
-            footer.appendChild(newbutton);
+        footer.appendChild(newbutton);
         }else if(document.getElementById("newBtn").style.display != "block") {
            document.getElementById("newBtn").style.display = "block";
         }
@@ -709,7 +730,6 @@
 
             function potentialduplicateCheck() {
                 var inputFrame = document.getElementById('inputFrame' + tstCurrentPage);
-
                 helpText = __$('helpText' + tstCurrentPage);
                 helpText.innerHTML = "<b>Name:</b> " +  __$('given_name').value;
                 helpText.innerHTML += " " + __$('family_name').value;
@@ -722,7 +742,7 @@
 
                 tabs = new ttTabsPlugin();
                 inputView = document.getElementById('inputFrame' + tstCurrentPage);
-                console.log(potential_duplicates_arr);
+                inputView.setAttribute("style","height: 90%; width: 96%;");
                 tabs.load(inputView, potential_duplicates_arr);
             }
 
@@ -1306,11 +1326,8 @@
                 if (__$('guardian_present').value == 'Yes' && showTypeOfPatient() == true) {
                     document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
                 } else {
-                    // document.location = "../patient_dashboard.html?patient_id=" + person_id;
                     enrollPatient(person_id);
                 }
-                // enrollPatient(person_id);
-                // document.location = "../patient_dashboard.html?patient_id=" + person_id;
             }
         };
         xhttp.open("POST", url, true);
