@@ -529,6 +529,10 @@ function showBarcodeDiv() {
 }
 
 function redirect(id) {
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = null;
+    dvTable.style = "width: 97% !important;";
+    
     if (id === "create-user") {
         window.location.href = './views/users/new.html';
     }
@@ -541,16 +545,12 @@ function redirect(id) {
         window.location.href = '/views/print_location.html';
     }
     if (id === "view-sys-settings") {
+      var obj = document.createElement("object");
+      obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/system_settings.html");
+      obj.setAttribute("type", "text/html");
+      obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
+      dvTable.appendChild(obj);
     }
-    var dvTable = document.getElementById("generic_tabs");
-    dvTable.innerHTML = null;
-    dvTable.style = "width: 97% !important;";
-
-    var obj = document.createElement("object");
-    obj.setAttribute("data", "/apps/ART/views/system_settings.html");
-    obj.setAttribute("type", "text/html");
-    obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
-    dvTable.appendChild(obj);
     if (id === "report-1") {
     }
 }
