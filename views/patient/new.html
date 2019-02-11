@@ -1059,8 +1059,8 @@
             <input name="commit" type="submit" value="Create person" /> -->
              <input  helpText="" id="duplicates" name="duplicates" 
              condition="duplicatesAvailable() == true;"
-             optional="true" tt_onLoad="potentialduplicateCheck();addClear(); __$('keyboard').style.display = 'none'; disablebutton();" 
-             tt_onUnLoad="removeClear();removeDuplicatesButton();" tt_pageStyleClass="NoControls" type="text" />           
+             optional="true" tt_onLoad="potentialduplicateCheck();removeClear(); __$('keyboard').style.display = 'none'; disablebutton();" 
+             tt_onUnLoad="addClear();removeDuplicatesButton();" tt_pageStyleClass="NoControls" type="text" />           
 
             <input type="text" name="summary" id="summary"
                    tt_onLoad="summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
