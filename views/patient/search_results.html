@@ -114,8 +114,12 @@
 
           window.location.href = "/views/patient/new.html" + parameters;
       }else if (search_redirect.length > 0){
-        sessionStorage.setItem("patientID", people[pos]["Person ID"]);
-        window.location.href = "/views/confirm.html?person_id=" + people[pos]['Person ID'];
+        if(people[pos]["person_type"] === "local") {
+          window.location.href = "/views/confirm.html?person_id=" + people[pos]['Person ID'];
+          sessionStorage.setItem("patientID", people[pos]["Person ID"]);
+        }else {
+          window.location.href = "/views/confirm.html?patient_id=" + people[pos]['Person ID'];
+        }
         // nextEncounter(people[pos]['Person ID'] , 1, sessionStorage.programID);
       }else{
           showMessage("Select value to continue");
@@ -218,6 +222,7 @@ function loadPatient(){
       people[pos]["Name"] = found_clients[j].given_name + " " + found_clients[j].family_name;
 
       people[pos]["Gender"] = found_clients[j].gender;
+      people[pos]["person_type"] = found_clients[j].person_type;
 
       birthdate_estimated      = found_clients[j].birthdate_estimated; 
       people[pos]["Birthdate"] = displayFormatedBirthdate(found_clients[j].birthdate, birthdate_estimated);
@@ -414,7 +419,6 @@ function findClients() {
 }
 function nationalID(identifiers) {
   var identifier = null;
-  console.log(identifiers);
   for (var index = 0; index < identifiers.length; index++) {
     if(identifiers[index]["identifier_type"] == 3) {
       identifier =  identifiers[index]["identifier"];
@@ -431,6 +435,7 @@ function searchResults(results){
     var obj3 =[];
     for (var index = 0; index < data["locals"].length; index++) {
       obj3.push(data["locals"][index]);
+      obj3[index]["pateint_type"] = "local";
     }
     for (var index = 0; index < data["remotes"].length; index++) {
       obj3.push(data["remotes"][index]);
@@ -439,7 +444,6 @@ function searchResults(results){
   }
   
   var patientsNumber = data.length;
-  // console.log(data);
   for(var x in data){
     
       
@@ -463,9 +467,9 @@ function searchResults(results){
           current_ta:								null_or_empty((data[x].person.addresses[0] || {}).township_division),
           current_village:					null_or_empty((data[x].person.addresses[0] || {}).city_village),
 
-          person_id:								data[x].person.person_id != null? data[x].person.person_id : nationalID(data[x].patient_identifiers)  
+          person_type:								data[x].person.person_id != null? "local" : "remote",  
+          person_id:								data[x].person.person_id != null? data[x].person.person_id : nationalID(data[x].patient_identifiers)
   			}
-          console.log(data);
       }else {
         found_clients[x] = {
           given_name: 							null_or_empty(data[x].names[0].given_name),
@@ -486,7 +490,6 @@ function searchResults(results){
         }
 
       }
-			
     }
   } 
 
@@ -516,7 +519,6 @@ function searchResults(results){
 }
 
 var interval = setInterval(function(){ 
-  // console.log("interval set");
   var lists = document.getElementsByTagName("li");
 
   loadPatient(); 
