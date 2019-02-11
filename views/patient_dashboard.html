@@ -612,9 +612,13 @@
                     var phone_number = "";
                 }
                 try {
-                    identifier = results.patient_identifiers[0].identifier || "no value available";
+                    for (var index = 0; index < results.patient_identifiers.length; index++) {
+                        if(results.patient_identifiers[index]["identifier_type"] == 3) {
+                        identifier =  results.patient_identifiers[index]["identifier"];
+                        }
+                    }
                 } catch (e) {
-
+                    console.log(e); 
                 }
 
                 setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier);
