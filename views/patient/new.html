@@ -218,11 +218,6 @@
             f.appendChild(table);
         }
         function disablebutton() {
-            var nextbtn = document.getElementById("nextButton");
-            nextbtn.setAttribute("onmousedown","");
-            nextbtn.setAttribute("class","button navButton red");
-            nextbtn.innerHTML = "<span>Duplicate</span>";
-            
             addButton();
         }
         
@@ -231,19 +226,11 @@
             nextbtn.setAttribute("onmousedown","gotoNextPage();");
             nextbtn.setAttribute("class","button navButton green");
             nextbtn.innerHTML = "<span>Next</span>";
-            
             var footer = document.getElementById('buttons');
             footer.removeChild(document.getElementById('newBtn')); 
         }
         
-        function addButton() {
-            var footer = document.getElementById('buttons');
-            var newbutton = document.createElement('button');
-            newbutton.setAttribute('id', 'newBtn');
-            newbutton.setAttribute('onmousedown', 'gotoNextPage(); resetButtons();');
-            newbutton.innerHTML="<span>Not a duplicate</span>";
-            footer.appendChild(newbutton);
-        }
+        
         function setDOCID(doc_id) {
 		var nextbtn = document.getElementById("nextButton");
 		nextbtn.setAttribute("onmousedown","window.location.href = '/views/confirm.html?person_id="+doc_id+"';");
@@ -271,7 +258,12 @@
     http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
     http.send();
 }
-
+    function removeClear() {
+            document.getElementById("clearButton").style.display = "none"; 
+    }
+    function addClear() {
+            document.getElementById("clearButton").style.display = "block"; 
+    }
     </script>
 
     <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
@@ -1050,8 +1042,8 @@
             <input name="commit" type="submit" value="Create person" /> -->
              <input  helpText="" id="duplicates" name="duplicates" 
              condition="duplicatesAvailable() == true;"
-             optional="true" tt_onLoad="potentialduplicateCheck(); __$('keyboard').style.display = 'none'; disablebutton();" 
-             tt_onUnLoad="" tt_pageStyleClass="NoControls" type="text" />           
+             optional="true" tt_onLoad="potentialduplicateCheck();removeClear(); __$('keyboard').style.display = 'none'; disablebutton();" 
+             tt_onUnLoad="addClear();" tt_pageStyleClass="NoControls" type="text" />           
 
             <input type="text" name="summary" id="summary"
                    tt_onLoad="summary();__$('keyboard').style.display = 'none';changeFinishBtn();"
