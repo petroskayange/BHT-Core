@@ -114,7 +114,7 @@
 
           window.location.href = "/views/patient/new.html" + parameters;
       }else if (search_redirect.length > 0){
-        if(people[pos]["person_type"] === "local") {
+        if(people[pos]["person_type"] === "local" || people[pos]["person_type"] == undefined) {
           window.location.href = "/views/confirm.html?person_id=" + people[pos]['Person ID'];
           sessionStorage.setItem("patientID", people[pos]["Person ID"]);
         }else {
@@ -467,7 +467,7 @@ function searchResults(results){
           current_ta:								null_or_empty((data[x].person.addresses[0] || {}).township_division),
           current_village:					null_or_empty((data[x].person.addresses[0] || {}).city_village),
 
-          person_type:								data[x].person.person_id != null? "local" : "remote",  
+          person_type:							data[x].person.person_id != null? "local" : "remote",  
           person_id:								data[x].person.person_id != null? data[x].person.person_id : nationalID(data[x].patient_identifiers)
   			}
       }else {
