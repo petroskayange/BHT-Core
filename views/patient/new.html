@@ -264,7 +264,7 @@
             var footer = document.getElementById('buttons');
             var newbutton = document.createElement('button');
             newbutton.setAttribute('id', 'newBtn');
-            newbutton.setAttribute('onmousedown', 'gotoNextPage(); resetButtons();');
+            newbutton.setAttribute('onmousedown', 'gotoNextPage();');
             newbutton.innerHTML="<span>Not a duplicate</span>";
         footer.appendChild(newbutton);
         }else if(document.getElementById("newBtn").style.display != "block") {
