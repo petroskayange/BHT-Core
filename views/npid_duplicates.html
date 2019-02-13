@@ -308,7 +308,7 @@ function reassignID(doc_id, patient_id) {
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function () { //Call a function when the state changes.
       if (http.readyState == 4) {
-        if (http.status == 201) {
+        if (http.status == 201 || http.status == 200) {
           var v = JSON.parse(http.responseText);
           document.location = "/views/patient/print.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
@@ -427,12 +427,12 @@ function mergeClients(){
 
 }
 function getDocumentID(identifiers) {
-  var identifier = null;
+  var identifier = "";
   for (var index = 0; index < identifiers.length; index++) {
     if(identifiers[index]["identifier_type"] == 27) {
       identifier =  identifiers[index]["identifier"];
     }else {
-      identifier = null;
+      identifier = "";
     }
   }
     return identifier;

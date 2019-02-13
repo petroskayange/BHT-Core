@@ -21,7 +21,7 @@
 
   function fetchPersonNationalId() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var url = "/patients/" + sessionStorage.patientID + "/labels/national_health_id"
+    var url = "/patients/" + PERSON_ID + "/labels/national_health_id"
     url = sessionStorage.apiProtocol + "://" + sessionStorage.apiURL + ":" + sessionStorage.apiPort + "/api/v1" + url;
     document.location = url;
   }
