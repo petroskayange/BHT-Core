@@ -359,8 +359,6 @@ function hideMergeBtn(){
 }
 
 function confirmMerge() {
-  // document.getElementById('confirmPage').style.display='inline'
-  // document.getElementById('cover').style.display='inline'
 
 	mergeClients();
 }
@@ -390,15 +388,18 @@ function mergeClients(){
            person_id: checkboxes[i].getAttribute("person_id"),
           doc_id: checkboxes[i].getAttribute("doc_id")   
           }
-        }else if(i == 1) {
-          client_ids.secondary= {
-           person_id: checkboxes[i].getAttribute("person_id"),
-          doc_id: checkboxes[i].getAttribute("doc_id")   
-          }
+        }else if(i == 0) {
+          client_ids.secondary= [
+            {
+              person_id: checkboxes[i].getAttribute("person_id"),
+              doc_id: checkboxes[i].getAttribute("doc_id")
+            }
+          ]
         }
         
     }
   }
+
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
     var params = JSON.stringify(client_ids);
@@ -419,40 +420,6 @@ function mergeClients(){
     }
     http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
     http.send(params);
-  // var http = new XMLHttpRequest();
-  // var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/'+id+ "/npid";
-  // http.open('POST', url, true);
-  // http.setRequestHeader('Content-type', 'application/json');
-  // http.onreadystatechange = function () { //Call a function when the state changes.
-  // if (http.readyState == 4) {
-  //     if (http.status == 201) {
-  //             var v = JSON.parse(http.responseText);
-  //             window.location.href = '/views/confirm.html?patient_id='+v.new_identifier.identifier;
-  //         } else if (http.status == 409) {
-  //             alert('Username already exists');
-  //         } else {
-  //             alert('error' + http.status);
-  //         }
-  // }
-  // }
-  // http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-  // http.send();
-	// if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-	// 	xmlhttp=new XMLHttpRequest();
-	// }else{// code for IE6, IE5
-	// 	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	// }
-	// xmlhttp.onreadystatechange=function() {
-	// 	if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-	// 		var results = xmlhttp.responseText;
-	// 		if(results) {
-	// 			//location.reload(); 
-	// 			window.location = '/';
-	// 		}
-	// 	}
-	// }
-	// xmlhttp.open("POST","/dde/merge_clients?client_ids=" + client_ids, true);
-	// xmlhttp.send();
 
 }
 function getDocumentID(identifiers) {
