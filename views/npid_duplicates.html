@@ -385,13 +385,13 @@ function mergeClients(){
     if(checkboxes[i].checked == true) {
         if (i == 0) {
           client_ids.primary = {
-           person_id: checkboxes[i].getAttribute("person_id"),
+           patient_id: checkboxes[i].getAttribute("person_id"),
           doc_id: checkboxes[i].getAttribute("doc_id")   
           }
-        }else if(i == 0) {
+        }else if(i > 0) {
           client_ids.secondary= [
             {
-              person_id: checkboxes[i].getAttribute("person_id"),
+              patient_id: checkboxes[i].getAttribute("person_id"),
               doc_id: checkboxes[i].getAttribute("doc_id")
             }
           ]
@@ -399,10 +399,11 @@ function mergeClients(){
         
     }
   }
-
+    // console.log(client_ids);
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
     var params = JSON.stringify(client_ids);
+    console.log(params);
     http.open('POST', url, true);
     //Send the proper header information along with the request
     http.setRequestHeader('Content-type', 'application/json');
