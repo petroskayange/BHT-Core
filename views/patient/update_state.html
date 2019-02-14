@@ -65,10 +65,13 @@ function validateOutcomeDate() {
   }
 
   currDate  = new Date();
-  currDate  = new Date(currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate());
+  currDate  = new Date(currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + (currDate.getDate() + 1));
   setDate   = new Date(set_dob);
   
   if(setDate > currDate){
+    alert(currDate);
+    alert(setDate);
+    alert(setDate > currDate);
     showMessage("Outcome date can not be greater than the current date");
     return;
   }
