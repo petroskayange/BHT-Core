@@ -174,7 +174,7 @@ var apiPort = sessionStorage.apiPort;
 
 var programID = sessionStorage.getItem("programID");
 var tt_cancel_destination = "/";
-var patientID = null;
+var patientID = "";
 var url_string  = window.location;
 var url_value         = new URL(url_string);
 var patient_id  = url_value.searchParams.get("health_id");
@@ -211,7 +211,7 @@ function loadData(results, type) {
   
   var t = document.createElement('div');
   t.setAttribute('class','main-table');
-  var identifier = null;
+  var identifier = "";
  
     for (var index = 0; index < results.length; index++) {
       var url = "";
@@ -384,14 +384,15 @@ function mergeClients(){
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked == true) {
         if (i == 0) {
+          console.log(checkboxes[i].getAttribute("person_id") === "null");
           client_ids.primary = {
-           patient_id: checkboxes[i].getAttribute("person_id"),
+           patient_id: (checkboxes[i].getAttribute("person_id") === "null" ? "": checkboxes[i].getAttribute("person_id")),
           doc_id: checkboxes[i].getAttribute("doc_id")   
           }
         }else if(i > 0) {
           client_ids.secondary= [
             {
-              patient_id: checkboxes[i].getAttribute("person_id"),
+              patient_id: (checkboxes[i].getAttribute("person_id") === "null" ? "": checkboxes[i].getAttribute("person_id")),
               doc_id: checkboxes[i].getAttribute("doc_id")
             }
           ]
