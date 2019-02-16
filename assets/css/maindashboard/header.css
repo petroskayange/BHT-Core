@@ -105,7 +105,6 @@
     box-shadow: inset 2px -4px 2px 0px;
     background-color: white;
     border-radius: 7px;
-    width: 20%;
     border: solid black 3px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -113,6 +112,8 @@
     -moz-box-shadow: inset 0 0 10px #000000;
     -webkit-box-shadow: inset 0 0 10px #000000;
     box-shadow: inset 0 0 10px #000000;
+    height: 185px;
+    width: 190px;
 }
 
 .cells {
