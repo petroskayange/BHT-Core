@@ -299,9 +299,11 @@ function reassignID(doc_id, patient_id) {
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/reassign_npid';
     var params = JSON.stringify({
-    patient_id: patient_id,
-    doc_id: doc_id
+    patient_id: (patient_id === "null" ? "" : patient_id),
+    doc_id: (doc_id === "null" ? "" : doc_id)
     });
+
+    console.log(params);
     http.open('POST', url, true);
     //Send the proper header information along with the request
     http.setRequestHeader('Content-type', 'application/json');
