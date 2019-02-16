@@ -20,7 +20,7 @@
 
 td {
     text-transform: capitalize;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 #ttp-tabs-tab-view table {
