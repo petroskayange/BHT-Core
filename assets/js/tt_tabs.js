@@ -2,7 +2,6 @@
 
 class ttTabsPlugin {
     load(target, items) {
-        console.log(items)
         let content = document.createElement('div');
         content.setAttribute("id", "ttp-tabs-content");
         target.appendChild(content);
