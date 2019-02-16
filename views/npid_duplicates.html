@@ -311,7 +311,7 @@ function reassignID(doc_id, patient_id) {
       if (http.readyState == 4) {
         if (http.status == 201 || http.status == 200) {
           var v = JSON.parse(http.responseText);
-          document.location = "/views/patient/print.html?person_id=" + v.patient_id;
+          document.location = "/views/print/reassign.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
           alert('Username already exists');
         } else {
