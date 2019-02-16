@@ -667,7 +667,7 @@
     }
 
     function getDates(patient_id, index, pageNumber) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits';
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits?program_id='+ sessionStorage.programID;
         var div = document.getElementById("dates");
         div.innerHTML = "";
         var req = new XMLHttpRequest();
