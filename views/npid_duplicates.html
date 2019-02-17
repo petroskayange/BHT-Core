@@ -311,7 +311,7 @@ function reassignID(doc_id, patient_id) {
       if (http.readyState == 4) {
         if (http.status == 201 || http.status == 200) {
           var v = JSON.parse(http.responseText);
-          document.location = "/views/patient/print.html?person_id=" + v.patient_id;
+          document.location = "/views/print/reassign.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
           alert('Username already exists');
         } else {
@@ -343,13 +343,16 @@ function activateMerge() {
 }
 
 function displayMergeBtn() {
-  var footer = document.getElementById('buttons');
-  var newbutton = document.createElement('button');
-  newbutton.setAttribute('id', 'newBtn');
-  newbutton.setAttribute('class', 'green');
-  newbutton.setAttribute('onmousedown', 'confirmMerge();');
-  newbutton.innerHTML="<span>Merge selected records</span>";
-  footer.appendChild(newbutton);
+  if (document.getElementById("newBtn") == null) {
+    var footer = document.getElementById('buttons');
+    var newbutton = document.createElement('button');
+    newbutton.setAttribute('id', 'newBtn');
+    newbutton.setAttribute('class', 'green');
+    newbutton.setAttribute('onmousedown', 'confirmMerge();');
+    newbutton.innerHTML="<span>Merge selected records</span>";
+    footer.appendChild(newbutton);
+  }
+  
 }
 
 function hideMergeBtn(){
@@ -382,7 +385,7 @@ function changeClearButton() {
 function mergeClients(){
   var checkboxes = document.getElementsByClassName('checkboxes');
   var client_ids = {};
-
+  client_ids.secondary = [];
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked == true) {
         if (i == 0) {
@@ -392,17 +395,17 @@ function mergeClients(){
           doc_id: checkboxes[i].getAttribute("doc_id")   
           }
         }else if(i > 0) {
-          client_ids.secondary= [
+          client_ids.secondary.push(
             {
               patient_id: (checkboxes[i].getAttribute("person_id") === "null" ? "": checkboxes[i].getAttribute("person_id")),
               doc_id: checkboxes[i].getAttribute("doc_id")
-            }
-          ]
+            });
+          
         }
         
     }
   }
-    // console.log(client_ids);
+    console.log(client_ids.secondary);
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
     var params = JSON.stringify(client_ids);

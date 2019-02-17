@@ -822,7 +822,7 @@
             programs.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&paginate=false";
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&program_id="+sessionStorage.programID+"&paginate=false";
         var req = new XMLHttpRequest();
 
         var listGroup = document.createElement("div");
