@@ -34,7 +34,6 @@
 <script>
   tt_cancel_destination = "/views/patient/programs.html?patient_id=" + sessionStorage.patientID;
 
-function passURL() {}
 
 function setAbsoluteMaxOutcomeYear(){
   var element = document.getElementById('touchscreenInput' + tstCurrentPage);
@@ -226,6 +225,13 @@ function getOutcomeDate() {
   }
 }
 
+function setProgramStates() {
+  var programID = fetchStatesUrl();
+  // var elem = document.getElementById("touchscreenInput" + tstCurrentPage);
+  $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', programID);
+  listSuggestions(tstCurrentPage); 
+}
+
 function postState(state) {
   var programId = fetchArgumentFromUrlString('program_id')
   var patientId = sessionStorage.getItem('patientID')
@@ -311,6 +317,8 @@ function estimateOutcomeDate() {
 function fetchStatesUrl () {
   return '/programs/' + fetchArgumentFromUrlString('program_id') + '/workflows'
 }
+
+
 </script>
 
 <body id="mateme">
@@ -324,9 +332,9 @@ function fetchStatesUrl () {
       <form>
         <input type="text" name="states" id="states" 
           field_type="alpha" xhelpText="State" 
-          helpText="States" ajaxURL="/programs/1/workflows" 
-          setvalue="" tt_pageStyleClass="NoKeyboard" 
-          tt_onLoad="passURL();" tt_onUnload="" objectType="states" />
+          setvalue="" tt_pageStyleClass="NoKeyboard"
+          ajaxURL="/programs/1/workflows" 
+          tt_onLoad="setProgramStates();" objectType="states" />
 
         <select objectType="location" ajaxURL="/locations?name=" 
           allowFreeText="true" 
@@ -335,6 +343,7 @@ function fetchStatesUrl () {
           helpText="Please select facility name" 
           id="facility_name" 
           tt_onUnload="transferring_out = true"
+          tt_onLoad="setCurrentLocation();"
           name="facility_name"></select>
 
         <input type="text" name="state_year" id="outcome_year" helpText="Outcome year" field_type="number" absoluteMin="1900"
