@@ -121,7 +121,7 @@ form{
   position:absolute;
   top:670px;
   width:990px;
-  z-index:10;
+  /*z-index:10;*/
 }
 
 /*.button {
