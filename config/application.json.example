@@ -64,6 +64,31 @@
       "available": true,
       "activitiesIcon": "/assets/images/dispensing.png",
       "url": "/apps/ART/views/htn/bp_alert.html"
+    },
+        "Outcome status": {
+      "available": true,
+      "activitiesIcon": "/assets/images/outcomes.png",
+      "url": "/apps/OPD/views/encounters/outcome_status.html"
+    },
+    "Clinical notes": {
+      "available": true,
+      "activitiesIcon": "/assets/images/clinical-notes.png",
+      "url": "/apps/OPD/views/encounters/clinical_notes.html"
+    },
+    "patient registration": {
+      "available": true,
+      "activitiesIcon": "/assets/images/attributes.png",
+      "url": "/apps/OPD/views/encounters/clinic_visit_attributes.html"
+    },
+    "presenting complaints": {
+      "available": true,
+      "activitiesIcon": "/assets/images/complaints.png",
+      "url": "/apps/OPD/views/encounters/presenting_complaints.html"
+    },
+    "social history": {
+      "available": true,
+      "activitiesIcon": "/assets/images/medical-report.png",
+      "url": "/apps/OPD/views/encounters/social_history.html"
     }
   },
   "activities": {
@@ -144,6 +169,22 @@
       "available": false,
       "activitiesIcon": "/assets/images/folder.png",
       "activitiesDescription": "Print Patient Visit Summary",
+      "comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
+    },
+    {
+      "activitiesName": "Mastercard",
+      "available": false,
+      "activitiesIcon": "/assets/images/results.png",
+      "url": "/views/patient/mastercard.html",
+      "activitiesDescription": "Mastercard",
+      "comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
+    },
+    {
+      "activitiesName": "View past filing numbers",
+      "available": false,
+      "activitiesIcon": "/assets/images/results.png",
+      "url": "/views/patient/past_filling_numbers.html",
+      "activitiesDescription": "View past filling numbers",
       "comment": "these are examples, add another application with this template at the end of these curly braces by adding a comma and copying this template"
     }
 

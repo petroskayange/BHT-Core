@@ -8,6 +8,8 @@ var ageInMonths = null;
 var birthdate;
 var dateCreated;
 var patientBirthdateEstimated;
+var patientAge = 0;
+var patientGender = "";
 
 function getDemographics(patient_id) {
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patient_id;
@@ -33,6 +35,12 @@ function getDemographics(patient_id) {
             patient_age = roundedAge;
             age = roundedAge;
             sessionStorage.patientGender = obj["gender"];
+            if (obj["gender"] == "F"){
+                patientGender = "FEMALE";
+            } else{
+                patientGender = "MALE";
+            }
+
             sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
             //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
             sessionStorage.currentWeight = 0;

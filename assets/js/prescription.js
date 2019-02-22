@@ -1,7 +1,7 @@
 
 function buildPrescriptionPage() {
   var iframe = document.getElementById("inputFrame" + tstCurrentPage);
-  iframe.style = "width: 96%;";
+  iframe.style = "width: 96%;height: 90%;";
 
   var main_table = document.createElement("div");
   main_table.setAttribute("class","main-table");
@@ -33,6 +33,7 @@ function buildMedicationSearch() {
 
   var results_divs_row = document.createElement("div");
   results_divs_row.setAttribute("class","results-divs-table-row");
+  results_divs_row.setAttribute("id","results-divs-table-row-one");
   results_divs.appendChild(results_divs_row);
    
   var cells = ["left", "right"];
@@ -97,8 +98,9 @@ function addKeyboard() {
 
   var keyInput = document.createElement("input");
   keyInput.setAttribute("id","key-input");
-  keyInput.setAttribute("type","hidden");
+  //keyInput.setAttribute("type","hidden");
   
+  var e = document.getElementById("main-table-cell-right");
   e.appendChild(keyInput);
 }
 
@@ -166,6 +168,7 @@ function displaySelected(container_name) {
   var mainContainer = document.getElementById(container_name);
   mainContainer.innerHTML = null;
   var table = document.createElement("table");
+  table.style = "width: 100%;";
 
   for(var drug_id in selected_meds){
     var row = document.createElement("tr");
