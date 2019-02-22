@@ -14,14 +14,14 @@
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/js/moment.js"></script>
 
-    <! -- ...................... -->
+    <!-- ...................... -->
     <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
 
     <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
     <script src="/assets/js/medication.history.js"></script>
-    <! -- ...................... -->
+    <!-- ...................... -->
 
     <script src="/assets/js/lab.history.js"></script>
 
@@ -48,8 +48,8 @@
         width: 94%;
         margin-left: 10px;
         /*background-color: transparent !important;
-        color: white !important; */
-    }
+        color: white !important; 
+    }*/
 
     .badge {
         background-color: #007bff;
@@ -751,7 +751,7 @@
             encounters.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?patient_id=' + id + '&date=' + value + "&program_id=" + sessionStorage.programID;
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value;
         var req = new XMLHttpRequest();
         var counter = 0;
         req.onreadystatechange = function () {
