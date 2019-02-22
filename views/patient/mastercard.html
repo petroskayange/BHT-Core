@@ -10,6 +10,12 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript">
+    
+    var patientID = getUrlParameter("patient_id");
+    // if ('sessionStorage.patientID === null'){
+    //     sessionStorage.patientID = patientID;
+    // }
+    sessionStorage.patientID = patientID;
 
     var name = "";
     var name_edit_url = "/views/patient/edit_demographics/name.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
@@ -32,6 +38,22 @@
     var address_edit_url = "/views/patient/edit_demographics/addresses.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
     var occupation = "Add";
     var occupation_edit_url = "/views/patient/edit_demographics/occupation.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+    //added Function to load mastercardsessionStorage.patientID = patientID;
+    function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;   
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
