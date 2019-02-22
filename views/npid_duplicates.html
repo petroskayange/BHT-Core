@@ -405,7 +405,6 @@ function mergeClients(){
         
     }
   }
-    console.log(client_ids.secondary);
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
     var params = JSON.stringify(client_ids);
@@ -417,6 +416,7 @@ function mergeClients(){
       if (http.readyState == 4) {
         if (http.status == 201 || http.status == 200) {
           var v = JSON.parse(http.responseText);
+          sessionStorage.patientID = v.patient_id;
           document.location = "/views/patient/print.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
           alert('Username already exists');
