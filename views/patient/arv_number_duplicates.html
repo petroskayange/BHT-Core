@@ -57,8 +57,7 @@
         }
     }
 
-    .select-btn{
-        background-color: teal; /* Green */
+    .arv-btn{
         border: none;
         color: white;
         padding: 8px 30px;
@@ -71,6 +70,13 @@
         cursor: pointer;
     }
 
+    .select-btn{
+        background-color: orange;
+    }
+
+    .reassign-btn{
+        background-color: firebrick;
+    }
 </style>
 
 <script type="text/javascript">
@@ -142,8 +148,8 @@
                     html += "<td>" + people[key]["person"]["gender"] + "</td>";
                     html += "<td>" + people[key]["person"]["birthdate"] + "</td>";
                     html += "<td>" + person_address["city_village"] + "</td>";
-                    html += "<td><span class='select-btn' onclick='selectPatient(" + person_id + ")'>Select</span></td>";
-                    html += "<td> <span class='select-btn' onclick='reassignARVNumber(" + person_id + ", " + patient_identifier_id + ")'>Reassign identifier</span></td>";
+                    html += "<td><span class='arv-btn select-btn' onclick='selectPatient(" + person_id + ")'>Select patient</span></td>";
+                    html += "<td> <span class='arv-btn reassign-btn' onclick='reassignARVNumber(" + person_id + ", " + patient_identifier_id + ")'>Reassign identifier</span></td>";
                     html += "</tr>";
                     count = count + 1;
                 }
