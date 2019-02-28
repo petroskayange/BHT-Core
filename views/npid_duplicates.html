@@ -409,11 +409,10 @@ function mergeClients(){
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked == true) {
         if (i == 0) {
-          console.log(checkboxes[i].getAttribute("person_id") === "null");
           client_ids.primary = {
            patient_id: (checkboxes[i].getAttribute("person_id") === "null" ? "": checkboxes[i].getAttribute("person_id")),
            doc_id: checkboxes[i].getAttribute("doc_id")
-          }
+          };
         }else if(i > 0) {
           client_ids.secondary.push(
             {
