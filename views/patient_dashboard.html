@@ -89,7 +89,7 @@
 
     #todaysDate, #selectedDate {
       font-size: 14px;
-    } */
+    } 
 
 </style>
 
@@ -157,10 +157,10 @@
     <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards"
          style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 78%;"
          id="generic_tabs">
-        <div class="row" style="display: flex;"><h4 class="headers" style="margin-left: 40px; ">Set Date: <span
-                id="selectedDate"></span> | </h4>
+        <div class="row" style="display: flex;"><h4 class="headers" style="margin-left: 40px; ">Today&apos;s Date: <span
+                id="todaysDate"></span> | </h4>
             <h4 class="headers"> Next Task: <span id="nextEncounter"></span> | </h4>
-            <h4 class="headers todays-date"> Today&apos;s Date: <span id="todaysDate"></span></h4>
+            <h4 class="headers todays-date"> Set Date: <span id="selectedDate"></span></h4>
         </div>
         <div class="row">
             <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6"
@@ -743,8 +743,6 @@
 
     function getValue(value, id, div, className, itemType) {
         var encounters = document.getElementById(div);
-        var selectedDate = document.getElementById("selectedDate");
-        selectedDate.innerHTML = moment(value).format("DD/MMM/YYYY");
         document.getElementById("encounterDate").innerHTML = moment(value).format("DD/MMM/YYYY");
         sessionStorage.setItem("value", value);
         if (encounters.innerHTML != null) {
@@ -813,7 +811,7 @@
     }
 
     function populateModal() {
-        getValue(sessionStorage.value, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
+        getValue(sessionStorage.sessionDate, sessionStorage.patientID, "encounters2", "btn btn-primary btn-lg", "button");
     }
 
     function getMedication(id, itemType, div) {
@@ -1198,12 +1196,15 @@
     }
 
     function loadTodaysDate() {
-        var todays_date = moment(sessionStorage.sessionDate).format("DD/MMM/YYYY");
-        if (sessionStorage.session) {
-            jQuery("#todaysDate").html("<span style='color: red; font-weight: bold;'>" + todays_date + "</span>")
+        var selected_date = moment(sessionStorage.sessionDate).format("DD/MMM/YYYY");
+        console.log(selected_date)
+        if (selected_date != moment().format('DD/MMM/YYYY')) {
+            jQuery("#selectedDate").html("<span style='color: red; font-weight: bold;'>" + selected_date + "</span>")
         } else {
-            jQuery("#todaysDate").html("<span style='color: green; font-weight: bold;'>" + todays_date + "</span>")
+            jQuery("#selectedDate").html("<span style='color: green; font-weight: bold;'>" + selected_date + "</span>")
         }
+        var todays_date = moment().format('DD/MMM/YYYY');
+        jQuery("#todaysDate").html("<span style='color: green; font-weight: bold;'>" + todays_date + "</span>")
     }
 
     loadTodaysDate();
