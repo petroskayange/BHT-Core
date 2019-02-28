@@ -165,6 +165,10 @@
 	color: #FFFFFF;
 }
 
+.inputFrameClass {
+  width: 96%;
+}
+
 </style>
 
       <script>
@@ -183,7 +187,11 @@ function getClient() {
  
   document.getElementById("helpText0").innerHTML = "Duplicate identifier ("+patient_id + ")";
   
-    var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/dde/patients/find_by_npid?npid=" + patient_id;
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/dde/patients/find_by_npid?npid=" + patient_id;
+  
+  if(sessionStorage.dde_enabled === 'true'){
+    url += '&program_id=' + sessionStorage.programID;
+  }
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -208,7 +216,6 @@ function getClient() {
 
 
 function loadData(results, type) {
-  
   var t = document.createElement('div');
   t.setAttribute('class','main-table');
   var identifier = "";
@@ -225,6 +232,9 @@ function loadData(results, type) {
       // }else {
         id = results[index].patient_id;
         url = apiProtocol + '://' + apiURL + ':' + apiPort + '/reassign_npid?dde_person_doc_id='+identifier;
+        if(sessionStorage.dde_enabled === 'true'){
+          url += '&program_id=' + sessionStorage.programID;
+        }
         checkbox_id = results[index].patient_id;;
       // }
       
@@ -298,12 +308,22 @@ function loadData(results, type) {
 function reassignID(doc_id, patient_id) {
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/reassign_npid';
-    var params = JSON.stringify({
-    patient_id: (patient_id === "null" ? "" : patient_id),
-    doc_id: (doc_id === "null" ? "" : doc_id)
-    });
 
-    console.log(params);
+    if(sessionStorage.dde_enabled === 'true'){
+      var params = {
+        patient_id: (patient_id === "null" ? "" : patient_id),
+        doc_id: (doc_id === "null" ? "" : doc_id),
+        program_id: sessionStorage.programID
+      };
+    }else{
+      var params = {
+        patient_id: (patient_id === "null" ? "" : patient_id),
+        doc_id: (doc_id === "null" ? "" : doc_id)
+      };
+    }
+    
+    params = JSON.stringify(params);
+
     http.open('POST', url, true);
     //Send the proper header information along with the request
     http.setRequestHeader('Content-type', 'application/json');
@@ -392,7 +412,7 @@ function mergeClients(){
           console.log(checkboxes[i].getAttribute("person_id") === "null");
           client_ids.primary = {
            patient_id: (checkboxes[i].getAttribute("person_id") === "null" ? "": checkboxes[i].getAttribute("person_id")),
-          doc_id: checkboxes[i].getAttribute("doc_id")   
+           doc_id: checkboxes[i].getAttribute("doc_id")
           }
         }else if(i > 0) {
           client_ids.secondary.push(
@@ -405,10 +425,13 @@ function mergeClients(){
         
     }
   }
+          
+    client_ids.program_id = sessionStorage.programID;
+
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
     var params = JSON.stringify(client_ids);
-    console.log(params);
+    
     http.open('POST', url, true);
     //Send the proper header information along with the request
     http.setRequestHeader('Content-type', 'application/json');
