@@ -14,14 +14,14 @@
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/js/moment.js"></script>
 
-    <! -- ...................... -->
+    <!-- ...................... -->
     <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
 
     <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
     <script src="/assets/js/medication.history.js"></script>
-    <! -- ...................... -->
+    <!-- ...................... -->
 
     <script src="/assets/js/lab.history.js"></script>
 
@@ -35,7 +35,7 @@
 </script>
 
 <style>
-    .modal-body {
+    /* .modal-body {
         overflow-y: auto;
     }
 
@@ -48,8 +48,8 @@
         width: 94%;
         margin-left: 10px;
         /*background-color: transparent !important;
-        color: white !important; */
-    }
+        color: white !important; 
+    }*/
 
     .badge {
         background-color: #007bff;
@@ -89,7 +89,7 @@
 
     #todaysDate, #selectedDate {
       font-size: 14px;
-    }
+    } */
 
 </style>
 
@@ -169,7 +169,7 @@
                      data-toggle="modal" data-target="#myModal" onclick="populateModal();">
                     <div class="card-header h4 btn-primary" style="margin: 3%; padding: 1%;" id="encounterHeader"></div>
 
-                    <div class="list-group" id="encounters">
+                    <div class="list-group" id="encounters" style="overflow-x: hidden;">
                     </div>
 
                     <!--table class="table" style="border: 0;">
@@ -232,10 +232,10 @@
                     onclick="finish();">
                 <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
             </button>
-<!--             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+            <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#appModal">
                 <span>&nbsp;&nbsp; Applications &nbsp;&nbsp;<img src="/assets/images/launcher.png"></span>
-            </button> -->
+            </button>
             <button id="activities" class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
                     data-target="#activitiesModal" onmousedown="showActivities(this);">
                 <span>&nbsp; Printouts/Other &nbsp;</span>
@@ -261,9 +261,9 @@
                 <div class="modal-body"
                      style="height: calc(100vh - 200px); max-height: calc(100vh - 200px); overflow: hidden;">
                     <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 border" id="encounters2"
-                         style="border-right: solid 1px;"></div>
+                         style="height: 100%; border-right: solid 1px; overflow-y: auto;"></div>
 
-                    <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="height: 100%;overflow:scroll;">
+                    <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="height: 100%;overflow-y:auto;" >
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -405,7 +405,7 @@
                         <div class="row" id="modal-div">
                             <template id="card_template">
                                 <!-- <div class="" > -->
-                                <a href="#" class="card-block clearfix" id="moduleButton"
+                                <a href="#" class="" id="moduleButton"
                                    onclick="$('#appModal').modal('hide');">
                                     <div class="app-btn" id="cardDiv" style="margin: 10px;">
                                         <img alt="Avatar" style="width:70px; height: 60px; margin-top: 10%;"
@@ -751,7 +751,7 @@
             encounters.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?patient_id=' + id + '&date=' + value + "&program_id=" + sessionStorage.programID;
+        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value;
         var req = new XMLHttpRequest();
         var counter = 0;
         req.onreadystatechange = function () {

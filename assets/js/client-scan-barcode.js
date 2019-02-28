@@ -52,9 +52,13 @@ function searchID(e) {
 }
 
 function autoFocus() {
-  try {
-    document.getElementById("search-string").focus();
-  }catch(e) {}
+  var urlToSearch = new URL(window.location);
+  if (sessionStorage.programID != undefined || (urlToSearch.href).match(/location.html/i)) {
+    try {
+      document.getElementById("search-string").focus();
+    }catch(e) {}
+  }
+  
 }
 
 function returnToFunction(search_string) {
