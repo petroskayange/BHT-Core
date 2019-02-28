@@ -306,7 +306,9 @@ function checkIfFilingNumberIsNotValid () {
     var dde_status = "";
     var url = "";
     if (sessionStorage.dde_enabled === "true") {
-      url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/dde/patients/find_by_npid?npid=" + patient_id;
+      url = apiProtocol + "://" + apiURL + ":" + apiPort;
+      url += "/api/v1/dde/patients/find_by_npid?npid=" + patient_id;
+      url += "&program_id=" + sessionStorage.programID;
     }else {
       url =
       apiProtocol +

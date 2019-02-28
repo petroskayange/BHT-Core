@@ -177,17 +177,6 @@
       document.getElementById("buttons").innerHTML += newSearchHTML;
   }
 
-  function search_remote(){
-    // return
-    var url = "/people/dde_search?given_name=John" +
-      "&family_name=Does&gender=M";
-
-    ajaxGeneralRequest(url, "loadPatient()");
-
-  }
-
-
-
 function loadPatient(){
     /*__$("summary").innerHTML = "";
     remote_people = JSON.parse(ajaxGeneralRequestResult);
@@ -306,7 +295,6 @@ function loadPatient(){
   <form action="" method="POST">
         <label for="person" id="patient-results">No patients were found:</label>
     <select name="person[id]" id="person" dualView="true" dualViewOptions="people" tt_onUnload="" tt_onLoad = "addBtns();setItems();">
-      <!--option onmousedown="search_remote()">Search from remote server for person with name John Does</option-->
 
           <option class="test" value="0" onmousedown="changeNextButtonText('New Patient')">&nbsp;</option>
 
@@ -405,7 +393,10 @@ function findClients() {
    var gender     = sessionStorage.getItem("gender");
 
    if(sessionStorage.dde_enabled === "true") {
-   url = "/dde/patients/find_by_name_and_gender?given_name=" + first_name +"&family_name=" + last_name +"&gender="+ gender;
+    url = "/dde/patients/find_by_name_and_gender?given_name=";
+    url += first_name + "&family_name=" + last_name;
+    url += "&gender="+ gender + "&program_id=";
+    url += sessionStorage.programID;
    }else {
     url = "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
    }
