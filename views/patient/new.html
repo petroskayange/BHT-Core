@@ -1317,7 +1317,7 @@
 
     function createPatient(person_id) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients';
-        var parametersPassed = JSON.stringify({person_id: person_id});
+        var parametersPassed = JSON.stringify({person_id: person_id, program_id: sessionStorage.programID});
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
