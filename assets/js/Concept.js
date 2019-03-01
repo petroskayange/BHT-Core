@@ -44,10 +44,7 @@ var Concept = function () {
     })
       .then((response) => {
         if (response.status === 201) {
-          response.json()
-            .then((payload) => {
-              data.success(payload)
-            })
+          data.success(response)
         } else {
           data.fail(response)
         }
