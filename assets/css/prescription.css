@@ -1,5 +1,4 @@
-
-#clearButton {
+#nextButton, #clearButton {
   display: none;
 }
 
@@ -24,7 +23,7 @@
 #main-table-cell-right {
   border-style: solid;
   border-width: 0px 0px 0px 1px;
-  height: 90%;
+  height: 598px;
   vertical-align: top;
 }
 
@@ -75,9 +74,9 @@
 /* .............................................. */
 .results-divs-table {
   display: table;
-  width: 100%;
+  width: 99%;
   margin: 10px;
-  
+  height: 570px;  
 }
 
 .results-divs-table-row {
@@ -88,8 +87,9 @@
   display: table-cell;
   border-style: solid;
   border-width: 1px;
-  height: 200px;
+  height: 285px;
   overflow: auto;
+  border-radius: 9px;
 }
 
 #results-divs-table-cell-left {
@@ -178,7 +178,11 @@
 }
 
 #keyboard-divs-table-cell {
-  padding: 2% 0% 0% 1%;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 9px;
+  position: absolute;
+  bottom: 30px;
 }
 
 .search-results-keyboard-row {
@@ -219,6 +223,8 @@
   border-style: solid;
   border-width: 0px 0px 0px 1px;
   width: 400px;
+  padding-right: 5px;
+  height: 598px;
 }
 
 #dosage-table-cell-left {
@@ -310,7 +316,6 @@
   height: 65px;
 }
 
-
 .input-boxes {
   width: 100px;
   height: 85px;
@@ -357,21 +362,23 @@
   padding-left: 5px;
 }
 
+#key-input {
+  position: absolute;
+  top: 50px;
+  width: 81%;
+  height: 55px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 9px 9px 0px 0px;
+  margin-left: 9px;
+  font-size: 2.5em;
+  padding-left: 10px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#results-divs-table-row-one {
+  padding-top: 50px;
+  position: absolute;
+  width: 82%;
+}
 
 

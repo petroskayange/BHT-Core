@@ -22,6 +22,9 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
+
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -108,7 +111,8 @@ function loadDoc() {
             if (status.toLocaleLowerCase() === "success") {
                 sessionStorage.setItem(auth_token, data.authorization.token);
 
-            } else {}
+            } else {
+            }
         });
 }
 
@@ -133,7 +137,7 @@ function PersistData(data, res) {
 
 }
 
-function loadConfigurations () {
+function loadConfigurations() {
     $.getJSON('/config/config.json')
         .done((configurations) => {
             loadApplicationsIntoMenu(configurations.apps)
@@ -144,7 +148,7 @@ function loadConfigurations () {
         })
 }
 
-function loadApplicationsIntoMenu (applications) {
+function loadApplicationsIntoMenu(applications) {
     applications.forEach((application, idx) => {
         const configFilePath = `/apps/${application.applicationFolder}/application.json`;
         $.getJSON(configFilePath)
@@ -158,7 +162,7 @@ function loadApplicationsIntoMenu (applications) {
 }
 
 
-function createApplicationCard (applicationData, idx) {
+function createApplicationCard(applicationData, idx) {
     $("#modal-div").append($('#card_template').html())
     $("#appDescription").text(applicationData.applicationDescription).attr('id', `appDescription${idx}`)
     $("#apptext").text(applicationData.applicationName).attr('id', `apptext${idx}`)
@@ -166,9 +170,9 @@ function createApplicationCard (applicationData, idx) {
     $("#moduleButton").attr('id', `moduleButton${idx}`)
 
     if (applicationData.url == "") {
-        $(`#moduleButton${idx}`).attr("href", "#")
+        $(`#moduleButton${idx}`).attr("href", window.location.href);
     } else {
-        $(`#moduleButton${idx}`).attr("href", applicationData.url)
+        $(`#moduleButton${idx}`).attr("href", applicationData.url);
     }
 
     $("#cardImage")
@@ -179,6 +183,7 @@ function createApplicationCard (applicationData, idx) {
     $(`#moduleButton${idx}`).click(() => {
         sessionStorage.setItem("applicationImage", applicationData.applicationIcon)
         sessionStorage.setItem("applicationName", applicationData.applicationName)
+        sessionStorage.setItem("applicationFolder", applicationData.applicationFolder)
         sessionStorage.setItem("programID", applicationData.programID)
         changeModule()
     })
@@ -188,7 +193,7 @@ function generateActivities() {
     if (document.createElement("template").content) {
         /*Code for browsers that supports the TEMPLATE element*/
 
-        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+        $.getJSON("/apps/" + sessionStorage.applicationName + "/application.json")
             .done(function (data, status) {
                 getActivities(data);
             })
@@ -204,7 +209,7 @@ function generateTasks() {
 
     if (document.createElement("template").content) {
 
-        $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
+        $.getJSON("/apps/" + sessionStorage.applicationName + "/application.json")
             .done(function (data, status) {
 
                 getTasks(data);
@@ -217,6 +222,7 @@ function generateTasks() {
 
     }
 }
+
 function _foo(data, resource) {
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/" + resource;
@@ -243,7 +249,7 @@ function newActivitiesCard(activitiesName, activitiesDescription, activitiesImag
     $("#activityName").text(activitiesName).attr('id', "activityName" + counter);
     $("#activitiesButton").attr('id', "activitiesButton" + counter);
     $("#activitiesCard").attr('id', "activitiesCard" + counter);
-    $("#activitiesButton"+counter).attr("href", url);
+    $("#activitiesButton" + counter).attr("href", url);
     // $("activitiesCard"+counter).attr("onclick", "window.location.href='"+url+"';");
 
     $("#cardImage")
@@ -306,7 +312,7 @@ function setUser() {
 function checkActivities(applicationJsonUrl, activitiesName, activitiesDescription, counter, activitiesIconUrl) {
     // $.getJSON(applicationJsonUrl)
     //     .done(function (data) {
-        newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
+    newActivitiesCard(activitiesName, activitiesDescription, activitiesIconUrl, counter, applicationJsonUrl);
 
 
 }
@@ -326,22 +332,22 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
-  var j = Object.keys(encountersData.encounters);
-  var i = 0;
-  var tasks = [];
-  j.forEach ( function(j) {
-    var values = encountersData.encounters[j]
-    var url = values.url;
-    var icon = values.activitiesIcon;
-    tasks.push([j, icon, url])
-  });
+    var j = Object.keys(encountersData.encounters);
+    var i = 0;
+    var tasks = [];
+    j.forEach(function (j) {
+        var values = encountersData.encounters[j]
+        var url = values.url;
+        var icon = values.activitiesIcon;
+        tasks.push([j, icon, url])
+    });
 
-  var container = document.getElementById('tasks-container');
-  buildDashboardButtons(tasks, container);
+    var container = document.getElementById('tasks-container');
+    buildDashboardButtons(tasks, container);
 }
 
 function printNPID() {
-  print_and_redirect('/views/print/npid.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+    print_and_redirect('/views/print/npid.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
 function printFilingNumber() {
@@ -355,91 +361,120 @@ function printVisitSummary() {
 function printTransferOut() {
     print_and_redirect('/views/print/transfer.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
+
 function download(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
 
-  element.style.display = 'none';
-  document.body.appendChild(element);
+    element.style.display = 'none';
+    document.body.appendChild(element);
 
-  element.click();
+    element.click();
 
-  document.body.removeChild(element);
+    document.body.removeChild(element);
 }
 
 function buildDashboardButtons(tasks, container) {
-  container.innerHTML = null;
-  var count = 0;
+    container.innerHTML = null;
+    var count = 0;
 
-  var containerTable = document.createElement("div");
-  containerTable.setAttribute("class","tasks-table");
-  containerTable.setAttribute("style","display: table; width: 100%;");
-  container.appendChild(containerTable);
+    var containerTable = document.createElement("div");
+    containerTable.setAttribute("class", "tasks-table");
+    containerTable.setAttribute("style", "display: table; width: 100%;");
+    container.appendChild(containerTable);
 
-  var containerTableRow = document.createElement("div");
-  containerTableRow.setAttribute("class","tasks-table-row");
-  containerTableRow.setAttribute("style","display: table-row;");
-  containerTable.appendChild(containerTableRow);
-
-
-  for(var i = 0 ; i < tasks.length ; i++){
-    if(count == 3){
-      containerTableRow = document.createElement("div");
-      containerTableRow.setAttribute("class","tasks-table-row");
-      containerTableRow.setAttribute("style","display: table-row;");
-      containerTable.appendChild(containerTableRow);
-      count = 0;
-    }
-
-    containerTableCell = document.createElement("div");
-    containerTableCell.setAttribute("class","tasks-table-cell");
-    containerTableCell.setAttribute("style","display: table-cell;");
-    if(tasks[i][0].match(/National Health ID/i)){
-      containerTableCell.setAttribute("onmousedown","printNPID();");
-    }else if(tasks[i][0].match(/Filing Number/i)){
-        containerTableCell.setAttribute("onmousedown","printFilingNumber();");
-    }else if(tasks[i][0].match(/Visit Summary/i)){
-        containerTableCell.setAttribute("onmousedown","printVisitSummary();");
-    }else if(tasks[i][0].match(/Transfer Out/i)){
-        containerTableCell.setAttribute("onmousedown","printTransferOut();");
-    }
-    else{
-      containerTableCell.setAttribute("onmousedown","document.location='" + tasks[i][2] + "'");
-    }
-
-    var infoTable = document.createElement("table");
-    infoTable.setAttribute("class","info-table");
-    infoTable.setAttribute("style","width: 100%; padding: 8px; color: black;");
-
-    var tr = document.createElement("tr");
-    infoTable.appendChild(tr);
-
-    var td = document.createElement("td");
-    td.setAttribute("style","width: 52px;");
-    var img = document.createElement("img");
-    img.setAttribute("src", tasks[i][1]);
-    img.setAttribute("style","width: 50px; height: 50px;");
-    td.appendChild(img);
-    tr.appendChild(td);
-
-    td = document.createElement("td");
-    td.setAttribute("style","color: #fff; font-weight: bold; width: 80%; text-align: left;");
-    td.setAttribute("id","task-button-" + (i + 1));
-    td.innerHTML = tasks[i][0].toUpperCase();
-    tr.appendChild(td);
-
-    containerTableCell.appendChild(infoTable);
+    var containerTableRow = document.createElement("div");
+    containerTableRow.setAttribute("class", "tasks-table-row");
+    containerTableRow.setAttribute("style", "display: table-row;");
+    containerTable.appendChild(containerTableRow);
 
 
-    containerTableRow.appendChild(containerTableCell);
+    var use_filling_number = false;
+    var use_filling_number_property_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.number";
+    var xhttp1 = new XMLHttpRequest();
+    xhttp1.onreadystatechange = function () {
+        if (this.readyState == 4 && (this.status == 201 || this.status == 200 || this.status == 404)) {
+            try {
+                var use_filling_number_property = JSON.parse(this.responseText)["use.filing.number"];
+                if (use_filling_number_property == "true") {
+                    use_filling_number = true
+                }
 
-    count++;
-  }
+            } catch (e) {
+
+            }
+
+            for (var i = 0; i < tasks.length; i++) {
+                if (count == 3) {
+                    containerTableRow = document.createElement("div");
+                    containerTableRow.setAttribute("class", "tasks-table-row");
+                    containerTableRow.setAttribute("style", "display: table-row;");
+                    containerTable.appendChild(containerTableRow);
+                    count = 0;
+                }
+
+                if (!use_filling_number) {
+                    if (tasks[i][0].match(/filing/i)) {
+                        continue;
+                    }
+                }
+
+                containerTableCell = document.createElement("div");
+                containerTableCell.setAttribute("class", "tasks-table-cell");
+                containerTableCell.setAttribute("style", "display: table-cell;");
+                if (tasks[i][0].match(/National Health ID/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printNPID();");
+                } else if (tasks[i][0].match(/Filing Number \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printFilingNumber();");
+                } else if (tasks[i][0].match(/Visit Summary/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printVisitSummary();");
+                } else if (tasks[i][0].match(/Transfer Out/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printTransferOut();");
+                }
+                else {
+                    containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
+                }
+
+                var infoTable = document.createElement("table");
+                infoTable.setAttribute("class", "info-table");
+                infoTable.setAttribute("style", "width: 100%; padding: 8px; color: black;");
+
+                var tr = document.createElement("tr");
+                infoTable.appendChild(tr);
+
+                var td = document.createElement("td");
+                td.setAttribute("style", "width: 52px;");
+                var img = document.createElement("img");
+                img.setAttribute("src", tasks[i][1]);
+                img.setAttribute("style", "width: 50px; height: 50px;");
+                td.appendChild(img);
+                tr.appendChild(td);
+
+                td = document.createElement("td");
+                td.setAttribute("style", "color: #fff; font-weight: bold; width: 80%; text-align: left;");
+                td.setAttribute("id", "task-button-" + (i + 1));
+                td.innerHTML = tasks[i][0].toUpperCase();
+                tr.appendChild(td);
+
+                containerTableCell.appendChild(infoTable);
+
+
+                containerTableRow.appendChild(containerTableCell);
+
+                count++;
+            }
+        }
+    };
+    xhttp1.open("GET", use_filling_number_property_url, true);
+    xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+    xhttp1.setRequestHeader('Content-type', "application/json");
+    xhttp1.send();
 
 }
 
-function changeModule(url ) {
+function changeModule(url) {
     var applicationImage = sessionStorage.getItem("applicationImage");
     var applicationName = sessionStorage.getItem("applicationName");
     if (applicationName != null && applicationImage != null) {
@@ -454,10 +489,11 @@ function changeModule(url ) {
 
         $("#myModal").modal("hide");
         $("#application-name").text(sessionStorage.getItem("applicationName"));
-    } else {}
+    } else {
+    }
 }
 
-function changeActivities(url ) {
+function changeActivities(url) {
     var activitiesImage = sessionStorage.getItem("activitiesImage");
     var activitiesName = sessionStorage.getItem("activitiesName");
     if (activitiesName != null && activitiesImage != null) {
@@ -471,10 +507,11 @@ function changeActivities(url ) {
 
         $("#myModal").modal("hide");
         $("#activities-name").text(sessionStorage.getItem("activitiesName"));
-    } else {}
+    } else {
+    }
 }
 
-function changeTasks(url ) {
+function changeTasks(url) {
     var tasksImage = sessionStorage.getItem("tasksImage");
     var encounter_name = sessionStorage.getItem("encounter_name");
     if (encounter_name != null && tasksImage != null) {
@@ -487,7 +524,8 @@ function changeTasks(url ) {
         }
         $("myModal").modal("hide");
         $("#tasks-name").text(sessionStorage.getItem("encounter_name"));
-    } else{}
+    } else {
+    }
 }
 
 function showBarcodeDiv() {
@@ -505,19 +543,23 @@ function redirect(id) {
     }
     if (id === "view-change-date") {
         window.location.href = './views/change_session_date.html';
+    }if (id === "print-location") {
+        window.location.href = '/views/print_location.html';
     }
-    if (id === "view-sys-settings") {
-      var dvTable = document.getElementById("generic_tabs");
-      dvTable.innerHTML = null;
-      dvTable.style = "width: 97% !important;";
+    if (id === "view-sys-settings"){
+    }
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = null;
+    dvTable.style = "width: 97% !important;";
 
-      var obj = document.createElement("object");
-      obj.setAttribute("data", "/apps/ART/views/system_settings.html");
-      obj.setAttribute("type","text/html");
-      obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
-      dvTable.appendChild(obj);
-    if (id === "report-1") {}
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/ART/views/system_settings.html");
+    obj.setAttribute("type", "text/html");
+    obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
+    dvTable.appendChild(obj);
+    if (id === "report-1") {
     }
+ 
     if (id === "cleaner") {
         // window.location.href = './views/reports/data_inconsistent/cleaner.html';
         var dvTable = document.getElementById("generic_tabs");
@@ -536,16 +578,19 @@ function activitiesRedirect(id) {
     if (id === "demographics-edit") {
         window.location.href = './views/patient/activities.html';
     }
-    if (id === "national-id") {}
-    if (id === "visit-summary") {}
-    if (id === "demographics-print") {}
+    if (id === "national-id") {
+    }
+    if (id === "visit-summary") {
+    }
+    if (id === "demographics-print") {
+    }
 }
 
 function registerPatientRedirect() {
     window.location.href = '/views/patient/search.html';
 }
 
-function gotoFindByMenu(){
+function gotoFindByMenu() {
     window.location.href = '/views/patient/find_by_menu.html';
 }
 
@@ -554,8 +599,9 @@ function updateOutcomeRedirect() {
 }
 
 function registerGuardianRedirect() {
-    window.location.href = '/views/patient/relationships/search.html?patient_id='+sessionStorage.backupPatientID;
+    window.location.href = '/views/patient/relationships/search.html?patient_id=' + sessionStorage.backupPatientID;
 }
+
 // overview tab work in progress
 function overview() {
     var table = document.createElement("TABLE");
@@ -589,19 +635,20 @@ function overview() {
 }
 
 function GenerateTable() {
-  var dvTable = document.getElementById("generic_tabs");
-  dvTable.innerHTML = "";
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = "";
 
 
-  //<object data="framed.html" type="text/html"><p>This is the fallback code!</p></object>
-  var obj = document.createElement("object");
-  obj.setAttribute("data", "/apps/ART/views/overview.html");
-  obj.setAttribute("type","text/html");
-  obj.setAttribute("style","width: 99%; height: 430px; text-align: left;");
+    //<object data="framed.html" type="text/html"><p>This is the fallback code!</p></object>
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/overview.html");
+    obj.setAttribute("type", "text/html");
+    obj.setAttribute("style", "width: 99%; height: 430px; text-align: left;");
 
-  dvTable.style = "height: 430px; width: 97% !important; margin: 15px;";
-  dvTable.appendChild(obj);
+    dvTable.style = "height: 430px; width: 97% !important; margin: 15px;";
+    dvTable.appendChild(obj);
 }
+
 // overview tab work in progress
 function showOptions(e) {
     // Get all buttons with class="btn" inside the container
@@ -623,31 +670,31 @@ function showActivities(a) {
     // for (var x = 0; x < btn.length; x++) {
     //     btn[x].setAttribute('class', 'btn btn-info activities-btns');
     // }
-    $.getJSON("/apps/"+sessionStorage.applicationName+"/application.json")
-      .done(function (data, status) {
-          buildPrintOutandOthers(data);
-      })
-      .fail(function () {
-          console.log("application.json is missing from /apps/ART folder");
-      });
+    $.getJSON("/apps/" + sessionStorage.applicationName + "/application.json")
+        .done(function (data, status) {
+            buildPrintOutandOthers(data);
+        })
+        .fail(function () {
+            console.log("application.json is missing from /apps/ART folder");
+        });
 }
 
 function buildPrintOutandOthers(data) {
-  var j = Object.keys(data.others);
-  var i = 0;
-  var tasks = [];
-  j.forEach ( function(j) {
-    var values = data.others[j]
-    var name = values.activitiesName;
-    var icon = values.activitiesIcon;
-    var url = values.url;
-    url = (url == undefined ? '#' : url);
-    tasks.push([name, icon, url]);
-  });
+    var j = Object.keys(data.others);
+    var i = 0;
+    var tasks = [];
+    j.forEach(function (j) {
+        var values = data.others[j]
+        var name = values.activitiesName;
+        var icon = values.activitiesIcon;
+        var url = values.url;
+        url = (url == undefined ? '#' : url);
+        tasks.push([name, icon, url]);
+    });
 
-  var container = document.getElementById("activities-body");
-  
-  buildDashboardButtons(tasks, container); 
+    var container = document.getElementById("activities-body");
+
+    buildDashboardButtons(tasks, container);
 }
 
 function showTasks(t) {
@@ -701,13 +748,17 @@ function checkCredentials(username, password) {
                 // window.location.href = 'show.html?user_id=' + v.user.user_id;
             } else if (http.status == 401) {
                 wrongPasswordUsernameAlert();
-            } else if (http.status == 0){
+            } else if (http.status == 0) {
                 // await sleep(2000);
                 // showMessage('No connection to EMR API',null,10000000000);
                 alert('no connection to EMR API');
                 window.location = "/views/config.html";
-            }else {
-                showMessage('error' + http.status);
+            } else {
+                try {
+                    showMessage('error: ' + http.status);
+                } catch (s) {
+                    alert('error: ' + http.status);
+                }
             }
         }
     }
@@ -717,9 +768,9 @@ function checkCredentials(username, password) {
 
 function sleep(ms) {
     // return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
-  function getAPI() {
+function getAPI() {
 
     var url = '/config/config.json';
     var req = new XMLHttpRequest();
@@ -730,7 +781,7 @@ function sleep(ms) {
         apiPort = localStorage.getItem("port");
         sessionStorage.setItem("apiProtocol", "http");
         apiProtocol = "http";
-    }else {
+    } else {
         req.onreadystatechange = function () {
 
             if (this.readyState == 4) {
@@ -744,13 +795,13 @@ function sleep(ms) {
                         apiPort = data.apiPort;
                         sessionStorage.setItem("apiProtocol", data.apiProtocol);
                         apiProtocol = data.apiProtocol;
-                    } catch(e) {
+                    } catch (e) {
                         console.log("invalid json formatting");
                     }
 
-                }else if(this.status == 404) {
+                } else if (this.status == 404) {
                     console.log("config.json is missing from the /config folder");
-                }else {
+                } else {
                     console.log("error " + this.status);
                 }
             }
@@ -767,20 +818,22 @@ function sleep(ms) {
 }
 
 function GetApplicationReports() {
-  var dvTable = document.getElementById("generic_tabs");
-  dvTable.innerHTML = null;
-  dvTable.style = "width: 97% !important;";
+    var dvTable = document.getElementById("generic_tabs");
+    dvTable.innerHTML = null;
+    dvTable.style = "width: 97% !important;";
 
-  var obj = document.createElement("object");
-  obj.setAttribute("data", "/apps/ART/views/reports.html");
-  obj.setAttribute("type","text/html");
-  obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+    var obj = document.createElement("object");
+    obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/reports.html");
+    obj.setAttribute("type", "text/html");
+    obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
 
-  dvTable.appendChild(obj);
+    dvTable.appendChild(obj);
 }
 
 function print_and_redirect(url_forward, url_back) {
-  document.location = url_forward;
+    document.location = url_forward;
 }
 
-function finishRedirect(url) { document.location = url; }
+function finishRedirect(url) {
+    document.location = url;
+}

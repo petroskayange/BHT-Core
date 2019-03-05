@@ -220,7 +220,29 @@
 </style>
 
 <script>
-  const apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;
+var global_property = GlobalProperty({
+  authToken: sessionStorage.authorization,
+  path: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1'
+});
+
+function checkIfFilingNumberIsNotValid () {
+  global_property.isEnabled('use.filing.numbers', function (predicate) {
+    if (predicate) {
+      getFilingNumberType({
+        programId: sessionStorage.programID,
+        patientId: sessionStorage.patientID,
+        authToken: sessionStorage.authorization
+      });
+    } else {
+      finish(sessionStorage.patientID)
+    }
+  }, function (error) {
+    console.error(error);
+    finish(sessionStorage.patientID)
+  });
+};
+
+  var apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;
   var patientDead = false;
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
@@ -354,7 +376,7 @@
     sessionStorage.patientID = patient_id;
     document
       .getElementById("continue")
-      .setAttribute("onmousedown", "finish(" + patient_id + ")");
+      .setAttribute("onmousedown", "checkIfFilingNumberIsNotValid()");
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
     client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -574,15 +596,9 @@
     var table = document.createElement("table");
     table.setAttribute("class", "info-tables");
 
-    var tr = document.createElement("tr");
-    var td = document.createElement("td");
-    td.innerHTML = identifiers;
-    tr.appendChild(td);
-
-    var td = document.createElement("td");
-    td.innerHTML = " Previous Lab Orders";
-    tr.appendChild(td);
-    table.appendChild(tr);
+    var tbody = document.createElement('tbody');
+    tbody.setAttribute('id','vl-orders');
+    table.appendChild(tbody);
 
     var container = document.getElementById("section-body-2");
     container.appendChild(table);
@@ -785,7 +801,7 @@
       function(data) {
         if (data.art_duration !== "N/A") {
           document.getElementById(options.elementToUse).innerText =
-            data.art_duration + " Month(s)";
+            calculateMonthsOnART(data.art_start_date) + " month(s)";
         }
       },
       function(error, status) {
@@ -995,7 +1011,7 @@
     } else {
       sessionStorage.showWeightChart = true;
       sessionStorage.showPregnantQuestion = true;
-      nextEncounter(sessionStorage.patientID, 1);
+      nextEncounter(sessionStorage.patientID, sessionStorage.programID);
     }
   }
 
@@ -1043,79 +1059,80 @@
     return identifier;
   }
 
-  function getFilingNumberType(options = {}) {
-    const path = `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1/programs/${options.programId}/patients/${options.patientId}`;
-    GET(
-      {
-        url: path,
-        async: true,
-        headers: {
-          Authorization: options.authToken
-        }
-      },
-      {},
-      data => {
-        if (isFilingNumberDormant(data.filing_number.type)) {
-          showPrompt({
-            message: `Patient has a dormant filing number. Would you like to assign them an active one?`,
-            yesCallback: () => {
-              removePrompt();
-              redirectToFilingNumberPage(sessionStorage.patientID);
-            },
-            noCallback: removePrompt
-          });
-        }
+function getFilingNumberType() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
-          showPrompt({
-            message: `Patient does not have a filing number. Would you like to assign them one?`,
-            yesCallback: () => {
-              removePrompt();
-              redirectToFilingNumberPage(sessionStorage.patientID);
-            },
-            noCallback: removePrompt
-          });
-        }
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }
-
-  function isFilingNumberDormant(filingNumber) {
-    return filingNumber.match(/archived/gi);
-  }
-
-  function patientDoesNotHaveFilingNumber(filingNumber) {
-    return filingNumber === "N/A";
-  }
-
-  function redirectToFilingNumberPage(patientId) {
-    const url = `/apps/ART/views/file_numbers.html?patient_id=${patientId}`;
-    document.location = url;
-  }
-
-  const global_property = GlobalProperty({
-    authToken: sessionStorage.authorization,
-    path: `${apiProtocol}://${apiURL}:${apiPort}/api/v1`
-  })
-
-  window.onload = () => {
-    global_property.isEnabled(
-    'use.filing.numbers',
-    (predicate) => {
-      if (predicate) {
-        getFilingNumberType({
-          programId: sessionStorage.programID,
-          patientId: sessionStorage.patientID,
-          authToken: sessionStorage.authorization
-        })
-      }
-    },
-    (error) => {
-      console.error(error)
+  var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + options.programId + '/patients/' + options.patientId;
+  GET({
+    url: path,
+    async: true,
+    headers: {
+      Authorization: options.authToken
     }
-  )
+  }, {}, function (data) {
+    if (isFilingNumberDormant(data.filing_number.type)) {
+      showPrompt({
+        message: 'Patient has a dormant filing number. Would you like to assign them an active one?',
+        yesCallback: function yesCallback() {
+          removePrompt();
+          redirectToFilingNumberPage(sessionStorage.patientID);
+        },
+        noCallback: function () {
+          removePrompt()
+          finish(sessionStorage.patientID)
+        }
+      });
+    } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
+      showPrompt({
+        message: 'Patient does not have a filing number. Would you like to assign them one?',
+        yesCallback: function yesCallback() {
+          removePrompt();
+          redirectToFilingNumberPage(sessionStorage.patientID);
+        },
+        noCallback: function () {
+          removePrompt()
+          finish(sessionStorage.patientID)
+        }
+      });
+    } else {
+      finish(sessionStorage.patientID)
+    }
+  }, function (error) {
+    console.error(error);
+  });
+}
+
+function isFilingNumberDormant(filingNumber) {
+  return filingNumber.match(/archived/ig);
+}
+
+function patientDoesNotHaveFilingNumber(filingNumber) {
+  return filingNumber === "N/A";
+}
+
+function redirectToFilingNumberPage(patientId) {
+  var url = '/apps/ART/views/file_numbers.html?patient_id=' + patientId;
+  document.location = url;
+}
+
+function calculateMonthsOnART(art_start_date) {
+  var year = art_start_date.split('/')[2];
+  var month = art_start_date.split('/')[1];
+  var day = art_start_date.split('/')[0];
+  art_start_date = (year + '-' + month + '-' + day);
+                               
+  var date1 = new Date(sessionStorage.sessionDate);
+  var date2 = new Date(moment(art_start_date).format('YYYY-MM-DD'));
+  return dateDiffInMonths(date1, date2);
+}            
+
+function dateDiffInMonths(dt2, dt1) {
+  var months;
+  months = (dt2.getFullYear() - dt1.getFullYear()) * 12;
+  months -= dt1.getMonth() + 1;
+  months += dt2.getMonth();
+  return months <= 0 ? 0 : months;
 }
 </script>
+
+<script src="/assets/js/show.lab.orders.js"></script>

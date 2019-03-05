@@ -5,7 +5,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
     <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
-
+    <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
     <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
 
     <script language="javascript">
@@ -80,7 +80,7 @@
                 } else if (title.match(/Register guardian/i)) {
                     parametersPassed.relationship = data;
                 } else if (title.match(/Patient Type/i)) {
-                    parametersPassed.patient_type = data;
+                    parametersPassed.patient_type = (showTypeOfPatient() == true ? data : 'New');
                 } else if (title.match(/Facility name/i)) {
                     parametersPassed.facility_name = data;
                 }
@@ -110,17 +110,21 @@
         }
 
         function summary() {
+            var date_estimated = 0;
             if (__$('person_birth_year').value !== "Unknown") {
                 birth_date = new Date(__$('person_birth_year').value + "/" + __$('person_birth_month').value + "/" + __$('person_birth_day').value);
                 birth_date = moment(birth_date).format("DD/MMM/YYYY");
             } else if (__$('person_birth_year').value === "Unknown") {
+                date_estimated = 1;
                 birth_date = moment().subtract(parseInt(__$('person_age_estimate').value), "years").format("YYYY");
                 birth_date = birth_date + "-07-01";
             }
             if (__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value === "Unknown") {
+                date_estimated = 1;
                 birth_date = __$('person_birth_year').value + "-07-01";
             }
             if (__$('person_birth_year').value !== "Unknown" && __$('person_birth_month').value !== "Unknown" && __$('person_birth_day').value === "Unknown") {
+                date_estimated = 1;
                 birth_date = __$('person_birth_year').value + "-" + __$('person_birth_month').value + "-15";
             }
             parameter = {
@@ -128,7 +132,7 @@
                 family_name: __$('family_name').value,
                 gender: __$('gender').value,
                 birthdate: birth_date,
-                birthdate_estimated: __$('person_birth_year').value != 'Unknown' ? 0 : 1,
+                birthdate_estimated: date_estimated,
 
                 current_district: __$('current_district').value,
                 current_traditional_authority: __$('current_ta').value,
@@ -142,7 +146,7 @@
                 cell_phone_number: __$('cellphone').value,
                 patient_type: __$('patient_type').value,
                 facility_name: __$('facility_name').value,
-                relationship: __$('guardian_present').value,
+                relationship: (showTypeOfPatient() == true ? __$('guardian_present').value : 'No'),
             }
 
             var table = document.createElement('table');
@@ -193,8 +197,14 @@
                 } else if (attributes[i][0].match(/Home Village/i)) {
                     getObjects(td, attributes[i][1], "Village", "/villages?paginate=false&traditional_authority_id=" + document.getElementById('home_ta').value);
                 }
-
-
+                if (attributes[i][0].match(/Birthdate Estimated/i)) {
+                    if(parameter.birthdate_estimated == 1) {
+                        td.innerHTML = "Yes";
+                    }else {
+                        td.innerHTML = "No";
+                        getObjects(td, attributes[i][1], "Birthdate", "No");
+                    }
+                }
                 row.appendChild(td);
 
 
@@ -813,6 +823,7 @@
             <select allowFreeText="false" helpText="Type of patient"
                     name="patient_type"
                     id="patient_type"
+                    condition="showTypeOfPatient() == true;"
                     tt_onLoad="setNextButtonToGetInputValue('patient_type')"
                     tt_onUnLoad="sessionStorage.patient_type = __$('patient_type').value;"
                     key="gender">
@@ -823,15 +834,17 @@
 
             <select objectType="location" ajaxURL="/locations?name="
                     allowFreeText="true"
-                    condition="$('patient_type').value != 'New patient'"
+                    condition="$('patient_type').value != 'New patient' && showTypeOfPatient() == true"
                     field_type="alpha"
                     helpText="Please select facility name"
                     id="facility_name"
+                    tt_onLoad="setCurrentLocation();"
                     name="facility_name"></select>
 
             <select allowFreeText="false" helpText="Register guardian?"
                     id="guardian_present"
                     name="guardian_present"
+                    condition="showTypeOfPatient() == true;"
                     ttMatchFromBeginning="true">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -1007,6 +1020,7 @@
             encounter_type_name: 'REGISTRATION',
             encounter_type_id: 5,
             patient_id: patient_id,
+            program_id: sessionStorage.programID,
             encounter_datetime: encounter_datetime
         }
 
@@ -1023,8 +1037,14 @@
     }
 
     function postPatienttypeObs(encounter) {
-        var patient_type = $('patient_type');
-        var ans = patient_type_map[patient_type.value];
+        if(showTypeOfPatient() == true) {
+          var patient_type = $('patient_type');
+          var ans = patient_type_map[patient_type.value];
+        }else{
+          var ans = 'New patient';
+          ans = patient_type_map[ans];
+        }
+
         var obs = {
             encounter_id: encounter.encounter_id,
             observations: [
@@ -1049,6 +1069,11 @@
 
     function postClientParamaters(parametersPassed) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people';
+        if (parametersPassed.birthdate_estimated === "Yes") {
+            parametersPassed.birthdate_estimated = 1;
+        }else {
+            parametersPassed.birthdate_estimated = 0;
+        }
         var parametersPassed = JSON.stringify(parametersPassed);
         showStatus();
 
@@ -1076,7 +1101,7 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 201) {
                 var obj = JSON.parse(this.responseText);
-                if (__$('guardian_present').value == 'Yes') {
+                if (__$('guardian_present').value == 'Yes' && showTypeOfPatient() == true) {
                     document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
                 } else {
                     // document.location = "../patient_dashboard.html?patient_id=" + person_id;
@@ -1097,7 +1122,8 @@
         var http = new XMLHttpRequest();
         var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + person_id + "/programs/";
         var params = JSON.stringify({
-            program_id: 1,
+            program_id: sessionStorage.programID,
+            date_enrolled: moment(sessionStorage.sessionDate).format("YYYY-MM-DD")
         });
         http.open('POST', url, true);
         //Send the proper header information along with the request
@@ -1119,4 +1145,7 @@
         http.send(params);
     }
 
+  function showTypeOfPatient() {
+    return sessionStorage.programID == '1' ? true : false;
+  }
 </script>

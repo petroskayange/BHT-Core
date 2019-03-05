@@ -111,7 +111,7 @@
                 jQuery("#age").html("<a href='" + age_edit_url + "'>" + age + "</a>");
                 jQuery("#sex").html("<a href='" + gender_edit_url + "'>" + gender + "</a>");
                 jQuery("#current_residence").html("<a href='" + address_edit_url + "'>" + current_residence + "</a>");
-                jQuery("#land_mark").html("<a href='" + landmark_edit_url + "'>" + closest_landmark + "</a>");
+                jQuery("#land_mark").html("<a href='#'>" + closest_landmark + "</a>");
                 jQuery("#occupation").html("<a href='" + occupation_edit_url + "'>" + occupation + "</a>");
 
             }
@@ -809,24 +809,40 @@
         xhttp1.send();
     }
 
+    function getRelationships(){
+        var guardian_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+        guardian_url += "/api/v1/people/" + sessionStorage.patientID + "/relationships";
+        var guardian_details = "Add";
+        var xhttp1 = new XMLHttpRequest();
+        xhttp1.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                var relationships = JSON.parse(this.responseText);
+                if (relationships.length > 0){
+                    try {
+                        var person_name = relationships[0]["relation"]["names"][0];
+                        var relationship_type = (relationships[0]["type"]["b_is_to_a"]);
+                        guardian_details = person_name["given_name"] + " " + person_name["family_name"] + " (" + relationship_type + ")";
+
+                        jQuery("#guardian").html("<a href='#'>" + guardian_details + "</a>");
+                    } catch (e) {
+                        jQuery("#guardian").html("<a href='#'>??</a>");
+                    }
+                } else {
+                    var relationship_url = "/views/patient/relationships/guardian_search.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+                    jQuery("#guardian").html("<a href='" + relationship_url + "'>" + guardian_details + "</a>");
+                }
+
+            }
+        };
+        xhttp1.open("GET", guardian_url, true);
+        xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp1.setRequestHeader('Content-type', "application/json");
+        xhttp1.send();
+    }
+
+    getRelationships();
+
     function getVisitDates() {
-        /*
-        <tr class="toggler toggler1">
-            <td>
-                <button class="btn btn-primary btn-block"><i class="fa fa-print"></i> 2019-01-09</button>
-            </td>
-            <td>162</td>
-            <td>56.8</td>
-            <td>22.6</td>
-            <td>5A</td>
-            <td>On ART</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        *
-        * */
         var visits_dates_url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + '/visits';
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -849,19 +865,20 @@
                         "            <td style='width: 140px;'>\n" +
                         "                <button onclick='printPatientVisitSummary(&#39;" + visit_date + "&#39;)' class=\"btn btn-primary btn-block\"><i class=\"fa fa-print\"></i> " + visit_date + "</button>\n" +
                         "            </td>\n" +
-                        "            <td id='" + height_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + weight_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + bmi_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + regimen_id + "' style='width: 70px;'>&nbsp;</td>\n" +
-                        "            <td id='" + outcome_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + adherence_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + side_effects_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + pills_remaining_id + "'>&nbsp;</td>\n" +
-                        "            <td id='" + pills_gave_id + "'>&nbsp;</td>\n" +
+                        "            <td id='" + height_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + weight_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + bmi_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + regimen_id + "' class='loader' style='width: 70px;'>&nbsp;</td>\n" +
+                        "            <td id='" + outcome_id + "' class='loader' >&nbsp;</td>\n" +
+                        "            <td id='" + adherence_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + side_effects_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_remaining_id + "' class='loader'>&nbsp;</td>\n" +
+                        "            <td id='" + pills_gave_id + "' class='loader'>&nbsp;</td>\n" +
                         "        </tr>"
                 }
 
                 jQuery("#mastercard").append(html);
+                jQuery(".loader").html("<img src='/assets/images/ajax-loader.gif'/>");
                 for (var i = 0; i <= visits.length - 1; i++) {
                     var visit_date = visits[i];
                     loadHeight(visit_date);
@@ -948,6 +965,7 @@
 
         var bmi = ""
         var xhttp = new XMLHttpRequest();
+        var field_id = "#" + visit_date + "_bmi";
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                 var bmi_observations = JSON.parse(this.responseText);
@@ -957,8 +975,9 @@
                     if (!bmi) {
                         bmi = observation.value_text;
                     }
-                    var field_id = "#" + visit_date + "_bmi";
                     jQuery(field_id).html("<a href='#'>" + bmi + "</a>");
+                } else{
+                    jQuery(field_id).html("<a href='#'>&nbsp;</a>");
                 }
             }
         };
@@ -974,6 +993,9 @@
         regimen_url += "programs/1/patients/" + sessionStorage.patientID + "?date=";
         regimen_url += visit_date;
 
+        var regimen_id = "#" + visit_date + "_regimen";
+        var outcome_id = "#" + visit_date + "_outcome";
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
@@ -982,10 +1004,11 @@
                     var current_regimen = data["current_regimen"];
                     var current_outcome = data["current_outcome"];
 
-                    var regimen_id = "#" + visit_date + "_regimen";
-                    var outcome_id = "#" + visit_date + "_outcome";
                     jQuery(regimen_id).html("<a href='#'>" + current_regimen + "</a>");
                     jQuery(outcome_id).html("<a href='#'>" + current_outcome + "</a>");
+                } else {
+                    jQuery(regimen_id).html("<a href='#'>&nbsp;</a>");
+                    jQuery(outcome_id).html("<a href='#'>&nbsp;</a>");
                 }
             }
         };
@@ -1000,6 +1023,10 @@
         var mastercard_data_url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/";
         mastercard_data_url += "programs/1/patients/" + sessionStorage.patientID + "/mastercard_data?date=";
         mastercard_data_url += visit_date;
+        var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+        var pills_gave_id = "#" + visit_date + "_pills_gave";
+        var side_effects_id = "#" + visit_date + "_side_effects";
+        var adherence_id = "#" + visit_date + "_adherence";
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -1007,10 +1034,7 @@
                 var mastercard_data = JSON.parse(this.responseText);
                 var adherence = mastercard_data["adherence"];
                 if (adherence.length > 0) {
-                    var adherence_id = "#" + visit_date + "_adherence";
-
                     var adherence_data = [];
-                    var adherence_id = "#" + visit_date + "_adherence";
                     for (var key in adherence) {
                         var drug_name = adherence[key]["short_name"];
                         var adherence_percent = adherence[key]["adherence"];
@@ -1021,10 +1045,12 @@
                     }
                     adherence_data = adherence_data.join("<br />");
                     jQuery(adherence_id).html("<a href='#'>" + adherence_data + "</a>");
+                } else{
+                    jQuery(adherence_id).html("<a href='#'>&nbsp;</a>");
                 }
                 var pills_brought = mastercard_data["pills_brought"];
                 if (pills_brought.length > 0) {
-                    var pills_remaining_id = "#" + visit_date + "_pills_remaining";
+
                     var pills_brought_data = [];
                     for (var key in pills_brought) {
                         var drug_name = pills_brought[key]["short_name"];
@@ -1036,12 +1062,13 @@
                     }
                     pills_brought_data = pills_brought_data.join("<br />");
                     jQuery(pills_remaining_id).html("<a href='#'>" + pills_brought_data + "</a>");
+                } else{
+                    jQuery(pills_remaining_id).html("<a href='#'>&nbsp;</a>");
                 }
 
                 var pills_given = mastercard_data["pills_given"];
                 if (pills_given.length > 0) {
                     var pills_given_data = [];
-                    var pills_gave_id = "#" + visit_date + "_pills_gave";
                     for (var key in pills_given) {
                         var drug_name = pills_given[key]["short_name"];
                         var quantity = pills_given[key]["quantity"];
@@ -1052,13 +1079,16 @@
                     }
                     pills_given_data = pills_given_data.join("<br />");
                     jQuery(pills_gave_id).html("<a href='#'>" + pills_given_data + "</a>");
+                } else{
+                    jQuery(pills_gave_id).html("<a href='#'>&nbsp;</a>");
                 }
 
                 var side_effects = mastercard_data["side_effects"];
                 if (side_effects.length > 0) {
-                    var side_effects_id = "#" + visit_date + "_side_effects";
                     side_effects = side_effects.join(", ");
                     jQuery(side_effects_id).html("<a href='#'>" + side_effects + "</a>");
+                } else{
+                    jQuery(side_effects_id).html("<a href='#'>&nbsp;</a>");
                 }
 
             }
@@ -1189,6 +1219,10 @@
     body{
         overflow: hidden;
     }
+    .loader img{
+        display: block;
+        margin: 0 auto; /*center image*/
+    }
 </style>
 
 
@@ -1243,7 +1277,7 @@
                     <td colspan="2"><b>Agrees to followup</b></td>
                 </tr>
                 <tr class="toggler toggler1">
-                    <td colspan="4">&nbsp;</td>
+                    <td colspan="4" id="guardian">&nbsp;</td>
                     <td colspan="4" id="hiv_test">&nbsp;</td>
                     <td colspan="2" id="agrees_to_follow_up">&nbsp;</td>
                 </tr>
@@ -1315,5 +1349,4 @@
 
     </div>
 </div>
-
 </body>

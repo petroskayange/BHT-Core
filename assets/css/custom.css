@@ -269,3 +269,26 @@ ul li.odd {
     font-family: "Nimbus Sans L","Arial Narrow",sans-serif;
     font-size: 1.2em;
 }
+
+.current-time{
+    position: absolute;
+    padding-left: 5px;
+    font-size: 14px;
+    font-family: Orbitron;
+    letter-spacing: 7px;
+    font-weight: bold;
+    background-color: black;
+    top: 20px;
+    padding-left: 10px;
+    margin-left: 30px;
+}
+
+.time{
+    color: white;
+    margin-top: 10px;
+    position: relative !important;
+}
+
+.hours, .minutes{
+    color: white;
+}
