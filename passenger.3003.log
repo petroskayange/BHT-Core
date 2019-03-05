@@ -453,3 +453,48 @@
 [ N 2019-02-21 21:46:59.3761 2857/Tg Ser/Server.h:558 ]: [ApiServer] Shutdown finished
 [ E 2019-02-21 21:46:59.3880 2857/T1 age/Cor/TelemetryCollector.h:455 ]: Error contacting anonymous telemetry server: Could not resolve host: anontelemetry.phusionpassenger.com
 [ N 2019-02-21 21:46:59.4404 2857/T1 age/Cor/CoreMain.cpp:1324 ]: Passenger core shutdown finished
+[ N 2019-02-26 08:42:20.0687 2275/T1 age/Wat/WatchdogMain.cpp:1366 ]: Starting Passenger watchdog...
+[ N 2019-02-26 08:42:20.1326 2278/T1 age/Cor/CoreMain.cpp:1339 ]: Starting Passenger core...
+[ N 2019-02-26 08:42:20.1328 2278/T1 age/Cor/CoreMain.cpp:256 ]: Passenger core running in multi-application mode.
+[ N 2019-02-26 08:42:20.1721 2278/T1 age/Cor/CoreMain.cpp:1014 ]: Passenger core online, PID 2278
+2019/02/26 08:42:22 [error] 2289#0: *4 directory index of "/home/patson/Desktop/BHT-Core/public/" is forbidden, client: 127.0.0.1, server: _, request: "HEAD / HTTP/1.1", host: "0.0.0.0"
+[ E 2019-02-26 08:42:42.2619 2278/T5 age/Cor/SecurityUpdateChecker.h:507 ]: Security update check failed: Couldn't resolve host name while connecting to https://securitycheck.phusionpassenger.com/v1/check.json (check your DNS) (next check in 24 hours)
+2019/02/26 08:43:18 [error] 2289#0: *5 "/home/patson/Desktop/BHT-Core/public/api/v1/_health/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: _, request: "HEAD /api/v1/_health/ HTTP/1.1", host: "0.0.0.0:3003", referrer: "http://localhost:3004/views/login.html"
+2019/02/26 08:43:23 [error] 2289#0: *5 "/home/patson/Desktop/BHT-Core/public/api/v1/_health/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: _, request: "HEAD /api/v1/_health/ HTTP/1.1", host: "0.0.0.0:3003", referrer: "http://localhost:3004/views/login.html"
+2019/02/26 08:43:41 [error] 2289#0: *5 "/home/patson/Desktop/BHT-Core/public/api/v1/_health/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: _, request: "HEAD /api/v1/_health/ HTTP/1.1", host: "0.0.0.0:3003", referrer: "http://localhost:3004/views/login.html"
+2019/02/26 08:43:46 [error] 2289#0: *5 "/home/patson/Desktop/BHT-Core/public/api/v1/_health/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: _, request: "HEAD /api/v1/_health/ HTTP/1.1", host: "0.0.0.0:3003", referrer: "http://localhost:3004/views/login.html"
+2019/02/26 08:44:43 [error] 2289#0: *5 "/home/patson/Desktop/BHT-Core/public/api/v1/_health/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: _, request: "HEAD /api/v1/_health/ HTTP/1.1", host: "0.0.0.0:3003", referrer: "http://localhost:3004/views/login.html"
+
+[ N 2019-02-26 08:46:41.4522 2278/T9 age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down... (send signal 2 more time(s) to force shutdown)
+[ N 2019-02-26 08:46:41.4523 2278/T1 age/Cor/CoreMain.cpp:1245 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected...
+[ N 2019-02-26 08:46:41.4526 2278/Ta Ser/Server.h:902 ]: [ServerThr.2] Freed 0 spare client objects
+[ N 2019-02-26 08:46:41.4526 2278/T9 Ser/Server.h:902 ]: [ServerThr.1] Freed 0 spare client objects
+[ N 2019-02-26 08:46:41.4526 2278/Tc Ser/Server.h:902 ]: [ServerThr.3] Freed 0 spare client objects
+[ N 2019-02-26 08:46:41.4527 2278/Ta Ser/Server.h:558 ]: [ServerThr.2] Shutdown finished
+[ N 2019-02-26 08:46:41.4527 2278/T9 Ser/Server.h:558 ]: [ServerThr.1] Shutdown finished
+[ N 2019-02-26 08:46:41.4527 2278/Tc Ser/Server.h:558 ]: [ServerThr.3] Shutdown finished
+[ N 2019-02-26 08:46:41.4528 2278/Te Ser/Server.h:902 ]: [ServerThr.4] Freed 0 spare client objects
+[ N 2019-02-26 08:46:41.4528 2278/Te Ser/Server.h:558 ]: [ServerThr.4] Shutdown finished
+[ N 2019-02-26 08:46:41.4674 2278/Tg Ser/Server.h:902 ]: [ApiServer] Freed 0 spare client objects
+[ N 2019-02-26 08:46:41.4675 2278/Tg Ser/Server.h:558 ]: [ApiServer] Shutdown finished
+[ N 2019-02-26 08:46:44.4202 2278/T1 age/Cor/CoreMain.cpp:1324 ]: Passenger core shutdown finished
+[ N 2019-02-26 08:46:44.8801 2648/T1 age/Wat/WatchdogMain.cpp:1366 ]: Starting Passenger watchdog...
+[ N 2019-02-26 08:46:44.8929 2651/T1 age/Cor/CoreMain.cpp:1339 ]: Starting Passenger core...
+[ N 2019-02-26 08:46:44.8930 2651/T1 age/Cor/CoreMain.cpp:256 ]: Passenger core running in multi-application mode.
+[ N 2019-02-26 08:46:44.9013 2651/T1 age/Cor/CoreMain.cpp:1014 ]: Passenger core online, PID 2651
+2019/02/26 08:46:46 [error] 2671#0: *4 directory index of "/home/patson/Desktop/BHT-Core/public/" is forbidden, client: 127.0.0.1, server: _, request: "HEAD / HTTP/1.1", host: "0.0.0.0"
+[ N 2019-02-26 08:46:48.8774 2651/T5 age/Cor/SecurityUpdateChecker.h:519 ]: Security update check: no update found (next check in 24 hours)
+
+[ N 2019-02-26 08:47:03.5431 2651/T8 age/Cor/CoreMain.cpp:671 ]: Signal received. Gracefully shutting down... (send signal 2 more time(s) to force shutdown)
+[ N 2019-02-26 08:47:03.5431 2651/T1 age/Cor/CoreMain.cpp:1245 ]: Received command to shutdown gracefully. Waiting until all clients have disconnected...
+[ N 2019-02-26 08:47:03.5432 2651/T8 Ser/Server.h:902 ]: [ServerThr.1] Freed 0 spare client objects
+[ N 2019-02-26 08:47:03.5432 2651/T8 Ser/Server.h:558 ]: [ServerThr.1] Shutdown finished
+[ N 2019-02-26 08:47:03.5432 2651/Ta Ser/Server.h:902 ]: [ServerThr.2] Freed 0 spare client objects
+[ N 2019-02-26 08:47:03.5432 2651/Ta Ser/Server.h:558 ]: [ServerThr.2] Shutdown finished
+[ N 2019-02-26 08:47:03.5432 2651/Te Ser/Server.h:902 ]: [ServerThr.4] Freed 0 spare client objects
+[ N 2019-02-26 08:47:03.5432 2651/Te Ser/Server.h:558 ]: [ServerThr.4] Shutdown finished
+[ N 2019-02-26 08:47:03.5433 2651/Tc Ser/Server.h:902 ]: [ServerThr.3] Freed 0 spare client objects
+[ N 2019-02-26 08:47:03.5433 2651/Tc Ser/Server.h:558 ]: [ServerThr.3] Shutdown finished
+[ N 2019-02-26 08:47:03.5433 2651/Tg Ser/Server.h:902 ]: [ApiServer] Freed 0 spare client objects
+[ N 2019-02-26 08:47:03.5433 2651/Tg Ser/Server.h:558 ]: [ApiServer] Shutdown finished
+[ N 2019-02-26 08:47:04.5866 2651/T1 age/Cor/CoreMain.cpp:1324 ]: Passenger core shutdown finished
