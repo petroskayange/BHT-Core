@@ -6,6 +6,10 @@ var Concept = function () {
     concept = data
   }
 
+  function getConceptIdByName (conceptName) {
+    return CONCEPT_IDS[conceptName] ? CONCEPT_IDS[conceptName] : null
+  } 
+
   const CONCEPT_IDS = {
     'Cough lasting >1 week': 2762,
     'Cough lasting >2 weeks': 2573,
@@ -56,6 +60,7 @@ var Concept = function () {
 
   return {
     create,
+    getConceptIdByName,
     CONCEPT_IDS
   }
 }()
