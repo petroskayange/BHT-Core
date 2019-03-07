@@ -17,6 +17,7 @@ sessionStorage.setItem("backupPatientID", id);
 admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 // alert(window.innerHeight);
@@ -550,6 +551,14 @@ function redirect(id) {
       obj.setAttribute("type", "text/html");
       obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
       dvTable.appendChild(obj);
+    }
+    //view-drug-management-settings
+    if (id === "view-drug-management-settings") {
+        var obj = document.createElement("object");
+        obj.setAttribute("data", "/apps/" + sessionStorage.applicationFolder + "/views/drug_management_settings.html");
+        obj.setAttribute("type", "text/html");
+        obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
+        dvTable.appendChild(obj);
     }
     if (id === "report-1") {
     }
