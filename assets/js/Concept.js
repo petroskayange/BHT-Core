@@ -7,7 +7,7 @@ var Concept = function () {
   }
 
   function getConceptIdByName (conceptName) {
-    return CONCEPT_IDS[conceptName] ? CONCEPT_IDS[conceptName] : null
+    return CONCEPT_IDS[conceptName] || null
   } 
 
   const CONCEPT_IDS = {
