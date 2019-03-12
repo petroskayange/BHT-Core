@@ -329,7 +329,7 @@ function checkIfFilingNumberIsNotValid () {
           var locals = JSON.parse(this.responseText)["locals"];
           if (remotes.length > 1 || locals.length > 1) {
             location.href = "/views/npid_duplicates.html?health_id=" + patient_id;
-          }else if (locals.length >= 1 && remotes >=1) {
+          }else if (locals.length >= 1 && remotes.length >=1) {
             location.href = "/views/npid_duplicates.html?health_id=" + patient_id;
           } else if (locals.length == 1) {
             populatePatient(locals[0], locals[0]);
