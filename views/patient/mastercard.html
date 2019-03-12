@@ -16,7 +16,7 @@
       url = new URL(url);
       var patient_id = url.searchParams.get("patient_id");
       if(patient_id != undefined)
-        sessionStorage.patientID = patient_id;
+         patient_id = sessionStorage.patientID;
 
     }catch(i){
     }
