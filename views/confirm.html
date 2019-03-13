@@ -779,12 +779,20 @@ function checkIfFilingNumberIsNotValid () {
   }
 
   function buildProgramInfo(patient_id) {
-    document.getElementById("section-body-3").innerHTML +=
-      "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-      "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
-    populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
-    populateArtDuration({ elementToUse: "artDuration" }, patient_id);
-    populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+    if (sessionStorage.programID === "12"){
+      document.getElementById("section-body-3").innerHTML +=
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        "</tr></table>";
+      populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      
+    }else if (sessionStorage.programID === "1"){
+      document.getElementById("section-body-3").innerHTML +=
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
+      populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      populateArtDuration({ elementToUse: "artDuration" }, patient_id);
+      populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+    }
   }
 
   function populateNextAppointmentDate(options, patient_id) {
