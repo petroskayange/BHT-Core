@@ -253,7 +253,10 @@
     modalConfirm(function (confirm) {
         if (confirm) {
             if(sessionStorage.portal_enabled === "true") {
-                window.location.href = sessionStorage.portal_location;
+                
+                var portal_location = sessionStorage.portal_location;
+                sessionStorage.clear();
+                window.location = portal_location;
             }else {
                 window.location = "/views/login.html";
             }

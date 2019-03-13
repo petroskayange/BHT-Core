@@ -252,7 +252,7 @@ function checkIfFilingNumberIsNotValid () {
       "labs",
       "Program info",
       "Outcome",
-      "Gurdian(s)"
+      "Guardian(s)"
     ];
 
     var count = 0;
@@ -328,6 +328,8 @@ function checkIfFilingNumberIsNotValid () {
           var remotes = JSON.parse(this.responseText)["remotes"];
           var locals = JSON.parse(this.responseText)["locals"];
           if (remotes.length > 1 || locals.length > 1) {
+            location.href = "/views/npid_duplicates.html?health_id=" + patient_id;
+          }else if (locals.length >= 1 && remotes.length >=1) {
             location.href = "/views/npid_duplicates.html?health_id=" + patient_id;
           } else if (locals.length == 1) {
             populatePatient(locals[0], locals[0]);
@@ -777,12 +779,20 @@ function checkIfFilingNumberIsNotValid () {
   }
 
   function buildProgramInfo(patient_id) {
-    document.getElementById("section-body-3").innerHTML +=
-      "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-      "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
-    populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
-    populateArtDuration({ elementToUse: "artDuration" }, patient_id);
-    populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+    if (sessionStorage.programID === "12"){
+      document.getElementById("section-body-3").innerHTML +=
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        "</tr></table>";
+      populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      
+    }else if (sessionStorage.programID === "1"){
+      document.getElementById("section-body-3").innerHTML +=
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
+      populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      populateArtDuration({ elementToUse: "artDuration" }, patient_id);
+      populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+    }
   }
 
   function populateNextAppointmentDate(options, patient_id) {
