@@ -24,27 +24,45 @@ function submitParameters(parameters, url, returnToFunction) {
         
           }
       }else if (this.status == 404 || this.status == 400 || this.status == 500) {
-        alertify.alert('An error has occured', 'Error' + this.status , function(){ alertify.success('Ok'); });
-  
+        var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
+        genericError(message);
+      }else if (this.status == 401) {
+        var message = "Error " + this.status + ". You have been logged out ,Click yes to continue to patient dashboard or No to go to the main dashboard";
+        genericError(message);
       }
       }else {
-        
-        alertify.alert('An error has occured', 'Error ' + this.status + ' ' + this.responseText, function(){
-           var submitCover = document.getElementById('submit-cover');
-           document.getElementsByClassName("ajs-button ajs-ok")[0].removeAttribute("style");
-           document.getElementById("innerPop").style.display = "none";
-           document.getElementById("popupBox").style.display = "none";
-           if (submitCover){
-               submitCover.parentNode.removeChild(submitCover);
-           }
-          });
+        var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
+        genericError(message);
       }
-      console.log(this.status);
   };
   xhttp.open("POST", url, true);
   xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
   xhttp.setRequestHeader('Content-type', "application/json");
   xhttp.send(parametersPassed);
+}
+
+function genericError(message) {
+
+try {
+  document.getElementById("innerPop").style.display = "none";
+  document.getElementById("popupBox").style.display = "none";         
+  confirmCancelEntryWithMessage(null, message , tt_cancel_destination);
+}catch(e) {
+  alertify.confirm(message, function(){ 
+    window.location = tt_cancel_destination;
+  }, function(){ 
+    window.location = "/";  
+    }
+  ).set(
+    { 
+      labels: 
+      {
+        ok     : "Yes",
+        cancel : "No"
+      } 
+    }
+  );
+}
 }
 
 function buildWall() {
