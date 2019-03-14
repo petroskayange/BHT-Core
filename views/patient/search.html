@@ -60,7 +60,7 @@ function validateName(element) {
 
   __$("nextButton").removeAttribute("onmousedown");
 
-  if(sessionStorage.programID === "12" && field_name === "family_name"){
+  if(sessionStorage.programID === "12" || sessionStorage.programID === "11" && field_name === "family_name"){
     
     __$('nextButton').children[0].innerHTML = "Finish";
 
@@ -78,7 +78,7 @@ function validateName(element) {
    
     }else if (value.match(validRegEx) != null) {
 
-      if(sessionStorage.programID === "12" && field_name === "family_name"){
+      if(sessionStorage.programID === "12" || sessionStorage.programID === "11" && field_name === "family_name"){
        
         submitSearchResults();
         return;
@@ -120,7 +120,7 @@ function validateName(element) {
 <script type="text/javascript">
 
   function  submitSearchResults(){
-    if(sessionStorage.programID === "12"){
+    if(sessionStorage.programID === "12" || sessionStorage.programID === "11"){
       getInput();
       var gender = "F";
     }else{
