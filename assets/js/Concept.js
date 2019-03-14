@@ -11,7 +11,7 @@ var Concept = function () {
   } 
 
   const CONCEPT_IDS = {
-    'Cough lasting >1 week': 2762,
+    'Cough lasting >1 week': 9694,
     'Cough lasting >2 weeks': 2573,
     'Cough (any duration)': 8261,
     'Weight loss': 832,
