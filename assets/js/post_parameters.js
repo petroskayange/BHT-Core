@@ -23,7 +23,7 @@ function submitParameters(parameters, url, returnToFunction) {
           }catch(e) {
         
           }
-      }else if (this.status == 404 || this.status == 400 || this.status == 500) {
+      }else if (this.status == 404 || this.status == 500) {
         var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
         genericError(message);
       }else if (this.status == 401) {
@@ -31,8 +31,8 @@ function submitParameters(parameters, url, returnToFunction) {
         genericError(message);
       }
       }else {
-        var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
-        genericError(message);
+        // var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
+        // genericError(message);
       }
   };
   xhttp.open("POST", url, true);
