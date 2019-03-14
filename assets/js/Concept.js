@@ -40,7 +40,8 @@ var Concept = function () {
     MINING_COMMUNITIES: 9696,
     ART_CLINIC: 7054,
     POSITIVE: 703,
-    PRISONER: 9734
+    PRISONER: 9734,
+    WARD: 7829
   }
 
   function create (data = {}) {
