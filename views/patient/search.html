@@ -44,18 +44,55 @@
 <script type="text/javascript">
 var tt_cancel_destination = "/";
 
-function validateName() {
-__$("nextButton").removeAttribute("onmousedown");
-__$("nextButton").onmousedown = function(){
+var url = window.location.href;
+url = new URL(url);
+var merge = url.searchParams.get("merge");
+if(merge == null)
+  merge = '';
+
+if(merge.length > 0) {
+  tt_cancel_destination = '/views/data_management/merge_clients.html'
+}
+
+function validateName(element) {
+
+  field_name = __$('touchscreenInput'+tstCurrentPage).name;
+
+  __$("nextButton").removeAttribute("onmousedown");
+
+  if(sessionStorage.programID === "12" && field_name === "family_name"){
+    
+    __$('nextButton').children[0].innerHTML = "Finish";
+
+  }
+  
+  __$("nextButton").onmousedown = function(){
 
     validRegEx = /^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
+    
     value = $('touchscreenInput' + tstCurrentPage).value;
-   if(value.match(validRegEx) == null) {
-     showMessage("Invalid name input");
-   }else if (value.match(validRegEx) != null) {
-    gotoNextPage();
-   }
+   
+    if(value.match(validRegEx) == null) {
+     
+      showMessage("Invalid name input");
+   
+    }else if (value.match(validRegEx) != null) {
+
+      if(sessionStorage.programID === "12" && field_name === "family_name"){
+       
+        submitSearchResults();
+        return;
+     
+      }else{
+      
+        gotoNextPage();
+     
+      }
+   
+    }
+  
   }
+
 }
 
 </script>
@@ -83,9 +120,24 @@ __$("nextButton").onmousedown = function(){
 <script type="text/javascript">
 
   function  submitSearchResults(){
-     var gender = __$('gender').value;
+    if(sessionStorage.programID === "12"){
+      getInput();
+      var gender = "F";
+    }else{
+      var gender = __$('gender').value;
+    }
+
+    if(merge.length > 0) {
+      var url = '/views/data_management/merge_clients.html'
+      url += "?gender=" + gender;
+      url += "&first_name=" + document.getElementById('given_name').value;
+      url += "&last_name=" + document.getElementById('family_name').value;
+      url += "&side=" + merge;
+      document.location = url;
+    }else{
      sessionStorage.setItem('gender', gender);
      document.location = "search_results.html"; 
+    }
   }
 
   function changeNextButton(){
@@ -94,8 +146,7 @@ __$("nextButton").onmousedown = function(){
 
   value = $('touchscreenInput' + tstCurrentPage).value;
  if (value.length  > 0) {
-
-           submitSearchResults();
+   submitSearchResults();
  }else {
    showMessage("You must enter a value to continue");
  }

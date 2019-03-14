@@ -1,3 +1,5 @@
+
+
 var targetInput;
 
 function lookForTag() {
@@ -26,7 +28,7 @@ function popupVK(e) {
   div.setAttribute('id','virtual-keyboard');
   div.setAttribute('class','keyboard');
   var divStyle = "background-color: #F4F4F4;border: 2px solid #E0E0E0;"
-  divStyle += "border-radius: 15px;height: 300px;position: absolute;";
+  divStyle += "border-radius: 15px;height: 350px;position: absolute;";
   divStyle += "z-index: 991;width: 820px;";
 
   var l = e.getBoundingClientRect().left;
@@ -48,7 +50,7 @@ function keyboardKeys(e, table) {
     ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
     ["q","w","e","r","t","y","u","i","o","p"],
     ["a","s","d","f","g","h","j","k","l","Del."],
-    ["z","x","c","v","b","n","m", "Hide","Caps"]
+    ["z","x","c","v","b","n","m", "Space","Caps","Hide"]
   ];
 
   //var table = document.createElement("div");
@@ -84,6 +86,8 @@ function keyPressed(e) {
     if(value_string.match(/Del/i)){
       inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);
     }else if(e.innerHTML.match(/Caps/i)){
+    }else if(e.innerHTML.match(/Space/i)){
+      inputBox.value += " ";
     }else if(e.innerHTML.match(/Hide/i)){
       var vl = document.getElementById('virtual-keyboard');
       var w = document.getElementsByTagName('body')[0];
@@ -98,3 +102,5 @@ function keyPressed(e) {
   }catch(x) { }
 
 }
+
+
