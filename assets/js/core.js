@@ -283,7 +283,7 @@ function getName(user_id, url, port, protocol) {
                 allRoles = result.roles[index].role + ", " + allRoles;
             }
             var role = result.roles.role;
-            var date_created = result.date_created;system_settings
+            var date_created = result.date_created;
             var given_name = result.person.names[0].given_name;
             var family_name = result.person.names[0].family_name;
             showUser(username, given_name, family_name, allRoles, date_created);
