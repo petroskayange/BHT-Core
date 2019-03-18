@@ -305,4 +305,23 @@
     sessionStorage.removeItem('user_family_name');
     sessionStorage.removeItem('user_given_name');
   }
+
+  function editUser () {
+    document.location = '/views/users/edit_user.html?user_id=' + userId;
+  }
+
+  function editPassword () {
+    document.location = '/views/users/change_password.html?user_id=' + userId;
+  }
+
+  function editRole () {
+    document.location = '/views/users/change_role.html?user_id=' + userId;
+  }
+
+  getUser(
+    {
+      url: `${root}/users/${userId}`,
+      authToken: sessionStorage.authorization,
+    }
+  )
 </script>
