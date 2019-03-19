@@ -2,6 +2,7 @@
         defer="true"></script>
 <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/dashboard.js"></script>
 
 <link rel="stylesheet" href="/assets/css/vitals-keypad.css" type="text/css">
 <script type="text/javascript" src="/assets/js/vitals-keypad.js"></script>
@@ -15,6 +16,7 @@
 <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
 <script type="text/javascript" src="/assets/js/demographics.js"></script>
 <script type="text/javascript" src="/apps/ANC/assets/js/common.js"></script>
+<script type="text/javascript" src="/apps/ANC/assets/js/vitals.js"></script>
 
 <style>
 
@@ -703,7 +705,9 @@
 
         if(sessionStorage.programID == 12) {
             // Validations specifically FOR ANC
-
+            // Moved to vitals javascript file
+            // with new error messages.
+            /**
             if (bp_systolic >= 140 && bp_diastolic >= 90) {
 
                 showMessage("Client is at risk of pre-eclampsia, refer for urine protein test.");
@@ -731,6 +735,7 @@
                 return true;
 
             }
+            */
 
 
         } else {
