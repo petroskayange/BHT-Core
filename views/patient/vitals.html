@@ -228,6 +228,7 @@
     }
 
     function getHeight(patient_id) {
+        sessionStorage.removeItem("currentHeight");
         var url = apiProtocol + "://" + apiURL + ":" + apiPort;
         url += "/api/v1/observations?person_id=" + patient_id + "&concept_id=5090";
         url += "&date=" + moment(new Date(sessionStorage.sessionDate)).format('YYYY-MM-DD');
@@ -258,7 +259,7 @@
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send();
     }
-
+    
     getHeight(patientID);
 </script>
 
@@ -1101,6 +1102,7 @@
 
             if (this.readyState == 4 && this.status == 204) {
                 modal.style.display = "none";
+                sessionStorage.removeItem("currentHeight");
                 getHeight(sessionStorage.patientID);
             } else {
             }
