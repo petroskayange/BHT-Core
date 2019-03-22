@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+    </script>
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+</style>
+
+<script type="text/javascript">
+var tt_cancel_destination = "/";
+
+var url = window.location.href;
+url = new URL(url);
+var merge = url.searchParams.get("merge");
+if(merge == null)
+  merge = '';
+
+if(merge.length > 0) {
+  tt_cancel_destination = '/views/data_management/merge_clients.html'
+}
+
+function validateName(element) {
+
+  field_name = __$('touchscreenInput'+tstCurrentPage).name;
+
+  __$("nextButton").removeAttribute("onmousedown");
+
+  if(sessionStorage.programID === "12" && field_name === "family_name"){
+    
+    __$('nextButton').children[0].innerHTML = "Finish";
+
+  }
+  
+  __$("nextButton").onmousedown = function(){
+
+    validRegEx = /^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
+    
+    value = $('touchscreenInput' + tstCurrentPage).value;
+   
+    if(value.match(validRegEx) == null) {
+     
+      showMessage("Invalid name input");
+   
+    }else if (value.match(validRegEx) != null) {
+
+      if(sessionStorage.programID === "12" && field_name === "family_name"){
+       
+        submitSearchResults();
+        return;
+     
+      }else{
+      
+        gotoNextPage();
+     
+      }
+   
+    }
+  
+  }
+
+}
+
+</script>
+
+
+<form action="search_results.html" method="POST" id="search_results">
+    
+  
+    <select allowFreeText="false" helpText="Test Without Results" id="tests" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+      <option value="M">FBC</option>
+      <option value="F">Viral Load</option></select>
+
+    <select allowFreeText="false" helpText="Select Test Measures" id="tests" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+      <option value="M">WBC</option>
+      <option value="F">Viral Load</option></select>
+
+      <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="getInput();"
+      helpText="Enter Test Result"  key="given_name" 
+      allowFreeText="true" ajaxURL="/search/given_name?search_string=" />
+
+</form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+
