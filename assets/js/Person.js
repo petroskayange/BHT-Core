@@ -41,10 +41,30 @@ var Person = function () {
     return isOfGender('F') && isAgedBetween(9, 55)
   }
 
+  function assignTbRegistrationNumber (options = {}) {
+    fetch (`${apiRoot}/patients/${options.personId}/assign_tb_number`, {
+      method: 'GET',
+      headers: {
+        'Authorization': sessionStorage.authorization
+      }
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          options.success(response)
+        } else {
+          options.fail(response)
+        }
+      })
+      .catch((error) => {
+        options.fail(error)
+      })
+  }
+
   return {
     init,
     get,
     setAge,
-    isEligibleForPregnancyQuestion
+    isEligibleForPregnancyQuestion,
+    assignTbRegistrationNumber
   }
 }()

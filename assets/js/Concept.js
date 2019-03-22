@@ -50,7 +50,9 @@ var Concept = function () {
     HIV_STATUS: 3753,
     HIV_TEST_DONE_TODAY: 9568,
     NOT_DONE: 2475,
-    REASON_HIV_TEST_NOT_DONE: 9569
+    REASON_HIV_TEST_NOT_DONE: 9569,
+    LIVES_NEAR: 9166,
+    TB_SYMPTOMS: 1560
   }
 
   function create (data = {}) {
