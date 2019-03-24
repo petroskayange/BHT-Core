@@ -19,9 +19,14 @@
          var d = new Date();
          sessionStorage.setItem("date_created", d.toDateString());
       }  
+
+      function enterResult(){
+          window.location = "result_entering.html";
+      }
+
     </script>
 
-    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+   
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
       <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
@@ -29,98 +34,130 @@
 
       <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
 
+      <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+      <link rel="stylesheet" href="/assets/css/custom.css">
+      <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+      <link rel="stylesheet" href="/assets/css/demographics-header.css">
+      <script src="/assets/js/jquery.min.js"></script>
+      <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+      <script src="/assets/js/moment.js"></script>
+  
+      <!-- ...................... -->
+      <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
+      <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
+  
+      <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
+      <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+      <script src="/assets/js/medication.history.js"></script>
+      <!-- ...................... -->
+  
+      <script src="/assets/js/lab.history.js"></script>
 
   </head>
   <body id="mateme">
     <div id="container">
-      <div id="content">
-        <style>
-.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+            <div id="content">
 
-.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+                <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 90%; margin-left: 5%;margin-top: 3%;">
+                            <div class="text-white mb-3 cards" style="width: 98%; height: 600px; overflow: hidden;border: thin solid black;"
+                            >
+                                <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;">Test Without Results</div>
+                                <div class="list-group" id="programs" style="height: 100%; overflow: hidden;">
+                                </div>
+                                    <table class="table" style="position: absolute;top:20%;width: 85%;margin-left: 5%;">
+                                        <thead >
+                                            <tr style="font-size:150%;">
+                                                <th>Test Name</th>
+                                                <th>Date & Time Sample Drawn</th>
+                                                <th>Tracking Number</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody  style="font-size:150%;" id="data">
+                                            
+                                        </tbody>
+                                    </table>
+                                <div class="card-footer" style="margin: 1%;">
+                                </div>
+                            </div>
+                </div>
 
-</style>
-
-<script type="text/javascript">
-var tt_cancel_destination = "/";
-
-var url = window.location.href;
-url = new URL(url);
-var merge = url.searchParams.get("merge");
-if(merge == null)
-  merge = '';
-
-if(merge.length > 0) {
-  tt_cancel_destination = '/views/data_management/merge_clients.html'
-}
-
-function validateName(element) {
-
-  field_name = __$('touchscreenInput'+tstCurrentPage).name;
-
-  __$("nextButton").removeAttribute("onmousedown");
-
-  if(sessionStorage.programID === "12" && field_name === "family_name"){
-    
-    __$('nextButton').children[0].innerHTML = "Finish";
-
-  }
-  
-  __$("nextButton").onmousedown = function(){
-
-    validRegEx = /^(?=.{2,100}$)[a-z\!\A-Z]+(?:['_.\-\!\][a-z]+[a-z\!\A-Z])*$/
-    
-    value = $('touchscreenInput' + tstCurrentPage).value;
-   
-    if(value.match(validRegEx) == null) {
-     
-      showMessage("Invalid name input");
-   
-    }else if (value.match(validRegEx) != null) {
-
-      if(sessionStorage.programID === "12" && field_name === "family_name"){
-       
-        submitSearchResults();
-        return;
-     
-      }else{
-      
-        gotoNextPage();
-     
-      }
-   
-    }
-  
-  }
-
-}
-
-</script>
-
-
-<form action="search_results.html" method="POST" id="search_results">
-    
-  
-    <select allowFreeText="false" helpText="Test Without Results" id="tests" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
-      <option value="M">FBC</option>
-      <option value="F">Viral Load</option></select>
-
-    <select allowFreeText="false" helpText="Select Test Measures" id="tests" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
-      <option value="M">WBC</option>
-      <option value="F">Viral Load</option></select>
-
-      <input type="text" name="given_name" id="given_name" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="getInput();"
-      helpText="Enter Test Result"  key="given_name" 
-      allowFreeText="true" ajaxURL="/search/given_name?search_string=" />
-
-</form>
-        <div id="footer">
-        </div>
-      </div>
+            </div>
     </div>
-  </body>
-</html>
 
+    <footer class="footer">
+            <div class="container-footer">
+                <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal"
+                        data-target="#appModal" onclick="window.location = 'order_and_enter_result.html'">
+                    <span>&nbsp;&nbsp; Order & Give Result &nbsp;&nbsp;</span>
+                </button>
 
+                <button class="btn btn-danger buttons red" style="margin-right: 5px;" data-toggle="modal"
+                        data-target="#appModal" onclick="cancel()">
+                    <span>&nbsp;&nbsp; Cancel &nbsp;&nbsp;</span>
+                </button>
+               
+            </div>
+    </footer>
 
+<script>
 
+    function loadData(){
+        var patientID = sessionStorage.getItem("patientID");
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/orders_without_results?patient_id=' + sessionStorage.patientID;
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                    if(obs.length >0)
+                    {   var tr = document.getElementById("data");
+                        obs.forEach(element => {
+                            status = element["status"];
+                            createdAt = element["created_at"];
+                            trackingNumber = element["tracking_number"];
+                            testName = element["test_name"];
+
+                            var row = tr.insertRow(0);                           
+                            var cel = row.insertCell(0);
+                                cel.innerHTML = testName;
+                                cel.style.fontSize = "100%";
+
+                            var cel = row.insertCell(1);
+                                cel.innerHTML = createdAt;
+                                cel.style.fontSize = "100%";
+                            
+                            var cel = row.insertCell(2);
+                                cel.innerHTML = trackingNumber;
+                                cel.style.fontSize = "100%";    
+                            row.onclick = function(){sessionStorage.setItem("select_test_for_result",JSON.stringify([trackingNumber,testName])); window.location="result_entering.html"};
+                        });                       
+                        
+                    }
+                    else{
+                        var tr = document.getElementById("data");
+                        var row = tr.insertRow(0);
+                        var cel = row.insertCell(0);
+                            cel.innerHTML = "no tests pending for results";
+                            cel.style.color = "red"
+                            cel.style.fontSize = "100%";
+                    }
+
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+
+        
+    }
+
+    function cancel(){
+        window.location = "../../patient_dashboard.html?patient_id=" + sessionStorage.getItem("patientID");
+    }
+
+    loadData();
+</script>

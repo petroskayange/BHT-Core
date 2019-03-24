@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+    </script>
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+</style>
+
+
+
+
+<form action="results_entrly_confirmation.html" method="POST" id="search_results">
+    
+  
+
+    <select allowFreeText="false" helpText="Type of Sample" id="test_measure"  name="test_measure" >
+        <option value=""></option>
+      </select>
+
+      <input type="text" name="result" id="results" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="getInput();submiteResultEntrly()"
+      helpText="Enter Test Result"  
+      allowFreeText="true"  />
+
+</form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+<script type="text/javascript">
+    var test_name = "";
+    var trackingNumber = "";
+    function loadTestWithoutResults()
+    {
+  
+    }
+  
+    function loadTestMeasures()
+    {
+      test_name = JSON.parse(sessionStorage.getItem("select_test_for_result"))[1];
+      trackingNumber = JSON.parse(sessionStorage.getItem("select_test_for_result"))[0];
+      console.log(test_name);
+      var select = document.getElementById("test_measure");
+          var option = document.createElement("option");                    
+              option.innerHTML = "Viral Load";
+              option.setAttribute("value","Viral Load");
+              select.appendChild(option);
+
+
+          var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+          url += '/programs/1/lab_tests/measures?test_name=' + "FBC";        
+
+          var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);    
+                          
+                    var select = document.getElementById("test_measure");
+                    obs.forEach(element => {                     
+                        var option = document.createElement("option");
+                        console.log(element);
+                        option.innerHTML = element;
+                        option.setAttribute("value",element);
+                        select.appendChild(option);
+                    });
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+
+
+    }
+  
+    loadTestMeasures();
+  
+    function submiteResultEntrly()
+    { var selected_data =  new Array;
+      var results = new Array;
+      var data = {};
+  
+      if ( sessionStorage.getItem('test_results'))
+      {
+        results =  JSON.parse(sessionStorage.getItem('test_results'));
+      }
+      var values = {};
+      selected_data = [test_name,document.getElementById('test_measure').value,document.getElementById('results').value];
+      sessionStorage.setItem('result_entry_confirmation',selected_data);
+      values[document.getElementById('test_measure').value]  = document.getElementById('results').value;     
+      
+      sessionStorage.setItem('test_results',JSON.stringify(values));
+      
+    }
+  
+  
+  </script>
+

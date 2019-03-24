@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+
+    </script>
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+</style>
+
+
+
+
+<form action="order_and_enter_result.html" method="POST" id="search_results">
+
+    
+    <select allowFreeText="false" helpText="Test Date" id="test_year" name="test_year" ><option value=""></option>
+      
+    </select>     
+    <select allowFreeText="false" helpText="Test Month" id="test_month" name="test_month" ><option value=""></option>
+      
+    </select>
+
+    <input type="text" name="test_da" id="test_day" field_type="number"  tt_onUnload="getInput();"
+        helpText="Test Day"  
+        allowFreeText="true"  />
+
+
+    <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onUnload="getInput();"
+        helpText="Result Aproved by"  
+        allowFreeText="true"  />
+       
+
+    <select allowFreeText="false" helpText="Reason For Test" id="reason_for_test"  name="reason_for_test" ><option value=""></option>
+            <option value="Routine">Routine</option>
+            <option value="Targeted">Targeted</option>
+            <option value="Confirmatory">Confirmatory</option>
+            <option value="Stat">Stat</option>
+    </select>
+
+    <select allowFreeText="false" helpText="Test Type" id="test_typee" name="test_type"><option value=""></option>
+    </select>
+
+    <select allowFreeText="false" helpText="Type of Sample" id="sample_typee"  name="test_measure"  >
+        <option value=""></option>
+      </select>
+    
+    <select allowFreeText="false" helpText="Test Measure" id="test_measure"  name="test_measure"><option value=""></option>
+      </select>   
+
+    <input type="text" name="result" id="results" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="submiteEntry()" helpText="Enter Test Result"  
+      allowFreeText="true"  />
+
+</form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+      var testCatelog = {}
+
+      function loadTestMeasures()
+      {       
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/types';
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   
+                    testCatelog = obs;
+                    var select = document.getElementById("test_typee");
+                    obs.forEach(element => {                     
+                        var option = document.createElement("option");
+                        option.innerHTML = element;
+                        option.setAttribute("value",element);
+                        option.onclick = function tt(){console.log("is being clicked");};                        
+                        select.appendChild(option);
+                    });
+
+                    loadSamples();
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+      }
+
+      function loadSamples()
+      { var test = document.getElementById("test_typee").value;
+        console.log("here test");
+        
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/panels?test_type=' + "FBC";
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   
+                    testCatelog = obs;
+                    var select = document.getElementById("sample_typee");
+                    obs.forEach(element => {
+                        var option = document.createElement("option");
+                       
+                        option.innerHTML = element;
+                        option.setAttribute("value",element);
+                        select.appendChild(option);
+                    });
+                    loadSampleTests();
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+      }
+
+      function loadSampleTests()
+      {
+        var test = document.getElementById("test_typee").value;
+
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/measures?test_name=' + "FBC";
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   
+                    testCatelog = obs;
+                    var select = document.getElementById("test_measure");
+                    obs.forEach(element => {
+                        var option = document.createElement("option");
+                        option.innerHTML = element;
+                        option.setAttribute("value",element);
+                        select.appendChild(option);
+                    });
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+                  
+      }
+
+    function loadYears()
+    {           
+        year  = new Date();
+        year = year.getFullYear();
+        start = year;
+        end = 2011;    
+        var select = document.getElementById("test_year");   
+        for (let i = start; i >= end; i--) {                     
+            var option = document.createElement("option");
+            option.innerHTML = i;
+            option.setAttribute("value",i);            
+            select.appendChild(option);
+        }       
+    }
+
+
+    function loadMonths()
+    {           
+        year  = new Date();
+        year = year.getFullYear();
+        start = year;
+        end = 2011;    
+        var select = document.getElementById("test_month");   
+        for (let i = start; i >= end; i--) {                     
+            var option = document.createElement("option");
+            option.innerHTML = i;
+            option.setAttribute("value",i);            
+            select.appendChild(option);
+        }       
+    }
+
+    function resetKeyBoard(){
+        for (var i = 1; i<= 31; i++) {
+        if (document.getElementById(i)){
+            document.getElementById(i).style.display = ''
+        }
+        }
+    }
+    
+        loadYears()
+        loadMonths()  
+        loadTestMeasures();
+
+    function submiteEntry()
+    {
+        var testDate = "2019-03-23"; 
+        var reasontForTest = document.getElementById("reason_for_test").value;
+        var testName = document.getElementById("test_typee").value;
+        var testMeasure = document.getElementById("test_measure").value;
+        var testResult = document.getElementById("results").value;
+        var sampleTYpe = document.getElementById("sample_typee").value;
+        var patientID = sessionStorage.patientID;
+        var approved_by = document.getElementById("approved_by").value;
+        var resutlValue = {}
+        resutlValue[testMeasure] = testResult;
+        data = {};
+        data['order'] = {
+            "sample_type":  sampleTYpe,
+            "test_name": testName,
+            "reason_for_test": reasontForTest,
+            "sample_status": "specimen_collected",
+            "date_sample_drawn": testDate
+        }
+
+        data['result'] = {
+            "test_status": "verified",
+            "test_name": testName,
+            "tracking_number": "",
+            "who_updated": {
+                'id_number': '',
+                'phone_number': '',
+                'first_name': approved_by,
+                'last_name':  approved_by
+            },
+            "results": resutlValue
+        }
+
+        sessionStorage.setItem("order_give_result",JSON.stringify(data));
+        console.log("order");
+        console.log(data);
+      
+    }
+
+    if (sessionStorage.getItem("order_give_result") != null)
+    {
+      console.log("in here-0---");
+      console.log(JSON.parse(sessionStorage.getItem('order_give_result')));
+      data = sessionStorage.getItem('order_give_result');
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/order_and_results?patient_id=' + sessionStorage.patientID;
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   console.log("entered");
+                   window.location = "test_without_results.html";
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("POST", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send(data);
+            sessionStorage.setItem("order_give_result",null);
+    }
+
+       
+
+
+  </script>
+</html>
