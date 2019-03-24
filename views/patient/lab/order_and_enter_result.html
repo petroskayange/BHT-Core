@@ -47,43 +47,39 @@
 
 <form action="order_and_enter_result.html" method="POST" id="search_results">
 
-    
-    <select allowFreeText="false" helpText="Test Date" id="test_year" name="test_year" ><option value=""></option>
-      
-    </select>     
-    <select allowFreeText="false" helpText="Test Month" id="test_month" name="test_month" ><option value=""></option>
-      
+    <select allowFreeText="false" helpText="Day Test Drawn" id="test_day" name="test_da"  tt_requireNextClick = "false" tt_pageStyleClass = "longSelectList" tt_onLoad = "__$('keyboard').style.display = 'none'"><option value=""></option>      
     </select>
-
-    <input type="text" name="test_da" id="test_day" field_type="number"  tt_onUnload="getInput();"
-        helpText="Test Day"  
-        allowFreeText="true"  />
-
+      
+    <select allowFreeText="false" helpText="Month Test Drawn" id="test_month" name="test_month"  tt_requireNextClick = "false" tt_pageStyleClass = "longSelectList" tt_onLoad = "__$('keyboard').style.display = 'none'"></select>><option value=""></option>      
+    </select>
+    
+    <select allowFreeText="false" helpText="Year Test Drawn" id="test_year" name="test_year"  tt_requireNextClick = "false"  tt_onLoad = "__$('keyboard').style.display = 'none'"></select>><option value=""></option>      
+    </select>     
+    <select allowFreeText="false" helpText="Reason For Test" id="reason_for_test"   tt_requireNextClick = "false"  name="reason_for_test" ><option value=""></option>
+      <option value="Routine">Routine</option>
+      <option value="Targeted">Targeted</option>
+      <option value="Confirmatory">Confirmatory</option>
+      <option value="Stat">Stat</option>
+    </select>
+    <select allowFreeText="false" helpText="Type of Sample" id="sample_typee"  name="test_measure"  tt_requireNextClick = "false" >
+      <option value=""></option>
+      <option value="DBS (Free drop to DBS card)">DBS 70ml</option>
+      <option value="DBS (Free drop to DBS card)">DBS (Free drop to DBS card)</option>
+      <option value="DBS (Using capillary tube)">DBS (Using capillary tube)</option>
+      <option value="Blood">Blood</option>
+      <option value="Plasma">Plasma</option>
+    </select>
+    <input type="text" name="result" id="results" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="submiteEntry()" helpText="Enter Test Result"  
+    allowFreeText="true"  />
 
     <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onUnload="getInput();"
         helpText="Result Aproved by"  
         allowFreeText="true"  />
        
-
-    <select allowFreeText="false" helpText="Reason For Test" id="reason_for_test"  name="reason_for_test" ><option value=""></option>
-            <option value="Routine">Routine</option>
-            <option value="Targeted">Targeted</option>
-            <option value="Confirmatory">Confirmatory</option>
-            <option value="Stat">Stat</option>
-    </select>
-
-    <select allowFreeText="false" helpText="Test Type" id="test_typee" name="test_type"><option value=""></option>
-    </select>
-
-    <select allowFreeText="false" helpText="Type of Sample" id="sample_typee"  name="test_measure"  >
-        <option value=""></option>
-      </select>
+    <input type="hidden"  name="test_type" id="test_typee" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
     
-    <select allowFreeText="false" helpText="Test Measure" id="test_measure"  name="test_measure"><option value=""></option>
-      </select>   
-
-    <input type="text" name="result" id="results" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="submiteEntry()" helpText="Enter Test Result"  
-      allowFreeText="true"  />
+    <input type="hidden"  name="test_measure" id="test_measure" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
+    
 
 </form>
         <div id="footer">
@@ -111,44 +107,11 @@
                         var option = document.createElement("option");
                         option.innerHTML = element;
                         option.setAttribute("value",element);
-                        option.onclick = function tt(){console.log("is being clicked");};                        
+                        option.onchange = function tt(){console.log("is being clicked");};                        
                         select.appendChild(option);
                     });
 
-                    loadSamples();
-                }
-                else{
-                  console.log(this.status);
-                }
-            };
-            xhttp.open("GET", url, true);
-            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-            xhttp.setRequestHeader('Content-type', "application/json");
-            xhttp.send();
-      }
-
-      function loadSamples()
-      { var test = document.getElementById("test_typee").value;
-        console.log("here test");
-        
-        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-            url += '/programs/1/lab_tests/panels?test_type=' + "FBC";
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                    var obs = JSON.parse(this.responseText);
                    
-                    testCatelog = obs;
-                    var select = document.getElementById("sample_typee");
-                    obs.forEach(element => {
-                        var option = document.createElement("option");
-                       
-                        option.innerHTML = element;
-                        option.setAttribute("value",element);
-                        select.appendChild(option);
-                    });
-                    loadSampleTests();
                 }
                 else{
                   console.log(this.status);
@@ -160,37 +123,6 @@
             xhttp.send();
       }
 
-      function loadSampleTests()
-      {
-        var test = document.getElementById("test_typee").value;
-
-        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-            url += '/programs/1/lab_tests/measures?test_name=' + "FBC";
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                    var obs = JSON.parse(this.responseText);
-                   
-                    testCatelog = obs;
-                    var select = document.getElementById("test_measure");
-                    obs.forEach(element => {
-                        var option = document.createElement("option");
-                        option.innerHTML = element;
-                        option.setAttribute("value",element);
-                        select.appendChild(option);
-                    });
-                }
-                else{
-                  console.log(this.status);
-                }
-            };
-            xhttp.open("GET", url, true);
-            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-            xhttp.setRequestHeader('Content-type', "application/json");
-            xhttp.send();
-                  
-      }
 
     function loadYears()
     {           
@@ -209,13 +141,26 @@
 
 
     function loadMonths()
-    {           
-        year  = new Date();
-        year = year.getFullYear();
-        start = year;
-        end = 2011;    
+    {   var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];     
+        start = 0;
+        end = 12;    
         var select = document.getElementById("test_month");   
-        for (let i = start; i >= end; i--) {                     
+        for (let i = start; i < end; i++) {                     
+            var option = document.createElement("option");
+            option.innerHTML = monthNames[i];
+            option.setAttribute("value",i);            
+            select.appendChild(option);0
+        }       
+    }
+
+    function loadDays()
+    {                  
+        start = 1;
+        end = 31;    
+        var select = document.getElementById("test_day");   
+        for (let i = start; i <= end; i++) {                     
             var option = document.createElement("option");
             option.innerHTML = i;
             option.setAttribute("value",i);            
@@ -234,10 +179,11 @@
         loadYears()
         loadMonths()  
         loadTestMeasures();
+        loadDays();
 
     function submiteEntry()
-    {
-        var testDate = "2019-03-23"; 
+    {   var da = document.getElementById("test_year").value + "-" + document.getElementById("test_month").value + "-" + document.getElementById("test_day").value 
+        var testDate = da; 
         var reasontForTest = document.getElementById("reason_for_test").value;
         var testName = document.getElementById("test_typee").value;
         var testMeasure = document.getElementById("test_measure").value;
