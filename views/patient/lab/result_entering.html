@@ -48,7 +48,7 @@
     
   
 
-    <select allowFreeText="false" helpText="Type of Sample" id="test_measure"  name="test_measure" >
+    <select allowFreeText="false" helpText="Select Measure" id="test_measure"  name="test_measure" >
         <option value=""></option>
       </select>
 
@@ -69,25 +69,17 @@
 <script type="text/javascript">
     var test_name = "";
     var trackingNumber = "";
-    function loadTestWithoutResults()
-    {
-  
-    }
-  
+ 
     function loadTestMeasures()
     {
       test_name = JSON.parse(sessionStorage.getItem("select_test_for_result"))[1];
       trackingNumber = JSON.parse(sessionStorage.getItem("select_test_for_result"))[0];
       console.log(test_name);
       var select = document.getElementById("test_measure");
-          var option = document.createElement("option");                    
-              option.innerHTML = "Viral Load";
-              option.setAttribute("value","Viral Load");
-              select.appendChild(option);
-
+         
 
           var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-          url += '/programs/1/lab_tests/measures?test_name=' + "FBC";        
+          url += '/programs/1/lab_tests/measures?test_name=' + test_name;        
 
           var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
