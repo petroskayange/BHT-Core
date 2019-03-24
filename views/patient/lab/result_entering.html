@@ -99,7 +99,7 @@
                   console.log(this.status);
                 }
             };
-            xhttp.open("GET", url, true);
+            xhttp.open("GET", url, false);
             xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
             xhttp.setRequestHeader('Content-type', "application/json");
             xhttp.send();
