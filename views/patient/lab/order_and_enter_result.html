@@ -8,6 +8,8 @@
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
       var tstCurrentDate = moment(tstCurrentDate).format("YYYY-MM-DD");
+      var tt_cancel_destination = "test_without_results.html";
+
 
       var d = new Date();
       d.toDateString();
@@ -21,21 +23,7 @@
          sessionStorage.setItem("date_created", d.toDateString());
       }  
 
-      var answers_hash = {
-                followup_agreement: "", ever_received_art: "", date_art_last_taken: "",
-                taken_art_in_the_last_two_months: "", taken_art_in_the_last_two_weeks: "",
-                ever_registered: "", drug_art_last_taken: "", location_of_art_initiation: "",
-                drug_start_date: "", date_art_started: "", art_number_at_previous_location: "",
-                has_transfer_letter: "", height: "", weight: "", bmi: "", is_patient_pregnant: "",
-                is_patient_breastfeeding: "",
-                who_stages_criteria_present: "", who_stage: "", cd4_less_than_or_equal_to_250: "",
-                cd4_less_than_or_equal_to_350: "", cd4_less_than_or_equal_to_500: "",
-                cd4_less_than_25: "", reason_for_art_eligibility: "", cd4_location: "",
-                cd4_datetime: "", cd4_count: "", confirmatory_hiv_test_date: "",
-                confirmatory_hiv_test_location: "", confirmatory_hiv_test_type: "",
-                send_sms: "", cd4_percent: ""
-            }
-
+  
 
       function setNextButtonToGetInputValue(key) {
                 __$('nextButton').onmousedown = function () {
@@ -46,13 +34,51 @@
                 }
             }
 
+
+            function resetKeyPad() {
+                buttons = document.getElementsByClassName("keyboardButton");
+                for (i = 0; i < buttons.length; i++) {
+                    if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                        buttons[i].disabled = true;
+                    } else {
+                        buttons[i].disabled = false;
+                    }
+                }
+            }
+
+            function updateCD4CountKeyPad() {
+                curr_page = tstCurrentPage - 1
+                buttons = document.getElementsByClassName("keyboardButton");
+                $("clearButton").setAttribute("onmousedown", "clearInput();updateCD4CountKeyPad();");
+                $("backButton").setAttribute("onmousedown", ";gotoPage(" + curr_page + ", null, true);resetPad();");
+                $("nextButton").setAttribute("onmousedown", "gotoNextPage();resetPad();");
+                
+                for (i = 0; i < buttons.length; i++) {
+                    if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                        buttons[i].disabled = false;
+                        if (buttons[i].id == "equals") {
+                            buttons[i].setAttribute("onmousedown", "press('=');resetKeyPad();");
+                        } else if (buttons[i].id == "lessthan") {
+                            buttons[i].setAttribute("onmousedown", "press('<');resetKeyPad();");
+                        } else if (buttons[i].id == "greaterthan") {
+                            buttons[i].setAttribute("onmousedown", "press('>');resetKeyPad();");
+                        }
+                    } else {
+                        buttons[i].disabled = true;
+                    }
+                }
+            }
+
+
     </script>
 
     <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/lab.min.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
       <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
       <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+      <script type="text/javascript" src="/assets/js/moment.js"></script>
 
       <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
 
@@ -92,7 +118,7 @@
       <option value="Blood">Blood</option>
       <option value="Plasma">Plasma</option>
     </select>
-    <input type="text" name="result" id="results" field_type="alpha" tt_onLoad='validateName();' tt_onUnload="submiteEntry()" helpText="Enter Test Result"  
+    <input type="text" name="result" id="results" field_type="alpha"  tt_onUnload="submiteEntry()" helpText="Enter Test Result"  
     allowFreeText="true"  />
 
     <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onUnload="getInput();"
@@ -137,7 +163,7 @@
                    
                 }
                 else{
-                  console.log(this.status);
+                  
                 }
             };
             xhttp.open("GET", url, true);
@@ -238,15 +264,12 @@
         }
 
         sessionStorage.setItem("order_give_result",JSON.stringify(data));
-        console.log("order");
-        console.log(data);
-      
+              
     }
 
     if (sessionStorage.getItem("order_give_result") != null)
     {
-      console.log("in here-0---");
-      console.log(JSON.parse(sessionStorage.getItem('order_give_result')));
+    
       data = sessionStorage.getItem('order_give_result');
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
             url += '/programs/1/lab_tests/order_and_results?patient_id=' + sessionStorage.patientID;
@@ -255,11 +278,13 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                     var obs = JSON.parse(this.responseText);
-                   console.log("entered");
+                   
+                   
                    window.location = "test_without_results.html";
+                  
                 }
                 else{
-                  console.log(this.status);
+                
                 }
             };
             xhttp.open("POST", url, true);
