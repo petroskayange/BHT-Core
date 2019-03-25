@@ -40,6 +40,17 @@
   function editAddresses() {
     document.location = '/views/patient/edit_demographics/addresses.html?patient_id='+ sessionStorage.patientID;
   }
+
+  function hideValidateDemographicsFieldsAlert() {
+    document.getElementById("alert-div").style.display = 'none';
+    document.getElementById("alert-cover").style.display = 'none';
+  }
+
+  function validateDemographicsFields() {
+    document.getElementById("alert-div").style.display = 'inline';
+    document.getElementById("alert-cover").style.display = 'inline';
+    return false;
+  }
 </script>
 
 <style>
@@ -110,6 +121,61 @@
         border-width: 1px;
         text-align: left;
         word-wrap: break-word;
+    }
+
+    #alert-cover{
+        display: none;
+        position: absolute;
+        background-color: black;
+        width: 100%;
+        height: 102%;
+        left: 0%;
+        top: 0%;
+        z-index: 990;
+        opacity: 0.65;
+    }
+
+    #alert-div {
+        display: none;
+        background-color: #F4F4F4;
+        border: 2px solid #E0E0E0;
+        border-radius: 15px;
+        height: 183px;
+        padding: 5px;
+        position: absolute;
+        top: 20%;
+        /*margin-top: 100px;
+        */
+        width: 560px;
+        /*margin-left: 430px;
+        */
+        left: 25%;
+        z-index: 991;
+    }
+
+    #alert-ok-btn{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        bottom: 45px;
+        -moz-user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: bolder;
+        line-height: 2.29;
+        padding: 6px 56px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        color: #fff;
+        left: 38%;
+        margin-top: -5px;
     }
 
     /* ............................. Row contents ends ............................... */
@@ -306,7 +372,7 @@
               </th>
               <td class='data'>
                 <p id="home-district">
-                     &nbsp;
+                    &nbsp;
                 </p>
               </td>
               <td class='anchor_class'>
@@ -417,9 +483,24 @@
                 </a>
               </td>
             </tr>
-            <footer class="footer">
+
+    <div id="alert-cover"></div>
+  
+      <div id="alert-div">
+        <div style="text-align: center; color: white; border-style: solid; 
+          border-color: black;font-size: 25px;border-width: 0px 0px 1px 0px;
+          border-radius: 9px 9px 0px 0px;background-color: slategray;">Notice</div>
+        <p style="text-align: center; color: black; font-size: 25px;">Enter all demographics to continue</p>
+        <div style="padding-top: 65px;">
+          <span id="alert-ok-btn" 
+          onclick="hideValidateDemographicsFieldsAlert();" 
+          style="position: relative;"> Ok</span>
+        </div>
+      </div>
+
+    <footer class="footer">
       <div class="container-footer">
-        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="finish();">
+        <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;" onclick="validateForm();">
         <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
         </button>
       </div>
@@ -468,6 +549,57 @@
         req.send(null);
       } catch (e) {
       }
+    }
+
+    function validateForm() {
+      var errors = [];
+      // alert("here");
+      var name = document.getElementById("name").innerHTML;
+      var birthdate = document.getElementById("birthdate").innerHTML;
+      var gender = document.getElementById("gender").innerHTML;
+      var district = document.getElementById("district").innerHTML;
+      var home_district = document.getElementById("home-district").innerHTML;
+      var current_village = document.getElementById("current-village").innerHTML;
+      var current_ta = document.getElementById("current-ta").innerHTML;
+      var home_village = document.getElementById("home-village").innerHTML;
+      var current_district = document.getElementById("current-district").innerHTML;
+      var cellphone_number = document.getElementById("cellphone-number").innerHTML;
+
+      name = name.replace(/&nbsp;/gi," ").trim();
+      birthdate = birthdate.replace(/&nbsp;/gi," ").trim();
+      gender = gender.replace(/&nbsp;/gi," ").trim();
+      district = district.replace(/&nbsp;/gi," ").trim();
+      home_district = home_district.replace(/&nbsp;/gi," ").trim();
+      current_village = current_village.replace(/&nbsp;/gi," ").trim();
+      current_ta = current_ta.replace(/&nbsp;/gi," ").trim();
+      home_village = home_village.replace(/&nbsp;/gi," ").trim();
+      current_district = current_district.replace(/&nbsp;/gi," ").trim();
+      cellphone_number = cellphone_number.replace(/&nbsp;/gi," ").trim();
+
+      if (name === "") {
+        validateDemographicsFields();
+        return false;
+      }
+      if (birthdate === "") {
+        validateDemographicsFields();
+        return false;
+      }
+      if (gender === "") {
+        validateDemographicsFields();
+        return false;
+      }
+      if (district  === "" || home_district === "" || current_village === "" || current_ta === "" || home_village === "" || current_district === "") {
+        validateDemographicsFields();
+        return false;
+      }
+      if (cellphone_number === "") {
+        validateDemographicsFields();
+        return false;
+      }
+      else{
+        finish();
+      }
+
     }
 
     ajaxRequest();

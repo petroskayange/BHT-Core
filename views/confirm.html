@@ -352,7 +352,8 @@ function checkIfFilingNumberIsNotValid () {
         window.location.href = "/";
       }else if (this.status == 422) {
         var f = JSON.parse(this.responseText);
-        sessionStorage.patientID = f.patient_id;
+        //sessionStorage.patientID = f.patient_id;
+        sessionStorage.patientID = f.entity.patient_id;
         window.location.href = "/views/patient/edit_demographics.html";
       }
     };
