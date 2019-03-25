@@ -188,34 +188,12 @@ function initSearch() {
 
 function searchClient(first_name, last_name, gender, side) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  if(sessionStorage.dde_enabled === "true") {
-    url += "/dde/patients/find_by_name_and_gender?program_id="+sessionStorage.programID+"&given_name=" + first_name +"&family_name=" + last_name +"&gender="+ gender;
-  }else {
     url += "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
-  }
-
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      if(sessionStorage.dde_enabled === "true") {
-        var obj2 = [];
-        for (var index = 0; index < obj["locals"].length; index++) {
-          obj2.push(obj["locals"][index]["person"]);
-          
-        }
-        for (var index = 0; index < obj["remotes"].length; index++) {
-          var doc_id = getIdentifier(obj["remotes"][index]["patient_identifiers"], 27);
-          // console.log(doc_id);
-          var current_patient = obj["remotes"][index]["person"];
-          current_patient.dde_doc_id = doc_id;
-          obj2.push(current_patient);
-          
-        }
-        processResults(obj2, side);
-      }else {
         processResults(obj, side);
-      }
     }
   };
   xhttp.open("GET", url, true);
@@ -307,9 +285,15 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['addresses'][0]['address2'];
-  td.innerHTML += " " + result['addresses'][0]['county_district'];
-  td.innerHTML += " " + result['addresses'][0]['neighborhood_cell'];
+  if (result.addresses[0].hasOwnProperty('address2')){
+    td.innerHTML = result['addresses'][0]['address2'];
+  }
+  if (result.addresses[0].hasOwnProperty('county_district')){
+    td.innerHTML += " " + result['addresses'][0]['county_district'];
+  }
+  if (result.addresses[0].hasOwnProperty('neighborhood_cell')){
+    td.innerHTML += " " + result['addresses'][0]['neighborhood_cell'];
+  }    
   tr.appendChild(td);
   /* ............................. */
 
@@ -321,9 +305,16 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['addresses'][0]['state_province'];
-  td.innerHTML += " " + result['addresses'][0]['township_division'];
-  td.innerHTML += " " + result['addresses'][0]['city_village'];
+  if (result.addresses[0].hasOwnProperty('state_province')){
+    td.innerHTML = result['addresses'][0]['state_province'];
+  }
+  if (result.addresses[0].hasOwnProperty('township_division')){
+    td.innerHTML += " " + result['addresses'][0]['township_division'];
+  }
+  if (result.addresses[0].hasOwnProperty('city_village')){
+    td.innerHTML += " " + result['addresses'][0]['city_village'];
+  }
+  
   tr.appendChild(td);
   /* ............................. */
 
@@ -387,29 +378,10 @@ function selectRow(e) {
 }
 
 function mergeClients(){
-  var checkboxes = document.getElementsByClassName('checkboxes');
   var client_ids = {};
-  var chkdbox_counter = 0;
-  client_ids.secondary = [];
-    for(var i = 0; i < checkboxes.length; i++){
-      if(checkboxes[i].getAttribute("selected") === "true") {
-          if (chkdbox_counter == 0) {
-            client_ids.primary = {
-            patient_id: (checkboxes[i].getAttribute("patient_id") === "null" ? "": checkboxes[i].getAttribute("patient_id")),
-            doc_id: checkboxes[i].getAttribute("dde_doc_id")
-            };
-          }else if(chkdbox_counter > 0) {
-            client_ids.secondary.push(
-              {
-                patient_id: (checkboxes[i].getAttribute("patient_id") === "null" ? "": checkboxes[i].getAttribute("patient_id")),
-                doc_id: checkboxes[i].getAttribute("dde_doc_id")
-              });
-          }
-        chkdbox_counter++
-      }
-   }
-
-    client_ids.program_id = sessionStorage.programID;
+  client_ids.secondary = [selectedRecords['right']];
+  client_ids.primary = selectedRecords['left'];
+  client_ids.program_id = sessionStorage.programID;
 
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
