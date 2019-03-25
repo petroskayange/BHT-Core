@@ -7,6 +7,7 @@
     <script language="javascript" defer="true">
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
+      var tstCurrentDate = moment(tstCurrentDate).format("YYYY-MM-DD");
 
       var d = new Date();
       d.toDateString();
@@ -19,6 +20,31 @@
          var d = new Date();
          sessionStorage.setItem("date_created", d.toDateString());
       }  
+
+      var answers_hash = {
+                followup_agreement: "", ever_received_art: "", date_art_last_taken: "",
+                taken_art_in_the_last_two_months: "", taken_art_in_the_last_two_weeks: "",
+                ever_registered: "", drug_art_last_taken: "", location_of_art_initiation: "",
+                drug_start_date: "", date_art_started: "", art_number_at_previous_location: "",
+                has_transfer_letter: "", height: "", weight: "", bmi: "", is_patient_pregnant: "",
+                is_patient_breastfeeding: "",
+                who_stages_criteria_present: "", who_stage: "", cd4_less_than_or_equal_to_250: "",
+                cd4_less_than_or_equal_to_350: "", cd4_less_than_or_equal_to_500: "",
+                cd4_less_than_25: "", reason_for_art_eligibility: "", cd4_location: "",
+                cd4_datetime: "", cd4_count: "", confirmatory_hiv_test_date: "",
+                confirmatory_hiv_test_location: "", confirmatory_hiv_test_type: "",
+                send_sms: "", cd4_percent: ""
+            }
+
+
+      function setNextButtonToGetInputValue(key) {
+                __$('nextButton').onmousedown = function () {
+                    console.log("Next button is clicked");
+                    value = __$('touchscreenInput' + tstCurrentPage).value;
+                    answers_hash[key] = value;
+                    gotoNextPage();
+                }
+            }
 
     </script>
 
@@ -47,14 +73,11 @@
 
 <form action="order_and_enter_result.html" method="POST" id="search_results">
 
-    <select allowFreeText="false" helpText="Day Test Drawn" id="test_day" name="test_da"  tt_requireNextClick = "false" tt_pageStyleClass = "longSelectList" tt_onLoad = "__$('keyboard').style.display = 'none'"><option value=""></option>      
-    </select>
-      
-    <select allowFreeText="false" helpText="Month Test Drawn" id="test_month" name="test_month"  tt_requireNextClick = "false" tt_pageStyleClass = "longSelectList" tt_onLoad = "__$('keyboard').style.display = 'none'"></select>><option value=""></option>      
-    </select>
+  <input 
+      field_type="date" helpText="Date Sample Drawn"
+      id="date_sample_drawn" name="date_sample_drawn"
+      tt_pageStyleClass="Date DatesOnly" type="text"/>
     
-    <select allowFreeText="false" helpText="Year Test Drawn" id="test_year" name="test_year"  tt_requireNextClick = "false"  tt_onLoad = "__$('keyboard').style.display = 'none'"></select>><option value=""></option>      
-    </select>     
     <select allowFreeText="false" helpText="Reason For Test" id="reason_for_test"   tt_requireNextClick = "false"  name="reason_for_test" ><option value=""></option>
       <option value="Routine">Routine</option>
       <option value="Targeted">Targeted</option>
@@ -176,13 +199,12 @@
         }
     }
     
-        loadYears()
-        loadMonths()  
+        
         loadTestMeasures();
-        loadDays();
+     
 
     function submiteEntry()
-    {   var da = document.getElementById("test_year").value + "-" + document.getElementById("test_month").value + "-" + document.getElementById("test_day").value 
+    {   var da = document.getElementById("date_sample_drawn").value;     
         var testDate = da; 
         var reasontForTest = document.getElementById("reason_for_test").value;
         var testName = document.getElementById("test_typee").value;
