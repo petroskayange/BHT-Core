@@ -16,10 +16,16 @@ sessionStorage.setItem("backupPatientID", id);
 // })
 admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="enable-portal" onclick="redirect(this.id); "><img src="/assets/images/portal.png" class="btn-icons"/><span>Portal Settings</span></button>';
 // alert(window.innerHeight);
 
@@ -571,6 +577,19 @@ function redirect(id) {
     }
     if (id === "report-1") {
     }
+ 
+    if (id === "cleaner") {
+        // window.location.href = './views/reports/data_inconsistent/cleaner.html';
+        var dvTable = document.getElementById("generic_tabs");
+        dvTable.innerHTML = null;
+        dvTable.style = "width: 97% !important;";
+  
+        var obj = document.createElement("object");
+        obj.setAttribute("data", "/apps/ART/views/reports/data_inconsistent/cleaner.html");
+        obj.setAttribute("type","text/html");
+        obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+        dvTable.appendChild(obj);
+    }
 }
 
 function activitiesRedirect(id) {
@@ -712,6 +731,8 @@ function loadTabContent(id) {
     } else {
         GenerateTable();
     }
+
+    
 }
 
 // function loadActivitiesContent(id) {
