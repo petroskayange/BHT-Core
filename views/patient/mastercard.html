@@ -9,7 +9,25 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+   
+
 <script type="text/javascript">
+ jQuery(document).ready(function($) {
+            
+            $('#back').click(function() {
+                history.go(-1);// /report/data_cleaning';
+
+            })
+        })
+
+    
+    var patientID = getUrlParameter("patient_id");
+    // if ('sessionStorage.patientID === null'){
+    //     sessionStorage.patientID = patientID;
+    // }
+    sessionStorage.patientID = patientID;
 
     try { 
       var url = window.location.href;
@@ -42,6 +60,22 @@
     var address_edit_url = "/views/patient/edit_demographics/addresses.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
     var occupation = "Add";
     var occupation_edit_url = "/views/patient/edit_demographics/occupation.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
+
+    //added Function to load mastercardsessionStorage.patientID = patientID;
+    function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;   
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
 
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
@@ -1200,6 +1234,8 @@
         margin: 0 auto; /*center image*/
     }
 </style>
+
+
 <body>
 <div id="container">
     <div id="content">
@@ -1310,10 +1346,15 @@
 
         <footer class="footer">
             <div class="container-footer">
+                 
                 <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
                         onclick="gotoPatientDashboard();"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
                 </button>
+
+                <button id="back" class="blue" style="margin: 5px 0px 0px; padding: 0px; float: left;"
+                ><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Back &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
             </div>
+  
         </footer>
 
     </div>
