@@ -63,6 +63,8 @@ function showStates(program){
   var program_states = programsHash[program.getAttribute('program-name')];
   var programHasStates = false
 
+  setSelectedProgram(program.getAttribute('id'))
+
   for(var i = 0 ; i < program_states.length ; i++){
     if (program_states[i].length < 1) {
       continue;
@@ -171,7 +173,7 @@ function createStateRow (state = {}, style = '', attributes = []) {
   const voidln = createTableData()
   voidln.appendChild(createVoidLink({
     patientId: sessionStorage.patientID,
-    programId: sessionStorage.programId,
+    programId: sessionStorage.selectedProgram,
     stateId: state.patient_state_id
   }))
   stateRow.appendChild(voidln)
@@ -242,8 +244,12 @@ function createVoidLink (options = {}) {
         }
       }
     ],
-    'text-align: center; color: crimson; font-weight: bold; font-size: 1.1em'
+    'text-align: center; color: blue; font-weight: bold; font-size: 1.1em; text-decoration: underline'
   )
+}
+
+function setSelectedProgram (programId) {
+  sessionStorage.selectedProgram = programId
 }
 
 function stateName(num) {
