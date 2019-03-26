@@ -40,7 +40,7 @@ function addPrograms(programs) {
     td.setAttribute('class','program-names');
     td.setAttribute('id', programs[i].program.program_id);
     td.setAttribute('program-name', programs[i].program.name);
-    td.setAttribute('onmousedown','showStates(this);');
+    td.setAttribute('onclick','showStates(this);');
     td.innerHTML = programs[i].program.name
     tr.appendChild(td);
 
@@ -75,7 +75,7 @@ function showStates(program){
       tr.appendChild(td);
       table.appendChild(tr);
 
-      buildStates(td, program_states[i]);
+      renderStates(td, program_states[i]);
     }
   }
 
@@ -116,55 +116,135 @@ function updateState(program_id) {
   document.location = '/views/patient/update_state.html?program_id=' + program_id;
 }
 
-function buildStates(container, states) {
-  var table = document.createElement('table')
-  table.setAttribute('class', 'states')
-  container.appendChild(table)
+function renderStates (container, states = []) {
+  const table = createTable(
+    [
+      { name: 'class', value: 'states'},
+      { name: 'cellpadding', value: '10px'}
+    ],
+    'padding: 4%'
+  )
 
-  var headerRow = document.createElement('tr')
-
-  var stateHeader = document.createElement('th')
-  stateHeader.innerText = 'State'
-  headerRow.appendChild(stateHeader)
-
-  var startDateHeader = document.createElement('th')
-  startDateHeader.innerText = 'Start Date' 
-  headerRow.appendChild(startDateHeader)
-
-  var endDateHeader = document.createElement('th')
-  endDateHeader.innerText = 'End Date' 
-  headerRow.appendChild(endDateHeader)
-
-  table.style.padding = '4%'
-  table.setAttribute('cellpadding', '10px')
-
+  const headerRow = createHeaderRow(['State', 'Start Date', 'End Date', 'Actions'])
   table.appendChild(headerRow)
-  
-  for(var i = 0 ; i < states.length ; i++){
-    var dataRow = document.createElement('tr')
-    if (i % 2 == 0) {
-      dataRow.style.backgroundColor = 'grey'
-      dataRow.style.color = 'white'
-    }
 
-    var statesName = document.createElement('td')
-    statesName.innerText = stateName(states[i].name)
-    dataRow.appendChild(statesName)
+  states.forEach((state, idx) => {
+    const style = idx % 2 === 0 ? 'background-color: grey; color: white' : ''
+    const selector = `state${idx}`
+    table.appendChild(createStateRow(state, style, [{ name: 'id', value: selector}]), selector)
+  })
 
-    var startDate = document.createElement('td')
-    startDate.innerText = moment(states[i].start_date).format('DD/MMM/YYYY')
-    dataRow.appendChild(startDate)
+  container.appendChild(table)
+}
 
-    var endDate = document.createElement('td')
-    if (states[i].end_date != null) {
-      endDate.innerText = moment(states[i].end_date).format('DD/MMM/YYYY')
-    } else {
-      endDate.innerText = 'N/A'
-    }
-    dataRow.appendChild(endDate)
+function createTable (attributes = [], style = '') {
+  const table = document.createElement('table')
+  table.style = style
 
-    table.appendChild(dataRow);
+  if (attributes.length) {
+    attributes.forEach((attribute) => {
+      table.setAttribute(attribute.name, attribute.value)
+    })
   }
+
+  return table
+}
+
+function createHeaderRow (headers = []) {
+  const headerRow = document.createElement('thead')
+  headers.forEach((header) => {
+    headerRow.appendChild(createTableHeader(header))
+  })
+  return headerRow
+}
+
+function createStateRow (state = {}, style = '', attributes = [], selector = '') {
+  const stateRow = document.createElement('tr')
+  stateRow.style = style
+
+  stateRow.appendChild(createTableData(stateName(state.name)))
+  stateRow.appendChild(createTableData(moment(state.start_date).format('DD/MMM/YYYY')))
+  stateRow.appendChild(createTableData(
+    state.end_date ? moment(state.end_date).format('DD/MMM/YYYY') : 'N/A'
+  ))
+
+  const voidln = createTableData()
+  voidln.appendChild(createVoidLink({
+    patientId: sessionStorage.patientID,
+    programId: sessionStorage.programId,
+    stateId: state.patient_state_id,
+    stateSelectorId: selector
+  }))
+  stateRow.appendChild(voidln)
+
+  if (attributes.length) {
+    attributes.forEach((attribute) => {
+      stateRow.setAttribute(attribute.name, attribute.value)
+    })
+  }
+
+  return stateRow
+}
+
+function createTableHeader (headerTitle = '') {
+  const header = document.createElement('th')
+  header.innerText = headerTitle
+  return header
+}
+
+function createTableData (innerText = '') {
+  const tableData = document.createElement('td')
+  tableData.innerText = innerText
+  return tableData
+}
+
+function createLink (innerText = '', listeners = [], style = '') {
+  const link = document.createElement('a')
+  link.innerText = innerText
+  link.style = style
+
+  if (listeners.length) {
+    listeners.forEach((listener) => {
+      link.addEventListener(listener.event, listener.handler)
+    })
+  }
+
+  return link
+}
+
+function createVoidLink (options = {}) {
+  return createLink(
+    'Void State',
+    [
+      {
+        event: 'click',
+        handler: (event) => {
+          event.preventDefault()
+          State._void({
+            stateId: options.stateId,
+            programId: options.programId,
+            patientId: options.patientId,
+            success: (response) => {
+              if (response.status === 204) {
+                showMessage('State successfully voided.')
+                setTimeout(() => {
+                  location.reload()
+                }, 1000)
+              } else {
+                console.error(response)
+                showMessage('There was a problem voiding the state.')
+              }
+            },
+            fail: (error) => {
+              console.error(error)
+              showMessage('There was a problem voiding the state.')
+            }
+          })
+        }
+      }
+    ],
+    'text-align: center; color: crimson; font-weight: bold; font-size: 1.1em'
+  )
 }
 
 function stateName(num) {
