@@ -1,0 +1,20 @@
+{
+	"creating_user_attributes": {
+		"first_name": "Firstname",
+		"middle_name": "Middle name",
+		"last_name": "Lastname",
+		"username": "username",
+		"password": "password",
+		"confirm_password": "Confirm password",
+		"role": "Role"
+	},
+	"view_user_attributes": {
+		"username": "username",
+			"edit_user_attributes": {
+				"username": "username",
+				"password": "password",
+				"role": "Update role"
+	}
+	}
+
+}
