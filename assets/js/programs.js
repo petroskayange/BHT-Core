@@ -158,7 +158,7 @@ function createHeaderRow (headers = []) {
   return headerRow
 }
 
-function createStateRow (state = {}, style = '', attributes = [], selector = '') {
+function createStateRow (state = {}, style = '', attributes = []) {
   const stateRow = document.createElement('tr')
   stateRow.style = style
 
@@ -172,8 +172,7 @@ function createStateRow (state = {}, style = '', attributes = [], selector = '')
   voidln.appendChild(createVoidLink({
     patientId: sessionStorage.patientID,
     programId: sessionStorage.programId,
-    stateId: state.patient_state_id,
-    stateSelectorId: selector
+    stateId: state.patient_state_id
   }))
   stateRow.appendChild(voidln)
 
