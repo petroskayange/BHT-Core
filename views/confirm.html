@@ -444,7 +444,8 @@ function checkIfFilingNumberIsNotValid () {
     //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
     getHeight(patient_id);
     getWeight(patient_id);
-
+    sessionStorage.patientID = patient_id;
+    showOrders();
     buildIdentifiers(patient["patient_identifiers"]);
     buildStates(obj, patient_id);
     var orders = obj_2;
@@ -601,7 +602,7 @@ function checkIfFilingNumberIsNotValid () {
           identifiersHash["Current Outcome"] =
             results.current_outcome !== "N/A"
               ? results.current_outcome
-              : "No Outcome Available";
+              : "No Outcome Available";buildInfoBoxes
           var table = document.createElement("table");
           table.setAttribute("class", "info-tables");
 
@@ -1184,5 +1185,4 @@ function dateDiffInMonths(dt2, dt1) {
   return months <= 0 ? 0 : months;
 }
 </script>
-
 <script src="/assets/js/show.lab.orders.js"></script>
