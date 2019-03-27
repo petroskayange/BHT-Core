@@ -52,7 +52,14 @@ var Concept = function () {
     NOT_DONE: 2475,
     REASON_HIV_TEST_NOT_DONE: 9569,
     LIVES_NEAR: 9166,
-    TB_SYMPTOMS: 1560
+    TB_SYMPTOMS: 1560,
+    PRESCRIBE_DRUGS: 7874,
+    MEDICAL_ORDERS: 1282,
+    'RHZ (R75/H50/Z150)': 765,
+    'E (Ethambutol 100mg tablet)': 745,
+    'RH (R75/H50)': 1194,
+    'RH (R150/H75)': 1194,
+    'RHZE (R150/H75/Z400/E275)': 1131
   }
 
   function create (data = {}) {
