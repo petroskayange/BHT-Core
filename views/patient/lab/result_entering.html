@@ -75,7 +75,7 @@
 
 
 
-<form action="results_entrly_confirmation.html" method="POST" id="search_results">
+<form action="result_entering.html" method="POST" id="search_results">
     
   
 
@@ -92,7 +92,6 @@
     <input  field_type="number"
     helpText="Enter Result" id="results" name="result"
     tt_pageStyleClass="Numeric NumbersOnly" type="text" 
-    tt_onLoad="validateEntry();"
     validationMessage="You must enter a modifier plus numbers only (for example =90)"
     validationRule="^(>|<|=)([0-9.]+)$|N/A$"/>
 
@@ -105,6 +104,10 @@
         allowFreeText="true"
         condition = "$('results').value == 'N/A'"
     />
+
+    <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onLoad="validateEntry()"
+        helpText="Result Aproved by"  
+        allowFreeText="true"  />
 
 </form>
         <div id="footer">
