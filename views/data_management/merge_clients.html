@@ -188,7 +188,7 @@ function initSearch() {
 
 function searchClient(first_name, last_name, gender, side) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-    url += "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
+    url += "/search/patients?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
@@ -249,6 +249,7 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
+  td.innerHTML = (result.patient_identifiers.filter(id => id.identifier_type == 3))[0].identifier;
   tr.appendChild(td);
   /* ............................. */
 
@@ -260,8 +261,8 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['names'][0]['given_name'];
-  td.innerHTML += " " + result['names'][0]['family_name'];
+  td.innerHTML = result.person.names[0].given_name;
+  td.innerHTML += " " + result.person.names[0].family_name;
   tr.appendChild(td);
 
   var tr = document.createElement('tr');
@@ -272,8 +273,8 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['birthdate'];
-  td.innerHTML += " (" + result['gender'] + ")"
+  td.innerHTML = result.person.birthdate;
+  td.innerHTML += " (" + result.person.gender + ")"
   tr.appendChild(td);
   /* ............................. */
 
@@ -285,14 +286,14 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  if (result.addresses[0].hasOwnProperty('address2')){
-    td.innerHTML = result['addresses'][0]['address2'];
+  if (result.person.addresses[0].hasOwnProperty('address2')){
+    td.innerHTML = result.person.addresses[0].address2;
   }
-  if (result.addresses[0].hasOwnProperty('county_district')){
-    td.innerHTML += " " + result['addresses'][0]['county_district'];
+  if (result.person.addresses[0].hasOwnProperty('county_district')){
+    td.innerHTML += " " + result.person.addresses[0].county_district;
   }
-  if (result.addresses[0].hasOwnProperty('neighborhood_cell')){
-    td.innerHTML += " " + result['addresses'][0]['neighborhood_cell'];
+  if (result.person.addresses[0].hasOwnProperty('neighborhood_cell')){
+    td.innerHTML += " " + result.person.addresses[0].neighborhood_cell;
   }    
   tr.appendChild(td);
   /* ............................. */
@@ -305,25 +306,25 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  if (result.addresses[0].hasOwnProperty('state_province')){
-    td.innerHTML = result['addresses'][0]['state_province'];
+  if (result.person.addresses[0].hasOwnProperty('state_province')){
+    td.innerHTML = result.person.addresses[0].state_province;
   }
-  if (result.addresses[0].hasOwnProperty('township_division')){
-    td.innerHTML += " " + result['addresses'][0]['township_division'];
+  if (result.person.addresses[0].hasOwnProperty('township_division')){
+    td.innerHTML += " " + result.person.addresses[0].township_division;
   }
-  if (result.addresses[0].hasOwnProperty('city_village')){
-    td.innerHTML += " " + result['addresses'][0]['city_village'];
+  if (result.person.addresses[0].hasOwnProperty('city_village')){
+    td.innerHTML += " " + result.person.addresses[0].city_village;
   }
   
   tr.appendChild(td);
   /* ............................. */
 
-  if(result['person_id'] != null) {
-    cell.setAttribute('patient_id', result['person_id'])
+  if(result.patient_id != null) {
+    cell.setAttribute('patient_id', result.person.person_id)
   }
   
-  if(result['dde_doc_id'] != null) {
-    cell.setAttribute('dde_doc_id', result['dde_doc_id'])
+  if (result.patient_identifiers.filter(id => id.identifier_type == 27)[0]!= null) {
+    cell.setAttribute('dde_doc_id', (result.patient_identifiers.filter(id => id.identifier_type == 27))[0].identifier);
   }
 
 
