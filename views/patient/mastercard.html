@@ -23,22 +23,18 @@
         })
 
     
-    var patientID = sessionStorage.patientID;
-    var patient_id = sessionStorage.patientID;
+    var patientID = getUrlParameter("patient_id"); 
+    if (patientID != undefined) {
+        sessionStorage.patientID = patientID;
+        patient_id = patientID;
+    }else {
+        var patient_id = sessionStorage.patientID;
+        patientID = sessionStorage.patientID;
+    }
     // if ('sessionStorage.patientID === null'){
     //     sessionStorage.patientID = patientID;
     // }
-    // sessionStorage.patientID = patientID;
-
-    // try { 
-    //   var url = window.location.href;
-    //   url = new URL(url);
-    //   var patient_id = url.searchParams.get("patient_id");
-    //   if(patient_id != undefined)
-    //      patient_id = sessionStorage.patientID;
-
-    // }catch(i){
-    // }
+    
 
     var name = "";
     var name_edit_url = "/views/patient/edit_demographics/name.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
@@ -1364,16 +1360,11 @@
     
 <script>
     
-  try { 
-    // var url = window.location.href;
-    // url = new URL(url);
-    // var patient_id = url.searchParams.get("patient_id");
     if(patient_id != undefined) {
       var btn = document.getElementById('btnNext');
       btn.setAttribute('onclick','gotoPatientDashboard();');
     }
-  }catch(i){
-  }
+ 
 
   function gotoCohort() {
     window.location = sessionStorage.cohort_url;
