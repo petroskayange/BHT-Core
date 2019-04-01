@@ -1,6 +1,7 @@
-var Person = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var person = null
+const Person = function () {
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
+
+  let person = null
 
   function init (data) {
     person = data
@@ -9,9 +10,7 @@ var Person = function () {
   function get (options = {}) {
     fetch (`${apiRoot}/people/${options.personId}`, {
       method: 'GET',
-      headers: {
-        'Authorization': sessionStorage.authorization
-      }
+      headers: { 'Authorization': sessionStorage.authorization }
     })
       .then((response) => {
         if (response.status === 200) {
@@ -41,23 +40,11 @@ var Person = function () {
     return isOfGender('F') && isAgedBetween(9, 55)
   }
 
-  function assignTbRegistrationNumber (options = {}) {
-    fetch (`${apiRoot}/patients/${options.personId}/assign_tb_number`, {
+  function assignTbRegistrationNumber (params = {}) {
+    return fetch (`${apiRoot}/patients/${params.personId}/assign_tb_number`, {
       method: 'GET',
-      headers: {
-        'Authorization': sessionStorage.authorization
-      }
+      headers: { 'Authorization': sessionStorage.authorization }
     })
-      .then((response) => {
-        if (response.status === 201) {
-          options.success(response)
-        } else {
-          options.fail(response)
-        }
-      })
-      .catch((error) => {
-        options.fail(error)
-      })
   }
 
   return {

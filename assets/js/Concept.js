@@ -59,7 +59,8 @@ var Concept = function () {
     'E (Ethambutol 100mg tablet)': 745,
     'RH (R75/H50)': 1194,
     'RH (R150/H75)': 1194,
-    'RHZE (R150/H75/Z400/E275)': 1131
+    'RHZE (R150/H75/Z400/E275)': 1131,
+    AMOUNT_DISPENSED: 2834
   }
 
   function create (data = {}) {

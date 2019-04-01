@@ -1,33 +1,22 @@
-var Encounter = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var user = null
-
-  function init (data) {
-    user = data
+const Encounter = function () {
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
   }
 
-  function create (data = {}) {
-    fetch (`${apiRoot}/encounters`, {
+  let encounter = null
+
+  function init (data) {
+    encounter = data
+  }
+
+  function create (params = {}) {
+    return fetch (`${apiRoot}/encounters`, {
       method: 'POST',
-      headers: {
-        'Authorization': sessionStorage.authorization,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data.params)
+      headers: headers,
+      body: JSON.stringify(params)
     })
-      .then((response) => {
-        if (response.status === 201) {
-          response.json()
-            .then((payload) => {
-              data.success(payload)
-            })
-        } else {
-          data.fail(response)
-        }
-      })
-      .catch((error) => {
-        data.fail(error)
-      })
   }
 
   return {
