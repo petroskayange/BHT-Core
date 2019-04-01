@@ -1,16 +1,38 @@
+/**
+ * Immediately executing func that creates a Dispensation js revealing module
+ * @return {object}
+ */
 const Dispensation = function () {
+  /** @type {string} */
   const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
+
+  /** @type {object} */
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': sessionStorage.authorization
   }
 
-  let dispensation = null
+  /** @type {object} */
+  let dispensation = {}
 
-  function init (data) {
+  /**
+   * Function to initialize a dispensation
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined} 
+   */
+  function init (data = {}) {
     dispensation = data
   }
 
+  /**
+   * Requests the creation of a Dispensation encounter
+   * 
+   * @param {object} params
+   * 
+   * @return {Promise} 
+   */
   function create (params = {}) {
     return fetch (`${apiRoot}/dispensations`, {
       method: 'POST',

@@ -1,15 +1,42 @@
-var Concept = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var concept = null
+/**
+ * Immediatelt executing function that creates a revealing Concept module
+ * 
+ * @return {object}
+ */
+const Concept = function () {
+  /** @type {string} */
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
-  function init (data) {
+  /** @type {object} */
+  const concept = {}
+
+  /**
+   * Function that initializes a concept
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined}
+   */
+  function init (data = {}) {
     concept = data
   }
 
-  function getConceptIdByName (conceptName) {
+  /**
+   * Function to lookup concept names in the CONCEPT_IDS object
+   * 
+   * @param {string} conceptName
+   * 
+   * @return {number|null}
+   */
+  function getConceptIdByName (conceptName = '') {
     return CONCEPT_IDS[conceptName] || null
   } 
 
+  /** 
+   * Central object containing concept ids
+   * 
+   * @type {object}
+   */
   const CONCEPT_IDS = {
     'Cough lasting >1 week': 9694,
     'Cough lasting >2 weeks': 2573,
@@ -63,8 +90,15 @@ var Concept = function () {
     AMOUNT_DISPENSED: 2834
   }
 
+  /**
+   * Function that asks the EMR-API to create a concept
+   * 
+   * @param {object} data
+   * 
+   * @return {Promise}
+   */
   function create (data = {}) {
-    fetch (`${apiRoot}/concepts`, {
+    return fetch (`${apiRoot}/concepts`, {
       method: 'POST',
       headers: {
         'Authorization': sessionStorage.authorization,
@@ -72,16 +106,6 @@ var Concept = function () {
       },
       body: JSON.stringify(data.params)
     })
-      .then((response) => {
-        if (response.status === 201) {
-          data.success(response)
-        } else {
-          data.fail(response)
-        }
-      })
-      .catch((error) => {
-        data.fail(error)
-      })
   }
 
   return {
