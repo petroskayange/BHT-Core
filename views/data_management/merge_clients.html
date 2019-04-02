@@ -220,7 +220,7 @@ function processResults(results, side) {
     container_cell.setAttribute('side', side);
     container_cell.setAttribute('selected', 'false');
     container_cell.setAttribute('patient_id', '');
-    container_cell.setAttribute('dde_doc_id', '');
+    container_cell.setAttribute('doc_id', '');
     container_cell.setAttribute('onmousedown','selectRow(this);');
     container_row.appendChild(container_cell);
 
@@ -286,37 +286,41 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  if (result.person.addresses[0].hasOwnProperty('address2')){
-    td.innerHTML = result.person.addresses[0].address2;
-  }
-  if (result.person.addresses[0].hasOwnProperty('county_district')){
-    td.innerHTML += " " + result.person.addresses[0].county_district;
-  }
-  if (result.person.addresses[0].hasOwnProperty('neighborhood_cell')){
-    td.innerHTML += " " + result.person.addresses[0].neighborhood_cell;
-  }    
-  tr.appendChild(td);
-  /* ............................. */
+  if (result.person.hasOwnProperty('addresses')){
+    if (result.person.addresses.length != 0){
+        if (result.person.addresses[0].hasOwnProperty('address2')){
+          td.innerHTML = result.person.addresses[0].address2;
+        }
+        if (result.person.addresses[0].hasOwnProperty('county_district')){
+          td.innerHTML += " " + result.person.addresses[0].county_district;
+        }
+        if (result.person.addresses[0].hasOwnProperty('neighborhood_cell')){
+          td.innerHTML += " " + result.person.addresses[0].neighborhood_cell;
+        }    
+        tr.appendChild(td);
+        /* ............................. */
 
-  var tr = document.createElement('tr');
-  table.appendChild(tr);
+        var tr = document.createElement('tr');
+        table.appendChild(tr);
 
-  var th = document.createElement('th');
-  th.innerHTML = 'Current address';
-  tr.appendChild(th);
+        var th = document.createElement('th');
+        th.innerHTML = 'Current address';
+        tr.appendChild(th);
 
-  var td = document.createElement('td');
-  if (result.person.addresses[0].hasOwnProperty('state_province')){
-    td.innerHTML = result.person.addresses[0].state_province;
+        var td = document.createElement('td');
+        if (result.person.addresses[0].hasOwnProperty('state_province')){
+          td.innerHTML = result.person.addresses[0].state_province;
+        }
+        if (result.person.addresses[0].hasOwnProperty('township_division')){
+          td.innerHTML += " " + result.person.addresses[0].township_division;
+        }
+        if (result.person.addresses[0].hasOwnProperty('city_village')){
+          td.innerHTML += " " + result.person.addresses[0].city_village;
+        }
+        
+        tr.appendChild(td);
+    }
   }
-  if (result.person.addresses[0].hasOwnProperty('township_division')){
-    td.innerHTML += " " + result.person.addresses[0].township_division;
-  }
-  if (result.person.addresses[0].hasOwnProperty('city_village')){
-    td.innerHTML += " " + result.person.addresses[0].city_village;
-  }
-  
-  tr.appendChild(td);
   /* ............................. */
 
   if(result.patient_id != null) {
@@ -324,7 +328,7 @@ function addResult(result, cell) {
   }
   
   if (result.patient_identifiers.filter(id => id.identifier_type == 27)[0]!= null) {
-    cell.setAttribute('dde_doc_id', (result.patient_identifiers.filter(id => id.identifier_type == 27))[0].identifier);
+    cell.setAttribute('doc_id', (result.patient_identifiers.filter(id => id.identifier_type == 27))[0].identifier);
   }
 
 
@@ -339,18 +343,18 @@ function selectRow(e) {
   }
  
   selectedRecords[e.getAttribute('side')] = {
-    patient_id: null, dde_doc_id: null
+    patient_id: null, doc_id: null
   }
    
   if(e.getAttribute('selected') == 'false') {
     var patient_id = e.getAttribute('patient_id');
-    var dde_doc_id = e.getAttribute('dde_doc_id');
+    var doc_id = e.getAttribute('doc_id');
 
     if(patient_id.length > 0)
       selectedRecords[e.getAttribute('side')].patient_id = patient_id;
     
-    if(dde_doc_id.length > 0)
-      selectedRecords[e.getAttribute('side')].dde_doc_id = dde_doc_id;
+    if(doc_id.length > 0)
+      selectedRecords[e.getAttribute('side')].doc_id = doc_id;
     
     e.style = 'background-color: lightblue;';
     e.setAttribute('selected','true');
@@ -362,8 +366,8 @@ function selectRow(e) {
   var button = document.getElementById('nextButton');
  
   try { 
-    if(selectedRecords['left'].patient_id.length > 0 || selectedRecords['left'].dde_doc_id.length > 0) {
-      if(selectedRecords['right'].patient_id.length > 0 || selectedRecords['right'].dde_doc_id.length > 0) {
+    if(selectedRecords['left'].patient_id.length > 0 || selectedRecords['left'].doc_id.length > 0) {
+      if(selectedRecords['right'].patient_id.length > 0 || selectedRecords['right'].doc_id.length > 0) {
         button.innerHTML = '<span>Merge</span>';
         button.setAttribute('onmousedown', 'mergeClients();');
         button.style = 'display: inline';
@@ -399,6 +403,8 @@ function mergeClients(){
           document.location = "/views/patient/print.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
           alert('Username already exists');
+        } else if (http.status == 400) {
+            alert('Merging of Same person is not Possible');
         } else {
          alert('error' + http.status);
         }
