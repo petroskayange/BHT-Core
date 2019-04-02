@@ -1,5 +1,5 @@
 /**
- * Immediatelt executing function that creates a revealing Concept module
+ * Immediately executing function that creates a revealing Concept module
  * 
  * @return {object}
  */
@@ -8,7 +8,7 @@ const Concept = function () {
   const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
   /** @type {object} */
-  const concept = {}
+  let concept = {}
 
   /**
    * Function that initializes a concept

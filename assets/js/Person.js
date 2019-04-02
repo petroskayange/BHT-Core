@@ -88,7 +88,7 @@ const Person = function () {
    * 
    * @return {Promise}
    */
-  function assignTbRegistrationNumber (personId = {}) {
+  function assignTbRegistrationNumber (personId) {
     return fetch (`${apiRoot}/patients/${personId}/assign_tb_number`, {
       method: 'GET',
       headers: { 'Authorization': sessionStorage.authorization }
