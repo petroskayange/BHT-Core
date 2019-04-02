@@ -1,9 +1,8 @@
 /**
- * Immediately executing function that creates a revealing Observation module
- * 
+ * Immediately executing func that creates a Dispensation js revealing module
  * @return {object}
  */
-const Observation = function () {
+const Dispensation = function () {
   /** @type {string} */
   const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
@@ -14,28 +13,28 @@ const Observation = function () {
   }
 
   /** @type {object} */
-  let observation = {}
+  let dispensation = {}
 
   /**
-   * Function to initialize an Observation
+   * Function to initialize a dispensation
    * 
    * @param {object} data
    * 
-   * @return {undefined}
+   * @return {undefined} 
    */
   function init (data = {}) {
-    observation = data
+    dispensation = data
   }
 
   /**
-   * Function that asks the EMR-API to create observations
+   * Requests the creation of a Dispensation encounter
    * 
    * @param {object} params
    * 
-   * @return {Promise}
+   * @return {Promise} 
    */
   function create (params = {}) {
-    return fetch (`${apiRoot}/observations`, {
+    return fetch (`${apiRoot}/dispensations`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(params)

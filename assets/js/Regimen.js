@@ -1,27 +1,45 @@
+/**
+ * Immediately executing function that creates a Regimen js revealing module
+ * 
+ * @return {object}
+ */
 const Regimen = function () {
+  /** @type {string} */
   const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  let regimen = null
 
-  function init (data) {
+  /** @type {object} */
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
+  }
+
+  /** @type {object} */
+  let regimen = {}
+
+  /**
+   * Function to initialize a Regimen
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined}
+  */
+  function init (data = {}) {
     regimen = data
   }
 
-  function getApplicableProgramRegimens (options = {}) {
-    fetch (`${apiRoot}/programs/${options.data.programId}/regimens/?patient_id=${options.data.patientId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': sessionStorage.authorization
-      }
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          options.success(response)
-        } else {
-          options.fail(response)
-        }
-      })
-      .catch((error) => {
-        options.fail(error)
+  /**
+   * Function that queries the EMR-API for recommended patient regimens
+   * 
+   * @param {object} params
+   * 
+   * @return {Promise}
+   */
+  function getApplicableProgramRegimens (params = {}) {
+    return fetch (
+      `${apiRoot}/programs/${params.programId}/regimens/?patient_id=${params.patientId}`,
+      {
+        method: 'GET',
+        headers: { 'Authorization': sessionStorage.authorization }
       })
   }
 
