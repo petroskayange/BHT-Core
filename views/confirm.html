@@ -571,7 +571,7 @@ function checkIfFilingNumberIsNotValid () {
       tr.appendChild(td);
       table.appendChild(tr);
 
-      if(sessionStorage.dde_enabled === 'true') {
+      if(sessionStorage.dde_enabled === 'true' && scanned_id != null) {
         if(identifier.toUpperCase() == 'NPID' && identifiersHash[identifier].length > 0) {
           var returned_id = identifiersHash[identifier].toUpperCase().replace(/-/g, "");
           if(scanned_id.toUpperCase() != returned_id && scanned_id.length != 6) {

@@ -1,4 +1,4 @@
-function showPrompt() {
+function showPrompt () {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var prompt = document.createElement('div');
@@ -49,6 +49,13 @@ function removePrompt() {
   document.body.removeChild(document.getElementById('dankPrompt'));
 }
 
+/**
+ * Function that creates a touchscreen toolkit button
+ * 
+ * @param {object} options - Contains name; ?attributes, ?listeners and ?styles
+ * 
+ * @return {object} - An HTMLButtonElement object
+ */
 function createToolkitButton() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -72,4 +79,88 @@ function createToolkitButton() {
   }
 
   return button;
+}
+
+/**
+ * Function that depends on tt_toolkit to display error messages to the user
+ * 
+ * @param {string|object} error
+ * 
+ * @return {undefined}
+ */
+function logErrorAndNotify (error) {
+  console.error(error)
+  showMessage('Oops! An error has occurred.')
+}
+
+/**
+ * Function that depends on jQuery to hide elements in the DOM
+ * 
+ * @param {string} selector
+ * 
+ * @return {undefined}
+ */
+function hide (selector = '') {
+  jQuery(selector).hide()
+}
+
+/**
+ * Function that depends on jQuery to show elements in the DOM
+ * 
+ * @param {string} selector
+ * 
+ * @return {undefined}
+ */
+function show (selector = '') {
+  jQuery(selector).show()
+}
+
+/**
+ * Function to hide an element given an id in the DOM
+ * 
+ * @param {string} id
+ * 
+ * @return {undefined}
+ */
+function hideElementById (id = '') {
+  document.getElementById(id).style.display = 'none'
+}
+
+/**
+ * Function to wait for a given delay and go to the patient dashboard
+ * 
+ * @param {number} delay
+ * 
+ * @return {undefined}
+ */
+function delayAndGoToPatientDashboard (delay) {
+  setTimeout(() => {
+    document.location = `/views/patient_dashboard.html?patient_id=${sessionStorage.patientID}`
+  }, delay)
+}
+
+/**
+ * Function to save a key-value pair in sessionStorage
+ * 
+ * @param {string} key 
+ * @param {string|number|boolean|object} data
+ * 
+ * @return {undefined}
+ */
+function saveInSessionStorage (key = '', data) {
+  if (typeof data === 'object') {
+    data = JSON.stringify(data)
+  }
+  sessionStorage.setItem(key, data)
+}
+
+/**
+ * Function to remove items from sessionStorage given a key
+ * 
+ * @param {string} key
+ * 
+ * @return {undefined} 
+ */
+function removeFromSessionStorage (key = '') {
+  sessionStorage.removeItem(key)
 }
