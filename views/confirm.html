@@ -574,7 +574,7 @@ function checkIfFilingNumberIsNotValid () {
       if(sessionStorage.dde_enabled === 'true' && scanned_id != null) {
         if(identifier.toUpperCase() == 'NPID' && identifiersHash[identifier].length > 0) {
           var returned_id = identifiersHash[identifier].toUpperCase().replace(/-/g, "");
-          if(scanned_id.toUpperCase() != returned_id && scanned_id.length != 6) {
+          if(scanned_id.toUpperCase().replace(/-/g, "") != returned_id && scanned_id.length != 6) {
             document.location = '/views/print/npid.html?identifier=' + returned_id;
           }
         }
@@ -952,7 +952,7 @@ function checkIfFilingNumberIsNotValid () {
         >
           <span aria-hidden="true">&times;</span>
         </button>
-        <h1 class="modal-title" id="myModalLabel">
+        <h1 class="modal-title" id="deadModalLabel">
           Patient Has Died, are you sure you want to continue?
         </h1>
       </div>
