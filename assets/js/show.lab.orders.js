@@ -1,4 +1,7 @@
 function showOrders() {
+  if (sessionStorage.patientID == 'null')
+    return;
+
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
   url += "/programs/1/lab_tests/orders?patient_id=" + sessionStorage.patientID;
 

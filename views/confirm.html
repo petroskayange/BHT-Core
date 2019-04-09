@@ -352,7 +352,8 @@ function checkIfFilingNumberIsNotValid () {
         window.location.href = "/";
       }else if (this.status == 422) {
         var f = JSON.parse(this.responseText);
-        sessionStorage.patientID = f.patient_id;
+        //sessionStorage.patientID = f.patient_id;
+        sessionStorage.patientID = f.entity.patient_id;
         window.location.href = "/views/patient/edit_demographics.html";
       }
     };
@@ -443,7 +444,8 @@ function checkIfFilingNumberIsNotValid () {
     //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
     getHeight(patient_id);
     getWeight(patient_id);
-
+    sessionStorage.patientID = patient_id;
+    showOrders();
     buildIdentifiers(patient["patient_identifiers"]);
     buildStates(obj, patient_id);
     var orders = obj_2;
@@ -569,10 +571,10 @@ function checkIfFilingNumberIsNotValid () {
       tr.appendChild(td);
       table.appendChild(tr);
 
-      if(sessionStorage.dde_enabled === 'true') {
+      if(sessionStorage.dde_enabled === 'true' && scanned_id != null) {
         if(identifier.toUpperCase() == 'NPID' && identifiersHash[identifier].length > 0) {
           var returned_id = identifiersHash[identifier].toUpperCase().replace(/-/g, "");
-          if(scanned_id.toUpperCase() != returned_id && scanned_id.length != 6) {
+          if(scanned_id.toUpperCase().replace(/-/g, "") != returned_id && scanned_id.length != 6) {
             document.location = '/views/print/npid.html?identifier=' + returned_id;
           }
         }
@@ -600,7 +602,7 @@ function checkIfFilingNumberIsNotValid () {
           identifiersHash["Current Outcome"] =
             results.current_outcome !== "N/A"
               ? results.current_outcome
-              : "No Outcome Available";
+              : "No Outcome Available";buildInfoBoxes
           var table = document.createElement("table");
           table.setAttribute("class", "info-tables");
 
@@ -950,7 +952,7 @@ function checkIfFilingNumberIsNotValid () {
         >
           <span aria-hidden="true">&times;</span>
         </button>
-        <h1 class="modal-title" id="myModalLabel">
+        <h1 class="modal-title" id="deadModalLabel">
           Patient Has Died, are you sure you want to continue?
         </h1>
       </div>
@@ -1183,5 +1185,4 @@ function dateDiffInMonths(dt2, dt1) {
   return months <= 0 ? 0 : months;
 }
 </script>
-
 <script src="/assets/js/show.lab.orders.js"></script>

@@ -21,7 +21,14 @@
         }
 
         function addInput(field_name) {
-            __$("touchscreenInput" + tstCurrentPage).value = sessionStorage.getItem(field_name);
+            var value = ""
+            console.log(sessionStorage.getItem(field_name));
+
+            if (sessionStorage.getItem(field_name) !== "null"){
+                value = sessionStorage.getItem(field_name);
+            }
+
+            __$("touchscreenInput" + tstCurrentPage).value = value;
         }
 
         function validateName() {
@@ -41,7 +48,7 @@
 
     <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
             defer="true"></script>
-    <!--   <script type="text/javascript" src="/assets/js/jquery.min.js"></script> -->
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/data.js"></script>
     <script type="text/javascript" src="/assets/js/core.js"></script>
     <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
