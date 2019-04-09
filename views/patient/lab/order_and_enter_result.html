@@ -3,6 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/lab.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+      <script type="text/javascript" src="/assets/js/moment.js"></script>
+      <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
     <style>
         .tt_controls_enter_result #lessthan {            
             right: 65%;
@@ -38,7 +50,7 @@
       tstUsername = "";
       tstUserKeyboardPref = "qwerty";
       var tstCurrentDate = moment(tstCurrentDate).format("YYYY-MM-DD");
-      var tt_cancel_destination = "test_without_results.html";
+      var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
 
 
       var d = new Date();
@@ -102,16 +114,6 @@
 
     </script>
 
-    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
-    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/assets/js/lab.min.js"></script>
-    <script type="text/javascript" src="/assets/js/core.js"></script>
-      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
-      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
-      <script type="text/javascript" src="/assets/js/moment.js"></script>
-
-      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
-
 
   </head>
   <body id="mateme">
@@ -165,7 +167,7 @@
         condition = "$('results').value == 'N/A'"
     />
 
-    <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onUnload="getInput();"
+    <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onLoad="validateEntry()"
         helpText="Result Aproved by"  
         allowFreeText="true"  />
        
@@ -273,6 +275,21 @@
         
         loadTestMeasures();
      
+    function validateEntry(){
+        var button = document.getElementById("nextButton");
+        button.setAttribute('onmousedown','createVLorder()');
+    }
+
+   function createVLorder() {
+       var inputText = document.getElementById("touchscreenInput" + tstCurrentPage);
+       if (inputText.value.length <1)
+       {
+           showMessege("Enter Provider");
+           return;
+       }
+       
+       submiteEntry();
+   }
 
     function submiteEntry()
     {   var da = document.getElementById("date_sample_drawn").value;     
@@ -283,10 +300,11 @@
         var testResult = document.getElementById("results").value;
         if (testResult == "N/A"){
             testResult = document.getElementById("results2").value;
+            
         }
         var sampleTYpe = document.getElementById("sample_typee").value;
         var patientID = sessionStorage.patientID;
-        var approved_by = document.getElementById("approved_by").value;
+        var approved_by = document.getElementById("touchscreenInput" + tstCurrentPage).value;
         var resutlValue = {}
         resutlValue[testMeasure] = testResult;
         data = {};
@@ -309,41 +327,16 @@
                 'last_name':  approved_by
             },
             "results": resutlValue
-        }
-
-        sessionStorage.setItem("order_give_result",JSON.stringify(data));
-              
+        }      
+            url = '/programs/1/lab_tests/order_and_results?patient_id=' + sessionStorage.patientID;
+            submitParameters(data, url, 'redirectToOrderMenu'); 
     }
 
-    if (sessionStorage.getItem("order_give_result") != null)
+    function redirectToOrderMenu(obs)
     {
-    
-      data = sessionStorage.getItem('order_give_result');
-        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-            url += '/programs/1/lab_tests/order_and_results?patient_id=' + sessionStorage.patientID;
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                    var obs = JSON.parse(this.responseText);
-                   
-                   
-                   window.location = "test_without_results.html";
-                  
-                }
-                else{
-                
-                }
-            };
-            xhttp.open("POST", url, true);
-            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-            xhttp.setRequestHeader('Content-type', "application/json");
-            xhttp.send(data);
-            sessionStorage.setItem("order_give_result",null);
+        window.location = "/views/patient/lab/test_without_results.html";
     }
-
-       
-
+ 
 
   </script>
 </html>

@@ -113,6 +113,12 @@
     nextBtn.setAttribute("onclick", "");
   }
 
+  function validateDay() {
+    var nextBtn = __$("nextButton");
+    nextBtn.setAttribute("onmousedown", "validateOutcomeDate();");
+    nextBtn.setAttribute("onclick", "");
+  }
+
   function validateOutcomeYearMonth() {
     setYear = parseInt(document.getElementById("outcome_year").value);
     if (setYear == new Date().getFullYear()) {
@@ -365,6 +371,7 @@
           id="outcome_day"
           field_type="number"
           helpText="Outcome Day"
+          tt_onLoad="validateDay();__$(keyboard).style.display = none;"
           condition="$('outcome_year').value.toLowerCase() != 'unknown' && $('outcome_month').value.toLowerCase() != 'unknown'"
         />
       </form>

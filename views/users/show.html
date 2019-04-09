@@ -294,12 +294,6 @@
     document.location = '/views/users/change_role.html?user_id=' + userId;
   }
 
-  getUser(
-    {
-      url: `${root}/users/${userId}`,
-      authToken: sessionStorage.authorization,
-    }
-  )
   function clearCreatedUserSession() {
     sessionStorage.removeItem('user_username');
     sessionStorage.removeItem('user_family_name');
