@@ -94,7 +94,8 @@ const Concept = function () {
     PROCEDURE_TYPE: 9587,
     TB_ADHERENCE: 2605,
     DRUGS_BROUGHT: 2540,
-    TB_DRUGS_START_DATE: 1113
+    TB_DRUGS_START_DATE: 1113,
+    HEALTH_WORKER: 1538
   }
 
   /**
