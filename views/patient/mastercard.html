@@ -235,7 +235,6 @@
          xhttp.onreadystatechange = function () {
              if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                  var ever_received_observations = JSON.parse(this.responseText);
-                 console.log(ever_received_observations );
                  if (ever_received_observations.length > 0) {
 
                      ever_received_art = "Yes";
