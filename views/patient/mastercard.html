@@ -198,6 +198,7 @@
 
     var ever_received_art = "No";
     var ever_received_concept_id = 7754;
+    var date_art_last_taken_concept_id = 7751;
     var yes_concept_id = 1065;
     var no_concept_id = 1066;
 
@@ -212,8 +213,11 @@
                 var ever_received_observations = JSON.parse(this.responseText);
                 if (ever_received_observations.length > 0) {
                     ever_received_art = "Yes";
+                    jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+                }else {
+                    transferInFallback();
                 }
-                jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+
             }
         };
 
@@ -222,6 +226,29 @@
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send();
     }
+
+     function transferInFallback() {
+         var ever_received_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+         ever_received_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+         ever_received_url += "&concept_id=" + date_art_last_taken_concept_id;
+         var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function () {
+             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                 var ever_received_observations = JSON.parse(this.responseText);
+                 console.log(ever_received_observations );
+                 if (ever_received_observations.length > 0) {
+
+                     ever_received_art = "Yes";
+                 }
+                 jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+             }
+         };
+
+         xhttp.open("GET", ever_received_url, true);
+         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+         xhttp.setRequestHeader('Content-type', "application/json");
+         xhttp.send();
+     }
 
     var bmi_concept_id = 2137;
 
