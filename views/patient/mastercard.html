@@ -74,6 +74,18 @@
     }
 };
 
+ function getAttribute(attributes, attribute_type_id) {
+     var attribute = "";
+     for (var index = 0; index < attributes.length; index++) {
+         if(attributes[index]["person_attribute_type_id"] == attribute_type_id) {
+            return  attribute =  attributes[index]["value"];
+         }else {
+            return attribute = "";
+         }
+     }
+     return attribute;
+ }
+
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
 
@@ -90,10 +102,7 @@
                 age = getAge(person["birthdate"]);
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
-                closest_landmark = person_address["neighborhood_cell"];
-                if (!closest_landmark){
-                    closest_landmark = "Add";
-                }
+                closest_landmark = getAttribute(person_attributes, "19");
 
                 for (var key in patient_identifiers) {
                     var type = patient_identifiers[key]["type"];
