@@ -95,7 +95,8 @@ const Concept = function () {
     DRUGS_BROUGHT: 2540,
     TB_DRUGS_START_DATE: 1113,
     HEALTH_WORKER: 1538,
-    PREV_TEST_DATE: 9657
+    PREV_TEST_DATE: 9657,
+    COUGH_DURATION: 5959
   }
 
   /**
