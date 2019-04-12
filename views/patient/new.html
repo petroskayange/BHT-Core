@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/tt_tabs.css" type="text/css">
 
+    <script type="text/javascript" src="/assets/js/add.locations.js"></script>
     <script language="javascript">
         tstUsername = "";
         tstUserKeyboardPref = "qwerty";
@@ -959,8 +960,8 @@
                    helpText="Home TA"
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
-                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);"
-                   tt_onUnLoad="jQuery('#nextButton').show();homeTA = getNames(__$('home_ta').value, 'TA', '/traditional_authorities?paginate=false&region_id=' + document.getElementById('home_ta').value);"
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('home_district').value);addLocation('TA','home_district');"
+                   tt_onUnLoad="jQuery('#nextButton').show();homeTA = getNames(__$('home_ta').value, 'TA', '/traditional_authorities?paginate=false&region_id=' + document.getElementById('home_ta').value);removeAddLocation();"
                    objectType="traditional_authority"/>
                  
             <input type="text" name="home_village"
@@ -968,8 +969,8 @@
                    helpText="Home Village"
                    condition="$('home_region').value != '4'"
                    tt_requireNextClick='false'
-                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);"
-                   tt_onUnload="jQuery('#nextButton').show();homeVillage = getNames(__$('home_village').value, 'Village', '/villages?paginate=false&traditional_authority_id=' + document.getElementById('home_ta').value);"
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('home_ta').value);addLocation('Village','home_ta');"
+                   tt_onUnload="jQuery('#nextButton').show();homeVillage = getNames(__$('home_village').value, 'Village', '/villages?paginate=false&traditional_authority_id=' + document.getElementById('home_ta').value);removeAddLocation();"
                    objectType="village"/>
 
             <!-- Home Address ............................................. -->
@@ -1005,8 +1006,8 @@
                    helpText="Current TA"
                    condition="$('current_region').value != '4'"
                    tt_requireNextClick='false'
-                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);"
-                   tt_onUnload="jQuery('#nextButton').show();"
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/traditional_authorities?district_id=', document.getElementById('current_district').value);addLocation('TA', 'current_district');"
+                   tt_onUnload="jQuery('#nextButton').show();removeAddLocation();"
                    objectType="traditional_authority"/>
 
             <input type="text" name="current_village"
@@ -1015,8 +1016,8 @@
                    ajaxURL=""
                    condition="$('current_region').value != '4'"
                    tt_requireNextClick='false'
-                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);"
-                   tt_onUnload="jQuery('#nextButton').show();searchForPotentialDuplicates();"
+                   tt_onLoad="jQuery('#nextButton').hide(); clearInput();set_ajaxURL_for_suggestions('/villages?traditional_authority_id=', document.getElementById('current_ta').value);addLocation('Village', 'current_ta');"
+                   tt_onUnload="jQuery('#nextButton').show();searchForPotentialDuplicates();removeAddLocation();"
                    objectType="village"/>
 
             <!-- ................... Current Address ends ........................... -->
