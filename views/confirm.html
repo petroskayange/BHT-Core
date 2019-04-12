@@ -571,11 +571,13 @@ function checkIfFilingNumberIsNotValid () {
       tr.appendChild(td);
       table.appendChild(tr);
 
-      if(sessionStorage.dde_enabled === 'true' && scanned_id != null) {
+      if(sessionStorage.dde_enabled === 'true') {
         if(identifier.toUpperCase() == 'NPID' && identifiersHash[identifier].length > 0) {
           var returned_id = identifiersHash[identifier].toUpperCase().replace(/-/g, "");
-          if(scanned_id.toUpperCase() != returned_id && scanned_id.length != 6) {
-            document.location = '/views/print/npid.html?identifier=' + returned_id;
+          if(scanned_id) {
+            if(scanned_id.toUpperCase().replace(/-/g, "") != returned_id && scanned_id.length != 6) {
+              document.location = '/views/print/npid.html?identifier=' + returned_id;
+            }
           }
         }
       }

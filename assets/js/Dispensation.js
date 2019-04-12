@@ -41,7 +41,22 @@ const Dispensation = function () {
     })
   }
 
+  /**
+   * Function to fetch the patient's most recent dispensation
+   * 
+   * @param {number} patientId
+   * 
+   * @return {Array}
+   */
+  function getLastPatientDispensation (patientId) {
+    return fetch (`${apiRoot}/dispensations?patient_id=${patientId}`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
   return {
-    create
+    create,
+    getLastPatientDispensation
   }
 }()
