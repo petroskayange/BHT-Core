@@ -651,11 +651,20 @@ function getMonthInNum(str) {
 }
 
 function nextPage(obs){
-  var url = "/programs/"+programID+"/patients/" + patientID + "/labels/visits"
-  url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
-  document.location = url;
+
+  if (programID === "12"){
+    
+    red();
   
-  setTimeout('red();', 2000);
+  }else{
+
+    var url = "/programs/"+programID+"/patients/" + patientID + "/labels/visits"
+    url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+    document.location = url;
+  
+    setTimeout('red();', 2000);
+
+  }
   
 }
 

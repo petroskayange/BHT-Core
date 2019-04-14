@@ -418,7 +418,7 @@ function buildDashboardButtons(tasks, container) {
                 }
 
                 containerTableCell = document.createElement("div");
-                containerTableCell.setAttribute("class", "tasks-table-cell");
+
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
@@ -430,7 +430,20 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
                 }
                 else {
-                    containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
+
+                    if (sessionStorage.savedEncounters !== undefined && 
+                      sessionStorage.savedEncounters.includes(tasks[i][0].toUpperCase())){
+                    
+                      containerTableCell.setAttribute("class", "tasks-table-cell-gray");
+                      containerTableCell.setAttribute("onmousedown", "");
+
+                    }else{
+
+                      containerTableCell.setAttribute("class", "tasks-table-cell");
+                      containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
+
+                    }
+
                 }
 
                 var infoTable = document.createElement("table");
@@ -913,3 +926,48 @@ function getPortalLocation(){
     xhttp.setRequestHeader('Content-type', "application/json");
     xhttp.send();
 }
+
+function getSavedEncounters() {
+
+  var url = 'http://'+apiURL+':'+apiPort+'/api/v1';
+  url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
+  url += '?date='+sessionStorage.sessionDate;
+
+  var req = new XMLHttpRequest();
+
+  var params = JSON.stringify({date: sessionStorage.sessionDate});
+
+  req.onreadystatechange = function(){
+
+    if (this.readyState == 4) {
+
+      if (this.status == 200) {
+
+        var results = JSON.parse(this.responseText);
+        console.log(results);
+
+        sessionStorage.setItem("savedEncounters", results);
+
+      }
+
+    }
+
+  };
+
+  try {
+
+    req.open('GET', url, true);
+
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+
+    req.send(null);
+
+  } catch (e) {
+  
+    console.log(e);
+
+  }
+
+}
+
+getSavedEncounters();
