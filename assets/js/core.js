@@ -14,19 +14,25 @@ sessionStorage.setItem("backupPatientID", id);
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
 // var activities_tab_content = "";
 // })
-admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
+var admin_tab_content = '';
+if(sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
+  admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="enable-portal" onclick="redirect(this.id); "><img src="/assets/images/portal.png" class="btn-icons"/><span>Portal Settings</span></button>';
+}
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="enable-portal" onclick="redirect(this.id); "><img src="/assets/images/portal.png" class="btn-icons"/><span>Portal Settings</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -759,7 +765,15 @@ function checkCredentials(username, password) {
         if (http.readyState == 4) {
             if (http.status == 200) {
                 var v = JSON.parse(http.responseText);
+
+                var user_roles = [];
+                var roles = v['authorization'].user.roles;
+                for(var i = 0 ; i < roles.length; i++){
+                  user_roles.push(roles[i].role);
+                }
+               
                 sessionStorage.setItem("authorization", v.authorization.token);
+                sessionStorage.setItem("userRoles", user_roles.join(','));
                 sessionStorage.removeItem("userPassword");
                 window.location.href = "location.html";
                 // sessionStorage.removeItem("userPassword");
