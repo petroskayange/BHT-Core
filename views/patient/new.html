@@ -875,7 +875,7 @@
                    id="given_name" field_type="alpha"
                    key="given_name" helpText="First name"
                    ajaxURL="/search/given_name?search_string="
-                   key=given_name" allowFreeText="true"
+                   key="given_name" allowFreeText="true"
                    condition="$(&quot;given_name&quot;).value == &quot;&quot;"/>
 
             <input type="text" name="person[names][family_name]"
@@ -1056,9 +1056,12 @@
                    helpText="Cell phone number"
                    field_type="number"
                    tt_pageStyleClass="nota"
-                   validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available|N\/A"
+                   validationRule="^0\\d{7}$|Unknown|Not Available|N\/A|^0\\d{9}$"
                    validationMessage="Not a valid phone number"
                    tt_onLoad="$(nextButton).style.display = block;"/>
+
+            <!--   validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available|N\/A"
+                   validationMessage="Not a valid phone number" -->
 
             <select allowFreeText="false" helpText="Type of patient"
                     name="patient_type"
