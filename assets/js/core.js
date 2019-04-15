@@ -15,7 +15,7 @@ sessionStorage.setItem("backupPatientID", id);
 // var activities_tab_content = "";
 // })
 var admin_tab_content = '';
-if(sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
+if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
   admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
 
   admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
