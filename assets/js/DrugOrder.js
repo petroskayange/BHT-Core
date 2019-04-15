@@ -50,7 +50,21 @@ const DrugOrder = function () {
    * @return {Promise}
    */
   function getRecentPatientDrugOrder (patientId) {
-    return fetch(`${apiRoot}/drug_orders?patient_id=${patientId}`, {
+    return fetch (`${apiRoot}/drug_orders?patient_id=${patientId}`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
+  /**
+   * Function to ask the EMR-API to get the last drugs received by the patient
+   * 
+   * @param {Object} params - object containing programId and patientId
+   * 
+   * @return {Promise}
+   */
+  function getLastDrugsReceived (params = {}) {
+    return fetch (`${apiRoot}/programs/${params.programId}/patients/${params.patientId}/last_drugs_received`, {
       method: 'GET',
       headers: { 'Authorization': sessionStorage.authorization }
     })
@@ -58,6 +72,7 @@ const DrugOrder = function () {
 
   return {
     create,
-    getRecentPatientDrugOrder
+    getRecentPatientDrugOrder,
+    getLastDrugsReceived
   }
 }()

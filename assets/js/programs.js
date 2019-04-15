@@ -178,6 +178,12 @@ function createStateRow (state = {}, style = '', attributes = []) {
   }))
   stateRow.appendChild(voidln)
 
+  if(state.name === "Patient transferred out") {
+    const printTransferOut = createTableData();
+    printTransferOut.appendChild(creatTransferLink());
+    stateRow.appendChild(printTransferOut);
+  }
+
   if (attributes.length) {
     attributes.forEach((attribute) => {
       stateRow.setAttribute(attribute.name, attribute.value)
@@ -245,6 +251,34 @@ function createVoidLink (options = {}) {
       }
     ],
     'text-align: center; color: blue; font-weight: bold; font-size: 1.1em; text-decoration: underline'
+  )
+}
+
+function creatTransferLink() {
+  return createLink(
+      'Print',
+      [
+        {
+          event: 'click',
+          handler: (event) => {
+            window.location.href = "/views/print/transfer.html";
+          }
+        }
+      ],
+      // 'text-align: center; color: blue; font-weight: bold;border: solid 1px black; font-size: 1.1em; text-decoration: underline; border-radius:20%;'
+      ' background-color: rgb(119, 136, 187); /* Green */\n' +
+      '  border: none;\n' +
+      '  border-radius: 20%;\n'+
+      '  color: white;\n' +
+      '  padding: 16px 32px;\n' +
+      '  text-align: center;\n' +
+      '  text-decoration: none;\n' +
+      '  display: inline-block;\n' +
+      '  font-size: 16px;\n' +
+      '  margin: 4px 2px;\n' +
+      '  -webkit-transition-duration: 0.4s; /* Safari */\n' +
+      '  transition-duration: 0.4s;\n' +
+      '  cursor: pointer;'
   )
 }
 
