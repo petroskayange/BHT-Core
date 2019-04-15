@@ -703,7 +703,7 @@
     helpText="Guardian cell phone number"
     tt_pageStyleClass="NumbersOnlyWithUnknown" 
     field_type="number"
-    validationRule="^0\\d{7}$|Unknown|Not Available|N\/A|^0\\d{9}$"
+    validationRule="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$|Unknown|Not Available"
     validationMessage="Not a valid phone number" 
     tt_onLoad="$(nextButton).style.display = block;" />
 
