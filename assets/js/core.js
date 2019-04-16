@@ -404,12 +404,12 @@ function buildDashboardButtons(tasks, container) {
 
     var use_filling_number = false;
     var use_filling_number_property_url = apiProtocol + "://" + apiURL + ":" + apiPort;
-    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.number";
+    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.numbers";
     var xhttp1 = new XMLHttpRequest();
     xhttp1.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200 || this.status == 404)) {
             try {
-                var use_filling_number_property = JSON.parse(this.responseText)["use.filing.number"];
+                var use_filling_number_property = JSON.parse(this.responseText)["use.filing.numbers"];
                 if (use_filling_number_property == "true") {
                     use_filling_number = true
                 }
