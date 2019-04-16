@@ -181,37 +181,6 @@
         window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
     }
 
-    function showFilingNumbers(identifiers) {
-        var html = "<table id='past-filing-numbers'>";
-        html += "<thead>";
-        html += "<th>&nbsp;</th>";
-        html += "<th>Filing #</th>";
-        html += "<th>Date created</th>";
-        html += "<th>Date voided</th>";
-        html += "</thead>";
-        html += "<tbody>";
-        var count = 1;
-        for (var key in past_filling_numbers) {
-            var identifier = past_filling_numbers[key]["identifier"];
-            var date_created = past_filling_numbers[key]["date_created"];
-            date_created = moment(date_created).format('DD/MMM/YYYY');
-            var date_voided = past_filling_numbers[key]["date_voided"];
-            date_voided = moment(date_voided).format('DD/MMM/YYYY');
-
-            html += "<tr>";
-            html += "<td>" + count + "</td>";
-            html += "<td>" + identifier + "</td>";
-            html += "<td>" + date_created + "</td>";
-            html += "<td>" + date_voided + "</td>"
-            html += "</tr>";
-            count = count + 1;
-        }
-
-        html += "</tbody>";
-        html += "<table>";
-        jQuery(".inputFrameClass").append(html);
-    }
-
     function archiveFileNumber(identifier) {
         console.log(identifier.getAttribute("id"));
       var patientId = sessionStorage.patientID; 
