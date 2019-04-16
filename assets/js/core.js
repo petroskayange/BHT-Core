@@ -329,7 +329,7 @@ function getActivities(activitiesData) {
 
     for (var i = 0; i < activitiesData.others.length; i++) {
 
-        activitiesName[i] = activitiesData.others[i].activitiesName || "Activities Name Not Defined!!";
+        activitiesName[i] = activitiesData.others[i]["activitiesName"] || "Activities Name Not Defined!!";
         activitiesDescription[i] = activitiesData.others[i].activitiesDescription || "No Description Available";
         activitiesIcon[i] = activitiesData.others[i].activitiesIcon;
         applicationFolder[i] = activitiesData.others[i].applicationFolder;
@@ -404,7 +404,7 @@ function buildDashboardButtons(tasks, container) {
 
     var use_filling_number = false;
     var use_filling_number_property_url = apiProtocol + "://" + apiURL + ":" + apiPort;
-    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.number";
+    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.numbers";
     var xhttp1 = new XMLHttpRequest();
     xhttp1.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200 || this.status == 404)) {
@@ -426,10 +426,10 @@ function buildDashboardButtons(tasks, container) {
                     containerTable.appendChild(containerTableRow);
                     count = 0;
                 }
-
+                console.log(!use_filling_number);
                 if (!use_filling_number) {
                     if (tasks[i][0].match(/filing/i)) {
-                        continue;
+                        // continue;
                     }
                 }
 
