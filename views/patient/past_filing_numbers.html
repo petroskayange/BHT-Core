@@ -1,7 +1,7 @@
-<script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
-        defer="true"></script>
-<!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/standard.js" defer="true"></script> -->
-<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script defer="true" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+        type="text/javascript"></script>
+
+<script src="/assets/js/jquery.min.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
@@ -19,7 +19,7 @@
         display: none;
     }
 
-    #past-filing-numbers{
+    #past-filing-numbers {
         width: 100%;
     }
 
@@ -33,7 +33,7 @@
     #past-filing-numbers tbody {
         text-align: center;
         line-height: 2em;
-        letter-spacing: 1;
+        letter-spacing: 1px;
     }
 
     .actionbtn {
@@ -48,9 +48,11 @@
         cursor: pointer;
         border-radius: 8px;
     }
+
     .activate {
         background-color: green;
     }
+
     .deactivate {
         background-color: red;
     }
@@ -69,6 +71,8 @@
 
         jQuery(".inputFrameClass").css("width", "96%");
         jQuery(".inputFrameClass").css("height", "80%");
+        jQuery(".inputFrameClass").css("overflow", "scroll");
+
 
         finishButtonHtml = '<button class="button navButton green"  onmousedown="gotoPatientDashboard();"><span>Finish</span></button>'
         jQuery("#buttons").append(finishButtonHtml);
@@ -95,16 +99,12 @@
         }
 
 
-
-
         function getIdentifier(identifiers, identifier_type) {
             var identifier = [];
-            // console.log(identifiers.length);
             for (var index = 0; index < identifiers.length; index++) {
-                console.log(identifiers[index]);
-                if(identifiers[index]["identifier_type"] == identifier_type) {
-                   return identifier =  identifiers[index];
-                }else {
+                if (identifiers[index]["identifier_type"] == identifier_type) {
+                    return identifier = identifiers[index];
+                } else {
                     identifier = [];
                 }
             }
@@ -122,11 +122,11 @@
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                     var old_filling_numbers = JSON.parse(this.responseText);
                     var past_filling_numbers = [];
-                    if(Object.keys(current_file_number).length > 0) {
+                    if (Object.keys(current_file_number).length > 0) {
                         past_filling_numbers.push(current_file_number);
 
                     }
-                    if(old_filling_numbers.length > 0) {
+                    if (old_filling_numbers.length > 0) {
 
                         for (var i = 0; i < old_filling_numbers.length; i++) {
 
@@ -134,7 +134,7 @@
 
                         }
                     }
-                    var html = "<table id='past-filing-numbers'>";
+                    var html = "<table id='past-filing-numbers' style='height: 100%;'>";
                     html += "<thead>";
                     html += "<th>Status</th>";
                     html += "<th>Filing #</th>";
@@ -142,7 +142,7 @@
                     html += "<th>Date voided</th>";
                     html += "<th>Action</th>";
                     html += "</thead>";
-                    html += "<tbody>";
+                    html += "<tbody style='overflow: scroll;'>";
                     var count = 1;
                     for (var key in past_filling_numbers) {
                         var identifier = past_filling_numbers[key]["identifier"];
@@ -156,7 +156,7 @@
                         html += "<td>" + identifier + "</td>";
                         html += "<td>" + date_created + "</td>";
                         html += "<td>" + date_voided + "</td>"
-                        html += "<td><span id="+past_filling_numbers[key].patient_identifier_id+" class='actionbtn " + ((past_filling_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                        html += "<td><span id=" + past_filling_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filling_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
                         html += "</tr>";
                         count = count + 1;
                     }
@@ -182,25 +182,114 @@
     }
 
     function archiveFileNumber(identifier) {
-        console.log(identifier.getAttribute("id"));
-      var patientId = sessionStorage.patientID; 
-      var apiUrl = apiProtocol + "://" + apiURL + ":" + apiPort + '/api/v1/patient_identifiers/' + identifier.id;
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function () {
+
+        showPrompt({
+            message: "Are you sure want to archive this file number ?",
+            yesCallback: function yesCallback() {
+
+                removePrompt();
+                var patientId = sessionStorage.patientID;
+                var apiUrl = apiProtocol + "://" + apiURL + ":" + apiPort + '/api/v1/patient_identifiers/' + identifier.id;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && (this.status == 201 || this.status == 204)) {
-                        //gotoMastercard();
-                        alert("voided")
+
+                        showMessage("successfully archived")
+                        setTimeout(location.reload(), 4000);
                     }
                 };
                 xhttp.open("DELETE", apiUrl, true);
                 xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
                 xhttp.setRequestHeader('Content-type', "application/json");
                 xhttp.send();
+            },
+            noCallback: removePrompt
+        });
+
+    }
+    function createScreenOverlay() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var overlay = document.createElement('div');
+        overlay.setAttribute('id', 'dankOverlay');
+        overlay.style = 'background-color: ' +
+            options.color + ';\nopacity: ' +
+            options.opacity + ';position: fixed;width: 100%;height: 100%;top: 0;bottom: 0;left: 0;right: 0;z-index: 9000;';
+        return overlay;
+    }
+
+    function createToolkitButton() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var button = document.createElement('button');
+        button.innerHTML += '<span>' + options.text + '</span>';
+
+        if (options.attributes) {
+            options.attributes.forEach(function (attribute) {
+                button.setAttribute(attribute.name, attribute.value);
+            });
+        }
+
+        if (options.listeners) {
+            options.listeners.forEach(function (listener) {
+                button.addEventListener(listener.event, listener.handler);
+            });
+        }
+
+        if (options.style) {
+            button.style = options.style;
+        }
+
+        return button;
+    }
+
+    function removePrompt() {
+        document.body.removeChild(document.getElementById('dankOverlay'))
+        document.body.removeChild(document.getElementById('dankPrompt'))
     }
 
     function getActiveFileNumber() {
         var url = '/apps/ART/views/file_numbers.html?patient_id=' + sessionStorage.patientID;
         document.location = url;
+    }
+
+    function showPrompt() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var prompt = document.createElement('div');
+        prompt.setAttribute('id', 'dankPrompt');
+        prompt.style =
+            'background-color: white;font-size: 1.5em;font-family: Ubuntu;position: fixed;width: 50%;height: auto;top: 25%;left: 25%;padding: 2%;' +
+            'border-radius: 4px;z-index: 9000;';
+
+        var promptMessage = document.createElement('h3');
+        promptMessage.innerText = options.message;
+        promptMessage.innerHTML += '<hr />';
+        prompt.appendChild(promptMessage);
+
+        prompt.appendChild(createToolkitButton({
+            text: 'Yes',
+            listeners: [{
+                event: 'click',
+                handler: options.yesCallback
+            }],
+            style: 'color: white; float: left'
+        }));
+
+        prompt.appendChild(createToolkitButton({
+            text: 'No',
+            listeners: [{
+                event: 'click',
+                handler: options.noCallback
+            }],
+            style: 'color: white; float: right'
+        }));
+
+        document.body.appendChild(createScreenOverlay({
+            color: 'black',
+            opacity: .8
+        }));
+        document.body.appendChild(prompt);
     }
 </script>
 
@@ -211,7 +300,7 @@
 
             <input type="text" name="summary"
                    tt_onLoad="showPastFillingNumbers();"
-                   tt_pageStyleClass="NoControls" helpText="Possible filling numbers" optional="true"/>
+                   tt_pageStyleClass="NoControls" helpText="Filing Number Trail" optional="true"/>
 
 
         </form>
