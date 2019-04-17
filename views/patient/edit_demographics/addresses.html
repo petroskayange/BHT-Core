@@ -409,6 +409,18 @@
     if (window.location.search.indexOf("source=mastercard") != -1) {
         tt_cancel_destination = "/views/patient/mastercard.html";
     }
+    
+    var scanned_patient_id = window.location.href;
+    scanned_patient_id = new URL(scanned_patient_id);
+    scanned_patient_id = scanned_patient_id.searchParams.get("scanned_patient_id");
+
+    if(scanned_patient_id) {
+      var tt_url = "/views/patient/edit_demographics.html?patient_id=" + sessionStorage.patientID;
+      tt_url += "&scanned_patient_id=" + scanned_patient_id;
+      tt_cancel_destination = tt_url;
+    }
+
+
     var url = new URL(url);
     var apiURL = sessionStorage.getItem("apiURL");
     var apiPort = sessionStorage.getItem("apiPort");
@@ -478,7 +490,8 @@
                 if (http.status == 200) {
                     if (window.location.search.indexOf("source=mastercard") != -1) {
                         document.location = "/views/patient/mastercard.html";
-                    }
+                    }else if (scanned_patient_id) {
+                      document.location = tt_cancel_destination;
                     else {
                         document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
                     }
