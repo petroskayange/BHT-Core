@@ -62,7 +62,7 @@
     var patient_id = sessionStorage.patientID;
     var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patient_id;
 
-    function showPastFillingNumbers() {
+    function showPastfilingNumbers() {
         html = "<table>";
         html += "</html>";
         jQuery("#keyboard").hide();
@@ -115,22 +115,22 @@
 
 
         function getPastFilingNumbers(current_file_number) {
-            var past_filling_numbers_url = apiProtocol + "://" + apiURL + ":" + apiPort;
-            past_filling_numbers_url += "/api/v1/patients/" + sessionStorage.patientID + "/past_filing_numbers";
+            var past_filing_numbers_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+            past_filing_numbers_url += "/api/v1/patients/" + sessionStorage.patientID + "/past_filing_numbers";
             var xhttp1 = new XMLHttpRequest();
             xhttp1.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-                    var old_filling_numbers = JSON.parse(this.responseText);
-                    var past_filling_numbers = [];
+                    var old_filing_numbers = JSON.parse(this.responseText);
+                    var past_filing_numbers = [];
                     if (Object.keys(current_file_number).length > 0) {
-                        past_filling_numbers.push(current_file_number);
+                        past_filing_numbers.push(current_file_number);
 
                     }
-                    if (old_filling_numbers.length > 0) {
+                    if (old_filing_numbers.length > 0) {
 
-                        for (var i = 0; i < old_filling_numbers.length; i++) {
+                        for (var i = 0; i < old_filing_numbers.length; i++) {
 
-                            past_filling_numbers.push(old_filling_numbers[i]);
+                            past_filing_numbers.push(old_filing_numbers[i]);
 
                         }
                     }
@@ -144,19 +144,19 @@
                     html += "</thead>";
                     html += "<tbody style='overflow: scroll;'>";
                     var count = 1;
-                    for (var key in past_filling_numbers) {
-                        var identifier = past_filling_numbers[key]["identifier"];
-                        var date_created = past_filling_numbers[key]["date_created"];
+                    for (var key in past_filing_numbers) {
+                        var identifier = past_filing_numbers[key]["identifier"];
+                        var date_created = past_filing_numbers[key]["date_created"];
                         date_created = moment(date_created).format('DD/MMM/YYYY');
-                        var date_voided = past_filling_numbers[key]["date_voided"];
+                        var date_voided = past_filing_numbers[key]["date_voided"];
                         date_voided = moment(date_voided).format('DD/MMM/YYYY');
 
                         html += "<tr>";
-                        html += "<td>" + ((past_filling_numbers[key].voided == 1) ? "voided" : "active") + "</td>";
+                        html += "<td>" + ((past_filing_numbers[key].voided == 1) ? "voided" : "active") + "</td>";
                         html += "<td>" + identifier + "</td>";
                         html += "<td>" + date_created + "</td>";
                         html += "<td>" + date_voided + "</td>"
-                        html += "<td><span id=" + past_filling_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filling_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                        html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
                         html += "</tr>";
                         count = count + 1;
                     }
@@ -167,7 +167,7 @@
                 }
             };
 
-            xhttp1.open("GET", past_filling_numbers_url, true);
+            xhttp1.open("GET", past_filing_numbers_url, true);
             xhttp1.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
             xhttp1.setRequestHeader('Content-type', "application/json");
             xhttp1.send();
@@ -299,7 +299,7 @@
         <form>
 
             <input type="text" name="summary"
-                   tt_onLoad="showPastFillingNumbers();"
+                   tt_onLoad="showPastfilingNumbers();"
                    tt_pageStyleClass="NoControls" helpText="Filing Number Trail" optional="true"/>
 
 
