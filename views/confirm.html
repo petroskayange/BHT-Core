@@ -1471,7 +1471,7 @@ function displayCurrentInfo(addresses, cell_number_details) {
   cancelBtn.setAttribute('class','address-confirmation-button');
   cancelBtn.innerHTML = 'Update information';
   cancelBtn.setAttribute('id','blue-btn');
-  cancelBtn.setAttribute('onmousedown','updateAddress();');
+  cancelBtn.setAttribute('onmousedown','updateAddress('+patient_id+');');
   btnContainer.appendChild(cancelBtn);
 
   var cancelBtn = document.createElement('button');
@@ -1499,7 +1499,10 @@ function getCellPhone(patient_id, addresses) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      validateContactDetails(addresses, obj);
+      if(sessionStorage.programID === "1") {
+        validateContactDetails(addresses, obj);  
+      }
+      
     }
   };
   xhttp.open("GET", url, true);
@@ -1572,10 +1575,11 @@ function confirmAddress() {
   xhttp.send(parameters);
 }
 
-function updateAddress() {
-  var scanned_patient_id = 'P170000000013';
-  var location_url = 'patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
-  location_url += "&scanned_patient_id=" + scanned_patient_id;
+function updateAddress(patient_id) {
+  
+  var scanned_patient_id = "";
+  var location_url = 'patient/edit_demographics.html?patient_id=' + patient_id;
+  location_url += "&scanned_patient_id=" + patient_id;
 
   location = location_url;
 }

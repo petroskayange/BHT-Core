@@ -492,7 +492,7 @@
                         document.location = "/views/patient/mastercard.html";
                     }else if (scanned_patient_id) {
                       document.location = tt_cancel_destination;
-                    else {
+                    }else {
                         document.location = '/views/patient/edit_demographics.html?patient_id=' + sessionStorage.patientID;
                     }
                 } else if (http.status == 400) {
