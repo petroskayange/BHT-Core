@@ -628,7 +628,7 @@ function checkIfFilingNumberIsNotValid () {
       current_village.innerHTML = obj["addresses"][0]["city_village"];
     }
 
-    if(sessionStorage.userRoles.match(/Registration/i) && sessionStorage.programID == '1') 
+    if(sessionStorage.programID == '1') 
       checkAddressValidity(obj['addresses']);
     
 
