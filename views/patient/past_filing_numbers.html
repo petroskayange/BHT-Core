@@ -75,17 +75,19 @@
 
 
         finishButtonHtml = '<button class="button navButton green"  onmousedown="gotoPatientDashboard();"><span>Finish</span></button>'
+        finishButtonHtml2 = '<button class="button navButton blue" style="float: left" onmousedown="getActiveFileNumber();" id="get-active-number"><span>Get Active Number</span></button>'
         jQuery("#buttons").append(finishButtonHtml);
+        jQuery("#buttons").append(finishButtonHtml2);
 
         function ajaxRequest() {
             var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID;
             var req = new XMLHttpRequest();
             req.onreadystatechange = function () {
-
                 if (this.readyState == 4) {
                     if (this.status == 200) {
                         var results = JSON.parse(this.responseText);
                         var file_number = getIdentifier(results["patient_identifiers"], 17);
+                        console.log(file_number);
                         getPastFilingNumbers(file_number);
                     }
                 }
@@ -100,10 +102,11 @@
 
 
         function getIdentifier(identifiers, identifier_type) {
+            // console.log(identifiers);
             var identifier = [];
             for (var index = 0; index < identifiers.length; index++) {
                 if (identifiers[index]["identifier_type"] == identifier_type) {
-                    return identifier = identifiers[index];
+                    identifier.push(identifiers[index]);
                 } else {
                     identifier = [];
                 }
@@ -121,9 +124,13 @@
             xhttp1.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                     var old_filing_numbers = JSON.parse(this.responseText);
+                    console.log(old_filing_numbers);
                     var past_filing_numbers = [];
                     if (Object.keys(current_file_number).length > 0) {
-                        past_filing_numbers.push(current_file_number);
+
+                        for (let index = 0; index < current_file_number.length; index++) {
+                            past_filing_numbers.push(current_file_number[index]);
+                        }
 
                     }
                     if (old_filing_numbers.length > 0) {
@@ -156,14 +163,20 @@
                         html += "<td>" + identifier + "</td>";
                         html += "<td>" + date_created + "</td>";
                         html += "<td>" + date_voided + "</td>"
-                        html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                        if((past_filing_numbers[key].voided != 1)) {
+                            html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                        }
                         html += "</tr>";
                         count = count + 1;
                     }
 
                     html += "</tbody>";
                     html += "<table>";
-                    jQuery(".inputFrameClass").append(html)
+                    jQuery(".inputFrameClass").append(html);
+
+                    if (document.getElementsByClassName("deactivate").length > 0) {
+                        document.getElementById("get-active-number").style.display = "none";
+                    }
                 }
             };
 
@@ -189,16 +202,16 @@
 
                 removePrompt();
                 var patientId = sessionStorage.patientID;
-                var apiUrl = apiProtocol + "://" + apiURL + ":" + apiPort + '/api/v1/patient_identifiers/' + identifier.id;
+                var apiUrl = apiProtocol + "://" + apiURL + ":" + apiPort + '/api/v1/archive_active_filing_number?patient_id=' + sessionStorage.patientID;
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && (this.status == 201 || this.status == 204)) {
+                    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
 
                         showMessage("successfully archived")
                         setTimeout(location.reload(), 4000);
                     }
                 };
-                xhttp.open("DELETE", apiUrl, true);
+                xhttp.open("GET", apiUrl, true);
                 xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
                 xhttp.setRequestHeader('Content-type', "application/json");
                 xhttp.send();

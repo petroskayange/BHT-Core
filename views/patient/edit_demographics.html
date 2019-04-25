@@ -22,23 +22,43 @@
   }
 
   function editName() {
-    document.location = '/views/patient/edit_demographics/name.html?patient_id='+ sessionStorage.patientID;
+    var url = '/views/patient/edit_demographics/name.html?patient_id='+ sessionStorage.patientID;
+    if(scanned_patient_id)
+      url += "&scanned_patient_id=" + scanned_patient_id;
+
+    document.location = url;
   }
 
   function editGender() {
-    document.location = '/views/patient/edit_demographics/gender.html?patient_id='+ sessionStorage.patientID;
+    var url = '/views/patient/edit_demographics/gender.html?patient_id='+ sessionStorage.patientID;
+    if(scanned_patient_id)
+      url += "&scanned_patient_id=" + scanned_patient_id;
+
+    document.location = url;
   }
 
   function editCellphone() {
-    document.location = '/views/patient/edit_demographics/cellphone.html?patient_id='+ sessionStorage.patientID;
+    var url = '/views/patient/edit_demographics/cellphone.html?patient_id='+ sessionStorage.patientID;
+    if(scanned_patient_id)
+      url += "&scanned_patient_id=" + scanned_patient_id;
+
+    document.location = url;
   }
 
   function editBirthdate() {
-    document.location = '/views/patient/edit_demographics/birthdate.html?patient_id='+ sessionStorage.patientID;
+    var url = '/views/patient/edit_demographics/birthdate.html?patient_id='+ sessionStorage.patientID;
+    if(scanned_patient_id)
+      url += "&scanned_patient_id=" + scanned_patient_id;
+
+    document.location = url;
   }
 
   function editAddresses() {
-    document.location = '/views/patient/edit_demographics/addresses.html?patient_id='+ sessionStorage.patientID;
+    var url = '/views/patient/edit_demographics/addresses.html?patient_id='+ sessionStorage.patientID;
+    if(scanned_patient_id)
+      url += "&scanned_patient_id=" + scanned_patient_id;
+
+    document.location = url;
   }
 
   function hideValidateDemographicsFieldsAlert() {
@@ -539,7 +559,6 @@
           }
           
         }
-          console.log(results);
       }
       }
       };
@@ -602,12 +621,24 @@
 
     }
 
+
+    var scanned_patient_id = window.location.href;
+    scanned_patient_id = new URL(scanned_patient_id);
+    scanned_patient_id = scanned_patient_id.searchParams.get("scanned_patient_id");
+
+    if(scanned_patient_id) {
+      var fnh = document.getElementById('btnNext');
+      fnh.setAttribute('onclick', 'confirmationPage("' + scanned_patient_id + '");');
+    }
+
+    function confirmationPage(scanned_patient_id) {
+      location = '/views/confirm.html?person_id=' + scanned_patient_id;
+    }
+
     ajaxRequest();
     
     </script>
-    </body>
-    </html>
-<!--           </table>
-        </div>
-      <div>
-</div> -->
+    
+    
+   </body>
+ </html>
