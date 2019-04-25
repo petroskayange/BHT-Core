@@ -628,8 +628,8 @@ function checkIfFilingNumberIsNotValid () {
       current_village.innerHTML = obj["addresses"][0]["city_village"];
     }
 
-    
-    checkAddressValidity(obj['addresses']);
+    if(sessionStorage.userRoles.match(/Registration/i) && sessionStorage.programID == '1') 
+      checkAddressValidity(obj['addresses']);
     
 
     var roundedAge = Math.round(moment().diff(obj["birthdate"], "years", true));
