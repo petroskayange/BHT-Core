@@ -1,0 +1,44 @@
+const State = function () {
+  const state = null
+  const apiRoot = `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
+
+  /** @type {object} */
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
+  }
+
+  function init (data = {}) {
+    state = data
+  }
+
+  function _void (options = {}) {
+    fetch(
+      `${apiRoot}/programs/${options.programId}/patients/${options.patientId}/states/${options.stateId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Authorization': sessionStorage.authorization
+        }
+      }
+    )
+      .then(options.success)
+      .catch(options.fail)
+  }
+
+  function create (options = {}) {
+    return fetch(
+      `${apiRoot}/programs/${options.programId}/patients/${options.patientId}/states`,
+      {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({state: options.stateId, date: options.startDate})
+      }
+    )
+  }
+
+  return {
+    _void,
+    create
+  }
+}()
