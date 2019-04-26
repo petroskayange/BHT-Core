@@ -322,12 +322,17 @@ function buildCalendar() {
 
   buildControls();
 
-  systemDate = document.getElementById("medication-runout-date");
-  systemDate.innerHTML = medication_runout_date;
+  if (parseInt(programID) !== 12){
+
+    systemDate = document.getElementById("medication-runout-date");
+    systemDate.innerHTML = medication_runout_date;
+    
+    systemDate = document.getElementById("system-selected-date");
+    systemDate2 = document.getElementById("selected-date");
+    systemDate.innerHTML = systemDate2.innerHTML;
+
+  }
   
-  systemDate = document.getElementById("system-selected-date");
-  systemDate2 = document.getElementById("selected-date");
-  systemDate.innerHTML = systemDate2.innerHTML;
 }
 
 function buildDisplayArea() {
@@ -344,6 +349,10 @@ function buildDisplayArea() {
     ["Appointment Limit (per/day)","appointment-limit"],
     ["&nbsp;","system-selected-date"]
   ];
+
+  if (parseInt(programID) == 12){
+    tds.shift();
+  }
 
   for(var i = 0 ; i < tds.length ; i++){
     var tr = document.createElement("tr");
@@ -512,20 +521,31 @@ function postAppointmentObs(encounter) {
 
   sysDate = year + "-" + month + "-" + day;
 
+  if (parseInt(programID) == 12){
+    var obs = {
+      encounter_id: encounter["encounter_id"],
+      observations: [
+        { 
+          concept_id: 5096, value_datetime: appointment
+        }
+      ]
+    }; 
 
+  }else{
+    
+    var obs = {
+      encounter_id: encounter["encounter_id"],
+      observations: [
+        { 
+          concept_id: 5096, value_datetime: appointment
+        },
+        { 
+          concept_id: 7437, value_datetime: sysDate
+        }
+      ]
+    }; 
 
-
-  var obs = {
-    encounter_id: encounter["encounter_id"],
-    observations: [
-      { 
-        concept_id: 5096, value_datetime: appointment
-      },
-      { 
-        concept_id: 7437, value_datetime: sysDate
-      }
-    ]
-  }; 
+  }
 
   submitParameters(obs, "/observations", "nextPage"); 
 }
