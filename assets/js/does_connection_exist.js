@@ -42,7 +42,7 @@ function doesConnectionExist() {
     req.send(null);
 }
 
-connectionInterval = window.setInterval("doesConnectionExist();", 5000);
+//connectionInterval = window.setInterval("doesConnectionExist();", 5000);
 
 function lostConnectionMessage() {
     alertify.error('Lost connection to server. Trying to reconnect...');
