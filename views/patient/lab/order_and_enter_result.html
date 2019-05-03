@@ -111,6 +111,34 @@
                 }
             }
 
+            function validateDate() {
+                var nextBtn =  __$("nextButton");
+                nextBtn.setAttribute('onmousedown',"validateOutcomeYearMonth();");
+                nextBtn.setAttribute('onclick',"");
+            }
+
+            function formatTsDate(date) {
+                var day = date.substr(0, 2);
+                var month = date.substr(3,2);
+                var year = date.substr(6,4);
+
+                return month + "/" + day + "/" + year;
+            }
+                function validateOutcomeYearMonth() {
+             
+                var sample_drawn = document.getElementById('date_sample_drawn').value;
+                sample_drawn = formatTsDate(sample_drawn);
+                var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+                element = (formatTsDate(element.value));;
+                if(sample_drawn > element){
+                showMessage("Sample draw date can not be greater than result date");
+                return;
+                }
+                
+
+                gotoNextPage();
+            }
+
 
     </script>
 
@@ -161,7 +189,7 @@
    <input 
       field_type="date" helpText="Result Date"
       id="result_date" name="result_date"
-      tt_pageStyleClass="Date DatesOnly" type="text"/>
+      tt_pageStyleClass="Date DatesOnly" type="text" tt_onLoad="validateDate()"/>
        
    
     <input type="text" 
