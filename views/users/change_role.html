@@ -11,6 +11,34 @@
   <script type="text/javascript" src="/assets/js/data.js"></script>
   <script type="text/javascript" src="/assets/js/core.js"></script>
 
+  <style>
+      .loader {
+    position: absolute;
+    display: none;
+    top: 30%;
+    left: 40%;
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid #3498db;
+    /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    z-index: 9999999999999;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  </style>
+
 </head>
 <script language="javascript" defer="true">
   var tt_cancel_destination = "/";
@@ -74,6 +102,44 @@
     http.send(params);
 
   }
+
+  function submitRole (userId = 0) {
+    jQuery('.loader').show()
+    const roles = [__$('role').value]
+    const mustAppend = __$('appendRoles').value === 'Yes'
+
+    fetch(
+      `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1/users/${userId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.authorization
+        },
+        body: JSON.stringify({ roles: roles, must_append_roles: mustAppend })
+      }
+    )
+      .then((res) => {
+        jQuery('.loader').hide()
+        if (res.status !== 200) {
+          jQuery('.loader').hide()
+          showMessage('There was an error creating the role.')
+        }
+        document.location = `/views/users/show.html?user_id=${userId}`
+      })
+      .catch((error) => {
+        jQuery('.loader').hide()
+        console.error(error)
+        showMessage('There was an error making the request.')
+        document.location = `/views/users/show.html?user_id=${userId}`
+      })
+  }
+
+  function hideTerminalButtons () {
+    jQuery('#backButton').hide()
+    jQuery('#nextButton').hide()
+    jQuery('#clearButton').hide()
+  }
     
 
     </script>
@@ -83,11 +149,21 @@
     <div id="content">
       <form action='' method='POST'>
 
-          <select allowFreeText="false" helpText=" Role" id="userRole" name="user_role" tt_onLoad="changeNextButton();setRoles('/roles?page_size=100'); $(keyboard).style.display = none;"
-          key="role" tt_onUnLoad="getInput();"></select>
+          <select allowFreeText="false" helpText="Please select a role" id="role" 
+            name="role" tt_onLoad="setRoles('/roles?page_size=100'); $(keyboard).style.display = none;"
+            key="role"></select>
+
+          <select id="appendRoles" name="appendRoles" tt_pageStyleClass="NoKeyboard NoInput small"
+            helpText="Would you like to append the role?" tt_requireNextClick="false">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+
+          <input id="lastPage" name="lastPage" tt_onload="hideTerminalButtons(); submitRole(id)" tt_pageStyleClass="NoKeyboard NoInput small" disabled/>
 
 
       </form>
+      <div class="loader"></div>
 
       <div id="footer">
       </div>

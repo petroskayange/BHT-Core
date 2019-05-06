@@ -8,8 +8,33 @@
 <link rel="stylesheet" href="/assets/css/custom.css">
 <!------ Include the above in your HEAD tag ---------->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+
+
+   
+
 <script type="text/javascript">
+ jQuery(document).ready(function($) {
+            
+            $('#back').click(function() {
+                history.go(-1);// /report/data_cleaning';
+
+            })
+        })
+
+    
+    var patientID = getUrlParameter("patient_id"); 
+    if (patientID != undefined) {
+        sessionStorage.patientID = patientID;
+        patient_id = patientID;
+    }else {
+        var patient_id = sessionStorage.patientID;
+        patientID = sessionStorage.patientID;
+    }
+    // if ('sessionStorage.patientID === null'){
+    //     sessionStorage.patientID = patientID;
+    // }
+    
 
     var name = "";
     var name_edit_url = "/views/patient/edit_demographics/name.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
@@ -33,6 +58,34 @@
     var occupation = "Add";
     var occupation_edit_url = "/views/patient/edit_demographics/occupation.html?patient_id=" + sessionStorage.patientID + "&source=mastercard";
 
+    //added Function to load mastercardsessionStorage.patientID = patientID;
+    function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;   
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
+
+ function getAttribute(attributes, attribute_type_id) {
+     var attribute = "";
+     for (var index = 0; index < attributes.length; index++) {
+         if(attributes[index]["person_attribute_type_id"] == attribute_type_id) {
+            return  attribute =  attributes[index]["value"];
+         }else {
+            return attribute = "";
+         }
+     }
+     return attribute;
+ }
+
     function loadDemographics() {
         var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + sessionStorage.patientID;
 
@@ -49,10 +102,7 @@
                 age = getAge(person["birthdate"]);
                 gender = person["gender"];
                 current_residence = person_address["city_village"];
-                closest_landmark = person_address["neighborhood_cell"];
-                if (!closest_landmark){
-                    closest_landmark = "Add";
-                }
+                closest_landmark = getAttribute(person_attributes, "19");
 
                 for (var key in patient_identifiers) {
                     var type = patient_identifiers[key]["type"];
@@ -157,6 +207,7 @@
 
     var ever_received_art = "No";
     var ever_received_concept_id = 7754;
+    var date_art_last_taken_concept_id = 7751;
     var yes_concept_id = 1065;
     var no_concept_id = 1066;
 
@@ -171,8 +222,11 @@
                 var ever_received_observations = JSON.parse(this.responseText);
                 if (ever_received_observations.length > 0) {
                     ever_received_art = "Yes";
+                    jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+                }else {
+                    transferInFallback();
                 }
-                jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+
             }
         };
 
@@ -181,6 +235,28 @@
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send();
     }
+
+     function transferInFallback() {
+         var ever_received_url = apiProtocol + "://" + apiURL + ":" + apiPort;
+         ever_received_url += "/api/v1/observations?person_id=" + sessionStorage.patientID;
+         ever_received_url += "&concept_id=" + date_art_last_taken_concept_id;
+         var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function () {
+             if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                 var ever_received_observations = JSON.parse(this.responseText);
+                 if (ever_received_observations.length > 0) {
+
+                     ever_received_art = "Yes";
+                 }
+                 jQuery("#transfer_in").html("<a href='#'>" + ever_received_art + "</a>");
+             }
+         };
+
+         xhttp.open("GET", ever_received_url, true);
+         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+         xhttp.setRequestHeader('Content-type', "application/json");
+         xhttp.send();
+     }
 
     var bmi_concept_id = 2137;
 
@@ -1190,6 +1266,8 @@
         margin: 0 auto; /*center image*/
     }
 </style>
+
+
 <body>
 <div id="container">
     <div id="content">
@@ -1300,12 +1378,31 @@
 
         <footer class="footer">
             <div class="container-footer">
+                 
                 <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
                         onclick="gotoPatientDashboard();"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
                 </button>
+
+                <button id="back" class="blue" style="margin: 5px 0px 0px; padding: 0px; float: left;"
+                ><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Back &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
             </div>
+  
         </footer>
 
     </div>
 </div>
 </body>
+    
+<script>
+    
+    if(patient_id != undefined) {
+      var btn = document.getElementById('btnNext');
+      btn.setAttribute('onclick','gotoPatientDashboard();');
+    }
+ 
+
+  function gotoCohort() {
+    window.location = sessionStorage.cohort_url;
+  }
+</script>
+

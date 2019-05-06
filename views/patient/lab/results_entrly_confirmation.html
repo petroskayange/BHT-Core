@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+    </script>
+
+   
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+      <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
+      <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+      <link rel="stylesheet" href="/assets/css/custom.css">
+      <link rel="stylesheet" href="/assets/css/patientdashboard.css">
+      <link rel="stylesheet" href="/assets/css/demographics-header.css">
+      <script src="/assets/js/jquery.min.js"></script>
+      <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+      <script src="/assets/js/moment.js"></script>
+  
+      <!-- ...................... -->
+      <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
+      <link rel="stylesheet" href="/assets/css/datatables/jquery.dataTables.min.css" type="text/css">
+  
+      <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
+      <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
+      <script src="/assets/js/medication.history.js"></script>
+      <!-- ...................... -->
+  
+      <script src="/assets/js/lab.history.js"></script>
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+            <div id="content">
+
+                <div class="col-sm-6 col-lg-6 col-md-6 col-xs-6" style="border: solid 0px; width: 60%; margin-left: 25%;margin-top: 8%;">
+                            <div class=" text-white mb-3 cards" style="width: 98%; height: 400px; overflow: hidden;font-size: 150%;"
+                            >
+                                <div class="card-header h4 btn-success" style="margin: 3%; padding: 1%;font-size: 140%">Results Entrly Confirmation</div>
+                                <div class="list-group" id="programs" style="height: 100%; overflow: hidden;">
+                                </div>
+                                    <table class="table" style="position: absolute;top:70px;width: 85%;margin-left: 5%;">
+                                        <tbody id="vl-orders" style="padding-left: 50px;">
+                                            <tr>
+                                                <td>Test Name:</td>
+                                                <td id="test"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Test Measure:</td>
+                                                <td id="measure"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Result:</td>
+                                                <td id="result"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                <div class="card-footer" style="margin: 1%;">
+                                </div>
+                            </div>
+                </div>
+
+            </div>
+    </div>
+
+    <footer class="footer">
+            <div class="container-footer">
+                <button id="btnNext" class="green right" style="margin: 5px 0px 0px; padding: 0px; float: right;"
+                        onclick="finish();">
+                    <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
+                </button>
+                <button class="btn btn-success buttons blue" style="margin-right: 5px;display: none;" data-toggle="modal"
+                        data-target="#appModal" onclick="nextMeasure()">
+                    <span>&nbsp;&nbsp; Next Test Measure &nbsp;&nbsp;</span>
+                </button>
+               
+            </div>
+    </footer>
+
+<script>
+
+    function loadData(){
+        var data = sessionStorage.getItem('result_entry_confirmation');
+        data = data.split(",");
+        test =  data[0];
+        measure = data[1];
+        result = data[2];
+
+        document.getElementById("test").innerHTML =  test;
+        document.getElementById("measure").innerHTML = measure;
+        document.getElementById("result").innerHTML = result;
+        d = sessionStorage.getItem('test_results');
+        console.log(d);
+    }
+
+    function nextMeasure()
+    {
+        window.location = "result_entering.html"
+    }
+
+    loadData();
+
+    function finish()
+    {  var data = {};
+        test_name = JSON.parse(sessionStorage.getItem("select_test_for_result"))[1];
+        trackingNumber = JSON.parse(sessionStorage.getItem("select_test_for_result"))[0];
+        testResults = JSON.parse(sessionStorage.getItem("test_results"));
+        
+        data = {
+                "tracking_number" : trackingNumber,
+                "test_status": "verified",
+                "test_name": test_name,
+                "who_updated": {
+                    'id_number': '',
+                    'phone_number': '',
+                    'first_name': '',
+                    'last_name': ''
+                },
+                "results": testResults
+            }
+
+            data = JSON.stringify(data);
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/results';
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   console.log(obs);
+                   window.location = "test_without_results.html";
+                }
+                else{
+                  console.log(this.status);
+                }
+            };
+            xhttp.open("POST", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send(data);
+
+            console.log(data);
+           
+        
+    }
+
+</script>

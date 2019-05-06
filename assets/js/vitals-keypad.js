@@ -131,9 +131,13 @@ function buildTable() {
 }
 
 function updateBMI() {
-  var bmi = document.getElementById('bmi');
-  var weight = document.getElementById('td-Weight').innerHTML;
-  var height = height = document.getElementById('td-Height').innerHTML;
+  try {
+    var bmi = document.getElementById('bmi');
+    var weight = document.getElementById('td-Weight').innerHTML;
+    var height = height = document.getElementById('td-Height').innerHTML;
+  }catch(j) {
+    return;
+  }
   
   var bmi_result = document.getElementById('bmi-result');
   if (weight != 0 && height != 0) {
