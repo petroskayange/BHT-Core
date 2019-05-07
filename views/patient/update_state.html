@@ -227,6 +227,7 @@ function getOutcomeDate() {
 
 function setProgramStates() {
   var programID = fetchStatesUrl();
+  console.log(programID)
   // var elem = document.getElementById("touchscreenInput" + tstCurrentPage);
   $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', programID);
   listSuggestions(tstCurrentPage); 
@@ -331,7 +332,7 @@ function fetchStatesUrl () {
 
       <form>
         <input type="text" name="states" id="states" 
-          field_type="alpha" xhelpText="State" 
+          field_type="alpha" helpText="State" 
           setvalue="" tt_pageStyleClass="NoKeyboard"
           ajaxURL="/programs/1/workflows" 
           tt_onLoad="setProgramStates();" objectType="states" />
