@@ -579,12 +579,16 @@ function getMonthDates(current_date){
 
 function selectDate(e) {
   var selected_date;
+
+  if (e === undefined){ //Do this to return to the system suggested date.
+    var e = document.getElementsByClassName("system-suggested-date")[0];
+  }
+
   selected_date = e.getAttribute("date");
   if(((new Date(selected_date)) > (new Date(medication_runout_date))) && 
     (parseInt(programID) !== 12))
   {
-    showMessage('Medication would have run-out on the selected date.</p>Select a different date.');
-    return;
+    showConfirm("Medication would run out on "+medication_runout_date+".</p>Are you sure about this selected date?", "selectDate");
   } 
   
   if(clinic_holidays.indexOf(selected_date) >= 0){
@@ -661,6 +665,21 @@ function nextPage(obs){
 
 function red() {
   nextEncounter(patientID, programID);
+}
+
+function showConfirm(message, returnFunction) {
+  
+  messageBar.innerHTML = "";
+
+  messageBar.innerHTML += "<p>" + ((message.match(/^Value\s/)) ? (message.replace(/^Value\s/, "")) : message) +
+    "</p><div style='display: block;'>" +
+    "<button class='button' style='float: none;' onmousedown='this.offsetParent.style.display=\"none\";'" +
+    "><span>Yes</span></button><button class='button' " +
+    "style='float: none; right: 3px;' onclick='this.offsetParent.style.display=\"none\";" + returnFunction + "();' onmousedown='this.offsetParent.style.display=\"none\";"+ returnFunction +"(); '>" +
+    "<span>No</span></button>";
+
+    messageBar.style.display = "block";
+
 }
 
 </script>
