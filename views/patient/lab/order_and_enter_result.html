@@ -111,6 +111,34 @@
                 }
             }
 
+            function validateDate() {
+                var nextBtn =  __$("nextButton");
+                nextBtn.setAttribute('onmousedown',"validateOutcomeYearMonth();");
+                nextBtn.setAttribute('onclick',"");
+            }
+
+            function formatTsDate(date) {
+                var day = date.substr(0, 2);
+                var month = date.substr(3,2);
+                var year = date.substr(6,4);
+
+                return month + "/" + day + "/" + year;
+            }
+                function validateOutcomeYearMonth() {
+             
+                var sample_drawn = document.getElementById('date_sample_drawn').value;
+                sample_drawn = formatTsDate(sample_drawn);
+                var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+                element = (formatTsDate(element.value));;
+                if(sample_drawn > element){
+                showMessage("Result date can not be less than sample draw date");
+                return;
+                }
+                
+
+                gotoNextPage();
+            }
+
 
     </script>
 
@@ -150,13 +178,20 @@
       <option value="Blood">Blood</option>
       <option value="Plasma">Plasma</option>
     </select>
-  
+
+    
     <input  field_type="number"
     helpText="Enter Result" id="results" name="results"
     tt_pageStyleClass="Numeric NumbersOnly" type="text" 
     validationMessage="You must enter a modifier plus numbers only (for example =90)"
     validationRule="^(>|<|=)([0-9.]+)$|N/A$"/>
-    
+   
+   <input 
+      field_type="date" helpText="Result Date"
+      id="result_date" name="result_date"
+      tt_pageStyleClass="Date DatesOnly" type="text" tt_onLoad="validateDate()"/>
+       
+   
     <input type="text" 
         name="results" 
         id="results2" 
@@ -170,7 +205,9 @@
     <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onLoad="validateEntry()"
         helpText="Result Aproved by"  
         allowFreeText="true"  />
-       
+
+
+
     <input type="hidden"  name="test_type" id="test_typee" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
     
     <input type="hidden"  name="test_measure" id="test_measure" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
@@ -294,6 +331,7 @@
     function submiteEntry()
     {   var da = document.getElementById("date_sample_drawn").value;     
         var testDate = da; 
+        var resultDate = document.getElementById("result_date").value
         var reasontForTest = document.getElementById("reason_for_test").value;
         var testName = document.getElementById("test_typee").value;
         var testMeasure = document.getElementById("test_measure").value;
@@ -320,6 +358,7 @@
             "test_status": "verified",
             "test_name": testName,
             "tracking_number": "",
+            "result_date": resultDate,
             "who_updated": {
                 'id_number': '',
                 'phone_number': '',
