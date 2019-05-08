@@ -135,10 +135,10 @@ function checkIfActivitySelected(encounter_name, url) {
     } else if  (encounter_name == "hiv clinic consultation" && !selected_activities.match(/HIV clinic consultations/i) ) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if  (encounter_name == "hiv clinic consultation (clinician)" && !selected_activities.match(/HIV clinic consultations/i) ) {
+    } else if  (encounter_name == "hiv clinic consultation - clinician" && !selected_activities.match(/HIV clinic consultations/i) ) {
       window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
       return;
-    } else if  (encounter_name == "hiv clinic consultation (clinician)" && selected_activities.match(/HIV clinic consultations/i) ) {
+    } else if  (encounter_name == "hiv clinic consultation - clinician" && selected_activities.match(/HIV clinic consultations/i) ) {
       if(sessionStorage.userRoles.match(/Nurse/i)) {
         window.location.href = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
         return;
