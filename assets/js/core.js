@@ -33,6 +33,8 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="backdata-entry" onclick="redirect(this.id); "><img src="/assets/images/obstetric_history.png" class="btn-icons"/><span>Backdata Entry</span></button>';
+
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -595,6 +597,9 @@ function redirect(id) {
         obj.setAttribute("type","text/html");
         obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
         dvTable.appendChild(obj);
+    }
+    if (id === "backdata-entry") {
+        window.location.href = 'apps/HTS/views/encounters/backdata2.html';
     }
 }
 
