@@ -419,6 +419,9 @@ function buildDashboardButtons(tasks, container) {
             }
 
             for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i][0].toUpperCase() == 'HIV CLINIC CONSULTATION (CLINICIAN)')
+                  continue;
+
                 if (count == 3) {
                     containerTableRow = document.createElement("div");
                     containerTableRow.setAttribute("class", "tasks-table-row");
