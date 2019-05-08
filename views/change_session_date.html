@@ -23,6 +23,32 @@
 
 <script>
 
+    function setSessionDate(redirect){
+        var url = 'http://'+apiURL+':'+apiPort+'/api/v1/current_time';
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(){
+
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    var results = JSON.parse(this.responseText);
+                    sessionStorage.sessionDate = moment(results.date).format('YYYY-MM-DD');
+                    if (redirect == true) {
+                        sessionStorage.removeItem("session");
+                        document.location = tt_cancel_destination;
+                    }else {
+                        
+                    }
+                }
+            }
+        };
+        try {
+            req.open('GET', url, true);
+            req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+            req.send(null);
+        } catch (e) {
+        }
+    }
+
     if (sessionStorage.patientID == null || sessionStorage.patientID == 'null') {
         var tt_cancel_destination = "/";
     } else {
@@ -86,9 +112,8 @@
 
     function resetDate() {
         var todays_date = moment(new Date()).format('YYYY-MM-DD');
-        sessionStorage.sessionDate = moment(todays_date).format('YYYY-MM-DD');
-        sessionStorage.removeItem("session");
-        document.location = tt_cancel_destination;   
+        // sessionStorage.sessionDate = moment(todays_date).format('YYYY-MM-DD');
+        setSessionDate(true);   
     }
 </script>
 

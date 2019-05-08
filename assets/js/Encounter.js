@@ -1,33 +1,45 @@
-var Encounter = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var user = null
+/**
+ * Immediately executing function that creates a revealing Encounter js module
+ * 
+ * @return {object}
+ */
+const Encounter = function () {
+  /** @type {string} */
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
-  function init (data) {
-    user = data
+  /** @type {object} */
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
   }
 
-  function create (data = {}) {
-    fetch (`${apiRoot}/encounters`, {
+  /** @type {object} */
+  let encounter = {}
+
+  /**
+   * Function that initializes as an encounter
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined}
+   */
+  function init (data = {}) {
+    encounter = data
+  }
+
+  /**
+   * Function that asks the EMR-API to create an encounter
+   * 
+   * @param {object} params
+   * 
+   * @return {Promise}
+   */
+  function create (params = {}) {
+    return fetch (`${apiRoot}/encounters`, {
       method: 'POST',
-      headers: {
-        'Authorization': sessionStorage.authorization,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data.params)
+      headers: headers,
+      body: JSON.stringify(params)
     })
-      .then((response) => {
-        if (response.status === 201) {
-          response.json()
-            .then((payload) => {
-              data.success(payload)
-            })
-        } else {
-          data.fail(response)
-        }
-      })
-      .catch((error) => {
-        data.fail(error)
-      })
   }
 
   return {

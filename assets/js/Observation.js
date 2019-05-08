@@ -1,30 +1,45 @@
-var Observation = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var user = null
+/**
+ * Immediately executing function that creates a revealing Observation module
+ * 
+ * @return {object}
+ */
+const Observation = function () {
+  /** @type {string} */
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
-  function init (data) {
-    user = data
+  /** @type {object} */
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
   }
 
-  function create (data = {}) {
-    fetch (`${apiRoot}/observations`, {
+  /** @type {object} */
+  let observation = {}
+
+  /**
+   * Function to initialize an Observation
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined}
+   */
+  function init (data = {}) {
+    observation = data
+  }
+
+  /**
+   * Function that asks the EMR-API to create observations
+   * 
+   * @param {object} params
+   * 
+   * @return {Promise}
+   */
+  function create (params = {}) {
+    return fetch (`${apiRoot}/observations`, {
       method: 'POST',
-      headers: {
-        'Authorization': sessionStorage.authorization,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data.params)
+      headers: headers,
+      body: JSON.stringify(params)
     })
-      .then((response) => {
-        if (response.status === 201) {
-          data.success(response)
-        } else {
-          data.fail(response)
-        }
-      })
-      .catch((error) => {
-        data.fail(error)
-      })
   }
 
   return {

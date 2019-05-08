@@ -655,7 +655,7 @@ function getMonthInNum(str) {
 }
 
 function nextPage(obs){
-  var url = "/programs/"+programID+"/patients/" + patientID + "/labels/visits"
+  var url = "/programs/"+programID+"/patients/" + patientID + "/labels/visits?date=" + sessionStorage.sessionDate
   url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
   document.location = url;
   
