@@ -684,10 +684,10 @@
             var modal = document.getElementById('myModal');
             var modalError = document.getElementById("modal-error");
             var currentHeight = document.getElementById("current-height");
-            currentHeight.innerHTML = "<p class='height-headers'>Previous Height </p><p class='height-text' >" + sessionStorage.currentHeight + "KG</p>";
+            currentHeight.innerHTML = "<p class='height-headers'>Previous Height </p><p class='height-text' >" + sessionStorage.currentHeight + "CM</p>";
             currentHeight.setAttribute("value", sessionStorage.currentHeight);
             var newHeight = document.getElementById("new-height");
-            newHeight.innerHTML = "<p class='height-headers'>Current Height</p><p class='height-text' >" + height + "KG</p>";
+            newHeight.innerHTML = "<p class='height-headers'>Current Height</p><p class='height-text' >" + height + "CM</p>";
             newHeight.setAttribute("value", height);
             modalError.innerHTML = "<p style='color: red; font-size: 20px;'>Inconsistent Height Reading: </p>" + ("Height can not be lower than previous height of " + sessionStorage.currentHeight + "KG. Please SELECT the correct height.");
             modal.style.display = "block";
