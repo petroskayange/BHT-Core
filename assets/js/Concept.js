@@ -103,7 +103,8 @@ const Concept = function () {
     TRANSFERRED_OUT_STATE: 95,
     REGIMEN_SUPPLY_DAYS: 3640,
     OTHER_REFERRAL: 6408,
-    RESULT_DATE: 3045
+    RESULT_DATE: 3045,
+    LAB_ORDER: 3388
   }
 
   /**
