@@ -340,15 +340,35 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
-    var j = Object.keys(encountersData.encounters);
-    var i = 0;
+    
     var tasks = [];
-    j.forEach(function (j) {
-        var values = encountersData.encounters[j]
-        var url = values.url;
-        var icon = values.activitiesIcon;
-        tasks.push([j, icon, url])
-    });
+
+    if (parseInt(sessionStorage.programID) == 12){
+        // This is for ANC Program to be able to differnctiate
+        // two different activities using a single encounter.
+        // e.g. ART Treatment and ANC Treatment both using Treatment encounter.
+        var j = encountersData.encounters;
+        for(var k = 0; k < encountersData.activities["tasks"].length; k++){
+            var values = encountersData.activities["tasks"][k][0]
+            var activity = encountersData.activities["tasks"][k][1]
+            if(j[activity] !== undefined){
+                var url = j[activity].url;
+                var icon = j[activity].activitiesIcon
+                tasks.push([values, icon, url])
+
+            }
+        }
+
+    }else{
+        var j = Object.keys(encountersData.encounters);
+        var i = 0;
+        j.forEach(function (j) {
+            var values = encountersData.encounters[j]
+            var url = values.url;
+            var icon = values.activitiesIcon;
+            tasks.push([j, icon, url])
+        });
+    }
 
     var container = document.getElementById('tasks-container');
     buildDashboardButtons(tasks, container);
@@ -432,6 +452,7 @@ function buildDashboardButtons(tasks, container) {
                         continue;
                     }
                 }
+                if (!(tasks[i][0].match(/ART/) &&  sessionStorage.programID == "12")){
 
                 containerTableCell = document.createElement("div");
                 containerTableCell.setAttribute("class", "tasks-table-cell");
@@ -478,6 +499,7 @@ function buildDashboardButtons(tasks, container) {
                 containerTableRow.appendChild(containerTableCell);
 
                 count++;
+                }
             }
         }
     };
