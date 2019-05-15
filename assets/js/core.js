@@ -350,11 +350,11 @@ function getTasks(encountersData) {
         var j = encountersData.encounters;
         for(var k = 0; k < encountersData.activities["tasks"].length; k++){
             var values = encountersData.activities["tasks"][k][0]
-            var activity = encountersData.activities["tasks"][k][1]
-            if(j[activity] !== undefined){
-                var url = j[activity].url;
-                var icon = j[activity].activitiesIcon
-                tasks.push([values, icon, url])
+            var encounter = encountersData.activities["tasks"][k][1]
+            if(j[encounter] !== undefined){
+                var url = j[encounter].url;
+                var icon = j[encounter].activitiesIcon
+                tasks.push([values, icon, url, encounter.toUpperCase()])
 
             }
         }
@@ -455,7 +455,25 @@ function buildDashboardButtons(tasks, container) {
                 if (!(tasks[i][0].match(/ART/) &&  sessionStorage.programID == "12")){
 
                 containerTableCell = document.createElement("div");
-                containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                if (sessionStorage.programID == "12"){ //Disable already saved encounters in ANC
+
+                    if (sessionStorage.savedEncounters.includes(tasks[i][3])){
+                    
+                        containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
+
+                    }else{
+
+                        containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                    }
+                    
+                }else{
+                    
+                    containerTableCell.setAttribute("class", "tasks-table-cell");
+                    
+                }
+
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
@@ -976,3 +994,47 @@ function getPortalLocation(){
     xhttp.setRequestHeader('Content-type', "application/json");
     xhttp.send();
 }
+
+function getSavedEncounters() {
+
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1';
+    url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
+    url += '?date='+sessionStorage.sessionDate;
+  
+    var req = new XMLHttpRequest();
+  
+    //var params = JSON.stringify({date: sessionStorage.sessionDate});
+  
+    req.onreadystatechange = function(){
+  
+      if (this.readyState == 4) {
+  
+        if (this.status == 200) {
+  
+          var results = JSON.parse(this.responseText);
+  
+          sessionStorage.setItem("savedEncounters", results);
+  
+        }
+  
+      }
+  
+    };
+  
+    try {
+  
+      req.open('GET', url, true);
+  
+      req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+  
+      req.send(null);
+  
+    } catch (e) {
+    
+      console.log(e);
+  
+    }
+  
+  }
+  
+  getSavedEncounters();
