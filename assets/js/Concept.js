@@ -86,6 +86,8 @@ const Concept = function () {
     'RH (R75/H50)': 1194,
     'RH (R150/H75)': 1194,
     'RHZE (R150/H75/Z400/E275)': 1131,
+    'INH or H (Isoniazid 100mg tablet)': 656,
+    'INH or H (Isoniazid 300mg tablet)': 656,
     AMOUNT_DISPENSED: 2834,
     X_RAY: 6687,
     CLINICAL: 3592,
