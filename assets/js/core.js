@@ -452,7 +452,7 @@ function buildDashboardButtons(tasks, container) {
                         continue;
                     }
                 }
-                if (!(tasks[i][0].match(/ART/) &&  sessionStorage.programID == "12")){
+                if (!((tasks[i][0].match(/ART/) || tasks[i][0].match(/HIV/)) &&  sessionStorage.programID == "12")){
 
                 containerTableCell = document.createElement("div");
 
