@@ -406,6 +406,7 @@
 </style>
 
 <script>
+const HIV_PROGRAM_ID = 1
 var global_property = GlobalProperty({
   authToken: sessionStorage.authorization,
   path: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1'
@@ -594,9 +595,12 @@ function checkIfFilingNumberIsNotValid () {
     patient_id = patient["patient_id"];
     sessionStorage.patientID = patient_id;
 
-    document
-      .getElementById("continue")
-      .setAttribute("onmousedown", "checkIfFilingNumberIsNotValid()");
+    (sessionStorage.programID === HIV_PROGRAM_ID) && document.getElementById("continue")
+                                                            .setAttribute(
+                                                              "onmousedown",
+                                                              "checkIfFilingNumberIsNotValid()"
+                                                            )
+
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
     client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -1226,7 +1230,7 @@ function checkIfFilingNumberIsNotValid () {
   >
     Cancel
   </button>
-  <button class="blue" style="float: right;" id="continue">Continue</button>
+  <button class="blue" onmousedown="finish(sessionStorage.patientID)" style="float: right;" id="continue">Continue</button>
 </div>
 
 <script>
