@@ -49,7 +49,8 @@
     //-->
   </script>
 
-  <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
 
 
 </head>
@@ -439,7 +440,7 @@ function mergeClients(){
         if (http.status == 201 || http.status == 200) {
           var v = JSON.parse(http.responseText);
           sessionStorage.patientID = v.patient_id;
-          document.location = "/views/patient/print.html?person_id=" + v.patient_id;
+          nextEncounter(v.patient_id, sessionStorage.programID);
         } else if (http.status == 409) {
           alert('Username already exists');
         } else {

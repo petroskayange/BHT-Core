@@ -37,6 +37,9 @@
 .alertify-notifier{
     color: black;
 }
+#cancelButton {
+  display: none;
+}
 </style>
 
 <script>
@@ -60,7 +63,8 @@ function changeNextButton() {
 }
 
 function doneDispensation() {
-  nextEncounter(sessionStorage.patientID, 1);
+  window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID
+  //nextEncounter(sessionStorage.patientID, 1);
 }
 var patient_id = sessionStorage.patientID;
 var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + patient_id;

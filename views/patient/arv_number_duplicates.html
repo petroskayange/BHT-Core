@@ -31,7 +31,7 @@
     #arv-number-duplicate-patients tbody {
         text-align: center;
         line-height: 2em;
-        letter-spacing: 1;
+        letter-spacing: 1px;
     }
 
     .loader {
@@ -126,14 +126,19 @@
                 for (var key in people) {
                     var patient_identifiers = people[key]["patient_identifiers"];
 
+
                     for (var i=0; i<=patient_identifiers.length - 1; i++){
                         var identifier_type = patient_identifiers[i].type;
                         if (identifier_type.name.match(/ARV/i)){
                             var patient_identifier_id = patient_identifiers[i]["patient_identifier_id"]
                         }
                     }
+                    var person_address = {};
 
-                    var person_address = people[key]["person"]["addresses"][0];
+                    if (people[key]["person"]["addresses"].length > 0) {
+                        person_address = people[key]["person"]["addresses"][0];
+                    }
+
                     var person_name = people[key]["person"]["names"][0];
                     //date_created = moment(date_created).format('DD/MMM/YYYY');
                     //var date_voided = past_filling_numbers[key]["date_voided"];
@@ -144,10 +149,10 @@
                     html += "<tr>";
                     html += "<td>" + count + "</td>";
                     html += "<td>" + person_name["given_name"] + "</td>";
-                    html += "<td>" + person_name["given_name"] + "</td>";
+                    html += "<td>" + person_name["family_name"] + "</td>";
                     html += "<td>" + people[key]["person"]["gender"] + "</td>";
                     html += "<td>" + people[key]["person"]["birthdate"] + "</td>";
-                    html += "<td>" + person_address["city_village"] + "</td>";
+                    html += "<td>" + (Object.keys(person_address).length > 0 ? person_address["city_village"] : "") + "</td>";
                     html += "<td><span class='arv-btn select-btn' onclick='selectPatient(" + person_id + ")'>Select patient</span></td>";
                     html += "<td> <span class='arv-btn reassign-btn' onclick='reassignARVNumber(" + person_id + ", " + patient_identifier_id + ")'>Reassign identifier</span></td>";
                     html += "</tr>";
@@ -170,7 +175,7 @@
         var vars = {};
         var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
             function (m, key, value) {
-                vars[key] = value;
+              vars[key] = value;
             });
         return vars;
     }

@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/lab.min.js"></script>
+    <script type="text/javascript" src="/assets/js/core.js"></script>
+      <script type="text/javascript" src="/assets/js/alertifyjs/alertify.js"></script>
+      <script type="text/javascript" src="/assets/js/does_connection_exist.js"></script>
+      <script type="text/javascript" src="/assets/js/moment.js"></script>
+      <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+
+      <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
+
+    <style>
+        .tt_controls_enter_result #lessthan {            
+            right: 65%;
+            display: inline !important;
+            top: -65px;
+        }
+
+        .tt_controls_enter_result #greaterthan {
+          
+            right: 65%;
+            display: inline !important;
+            top: 213px;
+            
+        }
+
+        .tt_controls_enter_result #equals {
+           
+            right: 65%;
+            display: inline !important;
+            top: 5px;
+            
+        }
+
+        .tt_controls_enter_result #na {
+           
+           right: 65%;
+           display: inline !important;
+           top: 5px;
+           
+       }
+    </style>
+    <script language="javascript" defer="true">
+      tstUsername = "";
+      tstUserKeyboardPref = "qwerty";
+      var tstCurrentDate = moment(tstCurrentDate).format("YYYY-MM-DD");
+      var tt_cancel_destination = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
+
+
+      var d = new Date();
+      d.toDateString();
+
+      function getInput(){
+        key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+         value = $('touchscreenInput' + tstCurrentPage).value;
+         value = value.charAt(0).toUpperCase() + value.slice(1);     
+         sessionStorage.setItem(key, value);
+         var d = new Date();
+         sessionStorage.setItem("date_created", d.toDateString());
+      }  
+
+  
+
+      function setNextButtonToGetInputValue(key) {
+                __$('nextButton').onmousedown = function () {
+                    console.log("Next button is clicked");
+                    value = __$('touchscreenInput' + tstCurrentPage).value;
+                    answers_hash[key] = value;
+                    gotoNextPage();
+                }
+            }
+
+
+            function resetKeyPad() {
+                buttons = document.getElementsByClassName("keyboardButton");
+                for (i = 0; i < buttons.length; i++) {
+                    if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                        buttons[i].disabled = true;
+                    } else {
+                        buttons[i].disabled = false;
+                    }
+                }
+            }
+
+            function updateCD4CountKeyPad() {
+                curr_page = tstCurrentPage - 1
+                buttons = document.getElementsByClassName("keyboardButton");
+                $("clearButton").setAttribute("onmousedown", "clearInput();updateCD4CountKeyPad();");
+                $("backButton").setAttribute("onmousedown", ";gotoPage(" + curr_page + ", null, true);resetPad();");
+                $("nextButton").setAttribute("onmousedown", "gotoNextPage();resetPad();");
+                
+                for (i = 0; i < buttons.length; i++) {
+                    if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                        buttons[i].disabled = false;
+                        if (buttons[i].id == "equals") {
+                            buttons[i].setAttribute("onmousedown", "press('=');resetKeyPad();");
+                        } else if (buttons[i].id == "lessthan") {
+                            buttons[i].setAttribute("onmousedown", "press('<');resetKeyPad();");
+                        } else if (buttons[i].id == "greaterthan") {
+                            buttons[i].setAttribute("onmousedown", "press('>');resetKeyPad();");
+                        }
+                    } else {
+                        buttons[i].disabled = true;
+                    }
+                }
+            }
+
+            function validateDate() {
+                var nextBtn =  __$("nextButton");
+                nextBtn.setAttribute('onmousedown',"validateOutcomeYearMonth();");
+                nextBtn.setAttribute('onclick',"");
+            }
+
+            function formatTsDate(date) {
+                var day = date.substr(0, 2);
+                var month = date.substr(3,2);
+                var year = date.substr(6,4);
+
+                return month + "/" + day + "/" + year;
+            }
+                function validateOutcomeYearMonth() {
+             
+                var sample_drawn = document.getElementById('date_sample_drawn').value;
+                sample_drawn = formatTsDate(sample_drawn);
+                var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+                element = (formatTsDate(element.value));;
+                if(sample_drawn > element){
+                showMessage("Result date can not be less than sample draw date");
+                return;
+                }
+                
+
+                gotoNextPage();
+            }
+
+
+    </script>
+
+
+  </head>
+  <body id="mateme">
+    <div id="container">
+      <div id="content">
+        <style>
+.tt_controls_first_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+.tt_controls_last_name #date, #star, #slash, #minus, #plus, #percent, #decimal, #comma { display: none; }
+
+</style>
+
+
+
+
+<form action="order_and_enter_result.html" method="POST" id="search_results">
+
+  <input 
+      field_type="date" helpText="Date Sample Drawn"
+      id="date_sample_drawn" name="date_sample_drawn"
+      tt_pageStyleClass="Date DatesOnly" type="text"/>
+    
+    <select allowFreeText="false" helpText="Reason For Test" id="reason_for_test"   tt_requireNextClick = "false"  name="reason_for_test" ><option value=""></option>
+      <option value="Routine">Routine</option>
+      <option value="Targeted">Targeted</option>
+      <option value="Confirmatory">Confirmatory</option>
+      <option value="Stat">Stat</option>
+    </select>
+    <select allowFreeText="false" helpText="Type of Sample" id="sample_typee"  name="test_measure"  tt_requireNextClick = "false" >
+      <option value=""></option>
+      <option value="DBS (Free drop to DBS card)">DBS 70ml</option>
+      <option value="DBS (Free drop to DBS card)">DBS (Free drop to DBS card)</option>
+      <option value="DBS (Using capillary tube)">DBS (Using capillary tube)</option>
+      <option value="Blood">Blood</option>
+      <option value="Plasma">Plasma</option>
+    </select>
+
+    
+    <input  field_type="number"
+    helpText="Enter Result" id="results" name="results"
+    tt_pageStyleClass="Numeric NumbersOnly" type="text" 
+    validationMessage="You must enter a modifier plus numbers only (for example =90)"
+    validationRule="^(>|<|=)([0-9.]+)$|N/A$"/>
+   
+   <input 
+      field_type="date" helpText="Result Date"
+      id="result_date" name="result_date"
+      tt_pageStyleClass="Date DatesOnly" type="text" tt_onLoad="validateDate()"/>
+       
+   
+    <input type="text" 
+        name="results" 
+        id="results2" 
+        field_type="alpha" 
+        tt_onUnload="submiteEntry()" 
+        helpText="Enter Test Result"       
+        allowFreeText="true"
+        condition = "$('results').value == 'N/A'"
+    />
+
+    <input type="text" name="approved_by" id="approved_by" field_type="alpha" tt_onLoad="validateEntry()"
+        helpText="Result Aproved by"  
+        allowFreeText="true"  />
+
+
+
+    <input type="hidden"  name="test_type" id="test_typee" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
+    
+    <input type="hidden"  name="test_measure" id="test_measure" field_type="number" value="Viral Load"  helpText="Test Day" allowFreeText="true"  />
+    
+
+</form>
+        <div id="footer">
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+      var testCatelog = {}
+
+      function loadTestMeasures()
+      {       
+            var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+            url += '/programs/1/lab_tests/types';
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+                    var obs = JSON.parse(this.responseText);
+                   
+                    testCatelog = obs;
+                    var select = document.getElementById("test_typee");
+                    obs.forEach(element => {                     
+                        var option = document.createElement("option");
+                        option.innerHTML = element;
+                        option.setAttribute("value",element);
+                        option.onchange = function tt(){console.log("is being clicked");};                        
+                        select.appendChild(option);
+                    });
+
+                   
+                }
+                else{
+                  
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+            xhttp.setRequestHeader('Content-type', "application/json");
+            xhttp.send();
+      }
+
+
+    function loadYears()
+    {           
+        year  = new Date();
+        year = year.getFullYear();
+        start = year;
+        end = 2011;    
+        var select = document.getElementById("test_year");   
+        for (let i = start; i >= end; i--) {                     
+            var option = document.createElement("option");
+            option.innerHTML = i;
+            option.setAttribute("value",i);            
+            select.appendChild(option);
+        }       
+    }
+
+    
+
+    function loadMonths()
+    {   var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];     
+        start = 0;
+        end = 12;    
+        var select = document.getElementById("test_month");   
+        for (let i = start; i < end; i++) {                     
+            var option = document.createElement("option");
+            option.innerHTML = monthNames[i];
+            option.setAttribute("value",i);            
+            select.appendChild(option);0
+        }       
+    }
+
+    function loadDays()
+    {                  
+        start = 1;
+        end = 31;    
+        var select = document.getElementById("test_day");   
+        for (let i = start; i <= end; i++) {                     
+            var option = document.createElement("option");
+            option.innerHTML = i;
+            option.setAttribute("value",i);            
+            select.appendChild(option);
+        }       
+    }
+
+    function resetKeyBoard(){
+        for (var i = 1; i<= 31; i++) {
+        if (document.getElementById(i)){
+            document.getElementById(i).style.display = ''
+        }
+        }
+    }
+    
+        
+        loadTestMeasures();
+     
+    function validateEntry(){
+        var button = document.getElementById("nextButton");
+        button.setAttribute('onmousedown','createVLorder()');
+    }
+
+   function createVLorder() {
+       var inputText = document.getElementById("touchscreenInput" + tstCurrentPage);
+       if (inputText.value.length <1)
+       {
+           showMessege("Enter Provider");
+           return;
+       }
+       
+       submiteEntry();
+   }
+
+    function submiteEntry()
+    {   var da = document.getElementById("date_sample_drawn").value;     
+        var testDate = da; 
+        var resultDate = document.getElementById("result_date").value
+        var reasontForTest = document.getElementById("reason_for_test").value;
+        var testName = document.getElementById("test_typee").value;
+        var testMeasure = document.getElementById("test_measure").value;
+        var testResult = document.getElementById("results").value;
+        if (testResult == "N/A"){
+            testResult = document.getElementById("results2").value;
+            
+        }
+        var sampleTYpe = document.getElementById("sample_typee").value;
+        var patientID = sessionStorage.patientID;
+        var approved_by = document.getElementById("touchscreenInput" + tstCurrentPage).value;
+        var resutlValue = {}
+        resutlValue[testMeasure] = testResult;
+        data = {};
+        data['order'] = {
+            "sample_type":  sampleTYpe,
+            "test_name": testName,
+            "reason_for_test": reasontForTest,
+            "sample_status": "specimen_collected",
+            "date_sample_drawn": testDate
+        }
+
+        data['result'] = {
+            "test_status": "verified",
+            "test_name": testName,
+            "tracking_number": "",
+            "result_date": resultDate,
+            "who_updated": {
+                'id_number': '',
+                'phone_number': '',
+                'first_name': approved_by,
+                'last_name':  approved_by
+            },
+            "results": resutlValue
+        }      
+            url = '/programs/1/lab_tests/order_and_results?patient_id=' + sessionStorage.patientID;
+            submitParameters(data, url, 'redirectToOrderMenu'); 
+    }
+
+    function redirectToOrderMenu(obs)
+    {
+        window.location = "/views/patient/lab/test_without_results.html";
+    }
+ 
+
+  </script>
+</html>

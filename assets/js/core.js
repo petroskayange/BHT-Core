@@ -14,13 +14,25 @@ sessionStorage.setItem("backupPatientID", id);
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
 // var activities_tab_content = "";
 // })
-admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
+var admin_tab_content = '';
+if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
+  admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-user" onclick="redirect(this.id); "><img src="/assets/images/edit-user.png" class="btn-icons"/><span>View user</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-sys-settings" onclick="redirect(this.id); "><img src="/assets/images/sys-setting.png" class="btn-icons"/><span>System settings</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-drug-management-settings" onclick="redirect(this.id); "><img src="/assets/images/drug.png" class="btn-icons"/><span>Drug management</span></button>';
+
+  admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="enable-portal" onclick="redirect(this.id); "><img src="/assets/images/portal.png" class="btn-icons"/><span>Portal Settings</span></button>';
+}
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
+
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="enable-portal" onclick="redirect(this.id); "><img src="/assets/images/portal.png" class="btn-icons"/><span>Portal Settings</span></button>';
+
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -328,15 +340,35 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
-    var j = Object.keys(encountersData.encounters);
-    var i = 0;
+    
     var tasks = [];
-    j.forEach(function (j) {
-        var values = encountersData.encounters[j]
-        var url = values.url;
-        var icon = values.activitiesIcon;
-        tasks.push([j, icon, url])
-    });
+
+    if (parseInt(sessionStorage.programID) == 12){
+        // This is for ANC Program to be able to differnctiate
+        // two different activities using a single encounter.
+        // e.g. ART Treatment and ANC Treatment both using Treatment encounter.
+        var j = encountersData.encounters;
+        for(var k = 0; k < encountersData.activities["tasks"].length; k++){
+            var values = encountersData.activities["tasks"][k][0]
+            var encounter = encountersData.activities["tasks"][k][1]
+            if(j[encounter] !== undefined){
+                var url = j[encounter].url;
+                var icon = j[encounter].activitiesIcon
+                tasks.push([values, icon, url, encounter.toUpperCase()])
+
+            }
+        }
+
+    }else{
+        var j = Object.keys(encountersData.encounters);
+        var i = 0;
+        j.forEach(function (j) {
+            var values = encountersData.encounters[j]
+            var url = values.url;
+            var icon = values.activitiesIcon;
+            tasks.push([j, icon, url])
+        });
+    }
 
     var container = document.getElementById('tasks-container');
     buildDashboardButtons(tasks, container);
@@ -356,6 +388,10 @@ function printVisitSummary() {
 
 function printTransferOut() {
     print_and_redirect('/views/print/transfer.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
+function printDemographics() {
+    print_and_redirect('/views/print/demographics.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
 function download(filename, text) {
@@ -388,12 +424,12 @@ function buildDashboardButtons(tasks, container) {
 
     var use_filling_number = false;
     var use_filling_number_property_url = apiProtocol + "://" + apiURL + ":" + apiPort;
-    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.number";
+    use_filling_number_property_url += "/api/v1/global_properties?property=use.filing.numbers";
     var xhttp1 = new XMLHttpRequest();
     xhttp1.onreadystatechange = function () {
         if (this.readyState == 4 && (this.status == 201 || this.status == 200 || this.status == 404)) {
             try {
-                var use_filling_number_property = JSON.parse(this.responseText)["use.filing.number"];
+                var use_filling_number_property = JSON.parse(this.responseText)["use.filing.numbers"];
                 if (use_filling_number_property == "true") {
                     use_filling_number = true
                 }
@@ -416,9 +452,28 @@ function buildDashboardButtons(tasks, container) {
                         continue;
                     }
                 }
+                if (!((tasks[i][0].match(/ART/) || tasks[i][0].match(/HIV/)) &&  sessionStorage.programID == "12")){
 
                 containerTableCell = document.createElement("div");
-                containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                if (sessionStorage.programID == "12"){ //Disable already saved encounters in ANC
+
+                    if (sessionStorage.savedEncounters.includes(tasks[i][3])){
+                    
+                        containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
+
+                    }else{
+
+                        containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                    }
+                    
+                }else{
+                    
+                    containerTableCell.setAttribute("class", "tasks-table-cell");
+                    
+                }
+
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
@@ -428,6 +483,8 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printVisitSummary();");
                 } else if (tasks[i][0].match(/Transfer Out/i)) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
+                }else if (tasks[i][0].match(/Demographics \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printDemographics();");
                 }
                 else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
@@ -460,6 +517,7 @@ function buildDashboardButtons(tasks, container) {
                 containerTableRow.appendChild(containerTableCell);
 
                 count++;
+                }
             }
         }
     };
@@ -564,6 +622,19 @@ function redirect(id) {
         dvTable.appendChild(obj);
     }
     if (id === "report-1") {
+    }
+ 
+    if (id === "cleaner") {
+        // window.location.href = './views/reports/data_inconsistent/cleaner.html';
+        var dvTable = document.getElementById("generic_tabs");
+        dvTable.innerHTML = null;
+        dvTable.style = "width: 97% !important;";
+  
+        var obj = document.createElement("object");
+        obj.setAttribute("data", "/apps/ART/views/reports/data_inconsistent/cleaner.html");
+        obj.setAttribute("type","text/html");
+        obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
+        dvTable.appendChild(obj);
     }
 }
 
@@ -706,6 +777,8 @@ function loadTabContent(id) {
     } else {
         GenerateTable();
     }
+
+    
 }
 
 // function loadActivitiesContent(id) {
@@ -732,7 +805,15 @@ function checkCredentials(username, password) {
         if (http.readyState == 4) {
             if (http.status == 200) {
                 var v = JSON.parse(http.responseText);
+
+                var user_roles = [];
+                var roles = v['authorization'].user.roles;
+                for(var i = 0 ; i < roles.length; i++){
+                  user_roles.push(roles[i].role);
+                }
+               
                 sessionStorage.setItem("authorization", v.authorization.token);
+                sessionStorage.setItem("userRoles", user_roles.join(','));
                 sessionStorage.removeItem("userPassword");
                 window.location.href = "location.html";
                 // sessionStorage.removeItem("userPassword");
@@ -913,3 +994,47 @@ function getPortalLocation(){
     xhttp.setRequestHeader('Content-type', "application/json");
     xhttp.send();
 }
+
+function getSavedEncounters() {
+
+    var url = 'http://'+apiURL+':'+apiPort+'/api/v1';
+    url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
+    url += '?date='+sessionStorage.sessionDate;
+  
+    var req = new XMLHttpRequest();
+  
+    //var params = JSON.stringify({date: sessionStorage.sessionDate});
+  
+    req.onreadystatechange = function(){
+  
+      if (this.readyState == 4) {
+  
+        if (this.status == 200) {
+  
+          var results = JSON.parse(this.responseText);
+  
+          sessionStorage.setItem("savedEncounters", results);
+  
+        }
+  
+      }
+  
+    };
+  
+    try {
+  
+      req.open('GET', url, true);
+  
+      req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+  
+      req.send(null);
+  
+    } catch (e) {
+    
+      console.log(e);
+  
+    }
+  
+  }
+  
+  getSavedEncounters();

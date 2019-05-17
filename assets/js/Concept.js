@@ -1,15 +1,42 @@
-var Concept = function () {
-  var apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
-  var concept = null
+/**
+ * Immediately executing function that creates a revealing Concept module
+ * 
+ * @return {object}
+ */
+const Concept = function () {
+  /** @type {string} */
+  const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
-  function init (data) {
+  /** @type {object} */
+  let concept = {}
+
+  /**
+   * Function that initializes a concept
+   * 
+   * @param {object} data
+   * 
+   * @return {undefined}
+   */
+  function init (data = {}) {
     concept = data
   }
 
-  function getConceptIdByName (conceptName) {
+  /**
+   * Function to lookup concept names in the CONCEPT_IDS object
+   * 
+   * @param {string} conceptName
+   * 
+   * @return {number|null}
+   */
+  function getConceptIdByName (conceptName = '') {
     return CONCEPT_IDS[conceptName] || null
   } 
 
+  /** 
+   * Central object containing concept ids
+   * 
+   * @type {object}
+   */
   const CONCEPT_IDS = {
     'Cough lasting >1 week': 9694,
     'Cough lasting >2 weeks': 2573,
@@ -43,18 +70,52 @@ var Concept = function () {
     PRISONER: 9734,
     WARD: 7829,
     HIV_TEST_DATE: 1837,
-    PREVIOSULY_TESTED: 9656,
+    PREVIOUSLY_TESTED: 9656,
     PREVIOUS_TEST_DATE: 9657,
-    ON_ART: 7010,
-    NOT_ON_ART: 8037,
+    ON_ART: 1577,
     HIV_STATUS: 3753,
     HIV_TEST_DONE_TODAY: 9568,
-    NOT_DONE: 2475,
-    REASON_HIV_TEST_NOT_DONE: 9569
+    NOT_DONE: 1118,
+    REASON_HIV_TEST_NOT_DONE: 9569,
+    LIVES_NEAR: 9166,
+    TB_SYMPTOMS: 1560,
+    PRESCRIBE_DRUGS: 7874,
+    MEDICAL_ORDERS: 1282,
+    'RHZ (R75/H50/Z150)': 765,
+    'E (Ethambutol 100mg tablet)': 745,
+    'RH (R75/H50)': 1194,
+    'RH (R150/H75)': 1194,
+    'RHZE (R150/H75/Z400/E275)': 1131,
+    AMOUNT_DISPENSED: 2834,
+    X_RAY: 6687,
+    CLINICAL: 3592,
+    TB_STATUS: 7459,
+    PROCEDURE_TYPE: 9587,
+    TB_ADHERENCE: 2605,
+    DRUGS_BROUGHT: 2540,
+    TB_DRUGS_START_DATE: 1113,
+    HEALTH_WORKER: 1538,
+    PREV_TEST_DATE: 9657,
+    COUGH_DURATION: 5959,
+    OCCUPATION: 1304,
+    TRANSFERRED_OUT_EXTERN: 9230,
+    FACILITY_NAME: 8341,
+    TRANSFERRED_OUT_STATE: 95,
+    REGIMEN_SUPPLY_DAYS: 3640,
+    OTHER_REFERRAL: 6408,
+    RESULT_DATE: 3045,
+    LAB_ORDER: 3388
   }
 
+  /**
+   * Function that asks the EMR-API to create a concept
+   * 
+   * @param {object} data
+   * 
+   * @return {Promise}
+   */
   function create (data = {}) {
-    fetch (`${apiRoot}/concepts`, {
+    return fetch (`${apiRoot}/concepts`, {
       method: 'POST',
       headers: {
         'Authorization': sessionStorage.authorization,
@@ -62,16 +123,6 @@ var Concept = function () {
       },
       body: JSON.stringify(data.params)
     })
-      .then((response) => {
-        if (response.status === 201) {
-          data.success(response)
-        } else {
-          data.fail(response)
-        }
-      })
-      .catch((error) => {
-        data.fail(error)
-      })
   }
 
   return {

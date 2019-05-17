@@ -217,9 +217,196 @@
     background-color: #303031;
     border-radius: 4px;
   }
+
+/* ... Address cover ............. */
+#address-confirmation-table {
+  width: 100%;
+}
+
+#address-confirmation-table th {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 40px;
+  text-align: center;
+}
+
+#address-confirmation-table td {
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+
+#address-confirmation {
+  display: none;
+  background-color: #F4F4F4;
+  border: 2px solid #E0E0E0;
+  border-radius: 15px;
+  height: 75%;
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  width: 97%;
+  left: 1%;
+  z-index: 991;
+}
+
+#address-confirmation-cover {
+  display: none;
+  position: absolute;
+  background-color: black;
+  width: 100%;
+  height: 102%;
+  left: 0%;
+  top: 0%;
+  z-index: 990;
+  opacity: 0.65;
+}
+
+#address-confirmation-buttons {
+  bottom: 15px;
+  width: 99%;
+  position: absolute;
+}
+
+.address-confirmation-button {
+  height: 100px;
+  width: 48%;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#green-btn:hover {
+  border: 1px solid #224b09;
+
+  background-color: #36780f;
+
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#36780f), to(#005900));
+
+  background-image: -webkit-linear-gradient(top, #36780f, #005900);
+
+  background-image: -moz-linear-gradient(top, #36780f, #005900);
+
+  background-image: -ms-linear-gradient(top, #36780f, #005900);
+
+  background-image: -o-linear-gradient(top, #36780f, #005900);
+
+  background-image: linear-gradient(to bottom, #36780f, #005900);
+
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#36780f, endColorstr=#005900);
+  }
+
+#green-btn {
+  border: 1px solid #34740e;
+
+  -webkit-border-radius: 3px;
+
+  -moz-border-radius: 3px;
+
+  border-radius: 3px;
+
+  margin-left: 20px;
+
+  font-size: 28px;
+
+  font-family: arial, helvetica, sans-serif;
+
+  padding: 10px 10px 10px 10px;
+
+  text-decoration: none;
+
+  display: inline-block;
+
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+
+  font-weight: bold;
+
+  color: #FFFFFF;
+
+  background-color: #4ba614;
+
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4ba614), to(#008c00));
+
+  background-image: -webkit-linear-gradient(top, #4ba614, #008c00);
+
+  background-image: -moz-linear-gradient(top, #4ba614, #008c00);
+
+  background-image: -ms-linear-gradient(top, #4ba614, #008c00);
+
+  background-image: -o-linear-gradient(top, #4ba614, #008c00);
+
+  background-image: linear-gradient(to bottom, #4ba614, #008c00);
+
+  filter:
+  }
+
+#blue-btn:hover {
+  border: 1px solid #5ca6c4;
+
+  background-color: #82bbd1;
+
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#82bbd1), to(#193b61));
+
+  background-image: -webkit-linear-gradient(top, #82bbd1, #193b61);
+
+  background-image: -moz-linear-gradient(top, #82bbd1, #193b61);
+
+  background-image: -ms-linear-gradient(top, #82bbd1, #193b61);
+
+  background-image: -o-linear-gradient(top, #82bbd1, #193b61);
+
+  background-image: linear-gradient(to bottom, #82bbd1, #193b61);
+
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#82bbd1, endColorstr=#193b61);
+  }
+
+#blue-btn {
+  border: 1px solid #7eb9d0;
+
+  -webkit-border-radius: 3px;
+
+  -moz-border-radius: 3px;
+
+  border-radius: 3px;
+
+  font-size: 28px;
+
+  font-family: arial, helvetica, sans-serif;
+
+  padding: 10px 10px 10px 10px;
+
+  text-decoration: none;
+
+  display: inline-block;
+
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+
+  font-weight: bold;
+
+  color: #FFFFFF;
+
+  background-color: #a7cfdf;
+
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+
+  background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+
+  background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+
+  background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+
+  background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+
+  background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+  }
+
+/* ... Address cover ends ............. */
+
+
 </style>
 
 <script>
+const HIV_PROGRAM_ID = 1
 var global_property = GlobalProperty({
   authToken: sessionStorage.authorization,
   path: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1'
@@ -246,14 +433,18 @@ function checkIfFilingNumberIsNotValid () {
   var patientDead = false;
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
-    var cells = [
-      "Patient identifiers",
-      "Alert(s)",
-      "labs",
-      "Program info",
-      "Outcome",
-      "Guardian(s)"
-    ];
+    
+    if(sessionStorage.programID == '1') {
+      var cells = [
+        "Patient identifiers", "Alert(s)",
+        "labs", "Program info", 
+        "Outcome", "Guardian(s)"
+      ];
+    }else{
+      var cells = [
+        "Patient identifiers"
+      ];
+    }
 
     var count = 0;
     var row = document.createElement("div");
@@ -352,7 +543,8 @@ function checkIfFilingNumberIsNotValid () {
         window.location.href = "/";
       }else if (this.status == 422) {
         var f = JSON.parse(this.responseText);
-        sessionStorage.patientID = f.patient_id;
+        //sessionStorage.patientID = f.patient_id;
+        sessionStorage.patientID = f.entity.patient_id;
         window.location.href = "/views/patient/edit_demographics.html";
       }
     };
@@ -402,9 +594,13 @@ function checkIfFilingNumberIsNotValid () {
     obj = obj["person"];
     patient_id = patient["patient_id"];
     sessionStorage.patientID = patient_id;
-    document
-      .getElementById("continue")
-      .setAttribute("onmousedown", "checkIfFilingNumberIsNotValid()");
+
+    (sessionStorage.programID === HIV_PROGRAM_ID) && document.getElementById("continue")
+                                                            .setAttribute(
+                                                              "onmousedown",
+                                                              "checkIfFilingNumberIsNotValid()"
+                                                            )
+
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
     client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -436,6 +632,10 @@ function checkIfFilingNumberIsNotValid () {
       current_village.innerHTML = obj["addresses"][0]["city_village"];
     }
 
+    if(sessionStorage.userRoles.match(/Registration/i) && sessionStorage.programID == '1') 
+      checkAddressValidity(obj['addresses']);
+    
+
     var roundedAge = Math.round(moment().diff(obj["birthdate"], "years", true));
     sessionStorage.patientAge = roundedAge;
     sessionStorage.patientGender = obj["gender"];
@@ -443,14 +643,19 @@ function checkIfFilingNumberIsNotValid () {
     //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
     getHeight(patient_id);
     getWeight(patient_id);
-
+    sessionStorage.patientID = patient_id;
+    
     buildIdentifiers(patient["patient_identifiers"]);
-    buildStates(obj, patient_id);
-    var orders = obj_2;
-    buildOrders(orders["orders"]);
-    buildProgramInfo(patient_id);
-    buildRelationShips(patient_id);
-    buildAlerts(patient_id);
+    if(sessionStorage.programID == '1') {
+      showOrders();
+      buildStates(obj, patient_id);
+      var orders = obj_2;
+      buildOrders(orders["orders"]);
+      buildProgramInfo(patient_id);
+      buildRelationShips(patient_id);
+      buildAlerts(patient_id);
+    }
+
     var gender = null;
     if (sessionStorage.patientGender === "F") {
       gender = "female";
@@ -539,7 +744,9 @@ function checkIfFilingNumberIsNotValid () {
           identifiers[i]["identifier"]
         );
       } else if (identifiers[i]["identifier_type"] == 4) {
-        identifiersHash["ARV#"] = identifiers[i]["identifier"];
+        if(sessionStorage.programID == '1')
+          identifiersHash["ARV#"] = identifiers[i]["identifier"];
+
       } else if (identifiers[i]["identifier_type"] == 17) {
         identifiersHash["Active filing#"] = formatIdentifier(
           identifiers[i]["identifier"]
@@ -572,8 +779,10 @@ function checkIfFilingNumberIsNotValid () {
       if(sessionStorage.dde_enabled === 'true') {
         if(identifier.toUpperCase() == 'NPID' && identifiersHash[identifier].length > 0) {
           var returned_id = identifiersHash[identifier].toUpperCase().replace(/-/g, "");
-          if(scanned_id.toUpperCase() != returned_id && scanned_id.length != 6) {
-            document.location = '/views/print/npid.html?identifier=' + returned_id;
+          if(scanned_id) {
+            if(scanned_id.toUpperCase().replace(/-/g, "") != returned_id && scanned_id.length != 6) {
+              document.location = '/views/print/npid.html?identifier=' + returned_id;
+            }
           }
         }
       }
@@ -600,7 +809,7 @@ function checkIfFilingNumberIsNotValid () {
           identifiersHash["Current Outcome"] =
             results.current_outcome !== "N/A"
               ? results.current_outcome
-              : "No Outcome Available";
+              : "No Outcome Available";buildInfoBoxes
           var table = document.createElement("table");
           table.setAttribute("class", "info-tables");
 
@@ -1021,7 +1230,7 @@ function checkIfFilingNumberIsNotValid () {
   >
     Cancel
   </button>
-  <button class="blue" style="float: right;" id="continue">Continue</button>
+  <button class="blue" onmousedown="finish(sessionStorage.patientID)" style="float: right;" id="continue">Continue</button>
 </div>
 
 <script>
@@ -1182,6 +1391,201 @@ function dateDiffInMonths(dt2, dt1) {
   months += dt2.getMonth();
   return months <= 0 ? 0 : months;
 }
-</script>
 
+var current_person_addresses;
+
+function checkAddressValidity(addresses) {
+  current_person_addresses = addresses;
+  getCellPhone(sessionStorage.patientID, addresses);
+}
+
+function displayCurrentInfo(addresses, cell_number_details) {  
+  var bd = document.getElementsByTagName('body')[0];
+ 
+  var current_district = (!addresses == false ? addresses[0]['state_province'] : null);
+  var current_ta = (!addresses == false ? addresses[0]['township_division'] : null);
+  var current_village = (!addresses == false ? addresses[0]['city_village'] : null);
+
+  var cell_number;
+  if(cell_number_details)
+    cell_number = cell_number_details.value;
+  
+  var popUpBox = document.createElement('div');
+  popUpBox.setAttribute('id','address-confirmation');
+  bd.appendChild(popUpBox);
+
+  var popUpBoxCover = document.createElement('div');
+  popUpBoxCover.setAttribute('id','address-confirmation-cover');
+  bd.appendChild(popUpBoxCover);
+
+  var table = document.createElement('table');
+  table.setAttribute('id','address-confirmation-table');
+  table.style.fontSize = '26px';
+  popUpBox.appendChild(table);
+  
+  var tr = document.createElement('tr');
+  var th = document.createElement('th');
+  th.setAttribute('colspan','2');
+  tr.appendChild(th);
+  th.innerHTML = "Confirm client's current address and phone number"
+  table.appendChild(tr);
+
+  var tr = document.createElement('tr');
+  var td = document.createElement('td');
+  td.innerHTML = 'Current district:';
+  tr.appendChild(td);
+  var td = document.createElement('td');
+  td.innerHTML = current_district;
+  tr.appendChild(td);
+  table.appendChild(tr);
+
+  var tr = document.createElement('tr');
+  var td = document.createElement('td');
+  td.innerHTML = 'Current TA:';
+  tr.appendChild(td);
+  var td = document.createElement('td');
+  td.innerHTML = current_ta;
+  tr.appendChild(td);
+  table.appendChild(tr);
+
+  var tr = document.createElement('tr');
+  var td = document.createElement('td');
+  td.innerHTML = 'Current village:';
+  tr.appendChild(td);
+  var td = document.createElement('td');
+  td.innerHTML = current_village;
+  tr.appendChild(td);
+  table.appendChild(tr);
+
+  var tr = document.createElement('tr');
+  var td = document.createElement('td');
+  td.innerHTML = 'Cell phone #:';
+  tr.appendChild(td);
+  var td = document.createElement('td');
+  td.innerHTML = cell_number;
+  tr.appendChild(td);
+  table.appendChild(tr);
+
+
+  var btnContainer = document.createElement('div');
+  btnContainer.setAttribute('id','address-confirmation-buttons');
+  popUpBox.appendChild(btnContainer);
+
+  var cancelBtn = document.createElement('button');
+  cancelBtn.setAttribute('class','address-confirmation-button');
+  cancelBtn.innerHTML = 'Update information';
+  cancelBtn.setAttribute('id','blue-btn');
+  cancelBtn.setAttribute('onmousedown','updateAddress('+patient_id+');');
+  btnContainer.appendChild(cancelBtn);
+
+  var cancelBtn = document.createElement('button');
+  cancelBtn.setAttribute('class','address-confirmation-button');
+  cancelBtn.innerHTML = 'Information OK';
+  cancelBtn.setAttribute('id','green-btn');
+  cancelBtn.setAttribute('onmousedown','confirmAddress();');
+  btnContainer.appendChild(cancelBtn);
+
+
+
+
+
+  popUpBoxCover.style = 'display: inline;';  
+  popUpBox.style = 'display: inline;';  
+}
+
+function getCellPhone(patient_id, addresses) {
+  
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+  url += "/api/v1/person_attributes?person_id=" + patient_id;
+  url += "&person_attribute_type_id=12";
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      if(sessionStorage.programID === "1") {
+        validateContactDetails(addresses, obj);  
+      }
+      
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+}
+
+function validateContactDetails(addresses, cell_number_details) {
+
+  if(!addresses && !cell_number_details) {
+    displayCurrentInfo([], null);
+    return;
+  }else if(!addresses && cell_number_details) {
+    displayCurrentInfo([], cell_number_details);
+    return;
+  }
+
+  if(addresses) {
+    var date_created = moment(addresses[0].date_created).format('YYYY-MM-DD');
+    date_created = moment(date_created);
+    current_date = moment();
+    var yrs = current_date.diff(date_created, 'years');
+
+    if(yrs >= 1) {
+      displayCurrentInfo(addresses, cell_number_details);
+    }
+
+  }else{
+    displayCurrentInfo([], cell_number_details);
+  }
+}
+
+function confirmAddress() {
+  var bd = document.getElementsByTagName('body')[0];
+  var div = document.getElementById('address-confirmation');
+  bd.removeChild(div);
+  var div = document.getElementById('address-confirmation-cover');
+  bd.removeChild(div);
+
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+  url += "/api/v1/people/" + patient_id;
+
+  if(!current_person_addresses)
+    return;
+
+  
+  var parameters = JSON.stringify({
+    home_district: current_person_addresses[0].address2, 
+    home_traditional_authority: current_person_addresses[0].county_district, 
+    home_village: current_person_addresses[0].neighborhood_cell, 
+    current_region: "", 
+    current_district: current_person_addresses[0].state_province, 
+    current_traditional_authority: current_person_addresses[0].township_division, 
+    current_village: current_person_addresses[0].city_village, 
+    id: sessionStorage.patientID, 
+    person: {}  
+  });
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      console.log(parameters);
+    }
+  };
+  xhttp.open("PUT", url, true);
+  xhttp.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(parameters);
+}
+
+function updateAddress(patient_id) {
+  
+  var scanned_patient_id = "";
+  var location_url = 'patient/edit_demographics.html?patient_id=' + patient_id;
+  location_url += "&scanned_patient_id=" + patient_id;
+
+  location = location_url;
+}
+</script>
 <script src="/assets/js/show.lab.orders.js"></script>

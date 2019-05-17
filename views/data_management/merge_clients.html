@@ -87,6 +87,7 @@
 
 <script>
 
+var tt_cancel_destination = "/";
 function buildMergePage() {
 
   var frame = document.getElementById('inputFrame' + tstCurrentPage);
@@ -188,34 +189,12 @@ function initSearch() {
 
 function searchClient(first_name, last_name, gender, side) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-  if(sessionStorage.dde_enabled === "true") {
-    url += "/dde/patients/find_by_name_and_gender?program_id="+sessionStorage.programID+"&given_name=" + first_name +"&family_name=" + last_name +"&gender="+ gender;
-  }else {
-    url += "/search/people?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
-  }
-
+    url += "/search/patients?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
-      if(sessionStorage.dde_enabled === "true") {
-        var obj2 = [];
-        for (var index = 0; index < obj["locals"].length; index++) {
-          obj2.push(obj["locals"][index]["person"]);
-          
-        }
-        for (var index = 0; index < obj["remotes"].length; index++) {
-          var doc_id = getIdentifier(obj["remotes"][index]["patient_identifiers"], 27);
-          // console.log(doc_id);
-          var current_patient = obj["remotes"][index]["person"];
-          current_patient.dde_doc_id = doc_id;
-          obj2.push(current_patient);
-          
-        }
-        processResults(obj2, side);
-      }else {
         processResults(obj, side);
-      }
     }
   };
   xhttp.open("GET", url, true);
@@ -242,7 +221,7 @@ function processResults(results, side) {
     container_cell.setAttribute('side', side);
     container_cell.setAttribute('selected', 'false');
     container_cell.setAttribute('patient_id', '');
-    container_cell.setAttribute('dde_doc_id', '');
+    container_cell.setAttribute('doc_id', '');
     container_cell.setAttribute('onmousedown','selectRow(this);');
     container_row.appendChild(container_cell);
 
@@ -271,6 +250,7 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
+  td.innerHTML = (result.patient_identifiers.filter(id => id.identifier_type == 3))[0].identifier;
   tr.appendChild(td);
   /* ............................. */
 
@@ -282,8 +262,8 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['names'][0]['given_name'];
-  td.innerHTML += " " + result['names'][0]['family_name'];
+  td.innerHTML = result.person.names[0].given_name;
+  td.innerHTML += " " + result.person.names[0].family_name;
   tr.appendChild(td);
 
   var tr = document.createElement('tr');
@@ -294,8 +274,8 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['birthdate'];
-  td.innerHTML += " (" + result['gender'] + ")"
+  td.innerHTML = result.person.birthdate;
+  td.innerHTML += " (" + result.person.gender + ")"
   tr.appendChild(td);
   /* ............................. */
 
@@ -307,32 +287,49 @@ function addResult(result, cell) {
   tr.appendChild(th);
 
   var td = document.createElement('td');
-  td.innerHTML = result['addresses'][0]['address2'];
-  td.innerHTML += " " + result['addresses'][0]['county_district'];
-  td.innerHTML += " " + result['addresses'][0]['neighborhood_cell'];
-  tr.appendChild(td);
+  if (result.person.hasOwnProperty('addresses')){
+    if (result.person.addresses.length != 0){
+        if (result.person.addresses[0].hasOwnProperty('address2')){
+          td.innerHTML = result.person.addresses[0].address2;
+        }
+        if (result.person.addresses[0].hasOwnProperty('county_district')){
+          td.innerHTML += " " + result.person.addresses[0].county_district;
+        }
+        if (result.person.addresses[0].hasOwnProperty('neighborhood_cell')){
+          td.innerHTML += " " + result.person.addresses[0].neighborhood_cell;
+        }    
+        tr.appendChild(td);
+        /* ............................. */
+
+        var tr = document.createElement('tr');
+        table.appendChild(tr);
+
+        var th = document.createElement('th');
+        th.innerHTML = 'Current address';
+        tr.appendChild(th);
+
+        var td = document.createElement('td');
+        if (result.person.addresses[0].hasOwnProperty('state_province')){
+          td.innerHTML = result.person.addresses[0].state_province;
+        }
+        if (result.person.addresses[0].hasOwnProperty('township_division')){
+          td.innerHTML += " " + result.person.addresses[0].township_division;
+        }
+        if (result.person.addresses[0].hasOwnProperty('city_village')){
+          td.innerHTML += " " + result.person.addresses[0].city_village;
+        }
+        
+        tr.appendChild(td);
+    }
+  }
   /* ............................. */
 
-  var tr = document.createElement('tr');
-  table.appendChild(tr);
-
-  var th = document.createElement('th');
-  th.innerHTML = 'Current address';
-  tr.appendChild(th);
-
-  var td = document.createElement('td');
-  td.innerHTML = result['addresses'][0]['state_province'];
-  td.innerHTML += " " + result['addresses'][0]['township_division'];
-  td.innerHTML += " " + result['addresses'][0]['city_village'];
-  tr.appendChild(td);
-  /* ............................. */
-
-  if(result['person_id'] != null) {
-    cell.setAttribute('patient_id', result['person_id'])
+  if(result.patient_id != null) {
+    cell.setAttribute('patient_id', result.person.person_id)
   }
   
-  if(result['dde_doc_id'] != null) {
-    cell.setAttribute('dde_doc_id', result['dde_doc_id'])
+  if (result.patient_identifiers.filter(id => id.identifier_type == 27)[0]!= null) {
+    cell.setAttribute('doc_id', (result.patient_identifiers.filter(id => id.identifier_type == 27))[0].identifier);
   }
 
 
@@ -347,18 +344,18 @@ function selectRow(e) {
   }
  
   selectedRecords[e.getAttribute('side')] = {
-    patient_id: null, dde_doc_id: null
+    patient_id: null, doc_id: null
   }
    
   if(e.getAttribute('selected') == 'false') {
     var patient_id = e.getAttribute('patient_id');
-    var dde_doc_id = e.getAttribute('dde_doc_id');
+    var doc_id = e.getAttribute('doc_id');
 
     if(patient_id.length > 0)
       selectedRecords[e.getAttribute('side')].patient_id = patient_id;
     
-    if(dde_doc_id.length > 0)
-      selectedRecords[e.getAttribute('side')].dde_doc_id = dde_doc_id;
+    if(doc_id.length > 0)
+      selectedRecords[e.getAttribute('side')].doc_id = doc_id;
     
     e.style = 'background-color: lightblue;';
     e.setAttribute('selected','true');
@@ -370,8 +367,8 @@ function selectRow(e) {
   var button = document.getElementById('nextButton');
  
   try { 
-    if(selectedRecords['left'].patient_id.length > 0 || selectedRecords['left'].dde_doc_id.length > 0) {
-      if(selectedRecords['right'].patient_id.length > 0 || selectedRecords['right'].dde_doc_id.length > 0) {
+    if(selectedRecords['left'].patient_id.length > 0 || selectedRecords['left'].doc_id.length > 0) {
+      if(selectedRecords['right'].patient_id.length > 0 || selectedRecords['right'].doc_id.length > 0) {
         button.innerHTML = '<span>Merge</span>';
         button.setAttribute('onmousedown', 'mergeClients();');
         button.style = 'display: inline';
@@ -387,29 +384,10 @@ function selectRow(e) {
 }
 
 function mergeClients(){
-  var checkboxes = document.getElementsByClassName('checkboxes');
   var client_ids = {};
-  var chkdbox_counter = 0;
-  client_ids.secondary = [];
-    for(var i = 0; i < checkboxes.length; i++){
-      if(checkboxes[i].getAttribute("selected") === "true") {
-          if (chkdbox_counter == 0) {
-            client_ids.primary = {
-            patient_id: (checkboxes[i].getAttribute("patient_id") === "null" ? "": checkboxes[i].getAttribute("patient_id")),
-            doc_id: checkboxes[i].getAttribute("dde_doc_id")
-            };
-          }else if(chkdbox_counter > 0) {
-            client_ids.secondary.push(
-              {
-                patient_id: (checkboxes[i].getAttribute("patient_id") === "null" ? "": checkboxes[i].getAttribute("patient_id")),
-                doc_id: checkboxes[i].getAttribute("dde_doc_id")
-              });
-          }
-        chkdbox_counter++
-      }
-   }
-
-    client_ids.program_id = sessionStorage.programID;
+  client_ids.secondary = [selectedRecords['right']];
+  client_ids.primary = selectedRecords['left'];
+  client_ids.program_id = sessionStorage.programID;
 
     var http = new XMLHttpRequest();
     url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dde/patients/merge';
@@ -426,6 +404,8 @@ function mergeClients(){
           document.location = "/views/patient/print.html?person_id=" + v.patient_id;
         } else if (http.status == 409) {
           alert('Username already exists');
+        } else if (http.status == 400) {
+            alert('Merging of Same person is not Possible');
         } else {
          alert('error' + http.status);
         }
