@@ -530,6 +530,8 @@ function postAppointmentObs(encounter) {
         }
       ]
     }; 
+    
+    submitParameters(obs, "/observations", "red"); 
 
   }else{
     
@@ -544,10 +546,11 @@ function postAppointmentObs(encounter) {
         }
       ]
     }; 
+  
+    submitParameters(obs, "/observations", "nextPage"); 
 
   }
 
-  submitParameters(obs, "/observations", "nextPage"); 
 }
 
 function setDates(dates) {
