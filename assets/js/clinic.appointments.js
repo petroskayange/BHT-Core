@@ -1,4 +1,3 @@
-
 var cssSpan = document.createElement('span');
 cssSpan.innerHTML ="<style>\
 .calendar-table {\
@@ -248,9 +247,18 @@ function buildCalendar() {
 
   buildControls();
 
-  systemDate = document.getElementById("number-of-holidays-set");
-  systemDate.innerHTML = selectedHolidays.length;
-  getHolidays();
+
+  var current_date = moment().format('YYYY-MM-DD');
+  var cells = document.getElementsByClassName('calendar-cell');
+  
+  for(var i = 0 ; i < cells.length ; i++){
+    var boxDate = cells[i].getAttribute('date');
+    if(boxDate == current_date) {
+      getAppointMents(cells[i]);
+    }
+  }
+
+  //getHolidays();
 }
 
 function buildDisplayArea() {
@@ -261,8 +269,8 @@ function buildDisplayArea() {
   container.appendChild(table);
 
   var tds = [
-  ["Number of holidays set","number-of-holidays-set"],
-  ["Selected date","selected-date"]
+  ["Selected date","selected-date"],
+  ["Booked appointments","appointments"]
 ];
 
   for(var i = 0 ; i < tds.length ; i++){
@@ -355,66 +363,15 @@ function buildCalendarCells(current_date) {
   var dates = getMonthDates(current_date);
 
   setDates(dates);
-  highlighDates();
-}
-function changeNextButton() {
-  var bnt = document.getElementById("nextButton")
-  bnt.setAttribute("onmousedown","setAppointmentDate()");
-}
+  
+  var sdate = moment(document.getElementById('selected-date').innerHTML).format('YYYY-MM-DD');
+  var cells = document.getElementsByClassName('calendar-cell');
 
-function setAppointmentDate() {
-  var currentTime = moment().format(' HH:mm:ss');
-  var encounter_datetime = moment(sessionStorage.sessionDate).format('YYYY-MM-DD'); 
-  encounter_datetime += currentTime; 
-
-  var encounter = {
-    encounter_type_name: 'APPOINTMENT',
-    encounter_type_id:  7,
-    patient_id: sessionStorage.patientID,
-    encounter_datetime: encounter_datetime
+  for(var i = 0 ; i < cells.length ; i++){
+    if(cells[i].getAttribute('date') == sdate) {
+      highlighDates(cells[i]);
+    }
   }
-
-  submitParameters(encounter, "/encounters", "postAppointmentObs");
-
-}
-
-function postAppointmentObs(encounter) {
-  var appointment = document.getElementById("selected-date").innerHTML;
-  var sysDate = document.getElementById("number-of-holidays-set").innerHTML;
-
-
-  var day   = appointment.split("/")[0];
-  var year  = appointment.split("/")[2];
-  var month = getMonthInNum(appointment.split("/")[1]);
-  if(month < 10)
-    month = "0" + month;
-
-  appointment = year + "-" + month + "-" + day;
-
-  var day   = sysDate.split("/")[0];
-  var year  = sysDate.split("/")[2];
-  var month = getMonthInNum(sysDate.split("/")[1]);
-  if(month < 10)
-    month = "0" + month;
-
-  sysDate = year + "-" + month + "-" + day;
-
-
-
-
-  var obs = {
-    encounter_id: encounter["encounter_id"],
-    observations: [
-      { 
-        concept_id: 5096, value_datetime: appointment
-      },
-      { 
-        concept_id: 7437, value_datetime: sysDate
-      }
-    ]
-  }; 
-
-  submitParameters(obs, "/observations", "nextPage"); 
 }
 
 function setDates(dates) {
@@ -434,7 +391,7 @@ function setDates(dates) {
 
     if(parseInt(calendarBoxes[i].getAttribute("weekDayNum")) == date.getDay() && calendarBoxes[i].innerHTML == "&nbsp;"){
       calendarBoxes[i].innerHTML = date.getDate();
-      calendarBoxes[i].setAttribute("onmousedown","selectDate(this);")
+      calendarBoxes[i].setAttribute("onmousedown","getAppointMents(this);")
       calendarBoxes[i].setAttribute("date", moment(date).format('YYYY-MM-DD'));
       count++;
     }
@@ -464,35 +421,6 @@ function getMonthDates(current_date){
   return dates.sort(function(a,b){return a.getTime() - b.getTime()});
 }
 
-function selectDate(e) {
-  var selected_date;
-  selected_date = e.getAttribute("date").split("-")[2];
-  if(selected_date.length < 2)
-    selected_date = "0" + selected_date;
-
-  selected_date += "/" + getFullMonthName(e.getAttribute("date").split("-")[1] - 1);
-  selected_date += "/" + e.getAttribute("date").split("-")[0];
- 
-  var eSelected = true;
-  try { 
-    eSelected = e.getAttribute("style").match(/green/i) == null ? true : false;
-  }catch(w){
-    eSelected = true;
-  }
-  document.getElementById("selected-date").innerHTML = selected_date;
-
-  if(eSelected) {
-    addHoliday(e);
-  }else{
-    removeHoliday(e);
-  }
-
-  suggestedYear = moment(e.getAttribute('date')).format('YYYY'); 
-  suggestedMonth = moment(e.getAttribute('date')).format('MM'); 
-  suggestedDay = moment(e.getAttribute('date')).format('DD'); 
-    
-}
-  
 function getFullMonthName(index) {  
   var months = new Array();
   months[0] = "January";
@@ -568,14 +496,25 @@ function getLimit() {
 }
 
 function getAppointMents(date) {
+  var sdate = date.getAttribute('date');
+  document.getElementById("selected-date").innerHTML = moment(sdate).format('DD/MMM/YYYY');
+  document.getElementById("appointments").innerHTML = null;
+  var b = document.getElementById('nextButton');
+  b.style = 'display: none;';
+  highlighDates(date);
+  
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
-  url += "/api/v1/appointments?date="+date.getAttribute("date");
-  url += "&paginate=false&program_id="+sessionStorage.programID;
+  url += "/api/v1/programs/"+ sessionStorage.programID + "/booked_appointments?date="+date.getAttribute("date");
+  url += "&paginate=false";
+  
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
       var obj = JSON.parse(this.responseText);
       document.getElementById("appointments").innerHTML = obj.length;
+      if(obj.length > 0) {
+        b.style = 'display: inline;';
+      }  
     }
   };
   xhttp.open("GET", url, true);
@@ -584,76 +523,24 @@ function getAppointMents(date) {
   xhttp.send();
 }
 
-var selectedHolidays = [];
-
-function addHoliday(e) {
-  selectedHolidays.push(e.getAttribute('date'));
-  var holidays = selectedHolidays;
-  selectedHolidays = [];
-  
-  for(var i = 0 ; i < holidays.length ; i++){
-     if(selectedHolidays.indexOf(holidays[i]) < 0){ 
-      selectedHolidays.push(holidays[i]);
-     }
-  }
-
-  highlighDates();
-}
-
-function removeHoliday(e) {
-  var holidays = selectedHolidays;
-  selectedHolidays = [];
-  
-  for(var i = 0 ; i < holidays.length ; i++){
-     if(holidays[i] != e.getAttribute('date')){ 
-      selectedHolidays.push(holidays[i]);
-     }
-  }
-
-  highlighDates();
-}
-
-function highlighDates() {
+function highlighDates(sdate) {
   var cells = document.getElementsByClassName("calendar-boxes");
   for(var i = 0 ; i < cells.length ; i++){
     cells[i].setAttribute("style","background-color: '';");
   }
   
-  for(var i = 0 ; i < selectedHolidays.length ; i++){
-    for(var x = 0 ; x < cells.length ; x++){
-      if(cells[x].getAttribute('date') == selectedHolidays[i]){ 
-        cells[x].setAttribute("style","background-color: green; color: white;");
-      }
+  for(var x = 0 ; x < cells.length ; x++){
+    if(cells[x].getAttribute('date') == sdate.getAttribute('date')){ 
+      cells[x].setAttribute("style","background-color: green; color: white;");
     }
   }
   
-  systemDate = document.getElementById("number-of-holidays-set");
-  systemDate.innerHTML = selectedHolidays.length;
 }
 
-function getHolidays() {
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/global_properties?property=clinic.holidays";
-
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
-      var obj = JSON.parse(this.responseText);
-      selectedHolidays = obj['clinic.holidays'].split(',');
-      highlighDates();
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
-  xhttp.setRequestHeader('Content-type', "application/json");
-  xhttp.send();
-}
-
-function submitHolidays() {
-  var url = "/global_properties";
-  var global_property = {property: 'clinic.holidays', property_value: selectedHolidays.join(',')}
-  submitParameters(global_property, url, "holidaysSet");
-}
-
-function holidaysSet(e) {
-  document.location = '/';
+function viewList() {
+  var sdate = document.getElementById('selected-date').innerHTML;
+  sdate = moment(sdate).format('YYYY-MM-DD');
+  var url = '/apps/'+ sessionStorage.applicationFolder +'/views/reports/clinic/appointment_list.html?date=';
+  url += sdate;
+  document.location = url;
 }

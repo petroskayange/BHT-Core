@@ -40,7 +40,7 @@ function enrollPatient(person_id) {
 
       } else if (http.status == 409) {
 
-        alert('Patient already enrolled');
+        //alert('Patient already enrolled');
 
       } else {
 
