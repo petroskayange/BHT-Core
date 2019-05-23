@@ -400,7 +400,7 @@ function postFastTrackObs(encounter) {
 }
 
 function gotoAppointmentEncounterType() {
-  if(parseInt(sessionStorage.programID) == 1) {  
+  if(parseInt(sessionStorage.programID) == 1 || parseInt(sessionStorage.programID) == 2) {  
     document.location = "/views/patient/appointment.html?patient_id=" + sessionStorage.patientID;
   }else{
     document.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;

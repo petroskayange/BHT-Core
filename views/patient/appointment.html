@@ -743,7 +743,7 @@ function addWeeks(date, n) {
 
 function getSuggestedAppointmentDate() {
   var patient_id = sessionStorage.patientID;
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/";
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/"+ sessionStorage.programID +"/patients/";
   url += patient_id + "/next_appointment_date?date=" + sessionStorage.sessionDate;
 
   var xhttp = new XMLHttpRequest();
@@ -797,7 +797,7 @@ function getLimit() {
 
 function getAppointMents(date) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
-  url += "/api/v1/appointments?date="+date.getAttribute("date");
+  url += "/api/v1/programs/"+ sessionStorage.programID +"/booked_appointments?date="+date.getAttribute("date");
   url += "&paginate=false"
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {

@@ -86,6 +86,8 @@ const Concept = function () {
     'RH (R75/H50)': 1194,
     'RH (R150/H75)': 1194,
     'RHZE (R150/H75/Z400/E275)': 1131,
+    'INH or H (Isoniazid 100mg tablet)': 656,
+    'INH or H (Isoniazid 300mg tablet)': 656,
     AMOUNT_DISPENSED: 2834,
     X_RAY: 6687,
     CLINICAL: 3592,
@@ -104,7 +106,11 @@ const Concept = function () {
     REGIMEN_SUPPLY_DAYS: 3640,
     OTHER_REFERRAL: 6408,
     RESULT_DATE: 3045,
-    LAB_ORDER: 3388
+    LAB_ORDER: 3388,
+    PULMONARY_TB: 1549,
+    EXTRA_PULMONARY_TB: 1547,
+    TB_TYPE: 2596,
+    DIAGNOSIS_DATE: 2182
   }
 
   /**
