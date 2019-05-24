@@ -997,10 +997,11 @@ function checkIfFilingNumberIsNotValid () {
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
+        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr><tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateArtDuration({ elementToUse: "artDuration" }, patient_id);
       populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+      populateNextTask(patient_id);
     }
   }
 
@@ -1587,5 +1588,26 @@ function updateAddress(patient_id) {
 
   location = location_url;
 }
+
+function populateNextTask(patient_id) {
+  
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+  url += "/api/v1/workflows/1/" + patient_id;
+  url += "?date=" + sessionStorage.sessionDate;
+
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      document.getElementById('nextTask').innerHTML = obj.name;
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+}
+
 </script>
 <script src="/assets/js/show.lab.orders.js"></script>
