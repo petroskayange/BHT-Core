@@ -41,6 +41,20 @@ const Patient = function () {
   }
 
   /**
+   * Function to ask the EMR-API for a patient
+   * 
+   * @param {Number} params
+   * 
+   * @return {Object}
+   */
+  function retrieve (patientId) {
+    return fetch(`${apiRoot}/patients/${patientId}`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
+  /**
    * Function to ask the EMR-API to create a patient
    * 
    * @param {object} params
@@ -57,6 +71,7 @@ const Patient = function () {
 
   return {
     get,
+    retrieve,
     create
   }
 }()
