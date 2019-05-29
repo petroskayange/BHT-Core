@@ -417,6 +417,13 @@ function addPrescriptions(data) {
         var amount_needed = data[i].amount_needed;
         var quantity = data[i].quantity;
 
+        if(amount_needed <= 0 && parseFloat(quantity) >= 0) {
+          var needed_amount = calculate_complete_pack(data[i], parseFloat(quantity));
+          if(parseFloat(needed_amount) > 0)
+            amount_needed = needed_amount;
+
+        }
+
         var complete_pack = calculate_complete_pack(data[i], parseFloat(amount_needed)) - (quantity || 0)
         fetchedPrescriptions[drug_id] = order_id;
         complete_pack = complete_pack < 0 ? 0 : complete_pack;
