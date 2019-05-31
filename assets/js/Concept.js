@@ -93,7 +93,7 @@ const Concept = function () {
     CLINICAL: 3592,
     TB_STATUS: 7459,
     PROCEDURE_TYPE: 9587,
-    TB_ADHERENCE: 2605,
+    TB_ADHERENCE: 6987,
     DRUGS_BROUGHT: 2540,
     TB_DRUGS_START_DATE: 1113,
     HEALTH_WORKER: 1538,
@@ -111,7 +111,8 @@ const Concept = function () {
     EXTRA_PULMONARY_TB: 1547,
     TB_TYPE: 2596,
     DIAGNOSIS_DATE: 2182,
-    TB_NUMBER: 7930
+    TB_NUMBER: 7930,
+    APPOINTMENT_REASON: 6784
   }
 
   /**
