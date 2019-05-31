@@ -112,7 +112,8 @@ const Concept = function () {
     TB_TYPE: 2596,
     DIAGNOSIS_DATE: 2182,
     TB_NUMBER: 7930,
-    APPOINTMENT_REASON: 6784
+    APPOINTMENT_REASON: 6784,
+    ULTRASOUND: 6686
   }
 
   /**
