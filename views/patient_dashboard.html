@@ -1056,9 +1056,13 @@
 
                     if (results.length > 0) {
                         for (var index = 0; index < results.length; index++) {
+                          try {
                             if (results[index].children[0].value_coded == 1065) {
                                 sideEffects++;
                             }
+                          }catch(q){
+                            continue;
+                          }
                         }
                         var tr = document.createElement("tr");
                         tr.setAttribute("class", "alerts");

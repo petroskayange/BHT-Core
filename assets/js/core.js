@@ -448,7 +448,7 @@ function buildDashboardButtons(tasks, container) {
                 }
 
                 if (!use_filling_number) {
-                    if (tasks[i][0].match(/filing/i)) {
+                    if (tasks[i][0].match(/filing/i) || tasks[i][0].match(/Archive client/i)) {
                         continue;
                     }
                 }
@@ -474,6 +474,7 @@ function buildDashboardButtons(tasks, container) {
                     
                 }
 
+                
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
@@ -485,6 +486,10 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
                 }else if (tasks[i][0].match(/Demographics \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printDemographics();");
+                }else if (tasks[i][0].match(/Archive client/i)) {
+                    var buildURL = tasks[i][2] + "?patient_id=" + sessionStorage.patientID;
+                    buildURL += '&archive_client=true'
+                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
                 }
                 else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
