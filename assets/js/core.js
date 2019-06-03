@@ -479,7 +479,11 @@ function buildDashboardButtons(tasks, container) {
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
                 } else if (tasks[i][0].match(/Filing Number \(Print\)/i)) {
-                    containerTableCell.setAttribute("onmousedown", "printFilingNumber();");
+                    var buildURL = '/apps/' + sessionStorage.applicationName;
+                    buildURL += '/views/filing_number/filing_number_management.html';
+                    buildURL += '?patient_id=' + sessionStorage.patientID;
+                    buildURL += '&print_fn=true';
+                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
                 } else if (tasks[i][0].match(/Visit Summary/i)) {
                     containerTableCell.setAttribute("onmousedown", "printVisitSummary();");
                 } else if (tasks[i][0].match(/Transfer Out/i)) {
