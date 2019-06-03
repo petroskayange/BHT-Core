@@ -1266,7 +1266,12 @@ var global_property = GlobalProperty({
 
       /* .......... filing ............... */
       if(user_filing_numbers == true){
-        var fnumber = document.getElementById('filing-number').innerHTML;
+        try {
+          var fnumber = document.getElementById('filing-number').innerHTML;
+        }catch(q) {
+          var fnumber = '';
+        }
+       
         var re = new RegExp(dormantPrefix);
         if(fnumber.match(re)){
           var tstMessageBar = document.createElement('div');
