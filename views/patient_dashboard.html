@@ -24,7 +24,6 @@
     <!-- ...................... -->
 
 
-    <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
 </head>
 <body>
@@ -539,6 +538,9 @@
 
 <script>
     var currentEncounter = null;
+    // Defined in core.js
+    getSavedEncounters();
+
     var modalConfirm = function (callback) {
 
         $("#btn-confirm").on("click", function () {

@@ -1037,4 +1037,3 @@ function getSavedEncounters() {
   
   }
   
-  getSavedEncounters();
