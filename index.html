@@ -44,6 +44,17 @@
           sessionStorage.patientID = null;
           sessionStorage.patient_type = null;
           sessionStorage.previousWeight = null;
+          
+          if (parseInt(sessionStorage.programID) === 12){
+            sessionStorage.ancVisitNumbers = null;
+            sessionStorage.subsequentVisit = false;
+            sessionStorage.pregnancyTestDone = false;
+            sessionStorage.previousHIVTestResult = "";
+            sessionStorage.patientHIVStatus = null;
+            sessionStorage.patientOnART = null;
+            sessionStorage.patientARVNumber = null;
+            sessionStorage.patientARVStartDate = null;
+          }
         }
 
         function setSessionDate(){
