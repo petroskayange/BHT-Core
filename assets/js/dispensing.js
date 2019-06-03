@@ -417,7 +417,14 @@ function addPrescriptions(data) {
         var amount_needed = data[i].amount_needed;
         var quantity = data[i].quantity;
 
-        var complete_pack = calculate_complete_pack(data[i], amount_needed) - (quantity || 0)
+        if(amount_needed <= 0 && parseFloat(quantity) >= 0) {
+          var needed_amount = calculate_complete_pack(data[i], parseFloat(quantity));
+          if(parseFloat(needed_amount) > 0)
+            amount_needed = needed_amount;
+
+        }
+
+        var complete_pack = calculate_complete_pack(data[i], parseFloat(amount_needed)) - (quantity || 0)
         fetchedPrescriptions[drug_id] = order_id;
         complete_pack = complete_pack < 0 ? 0 : complete_pack;
 
@@ -718,7 +725,7 @@ function calculate_complete_pack(drug, units) {
     var drug_order_barcodes = drug.barcodes.sort(function (a, b) {
         return a.tabs - b.tabs;
     }); //sorting in an ascending order by tabs
-    if (drug_order_barcodes.length == 0 || parseFloat(units) == 0.0) {
+    if (drug_order_barcodes.length == 0 || units == 0.0) {
         return units;
     }
 
@@ -731,7 +738,7 @@ function calculate_complete_pack(drug, units) {
     var smallest_available_tab = parseInt(drug_order_barcodes[0].tabs)
     var complete_pack = parseInt(drug_order_barcodes[drug_order_barcodes.length - 1].tabs)
 
-    while (complete_pack < units.to_f) {
+    while (complete_pack < units) {
         complete_pack += smallest_available_tab
     }
 

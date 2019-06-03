@@ -404,6 +404,18 @@
 
 /* ... Address cover ends ............. */
 
+#nextTask {
+  font-size: 12px;
+  color: black;
+  font-weight: bold;
+}
+
+.filing-number-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 115px;
+}
 
 </style>
 
@@ -413,23 +425,6 @@ var global_property = GlobalProperty({
   authToken: sessionStorage.authorization,
   path: apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1'
 });
-
-function checkIfFilingNumberIsNotValid () {
-  global_property.isEnabled('use.filing.numbers', function (predicate) {
-    if (predicate) {
-      getFilingNumberType({
-        programId: sessionStorage.programID,
-        patientId: sessionStorage.patientID,
-        authToken: sessionStorage.authorization
-      });
-    } else {
-      finish(sessionStorage.patientID)
-    }
-  }, function (error) {
-    console.error(error);
-    finish(sessionStorage.patientID)
-  });
-};
 
   var apiPath = `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;
   var patientDead = false;
@@ -596,12 +591,6 @@ function checkIfFilingNumberIsNotValid () {
     obj = obj["person"];
     patient_id = patient["patient_id"];
     sessionStorage.patientID = patient_id;
-
-    (sessionStorage.programID === HIV_PROGRAM_ID) && document.getElementById("continue")
-                                                            .setAttribute(
-                                                              "onmousedown",
-                                                              "checkIfFilingNumberIsNotValid()"
-                                                            )
 
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
@@ -775,6 +764,11 @@ function checkIfFilingNumberIsNotValid () {
 
       var td = document.createElement("td");
       td.innerHTML = identifiersHash[identifier];
+      
+      if(identifier.match(/filing/i)){
+        td.setAttribute('id', 'filing-number');
+      }
+
       tr.appendChild(td);
       table.appendChild(tr);
 
@@ -999,10 +993,11 @@ function checkIfFilingNumberIsNotValid () {
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr></table>";
+        "</tr><tr><td>ART Duration:</td><td id='artDuration'>N/A</td></tr><tr><td style=\"color:blue; font-weight:bold;\">ON FAST TRACK:</td><td id='onFastTrack'>N/A</td></tr><tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateArtDuration({ elementToUse: "artDuration" }, patient_id);
       populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+      populateNextTask(patient_id);
     }
   }
 
@@ -1232,7 +1227,8 @@ function checkIfFilingNumberIsNotValid () {
   >
     Cancel
   </button>
-  <button class="blue" onmousedown="finish(sessionStorage.patientID)" style="float: right;" id="continue">Continue</button>
+  <button class="blue" onmousedown="finish(sessionStorage.patientID)" 
+    style="float: right;" id="continue">Continue</button>
 </div>
 
 <script>
@@ -1269,6 +1265,51 @@ function checkIfFilingNumberIsNotValid () {
         }
       });
     } else {
+
+      /* .......... filing ............... */
+      if(user_filing_numbers == true){
+        try {
+          var fnumber = document.getElementById('filing-number').innerHTML;
+        }catch(q) {
+          var fnumber = '';
+        }
+       
+        var re = new RegExp(dormantPrefix);
+        if(fnumber.match(re)){
+          var tstMessageBar = document.createElement('div');
+          var p = document.createElement('p');
+          p.setAttribute('style','text-align: center;font-size: 35px;');
+          p.innerHTML = "Activate dormant #:<p />";
+          p.innerHTML += fnumber;
+          tstMessageBar.appendChild(p);
+          
+          var noBTN = document.createElement('button');
+          noBTN.innerHTML = "<span>No</span>";
+          noBTN.setAttribute('class', 'button blue navButton filing-number-btn');
+          noBTN.setAttribute('onmousedown','closeFilingNumPopUP();');
+          tstMessageBar.appendChild(noBTN);
+
+          var yesBTN = document.createElement('button');
+          yesBTN.innerHTML = "<span>Yes</span>";
+          yesBTN.setAttribute('class', 'button red navButton filing-number-btn');
+          yesBTN.style = 'right: 140px;'; 
+          yesBTN.setAttribute('onmousedown','archivePatient();');
+          tstMessageBar.appendChild(yesBTN);
+          tstMessageBar.setAttribute('id', 'address-confirmation');
+
+          var cover = document.createElement('div');
+          cover.setAttribute('id','address-confirmation-cover');
+          var bdy = document.getElementsByTagName('body')[0];
+          bdy.appendChild(cover);
+          bdy.appendChild(tstMessageBar);
+          tstMessageBar.style = 'display: inline; height: 30%; width: 50%; left: 30%;top: 10%;';
+          cover.style = 'display: inline;';
+
+          return;
+        }
+      }
+      /* .......... filing end ............... */
+
       sessionStorage.showWeightChart = true;
       sessionStorage.showPregnantQuestion = true;
       nextEncounter(sessionStorage.patientID, sessionStorage.programID);
@@ -1589,5 +1630,115 @@ function updateAddress(patient_id) {
 
   location = location_url;
 }
+
+function populateNextTask(patient_id) {
+  
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+  url += "/api/v1/workflows/1/" + patient_id;
+  url += "?date=" + sessionStorage.sessionDate;
+
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      document.getElementById('nextTask').innerHTML = obj.name;
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+}
+
+var activePrefix;
+var dormantPrefix;
+var user_filing_numbers = false;
+
+function filingNumberPrefix() {
+  var href = window.location.href;
+  var url = new URL(href);
+  primary_patient_id  = url.searchParams.get("primary_patient_id");
+  secondary_patient_id = url.searchParams.get("secondary_patient_id");
+  primary_id = url.searchParams.get("new_identifier");
+  secondary_id = url.searchParams.get("old_identifier");
+
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/global_properties?property=filing.number.prefix';
+  
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 ) {
+      if (this.status == 201 || this.status == 200 ) {
+        var obj = JSON.parse(this.responseText);
+        var prefix = obj['filing.number.prefix'].split(',');
+        activePrefix = prefix[0];
+        dormantPrefix = prefix[1];
+      }
+    }
+ };
+ xhttp.open("GET", url, true);
+ xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+ xhttp.setRequestHeader('Content-type', "application/json");
+ xhttp.send();
+}
+
+function userFilingNumbers() {
+  var href = window.location.href;
+  var url = new URL(href);
+  primary_patient_id  = url.searchParams.get("primary_patient_id");
+  secondary_patient_id = url.searchParams.get("secondary_patient_id");
+  primary_id = url.searchParams.get("new_identifier");
+  secondary_id = url.searchParams.get("old_identifier");
+
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
+  url += '/global_properties?property=use.filing.numbers';
+  
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 ) {
+      if (this.status == 201 || this.status == 200 ) {
+        var obj = JSON.parse(this.responseText);
+        var use_fn = obj['use.filing.numbers'];
+        try {
+          user_filing_numbers = (use_fn == 'true' ? true : false);
+        }catch(e) {
+          user_filing_numbers = false;
+        }
+      }
+    }
+ };
+ xhttp.open("GET", url, true);
+ xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+ xhttp.setRequestHeader('Content-type', "application/json");
+ xhttp.send();
+}
+
+function archivePatient() {
+  var bdy = document.getElementsByTagName('body')[0]
+  var e = document.getElementById('address-confirmation');
+  bdy.removeChild(e);
+
+  sessionStorage.showWeightChart = true;
+  sessionStorage.showPregnantQuestion = true;
+  var url = '/apps/ART/views/filing_number/filing_number_management.html?'
+  url += 'patient_id=' + sessionStorage.patientID;
+  document.location = url;
+}
+
+function closeFilingNumPopUP() {
+  /*var bdy = document.getElementsByTagName('body')[0]
+  var e = document.getElementById('address-confirmation');
+  var e2 = document.getElementById('address-confirmation-cover');
+  bdy.removeChild(e);
+  bdy.removeChild(e2);*/
+
+  sessionStorage.showWeightChart = true;
+  sessionStorage.showPregnantQuestion = true;
+  nextEncounter(sessionStorage.patientID, sessionStorage.programID);
+}
+
+userFilingNumbers();
+filingNumberPrefix();
 </script>
 <script src="/assets/js/show.lab.orders.js"></script>
