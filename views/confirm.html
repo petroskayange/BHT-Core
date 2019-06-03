@@ -334,8 +334,6 @@
   background-image: -o-linear-gradient(top, #4ba614, #008c00);
 
   background-image: linear-gradient(to bottom, #4ba614, #008c00);
-
-  filter:
   }
 
 #blue-btn:hover {
@@ -912,9 +910,14 @@ var global_property = GlobalProperty({
           var sideEffects = 0;
           if (results.length > 0) {
             for (var index = 0; index < results.length; index++) {
-              if (results[index].children[0].value_coded == 1065) {
-                sideEffects++;
+              try {
+                if (results[index].children[0].value_coded == 1065) {
+                  sideEffects++;
+                }
+              }catch(e) {
+
               }
+              
             }
             var tr = document.createElement("tr");
             var td = document.createElement("td");
@@ -1361,12 +1364,12 @@ var global_property = GlobalProperty({
 function getFilingNumberType() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + options.programId + '/patients/' + options.patientId;
+  var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + sessionStorage.programID + '/patients/' + sessionStorage.patientID;
   GET({
     url: path,
     async: true,
     headers: {
-      Authorization: options.authToken
+      Authorization: sessionStorage.authorization
     }
   }, {}, function (data) {
     if (isFilingNumberDormant(data.filing_number.type)) {
