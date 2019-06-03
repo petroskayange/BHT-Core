@@ -1,6 +1,6 @@
 var fetchedPrescriptions;
 var ordersToPost;
-
+var totalDispensed;
 function addModalDiv() {
     var iFrame = document.getElementById("inputFrame" + tstCurrentPage);
     var modal = document.createElement("div");
@@ -146,7 +146,7 @@ function displayKeyPad(order_id) {
     keypad_attributes.push([4, 5, 6]);
     keypad_attributes.push([7, 8, 9]);
     keypad_attributes.push(["Del.", 0, "Clear"]);
-    keypad_attributes.push(["&nbsp;", "Close", "&nbsp;"]);
+    keypad_attributes.push(["Reset", "Close", "&nbsp;"]);
     keypad_attributes.push(["Dispense"]);
 
     for (var i = 0; i < keypad_attributes.length; i++) {
@@ -221,7 +221,6 @@ function addPopDescription(order_id) {
     tr.appendChild(th)
     tr.appendChild(td)
     table.appendChild(tr);
-
     mainContainer.appendChild(table)
 
     var row = document.getElementById(order_id);
@@ -234,6 +233,7 @@ function addPopDescription(order_id) {
             document.getElementById("amount-needed-td").innerHTML = cells[j].innerHTML;
         } else if (j == 3) {
             document.getElementById("amount-dispensed-td").innerHTML = cells[j].innerHTML;
+            totalDispensed = (cells[j].innerHTML).replace(/<[^>]*>/g, "");
         }
     }
 
@@ -254,6 +254,10 @@ function enterKeypadValue(e, order_id) {
             document.getElementById("prescription-modal").style = "display: none;";
         } else if (e.innerHTML.match(/Close/i)) {
             document.getElementById("prescription-modal").style = "display: none;";
+        }else if (e.innerHTML.match(/Reset/i)) {
+            voidDrugDispensations(order_id);
+            
+            // manualDispensation(order_id, -+totalDispensed);
         }
         else {
             inputBox.value += e.innerHTML;
@@ -327,6 +331,47 @@ function postDispensation(order_id, amount_dispensed) {
     }
 }
 
+function voidDrugDispensations(order_id) {
+    
+    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/dispensations/' + order_id;
+    
+    var req = new XMLHttpRequest();
+        
+    req.onreadystatechange = function () {
+
+      if (this.readyState == 4 ) {
+        if(this.status == 204) {
+            doneDispensing("");
+            document.getElementById("prescription-modal").style = "display: none;";
+        }else if (this.status == 404 || this.status == 500) {
+            var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
+            genericError(message);
+        }else if (this.status == 401) {
+            var message = "Error " + this.status + ". You have been logged out ,Click yes to continue to patient dashboard or No to go to the main dashboard";
+            genericError(message);
+        }
+        else {
+            // var message = "Error " + this.status + ". An error has occured,Click yes to continue to patient dashboard or No to go to the main dashboard";
+            // genericError(message);
+        }
+        
+      }
+      
+    };
+        
+    try {
+      
+      req.open('DELETE', url, true);
+      
+      req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+      
+      req.send(null);
+      
+    } catch (e) {
+
+    }
+    
+  }
 function doneDispensing(orders) {
     var e = document.getElementById("nav-prescribed");
     setPage(e);
@@ -428,7 +473,7 @@ function addPrescriptions(data) {
         fetchedPrescriptions[drug_id] = order_id;
         complete_pack = complete_pack < 0 ? 0 : complete_pack;
 
-        setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication), addValue(order_id, complete_pack), addValue(order_id, quantity), '']).node().id = order_id;
+        setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication, true), addValue(order_id, complete_pack, false), addValue(order_id, quantity, false), addReset(order_id)]).node().id = order_id;
         setDataTable.draw();
         addClassIMGcontainter(order_id);
     }
@@ -455,14 +500,28 @@ function addDispBTN(order_id) {
     return span.innerHTML;
 }
 
+function addReset(order_id) {
+    //var row = document.getElementById(order_id);
+    //row.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
+    var span = document.createElement("span");
+    var btn = document.createElement("img");
+    btn.setAttribute("src","/assets/images/reset.png");
+    btn.style.maxWidth = "50%";
+    btn.setAttribute("onmousedown", "voidDrugDispensations('" + order_id + "');");
+    btn.innerHTML = "Dispense";
+    span.appendChild(btn);
+    return span.innerHTML;
+}
 
-function addValue(order_id, value) {
+function addValue(order_id, value, clickable) {
     //var row = document.getElementById(order_id);
     //row.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
     var span = document.createElement("span");
     var btn = document.createElement("p");
     // btn.setAttribute("class","dispense-button btn btn-primary");
-    btn.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
+    if(clickable) {
+        btn.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
+    }
     btn.innerHTML = value;
     span.appendChild(btn);
     return span.innerHTML;
@@ -526,7 +585,7 @@ function buildDispensingPage() {
     var tr = document.createElement("tr");
     thead.appendChild(tr);
 
-    var headers = ["&nbsp;", "Medication", "Amount need", "Amount dispensed", "&nbsp;"];
+    var headers = ["&nbsp;", "Medication", "Amount needed", "Amount dispensed", "Reset"];
 
     for (var i = 0; i < headers.length; i++) {
         var th = document.createElement("th");
