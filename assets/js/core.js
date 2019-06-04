@@ -343,7 +343,7 @@ function getTasks(encountersData) {
     
     var tasks = [];
 
-    if (parseInt(sessionStorage.programID) == 12){
+    if ((parseInt(sessionStorage.programID) == 12) || (parseInt(sessionStorage.programID) == 21)){
         // This is for ANC Program to be able to differnctiate
         // two different activities using a single encounter.
         // e.g. ART Treatment and ANC Treatment both using Treatment encounter.
@@ -355,7 +355,6 @@ function getTasks(encountersData) {
                 var url = j[encounter].url;
                 var icon = j[encounter].activitiesIcon
                 tasks.push([values, icon, url, encounter.toUpperCase()])
-
             }
         }
 
@@ -448,15 +447,16 @@ function buildDashboardButtons(tasks, container) {
                 }
 
                 if (!use_filling_number) {
-                    if (tasks[i][0].match(/filing/i) || tasks[i][0].match(/Archive client/i)) {
+                    if (tasks[i][0].match(/filing/i)) {
                         continue;
                     }
                 }
-                if (!((tasks[i][0].match(/ART/) || tasks[i][0].match(/HIV/)) &&  sessionStorage.programID == "12")){
+                if (!((tasks[i][0].match(/ART/) || tasks[i][0].match(/HIV/)) && (sessionStorage.programID == "12"))){
 
                 containerTableCell = document.createElement("div");
 
-                if (sessionStorage.programID == "12"){ //Disable already saved encounters in ANC
+
+                if (sessionStorage.programID == "12" || sessionStorage.programID === "21"){ //Disable already saved encounters in ANC
 
                     if (sessionStorage.savedEncounters.includes(tasks[i][3])){
                     
@@ -474,26 +474,17 @@ function buildDashboardButtons(tasks, container) {
                     
                 }
 
-                
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
                 } else if (tasks[i][0].match(/Filing Number \(Print\)/i)) {
-                    var buildURL = '/apps/' + sessionStorage.applicationName;
-                    buildURL += '/views/filing_number/filing_number_management.html';
-                    buildURL += '?patient_id=' + sessionStorage.patientID;
-                    buildURL += '&print_fn=true';
-                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
+                    containerTableCell.setAttribute("onmousedown", "printFilingNumber();");
                 } else if (tasks[i][0].match(/Visit Summary/i)) {
                     containerTableCell.setAttribute("onmousedown", "printVisitSummary();");
                 } else if (tasks[i][0].match(/Transfer Out/i)) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
                 }else if (tasks[i][0].match(/Demographics \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printDemographics();");
-                }else if (tasks[i][0].match(/Archive client/i)) {
-                    var buildURL = tasks[i][2] + "?patient_id=" + sessionStorage.patientID;
-                    buildURL += '&archive_client=true'
-                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
                 }
                 else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
