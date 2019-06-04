@@ -106,8 +106,9 @@ function validateName(element) {
     <input type="text" name="family_name" id="family_name" field_type="alpha"  tt_onLoad='validateName();' ajaxURL="/search/family_name?search_string=" helpText="Last name" key="family_name" allowFreeText="true" tt_onUnload="getInput();"/>
 
     <select allowFreeText="false" helpText="Gender" id="gender" tt_onUnLoad="getInput();" name="person[gender]" tt_onLoad="changeNextButton();" key="gender" ><option value=""></option>
+      <option value="F">Female</option>
       <option value="M">Male</option>
-      <option value="F">Female</option></select>
+    </select>
 
 </form>
         <div id="footer">
