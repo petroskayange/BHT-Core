@@ -159,7 +159,7 @@
                         html += "<td>" + ((past_filing_numbers[key].voided == 1) ? "voided" : "active") + "</td>";
                         html += "<td>" + identifier + "</td>";
                         html += "<td>" + date_created + "</td>";
-                        html += "<td>" + date_voided + "</td>"
+                        html += "<td>" + ((past_filing_numbers[key].voided == 1) ? date_voided : "") + "</td>"
                         if((past_filing_numbers[key].voided != 1)) {
                             html += "<td class=deactivate></td>";
                             // html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
