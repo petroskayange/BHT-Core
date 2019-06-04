@@ -54,7 +54,7 @@
     }
 
     .deactivate {
-        background-color: red;
+        /* background-color: red; */
     }
 </style>
 
@@ -87,7 +87,6 @@
                     if (this.status == 200) {
                         var results = JSON.parse(this.responseText);
                         var file_number = getIdentifier(results["patient_identifiers"], 17);
-                        console.log(file_number);
                         getPastFilingNumbers(file_number);
                     }
                 }
@@ -102,7 +101,6 @@
 
 
         function getIdentifier(identifiers, identifier_type) {
-            // console.log(identifiers);
             var identifier = [];
             for (var index = 0; index < identifiers.length; index++) {
                 if (identifiers[index]["identifier_type"] == identifier_type) {
@@ -124,7 +122,6 @@
             xhttp1.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
                     var old_filing_numbers = JSON.parse(this.responseText);
-                    console.log(old_filing_numbers);
                     var past_filing_numbers = [];
                     if (Object.keys(current_file_number).length > 0) {
 
@@ -141,7 +138,7 @@
 
                         }
                     }
-                    var html = "<table id='past-filing-numbers' style='height: 100%;'>";
+                    var html = "<table id='past-filing-numbers'>";
                     html += "<thead>";
                     html += "<th>Status</th>";
                     html += "<th>Filing #</th>";
@@ -164,7 +161,9 @@
                         html += "<td>" + date_created + "</td>";
                         html += "<td>" + date_voided + "</td>"
                         if((past_filing_numbers[key].voided != 1)) {
-                            html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                            html += "<td class=deactivate></td>";
+                            // html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
+                            // html += "<td><span id=" + past_filing_numbers[key].patient_identifier_id + " class='actionbtn " + ((past_filing_numbers[key].voided == 1) ? "activate' onclick='getActiveFileNumber();'>Activate" : "deactivate' onclick='archiveFileNumber(this);'>Archive") + "</span></td>";
                         }
                         html += "</tr>";
                         count = count + 1;
