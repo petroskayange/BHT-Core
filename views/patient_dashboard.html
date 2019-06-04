@@ -24,7 +24,6 @@
     <!-- ...................... -->
 
 
-    <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
 </head>
 <body>
@@ -539,6 +538,9 @@
 
 <script>
     var currentEncounter = null;
+    // Defined in core.js
+    getSavedEncounters();
+
     var modalConfirm = function (callback) {
 
         $("#btn-confirm").on("click", function () {
@@ -1056,9 +1058,13 @@
 
                     if (results.length > 0) {
                         for (var index = 0; index < results.length; index++) {
+                          try {
                             if (results[index].children[0].value_coded == 1065) {
                                 sideEffects++;
                             }
+                          }catch(q){
+                            continue;
+                          }
                         }
                         var tr = document.createElement("tr");
                         tr.setAttribute("class", "alerts");
