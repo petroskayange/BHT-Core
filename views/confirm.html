@@ -1374,33 +1374,38 @@ function getFilingNumberType() {
       Authorization: sessionStorage.authorization
     }
   }, {}, function (data) {
-    if (isFilingNumberDormant(data.filing_number.type)) {
-      showPrompt({
-        message: 'Patient has a dormant filing number. Would you like to assign them an active one?',
-        yesCallback: function yesCallback() {
-          removePrompt();
-          redirectToFilingNumberPage(sessionStorage.patientID);
-        },
-        noCallback: function () {
-          removePrompt()
-          finish(sessionStorage.patientID)
-        }
-      });
-    } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
-      showPrompt({
-        message: 'Patient does not have a filing number. Would you like to assign them one?',
-        yesCallback: function yesCallback() {
-          removePrompt();
-          redirectToFilingNumberPage(sessionStorage.patientID);
-        },
-        noCallback: function () {
-          removePrompt()
-          finish(sessionStorage.patientID)
-        }
-      });
-    } else {
+    try {
+      if (isFilingNumberDormant(data.filing_number.type)) {
+            showPrompt({
+              message: 'Patient has a dormant filing number. Would you like to assign them an active one?',
+              yesCallback: function yesCallback() {
+                removePrompt();
+                redirectToFilingNumberPage(sessionStorage.patientID);
+              },
+              noCallback: function () {
+                removePrompt()
+                finish(sessionStorage.patientID)
+              }
+            });
+          } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
+            showPrompt({
+              message: 'Patient does not have a filing number. Would you like to assign them one?',
+              yesCallback: function yesCallback() {
+                removePrompt();
+                redirectToFilingNumberPage(sessionStorage.patientID);
+              },
+              noCallback: function () {
+                removePrompt()
+                finish(sessionStorage.patientID)
+              }
+            });
+          } else {
+            finish(sessionStorage.patientID)
+          }
+    }catch(e) {
       finish(sessionStorage.patientID)
     }
+    
   }, function (error) {
     console.error(error);
   });
