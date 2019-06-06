@@ -1006,7 +1006,7 @@ function getPortalLocation(){
 
 function getSavedEncounters() {
 
-    var url = 'http://'+apiURL+':'+apiPort+'/api/v1';
+    var url = sessionStorage.apiProtocol + '://'+apiURL+':'+apiPort+'/api/v1';
     url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
     url += '?date='+sessionStorage.sessionDate;
   
