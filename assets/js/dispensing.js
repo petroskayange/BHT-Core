@@ -333,7 +333,7 @@ function postDispensation(order_id, amount_dispensed) {
 
 function voidDrugDispensations(order_id) {
     
-    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/dispensations/' + order_id;
+    var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dispensations/' + order_id;
     
     var req = new XMLHttpRequest();
         
