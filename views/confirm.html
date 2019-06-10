@@ -429,7 +429,7 @@ var global_property = GlobalProperty({
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
     
-    if(sessionStorage.programID == '1') {
+    if(sessionStorage.programID == '1' || sessionStorage.programID == '12') {
       var cells = [
         "Patient identifiers", "Alert(s)",
         "labs", "Program info", 
@@ -643,7 +643,12 @@ var global_property = GlobalProperty({
       buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
+    }else if (sessionStorage.programID == '12'){
+      buildProgramInfo(patient_id);
+      buildAlerts(patient_id);
+      buildStates(obj, patient_id);
     }
+    
 
     var gender = null;
     if (sessionStorage.patientGender === "F") {
@@ -792,7 +797,7 @@ var global_property = GlobalProperty({
       apiURL +
       ":" +
       apiPort +
-      "/api/v1/programs/1/patients/" +
+      "/api/v1/programs/" + sessionStorage.programID + "/patients/" +
       patient_id;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
@@ -988,10 +993,24 @@ var global_property = GlobalProperty({
 
   function buildProgramInfo(patient_id) {
     if (sessionStorage.programID === "12"){
+
+      gestation = (sessionStorage.gestation !== "") ? sessionStorage.gestation +" Weeks" : "N/A";
+      
+      lmp = (sessionStorage.dateOfLMP !== "") ? sessionStorage.dateOfLMP : "N/A";
+      
+      edod = (sessionStorage.patientEDOD !== "") ? sessionStorage.patientEDOD : "N/A";
+
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr></table>";
+        "</tr><tr><td>Gestation Age:</td><td id='gest_age'>"+ gestation +"</td></tr><tr>" +
+        "<td style=\"color:blue; font-weight:bold;\">Date of Last Menstral Period:</td><td id='date_of_lmp'>"+ lmp +"</td></tr>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">Expected Date of Delivery:</td><td id='edod'>"+ sessionStorage.patientEDOD +"</td></tr</table>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
+      //document.getElementById("section-body-3").innerHTML +=
+        //"<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        //"</tr></table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      populateNextTask(patient_id);
       
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
@@ -1641,7 +1660,7 @@ function updateAddress(patient_id) {
 function populateNextTask(patient_id) {
   
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
-  url += "/api/v1/workflows/1/" + patient_id;
+  url += "/api/v1/workflows/"+ sessionStorage.programID +"/" + patient_id;
   url += "?date=" + sessionStorage.sessionDate;
 
 
