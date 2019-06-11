@@ -69,7 +69,7 @@ function addVLorders(order, test) {
   var date_ordered = moment(order.date_ordered).format('DD/MMM/YYYY');
 
   if(test_name.match(/viral load/i) && test_values.length > 0) {
-    var r = (formatResults(test_values));
+    
     var div = document.createElement('div');
     div.setAttribute('class','list-group')
     orders_tbody.appendChild(div);
@@ -78,6 +78,8 @@ function addVLorders(order, test) {
     var class_test = 'list-group-item d-flex justify-content-between'; 
     class_test += ' align-items-center list-group-item-action ';
     class_test += 'list-group-item- primary list-group-links';
+    var r = (formatResults(test_values));
+    var b = (validateVL(test_values));
     a.setAttribute('class', class_test);
     a.setAttribute('href','#');
     a.innerHTML = r;
@@ -86,12 +88,20 @@ function addVLorders(order, test) {
   }
 }
 
-function formatResults(results) {
+function formatResults(results, a) {
   var parameters = [];
   for (var i = 0; i < results.length; i++) {
     var indicator = results[i].indicator;
     var value = results[i].value;
-    if (indicator == 'result_date') {
+    if (indicator == 'Viral Load') {
+      var vl_result = (validateVL(results[i].value));
+      if(vl_result === "low") {
+        a.className += "low"; 
+      }else {
+
+      }
+    }
+    else if (indicator == 'result_date') {
         indicator = 'Result date'
         value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
     }
@@ -102,3 +112,46 @@ function formatResults(results) {
 }
 
 showOrders();
+function formatResults(results, a) {
+  var parameters = [];
+  for (var i = 0; i < results.length; i++) {
+    var indicator = results[i].indicator;
+    var value = results[i].value;
+    if (indicator == 'Viral Load') {
+      var vl_result = (validateVL(results[i].value));
+      if(vl_result === "low") {
+        a.className += "low"; 
+      }else {
+
+      }
+    }
+    else if (indicator == 'result_date') {
+        indicator = 'Result date'
+        value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
+    }
+
+    parameters.push(indicator + ": " + value);
+  }
+  return parameters.join('<br />');
+}
+
+function validateVL(results) {
+    for (var i = 0; i < results.length; i++) {
+    var indicator = results[i].indicator;
+    var value = results[i].value;
+    if (indicator == 'Viral Load') {
+      var vl_result = (validateVL(results[i].value));
+      if(vl_result === "low") {
+        a.className += "low"; 
+      }else {
+
+      }
+    }
+
+  }
+  if(result.replace(/ /g, "").match(/^[<>=]/)) {
+    return "low";
+  }else {
+    return "high";
+  }
+}
