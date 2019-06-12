@@ -81,6 +81,15 @@ function addVLorders(order, test) {
     a.setAttribute('class', class_test);
     a.setAttribute('href','#');
     a.innerHTML = r;
+    if (a.innerHTML.match(/HIGH/g)) {
+        a.className += " high";
+
+        if(sessionStorage.userRoles.match(/clerk/ig)) {
+
+        }else {
+            $("#confirm-VL").modal();
+        }
+    }
     div.appendChild(a);
     vlCount++;
   }
@@ -88,17 +97,31 @@ function addVLorders(order, test) {
 
 function formatResults(results) {
   var parameters = [];
+  var vl_alert_level = "";
   for (var i = 0; i < results.length; i++) {
     var indicator = results[i].indicator;
     var value = results[i].value;
+    if(indicator == 'Viral Load') {
+        ((validateVL(results[i].value) === "low" ? vl_alert_level = "" : vl_alert_level = " ( HIGH )"));
+        parameters.push(indicator + ": " + value + vl_alert_level);
+    }
     if (indicator == 'result_date') {
         indicator = 'Result date'
         value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
+        parameters.push(indicator + ": " + value);
     }
 
-    parameters.push(indicator + ": " + value);
+
   }
   return parameters.join('<br />');
 }
 
 showOrders();
+
+function validateVL(results) {
+    if(results.replace(/ /g, "").match(/^[<>=]/)) {
+        return "low";
+    }else {
+        return "high";
+    }
+}

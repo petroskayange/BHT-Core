@@ -414,7 +414,9 @@
   right: 10px;
   width: 115px;
 }
-
+.high {
+  background: red;
+}
 </style>
 
 <script>
@@ -1251,6 +1253,20 @@ var global_property = GlobalProperty({
   </button>
   <button class="blue" onmousedown="getFilingNumberType()" 
     style="float: right;" id="continue">Continue</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirm-VL" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 style="text-align: center" class="text-uppercase">Patient has a high viral load,  Please take immediate action! </h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
