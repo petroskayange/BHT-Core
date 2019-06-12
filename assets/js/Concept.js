@@ -101,6 +101,7 @@ const Concept = function () {
     COUGH_DURATION: 5959,
     OCCUPATION: 1304,
     TRANSFERRED_OUT_EXTERN: 9230,
+    TRANSFERRED_IN: 8365,
     FACILITY_NAME: 8341,
     TRANSFERRED_OUT_STATE: 95,
     REGIMEN_SUPPLY_DAYS: 3640,
@@ -130,7 +131,9 @@ const Concept = function () {
     'Tuberculosis Meningitis': 6628,
     'Lymphadenitis': 3736,
     LAM: 9791,
-    'All Other': 6408
+    'All Other': 6408,
+    CLINICALLY_DIAGNOSED: 9792,
+    BACTERIOLOGICALLY_DIAGNOSED: 9793
   }
 
   /**
