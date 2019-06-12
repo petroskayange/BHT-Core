@@ -116,7 +116,7 @@ const Concept = function () {
     ULTRASOUND: 6686,
     MENINGITIS_TB: 6628,
     TUBERCULOSIS_CLASS: 7932,
-    'Pleaural Effusion': 1136,
+    'Pleural Effusion': 1136,
     'Pericardial Effusion': 6875,
     'Abdominal Tuberculosis': 9786,
     'Tuberculosis Ascites': 581,
