@@ -114,7 +114,23 @@ const Concept = function () {
     TB_NUMBER: 7930,
     APPOINTMENT_REASON: 6784,
     ULTRASOUND: 6686,
-    MENINGITIS_TB: 6628
+    MENINGITIS_TB: 6628,
+    TUBERCULOSIS_CLASS: 7932,
+    'Pleaural Effusion': 1136,
+    'Pericardial Effusion': 6875,
+    'Abdominal Tuberculosis': 9786,
+    'Tuberculosis Ascites': 581,
+    'Tuberculosis Spine': 7509,
+    'Infiltration': 7684,
+    'Tuberculosis Miliary': 7511,
+    'Opacification': 9787,
+    'Consolidation': 9788,
+    'Cavitation': 9789,
+    'Hilar Lymphadenopathy': 9790,
+    'Tuberculosis Meningitis': 6628,
+    'Lymphadenitis': 3736,
+    LAM: 9791,
+    'All Other': 6408
   }
 
   /**
