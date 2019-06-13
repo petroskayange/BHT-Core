@@ -1004,15 +1004,16 @@ var global_property = GlobalProperty({
 
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr><tr><td>Gestation Age:</td><td id='gest_age'>"+ gestation +"</td></tr><tr>" +
-        "<td style=\"color:blue; font-weight:bold;\">Date of LMP:</td><td id='date_of_lmp'>"+ lmp +"</td></tr>" +
-        "<tr><td style=\"color:green; font-weight:bold;\">EDOD:</td><td id='edod'>"+ sessionStorage.patientEDOD +"</td></tr</table>" +
+        "</tr><tr><td>Gestation Age:</td><td id='gest_age'></td></tr><tr>" +
+        "<td style=\"color:blue; font-weight:bold;\">Date of LMP:</td><td id='date_of_lmp'></td></tr>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">EDOD:</td><td id='edod'></td></tr</table>" +
         "<tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
       //document.getElementById("section-body-3").innerHTML +=
         //"<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
         //"</tr></table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateNextTask(patient_id);
+      populateANCProgramInfo();
       
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
@@ -1120,6 +1121,24 @@ var global_property = GlobalProperty({
         console.error(error);
       }
     );
+  }
+
+  function populateANCProgramInfo(){
+    gestation = document.getElementById("gest_age");
+    lmp = document.getElementById("date_of_lmp");
+    edod = document.getElementById('edod');
+    
+    if (sessionStorage.gestation){
+      gestation.innerHTML = sessionStorage.gestation + " weeks";
+    }
+
+    if (sessionStorage.dateOfLMP){
+      lmp.innerHTML = moment(sessionStorage.dateOfLMP).format("DD/MMM/YYYY");
+    }
+
+    if (sessionStorage.patientEDOD){
+      edod.innerHTML = moment(sessionStorage.patientEDOD).format("DD/MMM/YYYY");
+    }
   }
 </script>
 
