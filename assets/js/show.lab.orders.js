@@ -119,8 +119,16 @@ function formatResults(results) {
 showOrders();
 
 function validateVL(results) {
-    if(results.replace(/ /g, "").match(/^[<>=]/)) {
-        return "low";
+    if(results.match(/=/)){
+      var res = parseFloat(results.replace('=',''));
+      if(res >= 1000) 
+        return 'high';
+
+    }else if(results.match(/>/)){
+      var res = parseFloat(results.replace('>',''));
+      if(res >= 1000) 
+        return 'high';
+
     }else {
         return "high";
     }
