@@ -1399,6 +1399,11 @@ var global_property = GlobalProperty({
   }
 
 function getFilingNumberType() {
+  if(user_filing_numbers == false || parseInt(sessionStorage.programID) != 1) {
+    finish(sessionStorage.patientID);
+    return;
+  }
+
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + sessionStorage.programID + '/patients/' + sessionStorage.patientID;
