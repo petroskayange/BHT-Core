@@ -1418,55 +1418,7 @@ var global_property = GlobalProperty({
   }
 
 function getFilingNumberType() {
-  if(user_filing_numbers == false || parseInt(sessionStorage.programID) != 1) {
-    finish(sessionStorage.patientID);
-    return;
-  }
-
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + sessionStorage.programID + '/patients/' + sessionStorage.patientID;
-  GET({
-    url: path,
-    async: true,
-    headers: {
-      Authorization: sessionStorage.authorization
-    }
-  }, {}, function (data) {
-    try {
-      if (isFilingNumberDormant(data.filing_number.type)) {
-            showPrompt({
-              message: 'Patient has a dormant filing number. Would you like to assign them an active one?',
-              yesCallback: function yesCallback() {
-                removePrompt();
-                redirectToFilingNumberPage(sessionStorage.patientID);
-              },
-              noCallback: function () {
-                removePrompt()
-                finish(sessionStorage.patientID)
-              }
-            });
-          } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
-            showPrompt({
-              message: 'Patient does not have a filing number. Would you like to assign them one?',
-              yesCallback: function yesCallback() {
-                removePrompt();
-                redirectToFilingNumberPage(sessionStorage.patientID);
-              },
-              noCallback: function () {
-                removePrompt()
-                finish(sessionStorage.patientID)
-              }
-            });
-          } else {
-            finish(sessionStorage.patientID)
-          }
-    }catch(e) {
-      finish(sessionStorage.patientID)
-    }
-  }, function (error) {
-    console.error(error);
-  });
+  finish(sessionStorage.patientID);
 }
 
 function isFilingNumberDormant(filingNumber) {
