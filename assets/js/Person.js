@@ -116,12 +116,26 @@ const Person = function () {
     })
   }
 
+  /**
+   * Ask to EMR-API to return a person's relationships
+   * 
+   * @param {Number} personId
+   * @return {Promise}
+   */
+  function getRelationships (personId) {
+    return fetch(`${apiRoot}/people/${personId}/relationships`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
   return {
     init,
     get,
     create,
     setAge,
     isEligibleForPregnancyQuestion,
-    assignTbRegistrationNumber
+    assignTbRegistrationNumber,
+    getRelationships
   }
 }()
