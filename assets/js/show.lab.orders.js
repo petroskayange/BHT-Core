@@ -134,8 +134,6 @@ function validateVL(results) {
       if(res > 1000) 
         return 'high';
 
-    }else {
-        return "high";
     }
     
     return 'low'
