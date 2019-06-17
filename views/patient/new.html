@@ -52,8 +52,11 @@
                 gender: null, birthdate: null, birthdate_estimated: null,
                 home_district: null, home_traditional_authority: null, home_village: null,
                 current_district: null, current_traditional_authority: null, current_village: null,
-                landmark: null, cell_phone_number: null, occupation: null, regiment_id: null, date_joined_military: null, military_rank: null, relationship: null, patient_type: null, facility_name: null
+                landmark: null, cell_phone_number: null, occupation: null, relationship: null,
+                patient_type: null, facility_name: null
             }
+
+            var patientAttributes = [];
 
             for (var i = 0; i < rows.length; i++) {
 
@@ -90,11 +93,11 @@
                 } else if (title.match(/Occupation/i)) {
                     parametersPassed.occupation = data;
                 } else if (title.match(/Regiment ID/i)) {
-                    parametersPassed.regiment_id = data;
+                    patientAttributes.push({person_attribute_type_id: 35, value: data});
                 } else if (title.match(/Date Joined Military/i)) {
-                    parametersPassed.date_joined_military = data;
+                    patientAttributes.push({person_attribute_type_id: 37, value: data});
                 } else if (title.match(/Military Rank/i)) {
-                    parametersPassed.military_rank = data;
+                    patientAttributes.push({person_attribute_type_id: 36, value: data});
                 } else if (title.match(/Register guardian/i)) {
                     parametersPassed.relationship = data;
                 } else if (title.match(/Patient Type/i)) {
@@ -103,8 +106,8 @@
                     parametersPassed.facility_name = data;
                 }
             }
-            
-             postClientParamaters(parametersPassed);
+
+             postClientParamaters(parametersPassed, patientAttributes);
         }
 
         function changeNextButton() {
@@ -570,6 +573,16 @@
 
             .tt_controls_birth_day #qwerty {
                 display: none;
+            }
+            .inputFrameClass {
+                border: 1px solid black;
+                margin-left: 25px;
+                background: #F0F0F0;
+                width: 96.5%;
+                border-radius: 10px;
+                padding: 5px;
+                overflow-x: scroll;
+                max-height: 589px;
             }
 
         </style>
@@ -1393,7 +1406,7 @@
         }
     }
 
-    function postClientParamaters(parametersPassed) {
+    function postClientParamaters(parametersPassed, attributes = null) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people';
         if (parametersPassed.birthdate_estimated === "Yes") {
             parametersPassed.birthdate_estimated = 1;
@@ -1407,8 +1420,15 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 201) {
                 var obj = JSON.parse(this.responseText);
-                createPatient(obj['person_id']);
+                var personId = obj['person_id'];
 
+                if (attributes) {
+                    createPersonAttributes(personId, attributes, function () {
+                        createPatient(personId)
+                    });
+                } else {
+                    createPatient(personId);
+                }
                 // submitPatienttype(obj['person_id']);
             }
         };
@@ -1416,7 +1436,36 @@
         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send(parametersPassed);
+    }
 
+    function createPersonAttributes(personId, attributes, onSuccessCallback) {
+        if (attributes.length == 0) return onSuccessCallback();
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState != 4) return;
+
+            if (this.status != 201) {
+                console.warn('Failed to create person attribute: ' + this.body);
+                return;
+            }
+
+            createPersonAttributes(personId, attributes.slice(1), onSuccessCallback);
+        }
+
+        var url = makePath('person_attributes');
+        var patientAttribute = attributes[0];
+        patientAttribute.person_id = personId;
+
+
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send(JSON.stringify(patientAttribute));
+    }
+
+    function makePath(resource) {
+        return apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + resource;
     }
 
     function createPatient(person_id) {
