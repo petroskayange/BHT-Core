@@ -129,7 +129,14 @@ function validateVL(results) {
       if(res >= 1000) 
         return 'high';
 
+    }else if(results.match(/</)){
+      var res = parseFloat(results.replace('<',''));
+      if(res > 1000) 
+        return 'high';
+
     }else {
         return "high";
     }
+    
+    return 'low'
 }
