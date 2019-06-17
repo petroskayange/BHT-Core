@@ -629,7 +629,7 @@ function redirect(id) {
     }
     //if it is a military site
     if (id === "military-site") {
-        window.location.href = "/apps/" + sessionStorage.applicationFolder + "/views/military_site.html";
+        window.location.href = "/views/military_site.html";
     }
     //view-drug-management-settings
     if (id === "view-drug-management-settings") {
