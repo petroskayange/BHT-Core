@@ -996,12 +996,6 @@ var global_property = GlobalProperty({
   function buildProgramInfo(patient_id) {
     if (sessionStorage.programID === "12"){
 
-      gestation = (sessionStorage.gestation !== "") ? sessionStorage.gestation +" Weeks" : "N/A";
-      
-      lmp = (sessionStorage.dateOfLMP !== "") ? sessionStorage.dateOfLMP : "N/A";
-      
-      edod = (sessionStorage.patientEDOD !== "") ? sessionStorage.patientEDOD : "N/A";
-
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
         "</tr><tr><td>Gestation Age:</td><td id='gest_age'>N/A</td></tr><tr>" +
@@ -1015,7 +1009,7 @@ var global_property = GlobalProperty({
       populateNextTask(patient_id);
       setTimeout(function(){
         populateANCProgramInfo()
-      }, 5000);
+      }, 3000);
       
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
@@ -1126,20 +1120,74 @@ var global_property = GlobalProperty({
   }
 
   function populateANCProgramInfo(){
+
     gestation = document.getElementById("gest_age");
+    
     lmp = document.getElementById("date_of_lmp");
+    
     edod = document.getElementById('edod');
     
-    if (sessionStorage.gestation){
-      gestation.innerHTML = sessionStorage.gestation + " weeks";
-    }
+    var url = 'http://' + apiURL + ':' + apiPort 
 
-    if (sessionStorage.dateOfLMP){
-      lmp.innerHTML = moment(sessionStorage.dateOfLMP).format("DD/MMM/YYYY");
-    }
+    url += '/api/v1/programs/'+programID+'/patients/' + patientID;
 
-    if (sessionStorage.patientEDOD){
-      edod.innerHTML = moment(sessionStorage.patientEDOD).format("DD/MMM/YYYY");
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+
+      if (this.readyState == 4) {
+
+        if (this.status == 200) {
+          var results = JSON.parse(this.responseText);
+
+          if (results.gestation){
+            
+            sessionStorage.gestation = results.gestation; 
+
+            gestation.innerHTML = sessionStorage.gestation + " weeks";
+          
+          }
+
+          if (results.date_of_lnmp){
+
+            sessionStorage.dateOfLMP = results.date_of_lnmp;
+
+            lmp.innerHTML = moment(sessionStorage.dateOfLMP).format("DD/MMM/YYYY");
+
+          }
+
+          if (sessionStorage.patientEDOD){
+
+            sessionStorage.patientEDOD = results.edod;
+
+            edod.innerHTML = moment(sessionStorage.patientEDOD).format("DD/MMM/YYYY");
+          
+          }
+          
+          sessionStorage.fundusByLMP = results.fundus;  
+          
+          sessionStorage.totalANCVisits = results.anc_visits;
+          
+          sessionStorage.currentOutcome =  results.current_outcome;
+      
+        }
+    
+      }
+  
+    };
+  
+    try {
+    
+      req.open('GET', url, true);
+    
+      req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    
+      req.send(null);
+  
+    } catch (e) {
+  
+      console.log(e);
+
     }
   }
 </script>
