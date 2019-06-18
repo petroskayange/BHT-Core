@@ -414,7 +414,9 @@
   right: 10px;
   width: 115px;
 }
-
+.high {
+  background: red;
+}
 </style>
 
 <script>
@@ -1274,6 +1276,20 @@ var global_property = GlobalProperty({
     style="float: right;" id="continue">Continue</button>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="confirm-VL" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 style="text-align: center" class="text-uppercase">Patient has a high viral load,  Please take immediate action! </h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   buildInfoBoxes();
 
@@ -1404,50 +1420,7 @@ var global_property = GlobalProperty({
   }
 
 function getFilingNumberType() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + sessionStorage.programID + '/patients/' + sessionStorage.patientID;
-  GET({
-    url: path,
-    async: true,
-    headers: {
-      Authorization: sessionStorage.authorization
-    }
-  }, {}, function (data) {
-    try {
-      if (isFilingNumberDormant(data.filing_number.type)) {
-            showPrompt({
-              message: 'Patient has a dormant filing number. Would you like to assign them an active one?',
-              yesCallback: function yesCallback() {
-                removePrompt();
-                redirectToFilingNumberPage(sessionStorage.patientID);
-              },
-              noCallback: function () {
-                removePrompt()
-                finish(sessionStorage.patientID)
-              }
-            });
-          } else if (patientDoesNotHaveFilingNumber(data.filing_number.number)) {
-            showPrompt({
-              message: 'Patient does not have a filing number. Would you like to assign them one?',
-              yesCallback: function yesCallback() {
-                removePrompt();
-                redirectToFilingNumberPage(sessionStorage.patientID);
-              },
-              noCallback: function () {
-                removePrompt()
-                finish(sessionStorage.patientID)
-              }
-            });
-          } else {
-            finish(sessionStorage.patientID)
-          }
-    }catch(e) {
-      finish(sessionStorage.patientID)
-    }
-  }, function (error) {
-    console.error(error);
-  });
+  finish(sessionStorage.patientID);
 }
 
 function isFilingNumberDormant(filingNumber) {
@@ -1474,12 +1447,13 @@ function calculateMonthsOnART(art_start_date) {
   return dateDiffInMonths(date1, date2);
 }            
 
-function dateDiffInMonths(dt2, dt1) {
-  var months;
-  months = (dt2.getFullYear() - dt1.getFullYear()) * 12;
-  months -= dt1.getMonth() + 1;
-  months += dt2.getMonth();
-  return months <= 0 ? 0 : months;
+function dateDiffInMonths(d2, d1) {
+  var d1Y = d1.getFullYear();
+  var d2Y = d2.getFullYear();
+  var d1M = d1.getMonth();
+  var d2M = d2.getMonth();
+
+  return (d2M+12*d2Y)-(d1M+12*d1Y);
 }
 
 var current_person_addresses;
