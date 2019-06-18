@@ -1002,16 +1002,18 @@ var global_property = GlobalProperty({
 
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr><tr><td>Gestation Age:</td><td id='gest_age'></td></tr><tr>" +
-        "<td style=\"color:blue; font-weight:bold;\">Date of LMP:</td><td id='date_of_lmp'></td></tr>" +
-        "<tr><td style=\"color:green; font-weight:bold;\">EDOD:</td><td id='edod'></td></tr</table>" +
+        "</tr><tr><td>Gestation Age:</td><td id='gest_age'>N/A</td></tr><tr>" +
+        "<td style=\"color:blue; font-weight:bold;\">Date of LMP:</td><td id='date_of_lmp'>N/A</td></tr>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">EDOD:</td><td id='edod'>N/A</td></tr</table>" +
         "<tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
       //document.getElementById("section-body-3").innerHTML +=
         //"<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
         //"</tr></table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateNextTask(patient_id);
-      populateANCProgramInfo();
+      setTimeout(function(){
+        populateANCProgramInfo()
+      }, 3000);
       
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
