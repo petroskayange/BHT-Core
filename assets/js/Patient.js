@@ -69,9 +69,26 @@ const Patient = function () {
     })
   }
 
+  /**
+   * Ask EMR-API to create patient identifier
+   * 
+   * @param {Number} patientId
+   * @param {String} identifier
+   * @param {Number} identifierType
+   * @return {Promise}
+   */
+  function createIdentifier (patientId, identifier, identifierType) {
+    return fetch(`${apiRoot}/patient_identifiers`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ patient_id: patientId, identifier: identifier, identifier_type: identifierType })
+    })
+  }
+
   return {
     get,
     retrieve,
-    create
+    create,
+    createIdentifier
   }
 }()
