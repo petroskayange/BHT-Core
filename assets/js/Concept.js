@@ -137,7 +137,8 @@ const Concept = function () {
     TREATMENT_FAILURE: 843,
     RELAPSE: 1524,
     NEW_TB_CASE: 2406,
-    PATIENT_CATEGORY: 7935
+    PATIENT_CATEGORY: 7935,
+    TREATMENT_DURATION: 3515
   }
 
   /**
