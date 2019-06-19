@@ -33,6 +33,8 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="military-site" onclick="redirect(this.id); "><img src="/assets/images/soldier.png" class="btn-icons"/><span>Is this a military site?</span></button>';
+
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -624,6 +626,10 @@ function redirect(id) {
       obj.setAttribute("type", "text/html");
       obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
       dvTable.appendChild(obj);
+    }
+    //if it is a military site
+    if (id === "military-site") {
+        window.location.href = "/views/military_site.html";
     }
     //view-drug-management-settings
     if (id === "view-drug-management-settings") {

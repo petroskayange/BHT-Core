@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="/assets/css/alertifyjs/css/alertify.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/tt_tabs.css" type="text/css">
 
+    
+
     <script type="text/javascript" src="/assets/js/add.locations.js"></script>
     <script language="javascript">
         tstUsername = "";
         tstUserKeyboardPref = "qwerty";
+        tstCurrentDate = "";
 
         var d = new Date();
         d.toDateString();
@@ -49,11 +52,16 @@
                 gender: null, birthdate: null, birthdate_estimated: null,
                 home_district: null, home_traditional_authority: null, home_village: null,
                 current_district: null, current_traditional_authority: null, current_village: null,
-                landmark: null, cell_phone_number: null, relationship: null, patient_type: null, facility_name: null
+                landmark: null, cell_phone_number: null, occupation: null, relationship: null,
+                patient_type: null, facility_name: null
             }
 
+            var patientAttributes = [];
+
             for (var i = 0; i < rows.length; i++) {
+
                 var title = rows[i].getElementsByTagName('th')[0].innerHTML.trim();
+                console.log(title);
                 var data = rows[i].getElementsByTagName('td')[0].innerHTML.trim();
 
                 if (title.match(/Given name/i)) {
@@ -82,6 +90,14 @@
                     parametersPassed.landmark = data;
                 } else if (title.match(/Cell phone/i)) {
                     parametersPassed.cell_phone_number = data;
+                } else if (title.match(/Occupation/i)) {
+                    parametersPassed.occupation = data;
+                } else if (title.match(/Regiment ID/i)) {
+                    patientAttributes.push({person_attribute_type_id: 35, value: data});
+                } else if (title.match(/Date Joined Military/i)) {
+                    patientAttributes.push({person_attribute_type_id: 37, value: data});
+                } else if (title.match(/Military Rank/i)) {
+                    patientAttributes.push({person_attribute_type_id: 36, value: data});
                 } else if (title.match(/Register guardian/i)) {
                     parametersPassed.relationship = data;
                 } else if (title.match(/Patient Type/i)) {
@@ -91,7 +107,7 @@
                 }
             }
 
-            postClientParamaters(parametersPassed);
+             postClientParamaters(parametersPassed, patientAttributes);
         }
 
         function changeNextButton() {
@@ -132,6 +148,7 @@
                 date_estimated = 1;
                 birth_date = __$('person_birth_year').value + "-" + __$('person_birth_month').value + "-15";
             }
+
             parameter = {
                 given_name: __$('given_name').value,
                 family_name: __$('family_name').value,
@@ -154,6 +171,15 @@
                 relationship: (showTypeOfPatient() == true ? __$('guardian_present').value : 'No'),
             }
 
+            if (military_site) {
+                parameter = Object.assign(parameter, {
+                    occupation: __$('occupation').value,
+                    regiment_id: __$('person_regiment_id').value,
+                    date_joined_military: __$('person_date_joined_military').value,
+                    military_rank: __$('rank').value,
+                })
+             }
+
             var table = document.createElement('table');
             table.setAttribute('class', 'summary-table');
             var attributes = [
@@ -173,6 +199,15 @@
                 ["Patient Type", parameter.patient_type],
                 ["Register Guardian", parameter.relationship]
             ];
+
+            if (military_site) {
+                attributes = attributes.concat([
+                    ["Occupation", parameter.occupation],
+                    ["Regiment ID", parameter.regiment_id],
+                    ["Date Joined Military", parameter.date_joined_military],
+                    ["Military Rank", parameter.military_rank]
+                ])
+            }
 
             for (var i = 0; i < attributes.length; i++) {
 
@@ -313,8 +348,11 @@
     <script type="text/javascript" src="/assets/js/generic_ajaxrequest.js"></script>
     <script type="text/javascript" src="/assets/js/moment.js"></script>
     <script type="text/javascript" src="/assets/js/demographics.js"></script>
+    <script type="text/javascript" src="/assets/js/httpUtils.js"></script>
     <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
     <script type="text/javascript" src="/assets/js/tt_tabs.js"></script>
+    <script type="text/javascript" src="/assets/js/GlobalProperty.js"></script>
+    <script type="text/javascript" src="/assets/js/military_site.js"></script>
 
 </head>
 <body id="mateme">
@@ -535,6 +573,16 @@
 
             .tt_controls_birth_day #qwerty {
                 display: none;
+            }
+            .inputFrameClass {
+                border: 1px solid black;
+                margin-left: 25px;
+                background: #F0F0F0;
+                width: 96.5%;
+                border-radius: 10px;
+                padding: 5px;
+                overflow-x: scroll;
+                max-height: 589px;
             }
 
         </style>
@@ -1085,6 +1133,49 @@
                     tt_onLoad="setCurrentLocation();"
                     name="facility_name"></select>
 
+
+            <select name="person[occupation]" id="occupation" 
+                    helpText="Occupation" 
+                    allowFreeText="false" 
+                    tt_onLoad="seen(tstCurrentPage);__$('keyboard').style.display = 'none'" 
+                    condition="askMilitarySite();"
+                    ttMatchFromBeginning="true"><option value="MDF Active">MDF Active</option>
+                        <option value="MDF Reserve">MDF Reserve</option>
+                        <option value="MDF Retired">MDF Retired</option>
+                        <option value="Civilian">Civilian</option></select>
+
+            <input type="text" name="person[regiment_id]" 
+                    id="person_regiment_id" 
+                    field_type="number" 
+                    tt_onLoad="__$('Unknown').style.display = 'none';" 
+                    helpText="Regiment ID" 
+                    condition="__$('occupation').value.match(/MDF/i) && askMilitarySite();" />
+
+
+            <input type="text" 
+                      name="person[date_joined_military]" 
+                      id="person_date_joined_military" 
+                      field_type="date" 
+                      allowFreeText="true"
+                      tt_pageStyleClass="Date DatesOnly"
+                      tt_onLoad="__$('Unknown').style.display = 'none';"
+                      condition="__$('occupation').value.match(/MDF/i) && askMilitarySite();"
+                      helptext="Date Joined MDF" />
+
+            <select name="person[military_rank]" id="rank" 
+                    helpText="Rank" 
+                    allowFreeText="false" 
+                    condition="__$('occupation').value.match(/MDF/i) && askMilitarySite();"><option value="Second Lieutenant">Second Lieutenant</option>
+                        <option value="First Lieutenant">First Lieutenant</option>
+                        <option value="Captain">Captain</option>
+                        <option value="Major">Major</option>
+                        <option value="Lieutenant Colonel">Lieutenant Colonel</option>
+                        <option value="Colonel">Colonel</option>
+                        <option value="Brigadier General">Brigadier General</option>
+                        <option value="Major General">Major General</option>
+                        <option value="Lieutenant General">Lieutenant General</option>
+                        <option value="General">General</option></select>
+
             <select allowFreeText="false" helpText="Register guardian?"
                     id="guardian_present"
                     name="guardian_present"
@@ -1315,7 +1406,7 @@
         }
     }
 
-    function postClientParamaters(parametersPassed) {
+    function postClientParamaters(parametersPassed, attributes = null) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people';
         if (parametersPassed.birthdate_estimated === "Yes") {
             parametersPassed.birthdate_estimated = 1;
@@ -1329,8 +1420,15 @@
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 201) {
                 var obj = JSON.parse(this.responseText);
-                createPatient(obj['person_id']);
+                var personId = obj['person_id'];
 
+                if (attributes) {
+                    createPersonAttributes(personId, attributes, function () {
+                        createPatient(personId)
+                    });
+                } else {
+                    createPatient(personId);
+                }
                 // submitPatienttype(obj['person_id']);
             }
         };
@@ -1338,7 +1436,36 @@
         xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
         xhttp.setRequestHeader('Content-type', "application/json");
         xhttp.send(parametersPassed);
+    }
 
+    function createPersonAttributes(personId, attributes, onSuccessCallback) {
+        if (attributes.length == 0) return onSuccessCallback();
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState != 4) return;
+
+            if (this.status != 201) {
+                console.warn('Failed to create person attribute: ' + this.body);
+                return;
+            }
+
+            createPersonAttributes(personId, attributes.slice(1), onSuccessCallback);
+        }
+
+        var url = makePath('person_attributes');
+        var patientAttribute = attributes[0];
+        patientAttribute.person_id = personId;
+
+
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+        xhttp.setRequestHeader('Content-type', "application/json");
+        xhttp.send(JSON.stringify(patientAttribute));
+    }
+
+    function makePath(resource) {
+        return apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + resource;
     }
 
     function createPatient(person_id) {
