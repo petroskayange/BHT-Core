@@ -85,10 +85,25 @@ const Patient = function () {
     })
   }
 
+  /**
+   * Ask the EMR-API if the patient has any lab orders in recent times
+   * 
+   * @param {Number} patientId
+   * @param {String} referenceDate
+   * @return {Promise}
+   */
+  function recentLabOrders (patientId, referenceDate) {
+    return fetch(`${apiRoot}/patients/${patientId}/lab_orders?reference_date=${referenceDate}`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
   return {
     get,
     retrieve,
     create,
-    createIdentifier
+    createIdentifier,
+    recentLabOrders
   }
 }()

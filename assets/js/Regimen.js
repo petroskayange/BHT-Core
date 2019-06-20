@@ -43,7 +43,22 @@ const Regimen = function () {
       })
   }
 
+  /**
+   * Function that asks the EMR-API for Tuberculosis drugs
+   * 
+   * @return {Promise}
+   */
+  function fetchTbDrugs () {
+    return fetch(
+      `${apiRoot}/tb_drugs`, {
+        method: 'GET',
+        headers: { 'Authorization': sessionStorage.authorization }
+      }
+    )
+  }
+
   return {
-    getApplicableProgramRegimens
+    getApplicableProgramRegimens,
+    fetchTbDrugs
   }
 }()
