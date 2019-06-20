@@ -161,7 +161,6 @@ const Concept = function () {
 
   return {
     create,
-    getConceptIdByName,
-    CONCEPT_IDS
+    getConceptIdByName
   }
 }()
