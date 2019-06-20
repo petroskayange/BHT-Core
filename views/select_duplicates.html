@@ -148,7 +148,7 @@
 <div class="top-cover-wrapper">
 
     <div class="page-title">
-        Health ID Duplicates
+        Identifier Duplicates
     </div>
 
     <div class="search-area" style="display:none;">
@@ -193,7 +193,7 @@
 
     jQuery(document).ready(function ($) {
         $('#logout').click(function () {
-            window.location = '/clinic';
+            window.location = '/';
         })
         $('#find').click(function () {
             history.go(-1);// /report/data_cleaning';
@@ -209,7 +209,6 @@
     /**
      * Quick search from the returned queries
      */
-    var dateEnrolled = [];
 
     function renderData(data) {
         var table = document.getElementById("date_enrolled").getElementsByTagName("tbody")[0];
@@ -229,17 +228,9 @@
             var current_village = obj["addresses"][0]["city_village"];
             var roundedAge = Math.round(moment().diff(obj["birthdate"], 'years', true));
             var patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
-            //
-            // var orderTableCell = document.createElement("div");ß
 
             var tr = document.createElement("tr");
             table.appendChild(tr);
-
-            // var td = document.createElement("td");
-            //            // td.innerHTML = "Name: " +  + " " + ;
-            // td.innerHTML += " (" + gender + ") <br/>Age / DOB: " + patientDOB + " " + roundedAge;
-            // td.innerHTML = obj[index].identifier;
-            // tr.appendChild(td);
 
             var td = document.createElement("td");
             td.style.textAlign = 'left'
@@ -272,9 +263,9 @@
             var td = document.createElement("td");
             td.style.textAlign = 'left'
             var btn = document.createElement('button');
-            btn.innerHTML = '<span>Reassign</span>';
+            btn.innerHTML = '<span>Select</span>';
             btn.setAttribute('class', 'button blue navButton1');
-            btn.setAttribute('onclick', "reassignID('" + obj.person_id + "')");
+            btn.setAttribute('onclick', "redirectToDashBoard('" + obj.person_id + "')");
             td.appendChild(btn);
             tr.appendChild(td);
 
@@ -289,8 +280,8 @@
         // getDateEnrolled();
     });
 
-    function redirectToMastercard(patient_id) {
-        window.location.href = '/views/patient/mastercard.html?patient_id=' + patient_id;
+    function redirectToDashBoard(patient_id) {
+        window.location.href = '/views/patient_dashboard.html?patient_id=' + patient_id;
 
 
     }
@@ -540,9 +531,9 @@
     function getClient() {
         var url_string = window.location;
         var url = new URL(url_string);
-        var patient_id = url.searchParams.get("health_id");
-
-        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_npid?npid=" + patient_id;
+        var identfier_id = url.searchParams.get("identifier_id");
+        var identifier_type = url.searchParams.get("identifier_type_id");
+        var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/search/patients/by_identifier?type_id=" + identifier_type + "&identifier="  + identfier_id;
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -550,18 +541,7 @@
                 var obj = JSON.parse(this.responseText);
                 document.getElementById("cover-div").style = "display:none;";
                 document.getElementById("loader").style = "display:none;";
-                /**
-                 * Keeping the returned queries
-                 */
-                dateEnrolled.push(...obj);
-
-                /**
-                 * Displaying the returned results
-                 */
-                // renderData(obj);
                 renderData(obj);
-                // buildDuplicates(obj);
-
             } else if (this.status == 204) {
                 window.location.href = "/";
             }
@@ -572,53 +552,10 @@
         xhttp.send();
     }
 
-    function reassignID(patientID) {
-        var http = new XMLHttpRequest();
-        var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patientID + "/npid";
-        http.open('POST', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.onreadystatechange = function () { //Call a function when the state changes.
-            if (http.readyState == 4) {
-                if (http.status == 201) {
-                    var v = JSON.parse(http.responseText);
-
-                    var url = "/patients/" + patientID + "/labels/national_health_id";
-                    url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
-                    document.location = url;
-                    var id = v.new_identifier.identifier;
-                    setTimeout('red("' + id + '")', 2000);
-
-
-                } else if (http.status == 409) {
-                    alert('Username already exists');
-                } else {
-                    alert('error' + http.status);
-                }
-            }
-        }
-        http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-        http.send();
-    }
-
     function changeNextButton() {
         var nextButton = document.getElementById('nextButton');
-        nextButton.setAttribute("onmousedown", ";")
+        nextButton.setAttribute("onmousedown", "")
     }
-
-    function red(identifier) {
-        identifier;
-        window.location.href = '/views/confirm.html?patient_id=' + identifier;
-    }
-
-    function selectRecord(element) {
-        patientID = element.id;
-        var all = document.getElementsByClassName("order-table-cell");
-        for (let index = 0; index < all.length; index++) {
-            all[index].style.backgroundColor = "#f0f0f0";
-        }
-        element.style.backgroundColor = "#8cc08c";
-    }
-
 
 </script>
 
