@@ -423,6 +423,7 @@ function buildDashboardButtons(tasks, container) {
 
     if (sessionStorage.programID === "21") {
         checkConsent();
+        circumcisionConsent();
     }
     var use_filling_number = false;
     var use_filling_number_property_url = apiProtocol + "://" + apiURL + ":" + apiPort;
@@ -473,6 +474,10 @@ function buildDashboardButtons(tasks, container) {
                     
                 }if (sessionStorage.programID === "21" && consent === "NO"){ //Disable all VMMC tasks if consent is No
                     
+                        containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
+
+                }if (sessionStorage.programID === "21" && circumcision_consent === "NO"){ //Disable all VMMC tasks if circumcision consent is No
+
                         containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
 
                 }
@@ -538,7 +543,7 @@ function checkConsent() {
       if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
         var obj = JSON.parse(this.responseText);
         if (obj.length > 0) {
-          var consent_vc = (obj[obj.length - 1].value_coded);
+          var consent_vc = (obj[0].value_coded);
           consent = (parseInt(consent_vc) == 1065 ? "YES" : "NO");
           return(consent);
         }
@@ -555,6 +560,32 @@ function checkConsent() {
     // return "hello";
 
 }
+
+function circumcisionConsent() {
+
+    var url = apiProtocol + "://" + apiURL + ":" + apiPort;
+    url += "/api/v1/observations?person_id=" + sessionStorage.patientID + "&concept_id=9644";
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+        var obj = JSON.parse(this.responseText);
+        if (obj.length > 0) {
+          var circumcision_vc = (obj[0].value_coded);
+          circumcision_consent = (parseInt(circumcision_vc) == 1065 ? "YES" : "NO");
+          return(circumcision_consent);
+        }
+      }
+    };
+    xhttp.open("GET", url, false);
+    xhttp.setRequestHeader(
+      "Authorization",
+      sessionStorage.getItem("authorization")
+    );
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+
+}
+
 function changeModule(url) {
     var applicationImage = sessionStorage.getItem("applicationImage");
     var applicationName = sessionStorage.getItem("applicationName");
