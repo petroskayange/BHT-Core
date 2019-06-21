@@ -100,11 +100,26 @@ const Patient = function () {
     })
   }
 
+  /**
+   * Ask the EMR-API if the patient is due a lab order
+   * 
+   * @param {Number} patientId
+   * @param {Number} programId
+   * @return {Promise}
+   */
+  function isDueLabOrder (patientId, programId) {
+    return fetch(`${apiRoot}/programs/${programId}/patients/${patientId}/is_due_lab_order`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
   return {
     get,
     retrieve,
     create,
     createIdentifier,
-    recentLabOrders
+    recentLabOrders,
+    isDueLabOrder
   }
 }()
