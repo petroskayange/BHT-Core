@@ -24,7 +24,6 @@
     <!-- ...................... -->
 
 
-    <!-- <script src="/assets/js/patient_dashboard_alert.js"></script> -->
 
 </head>
 <body>
@@ -77,6 +76,27 @@
         box-shadow: inset 0 0 10px #000000;
         width: 300px;
         color: #fff;
+    }
+
+    .tasks-table-cell-grayed {
+        border-style: solid;
+
+        border-style: solid;
+        border: 1px solid #5ca6c4;
+        cursor: pointer;
+        box-shadow: inset 2px -4px 2px 0px;
+        background-color: #a9adb1;
+        border-radius: 7px;
+        border: solid black 3px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -moz-box-shadow: inset 0 0 10px #000000;
+        -webkit-box-shadow: inset 0 0 10px #5ca6c4;
+        box-shadow: inset 0 0 10px #000000;
+        width: 300px;
+        color: #a8a4a4;
+        pointer-events:none;
     }
 
     .alerts {
@@ -284,7 +304,7 @@
                     <button type="button" class="button blue navButton" id="btn-confirm" style="visibility:hidden;">Void
                         Encounter
                     </button>
-                    <button type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button onmousedown="location.reload()" type="button" class="button navButton red" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
 
             </div>
@@ -518,6 +538,9 @@
 
 <script>
     var currentEncounter = null;
+    // Defined in core.js
+    getSavedEncounters();
+
     var modalConfirm = function (callback) {
 
         $("#btn-confirm").on("click", function () {
@@ -588,7 +611,7 @@
     var d = new Date();
 
     function ajaxRequest() {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
 
@@ -666,7 +689,7 @@
     }
 
     function getDates(patient_id, index, pageNumber) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits?program_id='+ sessionStorage.programID;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/visits?program_id='+ sessionStorage.programID;
         var div = document.getElementById("dates");
         div.innerHTML = "";
         var req = new XMLHttpRequest();
@@ -748,7 +771,7 @@
             encounters.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value;
         var req = new XMLHttpRequest();
         var counter = 0;
         req.onreadystatechange = function () {
@@ -819,7 +842,7 @@
             programs.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&program_id="+sessionStorage.programID+"&paginate=false";
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&program_id="+sessionStorage.programID+"&paginate=false";
         var req = new XMLHttpRequest();
 
         var listGroup = document.createElement("div");
@@ -893,7 +916,7 @@
             obsDiv.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
 
@@ -915,7 +938,7 @@
                     } else if (results.observations[x].value_coded != null) {
                         value = results.observations[x].value_coded;
                         sessionStorage.removeItem("value_coded");
-                        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/concepts/' + results.observations[x].value_coded;
+                        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/concepts/' + results.observations[x].value_coded;
                         var req = new XMLHttpRequest();
                         req.onreadystatechange = function () {
 
@@ -956,7 +979,7 @@
 
     function voidEncounter(id) {
         currentEncounter = id;
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
 
@@ -983,7 +1006,7 @@
             programsTable.innerHTML = "";
         } else {
         }
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/" + id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/" + id;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
             if (this.readyState == 4) {
@@ -1023,7 +1046,7 @@
     }
 
     function buildAlerts(patient_id) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=7755';
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=7755';
         var req = new XMLHttpRequest();
         var table = document.getElementById("alerts");
         table.setAttribute("class", "info-tables");
@@ -1035,9 +1058,13 @@
 
                     if (results.length > 0) {
                         for (var index = 0; index < results.length; index++) {
+                          try {
                             if (results[index].children[0].value_coded == 1065) {
                                 sideEffects++;
                             }
+                          }catch(q){
+                            continue;
+                          }
                         }
                         var tr = document.createElement("tr");
                         tr.setAttribute("class", "alerts");
@@ -1076,7 +1103,7 @@
     }
 
     function buildDefaulter(patient_id, table) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=6828';
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=6828';
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
             if (this.readyState == 4) {
@@ -1104,7 +1131,7 @@
     }
 
     function buildProgramInfo(patient_id) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/next_appointment_date';
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + patient_id + '/next_appointment_date';
         var req = new XMLHttpRequest();
         var table = document.createElement("table");
         table.setAttribute("class", "info-tables");
@@ -1144,7 +1171,7 @@
     }
 
     function buildFT(patient_id, table) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=9561';
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/observations?person_id=' + patient_id + '&concept_id=9561';
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
             if (this.readyState == 4) {
@@ -1166,7 +1193,7 @@
     }
 
     function buildFTAssessment(table, encounter_id) {
-        var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + encounter_id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + encounter_id;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
             if (this.readyState == 4) {

@@ -322,12 +322,17 @@ function buildCalendar() {
 
   buildControls();
 
-  systemDate = document.getElementById("medication-runout-date");
-  systemDate.innerHTML = medication_runout_date;
+  if (parseInt(programID) !== 12){
+
+    systemDate = document.getElementById("medication-runout-date");
+    systemDate.innerHTML = medication_runout_date;
+    
+    systemDate = document.getElementById("system-selected-date");
+    systemDate2 = document.getElementById("selected-date");
+    systemDate.innerHTML = systemDate2.innerHTML;
+
+  }
   
-  systemDate = document.getElementById("system-selected-date");
-  systemDate2 = document.getElementById("selected-date");
-  systemDate.innerHTML = systemDate2.innerHTML;
 }
 
 function buildDisplayArea() {
@@ -344,6 +349,10 @@ function buildDisplayArea() {
     ["Appointment Limit (per/day)","appointment-limit"],
     ["&nbsp;","system-selected-date"]
   ];
+
+  if (parseInt(programID) == 12){
+    tds.shift();
+  }
 
   for(var i = 0 ; i < tds.length ; i++){
     var tr = document.createElement("tr");
@@ -512,22 +521,36 @@ function postAppointmentObs(encounter) {
 
   sysDate = year + "-" + month + "-" + day;
 
+  if (parseInt(programID) == 12){
+    var obs = {
+      encounter_id: encounter["encounter_id"],
+      observations: [
+        { 
+          concept_id: 5096, value_datetime: appointment
+        }
+      ]
+    }; 
+    
+    submitParameters(obs, "/observations", "red"); 
 
+  }else{
+    
+    var obs = {
+      encounter_id: encounter["encounter_id"],
+      observations: [
+        { 
+          concept_id: 5096, value_datetime: appointment
+        },
+        { 
+          concept_id: 7437, value_datetime: sysDate
+        }
+      ]
+    }; 
+  
+    submitParameters(obs, "/observations", "nextPage"); 
 
+  }
 
-  var obs = {
-    encounter_id: encounter["encounter_id"],
-    observations: [
-      { 
-        concept_id: 5096, value_datetime: appointment
-      },
-      { 
-        concept_id: 7437, value_datetime: sysDate
-      }
-    ]
-  }; 
-
-  submitParameters(obs, "/observations", "nextPage"); 
 }
 
 function setDates(dates) {
@@ -579,12 +602,16 @@ function getMonthDates(current_date){
 
 function selectDate(e) {
   var selected_date;
+
+  if (e === undefined){ //Do this to return to the system suggested date.
+    var e = document.getElementsByClassName("system-suggested-date")[0];
+  }
+
   selected_date = e.getAttribute("date");
   if(((new Date(selected_date)) > (new Date(medication_runout_date))) && 
     (parseInt(programID) !== 12))
   {
-    showMessage('Medication would have run-out on the selected date.</p>Select a different date.');
-    return;
+    showConfirm("Medication would run out on "+medication_runout_date+".</p>Are you sure about this selected date?", "selectDate");
   } 
   
   if(clinic_holidays.indexOf(selected_date) >= 0){
@@ -663,6 +690,21 @@ function red() {
   nextEncounter(patientID, programID);
 }
 
+function showConfirm(message, returnFunction) {
+  
+  messageBar.innerHTML = "";
+
+  messageBar.innerHTML += "<p>" + ((message.match(/^Value\s/)) ? (message.replace(/^Value\s/, "")) : message) +
+    "</p><div style='display: block;'>" +
+    "<button class='button' style='float: none;' onmousedown='this.offsetParent.style.display=\"none\";'" +
+    "><span>Yes</span></button><button class='button' " +
+    "style='float: none; right: 3px;' onclick='this.offsetParent.style.display=\"none\";" + returnFunction + "();' onmousedown='this.offsetParent.style.display=\"none\";"+ returnFunction +"(); '>" +
+    "<span>No</span></button>";
+
+    messageBar.style.display = "block";
+
+}
+
 </script>
 
 
@@ -701,7 +743,7 @@ function addWeeks(date, n) {
 
 function getSuggestedAppointmentDate() {
   var patient_id = sessionStorage.patientID;
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/";
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/"+ sessionStorage.programID +"/patients/";
   url += patient_id + "/next_appointment_date?date=" + sessionStorage.sessionDate;
 
   var xhttp = new XMLHttpRequest();
@@ -755,7 +797,7 @@ function getLimit() {
 
 function getAppointMents(date) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
-  url += "/api/v1/appointments?date="+date.getAttribute("date");
+  url += "/api/v1/programs/"+ sessionStorage.programID +"/booked_appointments?date="+date.getAttribute("date");
   url += "&paginate=false"
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {

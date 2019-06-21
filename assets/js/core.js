@@ -344,15 +344,35 @@ function getActivities(activitiesData) {
 }
 
 function getTasks(encountersData) {
-    var j = Object.keys(encountersData.encounters);
-    var i = 0;
+    
     var tasks = [];
-    j.forEach(function (j) {
-        var values = encountersData.encounters[j]
-        var url = values.url;
-        var icon = values.activitiesIcon;
-        tasks.push([j, icon, url])
-    });
+
+    if (parseInt(sessionStorage.programID) == 12){
+        // This is for ANC Program to be able to differnctiate
+        // two different activities using a single encounter.
+        // e.g. ART Treatment and ANC Treatment both using Treatment encounter.
+        var j = encountersData.encounters;
+        for(var k = 0; k < encountersData.activities["tasks"].length; k++){
+            var values = encountersData.activities["tasks"][k][0]
+            var encounter = encountersData.activities["tasks"][k][1]
+            if(j[encounter] !== undefined){
+                var url = j[encounter].url;
+                var icon = j[encounter].activitiesIcon
+                tasks.push([values, icon, url, encounter.toUpperCase()])
+
+            }
+        }
+
+    }else{
+        var j = Object.keys(encountersData.encounters);
+        var i = 0;
+        j.forEach(function (j) {
+            var values = encountersData.encounters[j]
+            var url = values.url;
+            var icon = values.activitiesIcon;
+            tasks.push([j, icon, url])
+        });
+    }
 
     var container = document.getElementById('tasks-container');
     buildDashboardButtons(tasks, container);
@@ -432,24 +452,52 @@ function buildDashboardButtons(tasks, container) {
                 }
 
                 if (!use_filling_number) {
-                    if (tasks[i][0].match(/filing/i)) {
+                    if (tasks[i][0].match(/filing/i) || tasks[i][0].match(/Archive client/i)) {
                         continue;
                     }
                 }
+                if (!((tasks[i][0].match(/ART/) || tasks[i][0].match(/HIV/)) &&  sessionStorage.programID == "12")){
 
                 containerTableCell = document.createElement("div");
-                containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                if (sessionStorage.programID == "12"){ //Disable already saved encounters in ANC
+
+                    if (sessionStorage.savedEncounters.includes(tasks[i][3])){
+                    
+                        containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
+
+                    }else{
+
+                        containerTableCell.setAttribute("class", "tasks-table-cell");
+
+                    }
+                    
+                }else{
+                    
+                    containerTableCell.setAttribute("class", "tasks-table-cell");
+                    
+                }
+
+                
                 containerTableCell.setAttribute("style", "display: table-cell;");
                 if (tasks[i][0].match(/National Health ID/i)) {
                     containerTableCell.setAttribute("onmousedown", "printNPID();");
                 } else if (tasks[i][0].match(/Filing Number \(Print\)/i)) {
-                    containerTableCell.setAttribute("onmousedown", "printFilingNumber();");
+                    var buildURL = '/apps/' + sessionStorage.applicationName;
+                    buildURL += '/views/filing_number/filing_number_management.html';
+                    buildURL += '?patient_id=' + sessionStorage.patientID;
+                    buildURL += '&print_fn=true';
+                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
                 } else if (tasks[i][0].match(/Visit Summary/i)) {
                     containerTableCell.setAttribute("onmousedown", "printVisitSummary();");
                 } else if (tasks[i][0].match(/Transfer Out/i)) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
                 }else if (tasks[i][0].match(/Demographics \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printDemographics();");
+                }else if (tasks[i][0].match(/Archive client/i)) {
+                    var buildURL = tasks[i][2] + "?patient_id=" + sessionStorage.patientID;
+                    buildURL += '&archive_client=true'
+                    containerTableCell.setAttribute("onmousedown", "document.location='" + buildURL +"'");
                 }
                 else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
@@ -482,6 +530,7 @@ function buildDashboardButtons(tasks, container) {
                 containerTableRow.appendChild(containerTableCell);
 
                 count++;
+                }
             }
         }
     };
@@ -964,3 +1013,45 @@ function getPortalLocation(){
     xhttp.setRequestHeader('Content-type', "application/json");
     xhttp.send();
 }
+
+function getSavedEncounters() {
+
+    var url = sessionStorage.apiProtocol + '://'+apiURL+':'+apiPort+'/api/v1';
+    url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
+    url += '?date='+sessionStorage.sessionDate;
+  
+    var req = new XMLHttpRequest();
+  
+    //var params = JSON.stringify({date: sessionStorage.sessionDate});
+  
+    req.onreadystatechange = function(){
+  
+      if (this.readyState == 4) {
+  
+        if (this.status == 200) {
+  
+          var results = JSON.parse(this.responseText);
+  
+          sessionStorage.setItem("savedEncounters", results);
+  
+        }
+  
+      }
+  
+    };
+  
+    try {
+  
+      req.open('GET', url, true);
+  
+      req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+  
+      req.send(null);
+  
+    } catch (e) {
+    
+      console.log(e);
+  
+    }
+  
+  }

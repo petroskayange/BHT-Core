@@ -15,7 +15,8 @@
         function getInput() {
             key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
             value = $('touchscreenInput' + tstCurrentPage).value;
-            sessionStorage.setItem(key, value);
+            var gender_value = (value == 'Female'?'F':'M');
+            sessionStorage.setItem(key, gender_value);
             var d = new Date();
             sessionStorage.setItem("date_created", d.toDateString())
         }

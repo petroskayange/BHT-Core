@@ -4,10 +4,11 @@
 <script type="text/javascript" src="/assets/js/httpUtils.js"></script>
 <script>
   var useFilingNumbers = false;
-  var API_PATH = 'http://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
-  var FILING_NUMBERS_ROUTE = '/apps/ART/views/file_numbers.html';
+  var API_PATH = sessionStorage.apiProtocol + '://' + sessionStorage.getItem('apiURL') + ':' + sessionStorage.getItem('apiPort') + '/api/v1';
+  var FILING_NUMBERS_ROUTE = '/apps/ART/views/filing_number/filing_number_management.html';
   var PERSON_ID = fetchArgumentFromUrlString('person_id');
   var PROGRAM_ID = sessionStorage.getItem('programID');
+  const HIV_PROGRAM_ID = 1
   var apiURL = sessionStorage.getItem("apiURL");
   var apiPort = sessionStorage.getItem("apiPort");
   var apiProtocol = sessionStorage.getItem("apiProtocol");
@@ -30,7 +31,7 @@
     sessionStorage.showPregnantQuestion = 'true';
     sessionStorage.showWeightChart = 'true';
 
-    if (useFilingNumbers) {
+    if (useFilingNumbers && (Number(PROGRAM_ID) === HIV_PROGRAM_ID)) {
       document.location = FILING_NUMBERS_ROUTE + '?patient_id=' + PERSON_ID;
     } else {
       nextEncounter(PERSON_ID, PROGRAM_ID, true);
