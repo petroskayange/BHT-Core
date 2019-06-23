@@ -81,13 +81,6 @@ const Concept = function () {
     TB_SYMPTOMS: 1560,
     PRESCRIBE_DRUGS: 7874,
     MEDICAL_ORDERS: 1282,
-    'RHZ (R75/H50/Z150)': 765,
-    'E (Ethambutol 100mg tablet)': 745,
-    'RH (R75/H50)': 1194,
-    'RH (R150/H75)': 1194,
-    'RHZE (R150/H75/Z400/E275)': 1131,
-    'INH or H (Isoniazid 100mg tablet)': 656,
-    'INH or H (Isoniazid 300mg tablet)': 656,
     AMOUNT_DISPENSED: 2834,
     X_RAY: 6687,
     CLINICAL: 3592,
@@ -142,7 +135,12 @@ const Concept = function () {
     RELAPSE: 1524,
     NEW_TB_CASE: 2406,
     PATIENT_CATEGORY: 7935,
-    TREATMENT_DURATION: 3515
+    TREATMENT_DURATION: 3515,
+    NEW_PATIENT: 2406,
+    REFERRAL: 9675,
+    PATIENT_TYPE: 3289,
+    UNKNOWN: 1067,
+    DEFAULTER: 6828
   }
 
   /**
