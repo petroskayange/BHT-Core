@@ -7,8 +7,12 @@ function submitParameters(parameters, url, returnToFunction) {
 
   }
   if (url === "/encounters") {
+    if (typeof providerID === 'undefined') {
+    
+  }else {
     if(providerID != null) {
       parameters.provider_id = providerID;
+    }
     }
   }
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
