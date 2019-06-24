@@ -29,8 +29,6 @@ if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|S
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
-
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-duplicates" onclick="redirect(this.id); "><img src="/assets/images/duplicate.png" class="btn-icons"/><span>View Duplicates</span></button>';
 
