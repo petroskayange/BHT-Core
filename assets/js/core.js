@@ -10,6 +10,7 @@ var url = window.location.href;
 var url = new URL(url);
 var backupPatientID = "";
 var consent = "";
+var circumcision_consent = "";
 var id = url.searchParams.get("patient_id");
 sessionStorage.setItem("backupPatientID", id);
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
