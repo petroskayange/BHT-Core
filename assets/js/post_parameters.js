@@ -6,7 +6,11 @@ function submitParameters(parameters, url, returnToFunction) {
   } catch (e) {
 
   }
-  
+  if (url === "/encounters") {
+    if(providerID != null) {
+      parameters.provider_id = providerID;
+    }
+  }
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
   
   parameters.program_id = sessionStorage.programID;

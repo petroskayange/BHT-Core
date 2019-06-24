@@ -16,6 +16,8 @@
 
 <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
 <script type="text/javascript" src="/apps/ANC/assets/js/common.js"></script>
+<link rel="stylesheet" href="/assets/css/provider.css" type="text/css">
+<script type="text/javascript" src="/assets/js/provider.js  "></script>
 
 <style>
 #system-selected-date {
@@ -727,7 +729,7 @@ function showConfirm(message, returnFunction) {
       <form>
 
         <input type="text" name="summary"
-          tt_onLoad="__$('keyboard').style.display = 'none'; getSuggestedAppointmentDate();changeNextButton(); 
+          tt_onLoad="checkIfInBDMode();__$('keyboard').style.display = 'none'; getSuggestedAppointmentDate();changeNextButton();
             setTimeout(function(){displayDeliveryButton();}, 2000)" 
           tt_pageStyleClass= "NoControls" helpText="Appointment booking" optional = "true"/>
 
