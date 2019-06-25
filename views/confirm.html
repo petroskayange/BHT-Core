@@ -414,7 +414,9 @@
   right: 10px;
   width: 115px;
 }
-
+.high {
+  background: red;
+}
 </style>
 
 <script>
@@ -429,7 +431,7 @@ var global_property = GlobalProperty({
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
     
-    if(sessionStorage.programID == '1') {
+    if(sessionStorage.programID == '1' || sessionStorage.programID == '12') {
       var cells = [
         "Patient identifiers", "Alert(s)",
         "labs", "Program info", 
@@ -643,7 +645,12 @@ var global_property = GlobalProperty({
       buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
+    }else if (sessionStorage.programID == '12'){
+      buildProgramInfo(patient_id);
+      buildAlerts(patient_id);
+      buildStates(obj, patient_id);
     }
+    
 
     var gender = null;
     if (sessionStorage.patientGender === "F") {
@@ -788,11 +795,11 @@ var global_property = GlobalProperty({
   function buildStates(identifiers, patient_id) {
     var identifiersHash = {};
     var url =
-      "http://" +
+      sessionStorage.apiProtocol + "://" +
       apiURL +
       ":" +
       apiPort +
-      "/api/v1/programs/1/patients/" +
+      "/api/v1/programs/" + sessionStorage.programID + "/patients/" +
       patient_id;
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
@@ -849,7 +856,7 @@ var global_property = GlobalProperty({
   }
   function buildRelationShips(patient_id) {
     var url =
-      "http://" +
+      sessionStorage.apiProtocol + "://" +
       apiURL +
       ":" +
       apiPort +
@@ -893,7 +900,7 @@ var global_property = GlobalProperty({
 
   function buildAlerts(patient_id) {
     var url =
-      "http://" +
+      sessionStorage.apiProtocol + "://" +
       apiURL +
       ":" +
       apiPort +
@@ -953,7 +960,7 @@ var global_property = GlobalProperty({
   }
   function buildDefaulter(patient_id, table) {
     var url =
-      "http://" +
+      sessionStorage.apiProtocol + "://" +
       apiURL +
       ":" +
       apiPort +
@@ -988,10 +995,25 @@ var global_property = GlobalProperty({
 
   function buildProgramInfo(patient_id) {
     if (sessionStorage.programID === "12"){
+
+      gestation = (sessionStorage.gestation !== "") ? sessionStorage.gestation +" Weeks" : "N/A";
+      
+      lmp = (sessionStorage.dateOfLMP !== "") ? sessionStorage.dateOfLMP : "N/A";
+      
+      edod = (sessionStorage.patientEDOD !== "") ? sessionStorage.patientEDOD : "N/A";
+
       document.getElementById("section-body-3").innerHTML +=
         "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
-        "</tr></table>";
+        "</tr><tr><td>Gestation Age:</td><td id='gest_age'></td></tr><tr>" +
+        "<td style=\"color:blue; font-weight:bold;\">Date of LMP:</td><td id='date_of_lmp'></td></tr>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">EDOD:</td><td id='edod'></td></tr</table>" +
+        "<tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
+      //document.getElementById("section-body-3").innerHTML +=
+        //"<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
+        //"</tr></table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
+      populateNextTask(patient_id);
+      populateANCProgramInfo();
       
     }else if (sessionStorage.programID === "1"){
       document.getElementById("section-body-3").innerHTML +=
@@ -1099,6 +1121,24 @@ var global_property = GlobalProperty({
         console.error(error);
       }
     );
+  }
+
+  function populateANCProgramInfo(){
+    gestation = document.getElementById("gest_age");
+    lmp = document.getElementById("date_of_lmp");
+    edod = document.getElementById('edod');
+    
+    if (sessionStorage.gestation){
+      gestation.innerHTML = sessionStorage.gestation + " weeks";
+    }
+
+    if (sessionStorage.dateOfLMP){
+      lmp.innerHTML = moment(sessionStorage.dateOfLMP).format("DD/MMM/YYYY");
+    }
+
+    if (sessionStorage.patientEDOD){
+      edod.innerHTML = moment(sessionStorage.patientEDOD).format("DD/MMM/YYYY");
+    }
   }
 </script>
 
@@ -1234,6 +1274,20 @@ var global_property = GlobalProperty({
     style="float: right;" id="continue">Continue</button>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="confirm-VL" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 style="text-align: center" class="text-uppercase">Patient has a high viral load,  Please take immediate action! </h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   buildInfoBoxes();
 
@@ -1364,6 +1418,11 @@ var global_property = GlobalProperty({
   }
 
 function getFilingNumberType() {
+  if(user_filing_numbers == false || parseInt(sessionStorage.programID) != 1) {
+    finish(sessionStorage.patientID);
+    return;
+  }
+
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var path = sessionStorage.apiProtocol + '://' + sessionStorage.apiURL + ':' + sessionStorage.apiPort + '/api/v1/programs/' + sessionStorage.programID + '/patients/' + sessionStorage.patientID;
@@ -1435,12 +1494,13 @@ function calculateMonthsOnART(art_start_date) {
   return dateDiffInMonths(date1, date2);
 }            
 
-function dateDiffInMonths(dt2, dt1) {
-  var months;
-  months = (dt2.getFullYear() - dt1.getFullYear()) * 12;
-  months -= dt1.getMonth() + 1;
-  months += dt2.getMonth();
-  return months <= 0 ? 0 : months;
+function dateDiffInMonths(d2, d1) {
+  var d1Y = d1.getFullYear();
+  var d2Y = d2.getFullYear();
+  var d1M = d1.getMonth();
+  var d2M = d2.getMonth();
+
+  return (d2M+12*d2Y)-(d1M+12*d1Y);
 }
 
 var current_person_addresses;
@@ -1642,7 +1702,7 @@ function updateAddress(patient_id) {
 function populateNextTask(patient_id) {
   
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
-  url += "/api/v1/workflows/1/" + patient_id;
+  url += "/api/v1/workflows/"+ sessionStorage.programID +"/" + patient_id;
   url += "?date=" + sessionStorage.sessionDate;
 
 

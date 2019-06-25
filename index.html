@@ -54,11 +54,17 @@
             sessionStorage.patientOnART = null;
             sessionStorage.patientARVNumber = null;
             sessionStorage.patientARVStartDate = null;
+            sessionStorage.dateOfLMP = "";
+            sessionStorage.fundusByLMP = "";
+            sessionStorage.gestation = "";
+            sessionStorage.totalANCVisits = "";
+            sessionStorage.currentOutcome =  "";
+            sessionStorage.referToUrineTest = false;
           }
         }
 
         function setSessionDate(){
-            var url = 'http://'+apiURL+':'+apiPort+'/api/v1/current_time';
+            var url = sessionStorage.apiProtocol + '://'+apiURL+':'+apiPort+'/api/v1/current_time';
             var req = new XMLHttpRequest();
             req.onreadystatechange = function(){
 

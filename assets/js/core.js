@@ -443,6 +443,9 @@ function buildDashboardButtons(tasks, container) {
             }
 
             for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i][0].toUpperCase() == 'HIV CLINIC CONSULTATION (CLINICIAN)')
+                  continue;
+
                 if (count == 3) {
                     containerTableRow = document.createElement("div");
                     containerTableRow.setAttribute("class", "tasks-table-row");
@@ -1056,7 +1059,7 @@ function getPortalLocation(){
 
 function getSavedEncounters() {
 
-    var url = 'http://'+apiURL+':'+apiPort+'/api/v1';
+    var url = sessionStorage.apiProtocol + '://'+apiURL+':'+apiPort+'/api/v1';
     url += '/programs/'+sessionStorage.programID+'/patients/'+sessionStorage.patientID+'/saved_encounters';
     url += '?date='+sessionStorage.sessionDate;
   

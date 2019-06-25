@@ -10,6 +10,74 @@ var apiPort = sessionStorage.apiPort;
 
 var authToken = sessionStorage.authorization;
 
+
+$(document).ready(function(){
+
+  if (parseInt(sessionStorage.programID) === 12){
+
+    isSubsequentVisit();
+
+    getAncVisitNumber();
+
+    getPatientHIVStatus();
+
+    getPatientSummary();
+
+  }
+
+});
+
+/** Function getting patient summary */
+function getPatientSummary() {
+
+  var url = 'http://' + apiURL + ':' + apiPort 
+
+  url += '/api/v1/programs/'+programID+'/patients/' + patientID;
+
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function () {
+
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+
+        sessionStorage.dateOfLMP = results.date_of_lnmp;
+        
+        sessionStorage.fundusByLMP = results.fundus;  
+        
+        sessionStorage.gestation = results.gestation;  
+        
+        sessionStorage.totalANCVisits = results.anc_visits;
+        
+        sessionStorage.currentOutcome =  results.current_outcome;
+
+        sessionStorage.patientEDOD = results.edod;
+      
+      }
+    
+    }
+  
+  };
+  
+  try {
+    
+    req.open('GET', url, true);
+    
+    req.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+    
+    req.send(null);
+  
+  } catch (e) {
+  
+    console.log(e);
+
+  }
+  
+}
+
+
+
 /** Function getting previous ANC Visit if exist */
 
 function getAncVisitNumber() {
@@ -143,18 +211,3 @@ function isSubsequentVisit(){
   xhttp.send();
 
 }
-
-$(document).ready(function(){
-
-  if (parseInt(sessionStorage.programID) === 12){
-
-    isSubsequentVisit();
-
-    getAncVisitNumber();
-
-    getPatientHIVStatus();
-
-  }
-
-
-});

@@ -333,7 +333,7 @@ function postDispensation(order_id, amount_dispensed) {
 
 function voidDrugDispensations(order_id) {
     
-    var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/dispensations/' + order_id;
+    var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/dispensations/' + order_id;
     
     var req = new XMLHttpRequest();
         
@@ -503,14 +503,11 @@ function addDispBTN(order_id) {
 }
 
 function addReset(order_id) {
-    //var row = document.getElementById(order_id);
-    //row.setAttribute("onmousedown", "displayKeyPad('" + order_id + "');");
     var span = document.createElement("span");
     var btn = document.createElement("img");
     btn.setAttribute("src","/assets/images/reset.png");
-    btn.style.maxWidth = "50%";
+    btn.style.width = "20%";
     btn.setAttribute("onmousedown", "voidDrugDispensations('" + order_id + "');");
-    btn.innerHTML = "Dispense";
     span.appendChild(btn);
     return span.innerHTML;
 }
