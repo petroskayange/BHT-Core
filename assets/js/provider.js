@@ -24,7 +24,7 @@ function showProviderModal() {
     
     var modalFooter = document.createElement('div');
     modalFooter.setAttribute('class', 'provider-modal-footer');
-    modalFooter.innerHTML = '<span class="select-button activated-btn" id="set-provider" onclick="setProvider()" > select </span> '
+    modalFooter.innerHTML = '<span class="select-button activated-btn" id="set-provider" onclick="setProvider()" >Confirm</span> '
     modalContent.appendChild(modalFooter);
     
     document.getElementById('content').appendChild(providerModal);
