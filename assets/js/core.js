@@ -31,9 +31,10 @@ if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|S
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="cleaner" onclick="redirect(this.id); "><img src="/assets/images/clean.jpg" class="btn-icons"/><span>Data cleaning tool</span></button>';
-
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-duplicates" onclick="redirect(this.id); "><img src="/assets/images/duplicate.png" class="btn-icons"/><span>View Duplicates</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="military-site" onclick="redirect(this.id); "><img src="/assets/images/soldier.png" class="btn-icons"/><span>Is this a military site?</span></button>';
 
 // alert(window.innerHeight);
 
@@ -667,6 +668,8 @@ function redirect(id) {
         window.location.href = '/views/print_location.html';
     }if (id === "enable-portal") {
         window.location.href = '/views/portal.html';
+    }if (id === "view-duplicates") {
+        window.location.href = '/views/search_identifiers.html';
     }
     if (id === "view-sys-settings") {
       var obj = document.createElement("object");
@@ -674,6 +677,10 @@ function redirect(id) {
       obj.setAttribute("type", "text/html");
       obj.setAttribute("style", "width: 97%; height: 430px; text-align: left;");
       dvTable.appendChild(obj);
+    }
+    //if it is a military site
+    if (id === "military-site") {
+        window.location.href = "/views/military_site.html";
     }
     //view-drug-management-settings
     if (id === "view-drug-management-settings") {

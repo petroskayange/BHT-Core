@@ -176,3 +176,5 @@ function setCurrentLocation() {
   $('touchscreenInput' + tstCurrentPage).setAttribute('ajaxURL', "/locations?name=");
   
 }
+
+

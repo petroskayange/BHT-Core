@@ -110,6 +110,10 @@
       font-size: 12px;
     } 
 
+    .active-reason {
+        background-color: rgb(189, 189, 236);
+    }
+
 </style>
 
 <!-- container -->
@@ -312,7 +316,7 @@
     </div>
     <!-- /encounters details modal -->
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; "
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:25%; "
          aria-hidden="true" id="mi-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
@@ -320,9 +324,17 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Are you sure you want to void this encounter?</h4>
+                    <h5 class="modal-title">Please specify reason for voiding</h5>
+                </div>
+                <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item reason" onclick="selectReason(this)">Mistake / Wrong Entry</li>
+                            <li class="list-group-item reason" onclick="selectReason(this)">System Error</li>
+                            <li class="list-group-item reason" onclick="selectReason(this)">Duplicate Entry</li>
+                        </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-lg" id="modal-btn-si">yes</button>
+                    <button type="button" style="float:left" class="btn btn-default btn-lg" id="modal-btn-si" disabled>yes</button>
                     <button type="button" class="btn btn-primary btn-lg" id="modal-btn-no">No</button>
                 </div>
             </div>
@@ -538,8 +550,22 @@
 
 <script>
     var currentEncounter = null;
+    var void_reason = null;
     // Defined in core.js
     getSavedEncounters();
+    function selectReason(element) {
+        var items = document.getElementsByClassName("list-group-item reason active-reason");
+        for (let index = 0; index < items.length; index++) {
+            items[index].className = "list-group-item reason";
+        }
+        if(element != undefined) {
+        document.getElementById("modal-btn-si").removeAttribute("disabled");
+        element.className = "list-group-item reason active-reason"
+        void_reason = element.innerHTML;
+        }else {
+            document.getElementById("modal-btn-si").setAttribute('disabled', null);
+        }
+    }
 
     var modalConfirm = function (callback) {
 
@@ -555,6 +581,7 @@
 
         $("#modal-btn-no").on("click", function () {
             callback(false);
+            selectReason();
             $("#mi-modal").modal('hide');
         });
     };
@@ -979,7 +1006,7 @@
 
     function voidEncounter(id) {
         currentEncounter = id;
-        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters/' + id + '?reason=' + encodeURIComponent(void_reason);
         var req = new XMLHttpRequest();
         req.onreadystatechange = function () {
 

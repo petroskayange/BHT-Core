@@ -322,6 +322,10 @@ function postDispensation(order_id, amount_dispensed) {
         drug_order_id: order_id, 
         quantity: amount_dispensed}]
     }
+
+    if(providerID != null) {
+        drug_order.provider_id = providerID;
+    }
     submitParameters(drug_order, "/dispensations", "doneDispensing");
 
     try {
