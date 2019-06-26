@@ -52,7 +52,7 @@ function getProviders(modalBody){
             }catch(e) {
 
             }
-            li.setAttribute('onclick', 'selectReason(this)');
+            li.setAttribute('onclick', 'selectProvider(this)');
             ul.appendChild(li);
         }
 
@@ -68,7 +68,7 @@ function getProviders(modalBody){
 }
 }
 
-function selectReason(element) {
+function selectProvider(element) {
         var items = document.getElementsByClassName("providers active");
         for (let index = 0; index < items.length; index++) {
             items[index].className = "providers";
