@@ -33,9 +33,7 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="backdata-entry" onclick="redirect(this.id); "><img src="/assets/images/obstetric_history.png" class="btn-icons"/><span>Backdata Entry</span></button>';
-
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="art-refferal" onclick="redirect(this.id); "><img src="/assets/images/obstetric_history.png" class="btn-icons"/><span>ART Refferal</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="registers" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Manage Registers</span></button>';
 
 // alert(window.innerHeight);
 
@@ -636,6 +634,9 @@ function redirect(id) {
     }
     if (id === "report-1") {
     }
+    if (id === "registers") {
+        window.location.href = './views/users/new.html';
+    }
  
     if (id === "cleaner") {
         // window.location.href = './views/reports/data_inconsistent/cleaner.html';
@@ -648,12 +649,6 @@ function redirect(id) {
         obj.setAttribute("type","text/html");
         obj.setAttribute("style","width: 97%; height: 430px; text-align: left;");
         dvTable.appendChild(obj);
-    }
-    if (id === "backdata-entry") {
-        window.location.href = 'apps/HTS/views/encounters/backdata.html';
-    }
-    if (id === "art-refferal") {
-        window.location.href = 'apps/HTS/views/encounters/refferal.html';
     }
 }
 

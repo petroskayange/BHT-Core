@@ -198,6 +198,9 @@
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Applications &nbsp; &nbsp; &nbsp;<img src="/assets/images/launcher.png"></span></button>
             <button class="green" style="margin: 5px; width: 285px; padding: 0px;" visibility: hidden; id="registerButton" onmousedown="registerPatientRedirect();" ><span>Find or Register Patient</span></button>
+            <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right:1px; display: none;" visibility: hidden; id="backdata" onclick="callPage(this.id)" ><span>Backdata Entry</span></button>
+            <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right:1px; display: none;" visibility: hidden; id="artReferral" onclick="callPage(this.id)" ><span>ART Referral</span></button>
+            <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right: 1px; display: none;" visibility: hidden; id="findRecord" onclick="callPage(this.id)" ><span>Find Entered Record</span></button>
             <button class="blue" style="margin: 5px; width: 200px; padding: 0px;" visibility: hidden; id="findByButton" onmousedown="gotoFindByMenu();" ><span>Find by</span></button>
         </div>
          </div>
@@ -210,6 +213,17 @@
         var apiPort = sessionStorage.apiPort;
         getDDEStatus();
         getPortalStatus();
+
+        if(sessionStorage.programID == "18"){
+            var btn_backdata = document.getElementById("backdata");
+            btn_backdata.style.display = "block";
+
+            var btn_art_referral = document.getElementById("artReferral");
+            btn_art_referral.style.display = "block";
+
+            var btn_find_record = document.getElementById("findRecord");
+            btn_find_record.style.display = "block";
+        }
         if(sessionStorage.sessionDate == undefined) {
             setSessionDate();
         }
@@ -230,6 +244,14 @@
             xhttp.send();
         }
 
+        function callPage(id){
+            if (id === "backdata") {
+                window.location.href = 'apps/HTS/views/encounters/backdata.html';
+            }
+            if (id === "artReferral") {
+                window.location.href = 'apps/HTS/views/encounters/refferal.html';
+            }
+        }
         function getLocationName(location_id){
             var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/locations/"+location_id;
 
