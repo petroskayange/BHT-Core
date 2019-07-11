@@ -8,6 +8,12 @@ const Person = function () {
   const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
 
   /** @type {object} */
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.authorization
+  }
+
+  /** @type {object} */
   let person = {}
 
   /**
@@ -19,6 +25,21 @@ const Person = function () {
    */
   function init (data = {}) {
     person = data
+  }
+
+  /**
+   * Function to ask the EMR-API to create a person
+   * 
+   * @param {Object} params
+   * 
+   * @return {Promise}
+   */
+  function create (params) {
+    return fetch(`${apiRoot}/people`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(params)
+    })
   }
 
   /**
@@ -95,11 +116,26 @@ const Person = function () {
     })
   }
 
+  /**
+   * Ask to EMR-API to return a person's relationships
+   * 
+   * @param {Number} personId
+   * @return {Promise}
+   */
+  function getRelationships (personId) {
+    return fetch(`${apiRoot}/people/${personId}/relationships`, {
+      method: 'GET',
+      headers: { 'Authorization': sessionStorage.authorization }
+    })
+  }
+
   return {
     init,
     get,
+    create,
     setAge,
     isEligibleForPregnancyQuestion,
-    assignTbRegistrationNumber
+    assignTbRegistrationNumber,
+    getRelationships
   }
 }()
