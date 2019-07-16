@@ -197,7 +197,7 @@
             <button class="btn btn-danger buttons red " style="width: 200px; font-size: 2rem;" id="logout">Logout</button>
             <button class="btn btn-success buttons blue" style="margin-right: 5px;" data-toggle="modal" data-target="#myModal">
             <span>&nbsp; &nbsp; &nbsp; Applications &nbsp; &nbsp; &nbsp;<img src="/assets/images/launcher.png"></span></button>
-            <button class="green" style="margin: 5px; width: 285px; padding: 0px;" visibility: hidden; id="registerButton" onmousedown="registerPatientRedirect();" ><span>Find or Register Patient</span></button>
+            <button class="green" style="margin: 5px; width: 285px; padding: 0px;" visibility: hidden; id="registerButton" onmousedown="checkProgram();" ><span>Find or Register Patient</span></button>
             <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right:1px; display: none;" visibility: hidden; id="backdata" onclick="callPage(this.id)" ><span>Backdata Entry</span></button>
             <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right:1px; display: none;" visibility: hidden; id="artReferral" onclick="callPage(this.id)" ><span>ART Referral</span></button>
             <button class="blue" style="margin: 5px; width: 205px; padding: 0px; margin-right: 1px; display: none;" visibility: hidden; id="findRecord" onclick="callPage(this.id)" ><span>Find Entered Record</span></button>
@@ -213,6 +213,7 @@
         var apiPort = sessionStorage.apiPort;
         getDDEStatus();
         getPortalStatus();
+        
 
         if(sessionStorage.programID == "18"){
             var btn_backdata = document.getElementById("backdata");
@@ -224,6 +225,8 @@
             var btn_find_record = document.getElementById("findRecord");
             btn_find_record.style.display = "block";
         }
+
+
         if(sessionStorage.sessionDate == undefined) {
             setSessionDate();
         }
@@ -242,6 +245,14 @@
             xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
             xhttp.setRequestHeader('Content-type', "application/json");
             xhttp.send();
+        }
+
+        function checkProgram(){
+            if(sessionStorage.programID == "18"){
+                window.location.href = "apps/HTS/views/encounters/consent.html";
+            }else{
+                registerPatientRedirect();
+            }
         }
 
         function callPage(id){

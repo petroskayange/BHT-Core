@@ -868,7 +868,6 @@
                 }
                 // getNames(__$('home_district').value, "District", "/districts?paginate=false&region_id=" + document.getElementById('current_region').value);
 
-           
         </script>
 
         <form action="/views/patient_dashboard.html" method="POST">
@@ -886,6 +885,7 @@
                    ajaxURL="/search/family_name?search_string="
                    allowFreeText="true"
                    condition="$(&quot;family_name&quot;).value == &quot;&quot;"/>
+            
 
             <input type="text" name="person[birth_year]" id="person_birth_year" helpText="Year of Birth"
                    field_type="number"
