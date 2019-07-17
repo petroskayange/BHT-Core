@@ -9,7 +9,10 @@
             //alert("not logged in");
             window.location = "/views/login.html";
         }
-    </script>
+        if (top.location != location) {
+        top.location.href = document.location.href ;
+        }
+    </script>          
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/maindashboard/header.css">
