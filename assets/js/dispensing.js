@@ -449,9 +449,11 @@ function postFastTrackObs(encounter) {
 }
 
 function gotoAppointmentEncounterType() {
-  if(parseInt(sessionStorage.programID) == 1 || parseInt(sessionStorage.programID) == 2) {  
+  if(parseInt(sessionStorage.programID) == 1) {  
     document.location = "/views/patient/appointment.html?patient_id=" + sessionStorage.patientID;
-  }else{
+  } else if (parseInt(sessionStorage.programID) === 2) {
+    nextEncounter(sessionStorage.patientID, sessionStorage.programID, true)
+  } else{
     document.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID;
   }
 }

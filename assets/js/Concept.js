@@ -110,7 +110,8 @@ const Concept = function () {
     PULMONARY_TB: 1549,
     EXTRA_PULMONARY_TB: 1547,
     TB_TYPE: 2596,
-    DIAGNOSIS_DATE: 2182
+    DIAGNOSIS_DATE: 2182,
+    TB_NUMBER: 7930
   }
 
   /**

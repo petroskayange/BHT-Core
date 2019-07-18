@@ -330,7 +330,7 @@ function buildCalendar() {
 
   buildControls();
 
-  if (parseInt(programID) !== 12){
+  if ((parseInt(programID) !== 12) || (parseInt(programID !== 21))){
 
     systemDate = document.getElementById("medication-runout-date");
     systemDate.innerHTML = medication_runout_date;
@@ -358,7 +358,7 @@ function buildDisplayArea() {
     ["&nbsp;","system-selected-date"]
   ];
 
-  if (parseInt(programID) == 12){
+  if ((parseInt(programID) == 12) || (parseInt(programID) == 21)){
     tds.shift();
   }
 
@@ -529,7 +529,7 @@ function postAppointmentObs(encounter) {
 
   sysDate = year + "-" + month + "-" + day;
 
-  if (parseInt(programID) == 12){
+  if ((parseInt(programID) == 12) || (parseInt(programID) == 21)){
 
     var value = (appointment)
     var obs = {
