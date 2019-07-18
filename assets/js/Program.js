@@ -42,7 +42,18 @@ const Program = function () {
     })
   }
 
-  return {
-    enroll
+  function switchProgramToArt(){
+    sessionStorage.setItem("programID", 1) 
   }
+
+  function switchProgramToTb(){
+    sessionStorage.setItem("programID", 2) 
+  }
+
+  return {
+    enroll,
+    switchProgramToArt,
+    switchProgramToTb
+  }
+
 }()
