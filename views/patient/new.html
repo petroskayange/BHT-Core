@@ -617,9 +617,14 @@
             }
 
             function setAbsoluteMaxBirthYear() {
-                if(sessionStorage.programID === "12"){
+                if(parseInt(sessionStorage.programID) == 12){
                     var element = document.getElementById('touchscreenInput' + tstCurrentPage);
                     element.setAttribute("absoluteMax", (new Date().getFullYear() - 13));
+                    element.setAttribute("min", (new Date().getFullYear() - 100));
+                    element.setAttribute("absoluteMin", (new Date().getFullYear() - 100));
+                } if(parseInt(sessionStorage.programID) == 21) {
+                    var element = document.getElementById('touchscreenInput' + tstCurrentPage);
+                    element.setAttribute("absoluteMax", (new Date().getFullYear() - 10));
                     element.setAttribute("min", (new Date().getFullYear() - 100));
                     element.setAttribute("absoluteMin", (new Date().getFullYear() - 100));
                 } else{
@@ -750,6 +755,8 @@
             function addMaxValue(){
                 if (sessionStorage.programID === "12"){
                     $("person_age_estimate").setAttribute('absoluteMin', 13);
+                }else if (sessionStorage.programID === "21"){
+                    $("person_age_estimate").setAttribute('absoluteMin', 10);
                 }else{
                     $("person_age_estimate").setAttribute('absoluteMin', 1);
                 }
