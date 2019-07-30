@@ -443,6 +443,7 @@ function buildDashboardButtons(tasks, container) {
 
             }
 
+
             for (var i = 0; i < tasks.length; i++) {
                 if (tasks[i][0].toUpperCase() == 'HIV CLINIC CONSULTATION (CLINICIAN)')
                   continue;
@@ -525,13 +526,31 @@ function buildDashboardButtons(tasks, container) {
                 tr.appendChild(td);
 
                 containerTableCell.appendChild(infoTable);
-
+                containerTableCell.setAttribute('data-name', tasks[i][0].toUpperCase());
 
                 containerTableRow.appendChild(containerTableCell);
 
                 count++;
                 }
             }
+
+            var url = "http://localhost:3001/api/v1/encounters?patient_id=".concat(sessionStorage.patientID, "&program_id=").concat(sessionStorage.programID, "&paginate=false");
+            var headers = {
+              'Authorization': sessionStorage.authorization,
+              'Content-Type': 'application/json'
+            };
+            fetch(url, {
+              'headers': headers
+            }).then(function (response) {
+              response.json().then(function (encounters) {
+                encounters.forEach(function (encounter) {
+                  var type = encounter.type.name;
+                  var taskButton = document.querySelector("[data-name='".concat(type, "']"));
+                  if (!taskButton) return;
+                  taskButton.setAttribute('class', 'tasks-table-cell-grayed');
+                });
+              });
+            });
         }
     };
     xhttp1.open("GET", use_filling_number_property_url, true);
