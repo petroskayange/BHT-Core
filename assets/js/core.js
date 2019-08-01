@@ -534,7 +534,7 @@ function buildDashboardButtons(tasks, container) {
                 }
             }
 
-            var url = "http://localhost:3001/api/v1/encounters?patient_id=".concat(sessionStorage.patientID, "&program_id=").concat(sessionStorage.programID, "&paginate=false");
+            var url = `${apiProtocol}://${apiURL}:${apiPort}/api/v1/encounters?patient_id=${sessionStorage.patientID}&${sessionStorage.programID}&paginate=false`;
             var headers = {
               'Authorization': sessionStorage.authorization,
               'Content-Type': 'application/json'
