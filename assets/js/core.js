@@ -36,6 +36,10 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="military-site" onclick="redirect(this.id); "><img src="/assets/images/soldier.png" class="btn-icons"/><span>Is this a military site?</span></button>';
 
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="registers" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Manage Registers</span></button>';
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="userStats" onclick="redirect(this.id); "><img src="/assets/images/add-user.png" class="btn-icons"/><span>User Stats</span></button>';
+
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -710,6 +714,13 @@ function redirect(id) {
         dvTable.appendChild(obj);
     }
     if (id === "report-1") {
+    }
+    if (id === "registers") {
+        window.location.href = './././apps/HTS/views/encounters/registers.html';
+    }
+    
+    if (id === "userStats") {
+        window.location.href = './././apps/HTS/views/encounters/user_stats.html';
     }
  
     if (id === "cleaner") {

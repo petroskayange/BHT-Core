@@ -3,6 +3,7 @@
 <head>
     <title>Baobab Health Trust</title>
     <meta charset="utf-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="/assets/css/custom.css">
     <link rel="stylesheet" href="/assets/css/patientdashboard.css">
     <link rel="stylesheet" href="/assets/css/demographics-header.css">
+    
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/js/moment.js"></script>
@@ -21,6 +23,7 @@
     <script type="text/javascript" src="/assets/js/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/assets/js/datatables/dataTables.fixedHeader.min.js"></script>
     <script src="/assets/js/medication.history.js"></script>
+    
     <!-- ...................... -->
 
 
@@ -541,6 +544,25 @@
         </div>
     </div>
     <!-- /tasks modal-->
+ <!-- tasks modal-->
+
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="top:40%; "
+    aria-hidden="true" id="modal-finish">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-left: 28%; margin-right:10%; width: 70%; height: 20%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Finishing will close both sessions. Are you sure you want to continue?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-lg" id="modal-yes">yes</button>
+                <button type="button" class="btn btn-primary btn-lg" id="modal-no">No</button>
+            </div>
+        </div>
+    </div>
+    </div>
+     <!-- /tasks modal-->
     <!-- /container -->
 </div>
 <!-- /body -->
@@ -601,8 +623,21 @@
     sessionStorage.showPregnantQuestion = true;
 
     function finish() {
-        window.location = "/";
+        if(sessionStorage.programID == "18"){
+            if (top.location != location) {
+                $("#modal-finish").modal();
+            }else{
+               window.location = "/";
+            }
+        }
     }
+
+    $("#modal-yes").on("click", function () {
+        window.location = "/";
+    });
+    $("#modal-no").on("click", function () {
+        $("#modal-finish").modal('hide');
+    });
 
     var nextEnc = "";
     nextEncounter(sessionStorage.patientID, sessionStorage.programID, false);
@@ -679,10 +714,6 @@
             req.send(null);
         } catch (e) {
         }
-    }
-
-    function finish() {
-        window.location = "/";
     }
 
     function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier) {
