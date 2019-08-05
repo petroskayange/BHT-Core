@@ -102,13 +102,17 @@ function formatResults(results) {
         var indicator = results[i].indicator;
         var value = results[i].value;
         if(indicator == 'Viral Load') {
-            ((validateVL(results[i].value) === "low" ? vl_alert_level = "" : vl_alert_level = " ( HIGH )"));
-            parameters.push(indicator + ": " + value + vl_alert_level);
+          if(value.match(/>|</)){
+            value = value.replace('<', '&lt;');
+            value = value.replace('>', '&gt;');
+          }
+          ((validateVL(results[i].value) === "low" ? vl_alert_level = "" : vl_alert_level = " ( HIGH )"));
+          parameters.push(indicator + ": " + value + vl_alert_level);
         }
         if (indicator == 'result_date') {
-            indicator = 'Result date'
-            value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
-            parameters.push(indicator + ": " + value);
+          indicator = 'Result date'
+          value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
+          parameters.push(indicator + ": " + value);
         }
 
 
