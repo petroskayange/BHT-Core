@@ -5,6 +5,9 @@
     <title>Baobab Health Trust</title>
     <meta charset="utf-8">
     <script>
+        var apiProtocol = sessionStorage.apiProtocol;
+        var apiURL = sessionStorage.apiURL;
+        var apiPort = sessionStorage.apiPort;
         if (sessionStorage.getItem("authorization") == null) {
             //alert("not logged in");
             window.location = "/views/login.html";
@@ -47,7 +50,6 @@
           sessionStorage.patientID = null;
           sessionStorage.patient_type = null;
           sessionStorage.previousWeight = null;
-<<<<<<< HEAD
           
           if (parseInt(sessionStorage.programID) === 12){
             sessionStorage.ancVisitNumbers = null;
@@ -68,7 +70,7 @@
         }
 
         function setSessionDate(){
-            var url = 'http://'+apiURL+':'+apiPort+'/api/v1/current_time';
+            var url = 'http://' + apiURL + ':' + apiPort + '/api/v1/current_time';
             var req = new XMLHttpRequest();
             req.onreadystatechange = function(){
 
@@ -85,6 +87,14 @@
                 req.send(null);
             } catch (e) {
             }
+        }
+
+        try {
+          if(sessionStorage.sessionDate == undefined) {
+              setSessionDate();
+          }
+        }catch(i){
+          setSessionDate();
         }
 
 
@@ -229,9 +239,6 @@
    </body>
    <script src="/assets/js/core.js "></script>
    <script>
-        var apiProtocol = sessionStorage.apiProtocol;
-        var apiURL = sessionStorage.apiURL;
-        var apiPort = sessionStorage.apiPort;
         getDDEStatus();
         getPortalStatus();
         
@@ -245,11 +252,6 @@
 
             var btn_find_record = document.getElementById("findRecord");
             btn_find_record.style.display = "block";
-        }
-
-
-        if(sessionStorage.sessionDate == undefined) {
-            setSessionDate();
         }
 
        function getLocationID() {

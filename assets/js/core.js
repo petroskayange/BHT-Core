@@ -482,11 +482,17 @@ function buildDashboardButtons(tasks, container) {
 
                     }
                     
-                }if (sessionStorage.programID === "21" && consent === "NO"){ //Disable all VMMC tasks if consent is No
+                }else{
+                  containerTableCell.setAttribute("class", "tasks-table-cell");
+                }
+
+                if (sessionStorage.programID === "21" && consent === "NO"){ //Disable all VMMC tasks if consent is No
                     
                         containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
 
-                }if (sessionStorage.programID === "21" && circumcision_consent === "NO"){ //Disable all VMMC tasks if circumcision consent is No
+                }
+
+                if (sessionStorage.programID === "21" && circumcision_consent === "NO"){ //Disable all VMMC tasks if circumcision consent is No
 
                         containerTableCell.setAttribute("class", "tasks-table-cell-grayed");
 
@@ -538,6 +544,9 @@ function buildDashboardButtons(tasks, container) {
                 }
             }
 
+
+            if(sessionStorage.programID == '21') {
+
             var url = `${apiProtocol}://${apiURL}:${apiPort}/api/v1/encounters?patient_id=${sessionStorage.patientID}&${sessionStorage.programID}&paginate=false`;
             var headers = {
               'Authorization': sessionStorage.authorization,
@@ -555,6 +564,10 @@ function buildDashboardButtons(tasks, container) {
                 });
               });
             });
+
+          }
+
+
         }
     };
     xhttp1.open("GET", use_filling_number_property_url, true);
