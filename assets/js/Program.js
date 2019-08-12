@@ -42,7 +42,21 @@ const Program = function () {
     })
   }
 
-  return {
-    enroll
+  function switchProgram(programId = 0){
+    sessionStorage.setItem("programID", programId)
   }
+  
+  function patientProgram(params = {}){
+    return fetch (`${apiRoot}/patients/${params.patientId}/programs`, {
+      method: 'GET',
+      headers: headers
+    })
+  }
+
+  return {
+    enroll,
+    switchProgram,
+    patientProgram
+  }
+
 }()

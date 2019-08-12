@@ -140,8 +140,17 @@ const Concept = function () {
     REFERRAL: 9675,
     PATIENT_TYPE: 3289,
     UNKNOWN: 1067,
-    DEFAULTER: 6828
-  }
+    DEFAULTER: 6828,
+    ANTIRETROVIRAL_TREATMENT_NEED: 1445,
+    CULTERE_AND_DST: 2508,
+    MYCOBACTERIAL_LIPOARABINOMANNAN: 9791,
+    TUBERCULOSIS_SMEAR_MICROSCOPY_METHOD: 3050,
+    XPERT_MTB_RIF: 9815,
+    XPERT_MTB_RIF_ULTA: 9816,
+    LPA: 9817
+  } 
+
+  // Tuberculosis smear microscopy method
 
   /**
    * Function that asks the EMR-API to create a concept
@@ -158,6 +167,13 @@ const Concept = function () {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data.params)
+    })
+  }
+
+  function retrieve(queryString = ''){
+    return fetch (`${apiRoot}/encounters`, {
+      method: 'GET',
+      headers: headers
     })
   }
 
