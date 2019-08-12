@@ -400,6 +400,14 @@ function printDemographics() {
     print_and_redirect('/views/print/demographics.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
+function printPatientHistory() {
+    print_and_redirect('/views/print/patient_history.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
+function printLabResults() {
+    print_and_redirect('/views/print/lab_results.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
@@ -509,8 +517,11 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printTransferOut();");
                 }else if (tasks[i][0].match(/Demographics \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printDemographics();");
-                }
-                else {
+                } else if (tasks[i][0].match(/Lab Results \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printLabResults();");
+                }else if (tasks[i][0].match(/Patient History \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printPatientHistory();");
+                }else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
                 }
 
