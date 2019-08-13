@@ -372,7 +372,9 @@ function getTasks(encountersData) {
             var values = encountersData.encounters[j]
             var url = values.url;
             var icon = values.activitiesIcon;
-            tasks.push([j, icon, url])
+            var show = values.show;
+
+            if (show || show == undefined) tasks.push([j, icon, url]);
         });
     }
 
