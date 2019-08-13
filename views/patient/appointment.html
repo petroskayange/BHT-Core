@@ -815,7 +815,7 @@ function compareSuggestedTbArtAppointmentDates(){
 
 function getSuggestedAppointmentDateForTb() {
   var patient_id = sessionStorage.patientID;
-  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/"+ 2 +"/patients/";
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/2/patients/";
   url += patient_id + "/next_appointment_date?date=" + sessionStorage.sessionDate;
   
   var xhttp = new XMLHttpRequest();
@@ -879,7 +879,6 @@ function getSuggestedAppointmentDate() {
         date
       */
       tbPatientArtTreatmentNeed().then(treatTbPatientForArt => {
-        console.log(treatTbPatientForArt)
         if(treatTbPatientForArt){
           getSuggestedAppointmentDateForTb()
         }else{
