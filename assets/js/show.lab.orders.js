@@ -58,6 +58,7 @@ function updateOrdersTable(orders) {
 
     }
 
+    alertHighVL();
 }
 
 function addVLorders(order, test) {
@@ -81,7 +82,7 @@ function addVLorders(order, test) {
         a.setAttribute('class', class_test);
         a.setAttribute('href','#');
         a.innerHTML = r;
-        if (a.innerHTML.match(/HIGH/g)) {
+        /*if (a.innerHTML.match(/HIGH/g)) {
             a.className += " high";
 
             if(sessionStorage.userRoles.match(/clerk/ig)) {
@@ -89,29 +90,52 @@ function addVLorders(order, test) {
             }else {
                 $("#confirm-VL").modal();
             }
-        }
+        } */
         div.appendChild(a);
         vlCount++;
     }
 }
 
+var vlParameters = {};
+var latestVLresultDate;
+
 function formatResults(results) {
     var parameters = [];
+    var parametersVL = {result: null, date: null};
+
     var vl_alert_level = "";
     for (var i = 0; i < results.length; i++) {
         var indicator = results[i].indicator;
         var value = results[i].value;
         if(indicator == 'Viral Load') {
-            ((validateVL(results[i].value) === "low" ? vl_alert_level = "" : vl_alert_level = " ( HIGH )"));
-            parameters.push(indicator + ": " + value + vl_alert_level);
+          if(value.match(/>|</)){
+            value = value.replace('<', '&lt;');
+            value = value.replace('>', '&gt;');
+          }
+          ((validateVL(results[i].value) === "low" ? vl_alert_level = "" : vl_alert_level = " ( HIGH )"));
+          parameters.push(indicator + ": " + value + vl_alert_level);
+          parametersVL.results = value;
         }
         if (indicator == 'result_date') {
-            indicator = 'Result date'
-            value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
-            parameters.push(indicator + ": " + value);
+          indicator = 'Result date'
+          parametersVL.date = moment(results[i].value).format('DD/MMM/YYYY');
+          value = "(" + moment(results[i].value).format('DD/MMM/YYYY') + ")";
+          parameters.push(indicator + ": " + value);
+          if(latestVLresultDate == undefined)
+            latestVLresultDate = moment(results[i].value).format('DD/MMM/YYYY');
+
+
+          if((new Date(moment(results[i].value).format('YYYY-MM-DD'))) > (new Date(moment(latestVLresultDate).format('YYYY-MM-DD'))))
+            latestVLresultDate = moment(results[i].value).format('DD/MMM/YYYY');
+  
+
         }
 
 
+    }
+
+    if(parametersVL.date != null){
+      vlParameters[parametersVL.date] = parametersVL.results;
     }
     return parameters.join('<br />');
 }
@@ -137,4 +161,15 @@ function validateVL(results) {
     }
     
     return 'low'
+}
+
+function alertHighVL() {
+  if(latestVLresultDate != undefined) {
+    var result = vlParameters[latestVLresultDate];
+    var resultValidated = validateVL(result);
+    if(resultValidated == 'high')
+      $("#confirm-VL").modal();
+      
+
+  }
 }
