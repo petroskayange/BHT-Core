@@ -15,6 +15,7 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/js/moment.js"></script>
+    <script src="/assets/js/Patient.js"></script>
 
     <!-- ...................... -->
     <link rel="stylesheet" href="/assets/css/datatables/fixedHeader.dataTables.min.css" type="text/css">
@@ -646,7 +647,7 @@
     } else {
         nextEnc = "None"
     }
-    document.getElementById("nextEncounter").innerHTML = nextEnc;
+    document.getElementById("nextEncounter").innerHTML = nextEnc.toUpperCase();
 
     function changeIcon(gender) {
         var img = document.getElementById('gender');
@@ -1157,6 +1158,7 @@
         } catch (e) {
 
         }
+        checkIfDueLabOrder()
         buildDefaulter(patient_id, table)
     }
 
@@ -1301,6 +1303,30 @@
         }
         button.style.color = "white";
         button.style.backgroundColor = "#204d74";
+    }
+
+    function checkIfDueLabOrder () {
+        const patientId = sessionStorage.patientID
+        const programId = sessionStorage.programID
+
+        Patient.isDueLabOrder(patientId, programId)
+            .then(payload => payload.ok && payload.json().then(data => data.message && renderLabOrderAlert()))
+            .catch(console.error)
+    }
+
+    function renderLabOrderAlert () {
+        const alertsContainer = document.getElementById('alerts')
+
+        const row = document.createElement('tr')
+        row.setAttribute('class', 'alerts')
+        row.className = 'list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item- primary list-group-links'
+
+        const data = document.createElement('td')
+        data.innerText = 'Patient is due a lab order!'
+        data.style.borderTop = '0'
+
+        row.appendChild(data)
+        alertsContainer.appendChild(row)
     }
 
     GetApplicationInfo();
