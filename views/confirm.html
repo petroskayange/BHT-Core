@@ -431,7 +431,7 @@ var global_property = GlobalProperty({
   function buildInfoBoxes() {
     var infoBox = document.getElementsByClassName("info-table")[0];
     
-    if(sessionStorage.programID == '1' || sessionStorage.programID == '12') {
+    if(sessionStorage.programID == '1' || sessionStorage.programID == '12' || sessionStorage.programID == '21') {
       var cells = [
         "Patient identifiers", "Alert(s)",
         "labs", "Program info", 
@@ -645,7 +645,7 @@ var global_property = GlobalProperty({
       buildProgramInfo(patient_id);
       buildRelationShips(patient_id);
       buildAlerts(patient_id);
-    }else if (sessionStorage.programID == '12'){
+    }else if (sessionStorage.programID == '12' || sessionStorage.programID == '21'){
       buildProgramInfo(patient_id);
       buildAlerts(patient_id);
       buildStates(obj, patient_id);
@@ -1018,6 +1018,13 @@ var global_property = GlobalProperty({
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateArtDuration({ elementToUse: "artDuration" }, patient_id);
       populateOnFastTrack({ elementToUse: "onFastTrack" }, patient_id);
+      populateNextTask(patient_id);
+
+    }else if (sessionStorage.programID === "21"){
+      document.getElementById("section-body-3").innerHTML +=
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" + 
+        "</tr><tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
+      populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateNextTask(patient_id);
     }
   }
