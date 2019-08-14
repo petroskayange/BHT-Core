@@ -1022,7 +1022,7 @@ var global_property = GlobalProperty({
 
     }else if (sessionStorage.programID === "21"){
       document.getElementById("section-body-3").innerHTML +=
-        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" + 
+        "<table class='info-tables'><tr><td style=\"color:blue; font-weight:bold;\">Next Appointment Date:</td><td id='nextAptDate'>N/A</td>" +
         "</tr><tr><td style=\"color:green; font-weight:bold;\">Next task:</td><td id='nextTask'>None</td></tr</table>";
       populateNextAppointmentDate({ elementToUse: "nextAptDate" }, patient_id);
       populateNextTask(patient_id);
