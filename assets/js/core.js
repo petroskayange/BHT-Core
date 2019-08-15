@@ -410,6 +410,10 @@ function printLabResults() {
     print_and_redirect('/views/print/lab_results.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
+function printTBNumber() {
+    print_and_redirect('/views/print/tb_ipt_number.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
