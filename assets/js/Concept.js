@@ -147,7 +147,19 @@ const Concept = function () {
     TUBERCULOSIS_SMEAR_MICROSCOPY_METHOD: 3050,
     XPERT_MTB_RIF: 9815,
     XPERT_MTB_RIF_ULTA: 9816,
-    LPA: 9817
+    LPA: 9817,
+    TEST_TYPE: 9737,
+    TB: 7691,
+    'Sputum': 1004,
+    'CSF': 1594,
+    'Pleural Fluid': 6690,
+    'Ascitic Fluid': 6691,
+    'Pericardial Fluid': 6692,
+    'Peritoneal Fluid': 2483,
+    'Pus': 9820,
+    'Diagnosis': 3065,
+    'Follow-up': 2484,
+    LAB: 9739
   } 
 
   // Tuberculosis smear microscopy method
