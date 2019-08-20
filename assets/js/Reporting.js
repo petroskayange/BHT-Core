@@ -29,5 +29,19 @@ const Reporting = (function() {
     });
   }
 
-  return { getIndicator };
+  /**
+   * Ask the EMR-API to return dashboard statistics for a given program
+   * @param {Number} programId
+   * @param {String} date
+   * @return {Promise}
+   */
+  function dashboardStats (programId, date) {
+    return fetch(`${apiRoot}/dashboard_stats?date=${date}&program_id=${programId}`, {
+      method: 'GET',
+      headers: { Authorization: sessionStorage.authorization }
+    })
+  }
+
+
+  return { getIndicator, dashboardStats };
 })();
