@@ -42,7 +42,7 @@ const LabOrder = function () {
         body: JSON.stringify(params)
       })
     }
-  
+
     return {
       create
     }
