@@ -153,7 +153,8 @@ function initiateDataTable() {
     scrollY: 555,
     scroller: {
       loadingIndicator: true
-    }
+    },
+    order: [[2, 'desc']]
   } );
 }
 
