@@ -176,7 +176,9 @@ const Concept = function () {
     MUCO_PURULENT: 2486,
     BLOOD_STAINED: 1077,
     OTHER: 6408,
-    TB_SYMPTOMS: 1560
+    TB_SYMPTOMS: 1560,
+    MICROSCOPY: 1444,
+    XPERTRIF: 9815
   }
 
   /**
