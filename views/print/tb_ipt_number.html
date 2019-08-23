@@ -67,7 +67,7 @@
       Add IPT number print condition
       Add TB and IPT number reprint
     */
-    var url = "/patients/" + sessionStorage.patientID + "/labels/print_tb_number"
+    var url = "/patients/" + sessionStorage.patientID + "/labels/print_tb_number?patient_id="+sessionStorage.patientID+""
     url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
     document.location = url;
 
