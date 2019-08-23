@@ -105,12 +105,13 @@ const Person = function () {
    * A TB number (Tuberculosis number) is given to TB+ patients
    * These patients must be staying near or assigned to the TB facility
    * 
-   * @param {number} personId
+   * @param {Object} params
    * 
    * @return {Promise}
    */
-  function assignTbRegistrationNumber (personId) {
-    return fetch (`${apiRoot}/patients/${personId}/assign_tb_number`, {
+  function assignTbRegistrationNumber (params) {
+    const args = params.bdeNumbers === null ? '' : `?date=${params.bdeNumbers.date}&number=${params.bdeNumbers.number}`
+    return fetch (`${apiRoot}/patients/${params.personId}/assign_tb_number${args}`, {
       method: 'GET',
       headers: { 'Authorization': sessionStorage.authorization }
     })
