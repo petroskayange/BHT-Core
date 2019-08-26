@@ -110,9 +110,8 @@ const Person = function () {
    * @return {Promise}
    */
   function assignTbRegistrationNumber (params) {
-    const args = params.bdeNumbers === undefined ? '' : `?date=${params.bdeNumbers.date}&number=${params.bdeNumbers.number}`
-    console.log(args)
-    return fetch (`${apiRoot}/patients/${params}/assign_tb_number${args}`, {
+    const args = params.bdeNumbers === null ? '' : `?date=${params.bdeNumbers.date}&number=${params.bdeNumbers.number}`
+    return fetch (`${apiRoot}/patients/${params.personId}/assign_tb_number${args}`, {
       method: 'GET',
       headers: { 'Authorization': sessionStorage.authorization }
     })
