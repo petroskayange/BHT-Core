@@ -570,7 +570,7 @@ function getLimit() {
 function getAppointMents(date) {
   var url = apiProtocol + "://" + apiURL + ":" + apiPort;
   url += "/api/v1/appointments?date="+date.getAttribute("date");
-  url += "&paginate=false"
+  url += "&paginate=false&program_id="+sessionStorage.programID;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {

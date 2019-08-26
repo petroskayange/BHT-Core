@@ -14,7 +14,7 @@ const State = function () {
 
   function _void (options = {}) {
     fetch(
-      `${apiRoot}/programs/${options.programId}/patients/${options.patientId}/states/${options.stateId}`,
+      `${apiRoot}/programs/${options.programId}/patients/${options.patientId}/states/${options.stateId}?reason=${encodeURIComponent(void_reason)}`,
       {
         method: 'DELETE',
         headers: {
