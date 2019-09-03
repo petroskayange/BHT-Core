@@ -199,7 +199,7 @@ const Concept = function () {
     TB_SYMPTOMS: 1560,
     MICROSCOPY: 1444,
     XPERTRIF: 9815,
-    URINE: 1592,
+    'Urine': 1592,
     SPECIMEN_TYPE: 9738
   }
 
