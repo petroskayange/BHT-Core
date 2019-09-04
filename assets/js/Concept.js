@@ -146,6 +146,7 @@ const Concept = function () {
     'Pericardial Fluid': 6692,
     'Peritoneal Fluid': 2483,
     'Pus': 9820,
+    'Urine': 1592,
     'Diagnosis': 3065,
     'Follow-up': 2484,
     LAB: 9739,
