@@ -847,7 +847,6 @@
                 for (var x = 0; x < results.length; x++) {
                     var d = new Date(results[x].encounter_datetime);
                     var f = moment(d).format("HH:mm A");
-
                     if (itemType == "table") {
                         var a = document.createElement("a");
                         var aclass = "list-group-item d-flex justify-content-between";
@@ -855,7 +854,14 @@
                         a.setAttribute("class", aclass);
                         a.setAttribute("href", "#");
                         //a.setAttribute("onmousedown","getEncounter('" + results[x].encounter_id + "')");
-                        a.innerHTML = results[x].type.name;
+                        if(results[x].program_id === 2 && sessionStorage.programID === 2){
+                            a.innerHTML = results[x].type.name + " | TB";
+                        }else if(results[x].program_id === 1 && sessionStorage.programID === 2){
+                            a.innerHTML = results[x].type.name + " | ART";
+                        }else {
+                            a.innerHTML = results[x].type.name 
+                        }
+                        
 
                         var s = document.createElement("span");
                         s.setAttribute("class", "badge badge-primary badge-pill");
@@ -873,10 +879,23 @@
                             break;
                         }
                     } else if (itemType == "button") {
-                        encounters.innerHTML +=
+                        if(results[x].program_id == 2){
+                            encounters.innerHTML +=
                             '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
                             '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
-                            '<span class="h5">' + results[x].type.name + '</span></button>';
+                            '<span class="h5">' + results[x].type.name + " | TB" + '</span></button>';
+                        }else if(results[x].program_id == 1){
+                            encounters.innerHTML +=
+                            '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
+                            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
+                            '<span class="h5">' + results[x].type.name + " | ART" + '</span></button>';
+                        }else {
+                            encounters.innerHTML +=
+                            '<button type="button" id="' + results[x].encounter_ixd + '" value="' + results[x] +
+                            '" class="btn btn-primary btn-sm" style="width: 98%;  margin: 1%; border-radius: 0%; height: 50px;" onClick="getEncounter(' + results[x].encounter_id + ')">' +
+                            '<span class="h5">' + results[x].type.name   + '</span></button>';
+                        }
+                        
                     }
 
                 }
@@ -901,7 +920,12 @@
             programs.innerHTML = "";
         } else {
         }
-        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&program_id="+sessionStorage.programID+"&paginate=false";
+
+        if(sessionStorage.programID == 2){ // TB Program - fetch all patient medications
+            var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id +"&paginate=false";
+        }else{ // fetch all patient medications
+            var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/drug_orders?patient_id=' + id + "&program_id="+sessionStorage.programID+"&paginate=false";
+        }
         var req = new XMLHttpRequest();
 
         var listGroup = document.createElement("div");

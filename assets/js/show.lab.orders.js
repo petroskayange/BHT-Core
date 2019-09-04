@@ -3,7 +3,7 @@ function showOrders() {
         return;
 
     var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-    url += "/programs/1/lab_tests/orders?patient_id=" + sessionStorage.patientID;
+    url += "/programs/"+sessionStorage.programID+"/lab_tests/orders?patient_id=" + sessionStorage.patientID;
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {

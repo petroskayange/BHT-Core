@@ -372,7 +372,9 @@ function getTasks(encountersData) {
             var values = encountersData.encounters[j]
             var url = values.url;
             var icon = values.activitiesIcon;
-            tasks.push([j, icon, url])
+            var show = values.show;
+
+            if (show || show == undefined) tasks.push([j, icon, url]);
         });
     }
 
@@ -406,6 +408,10 @@ function printPatientHistory() {
 
 function printLabResults() {
     print_and_redirect('/views/print/lab_results.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
+}
+
+function printTBNumber() {
+    print_and_redirect('/views/print/tb_ipt_number.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
 function download(filename, text) {

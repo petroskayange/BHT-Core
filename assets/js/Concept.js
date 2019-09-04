@@ -21,17 +21,6 @@ const Concept = function () {
     concept = data
   }
 
-  /**
-   * Function to lookup concept names in the CONCEPT_IDS object
-   * 
-   * @param {string} conceptName
-   * 
-   * @return {number|null}
-   */
-  function getConceptIdByName (conceptName = '') {
-    return CONCEPT_IDS[conceptName] || null
-  } 
-
   /** 
    * Central object containing concept ids
    * 
@@ -141,6 +130,27 @@ const Concept = function () {
     PATIENT_TYPE: 3289,
     UNKNOWN: 1067,
     DEFAULTER: 6828,
+    ANTIRETROVIRAL_TREATMENT_NEED: 1445,
+    'Culture and DST': 2508,
+    LAM: 9791,
+    'Microsopy': 3050,
+    'Xpert MTB/RIF': 9815,
+    'Xpert MTB/RIF Ultra': 9816,
+    LPA: 9817,
+    TEST_TYPE: 9737,
+    TB: 7691,
+    'Sputum': 1004,
+    'CSF': 1594,
+    'Pleural Fluid': 6690,
+    'Ascitic Fluid': 6691,
+    'Pericardial Fluid': 6692,
+    'Peritoneal Fluid': 2483,
+    'Pus': 9820,
+    'Urine': 1592,
+    'Diagnosis': 3065,
+    'Follow-up': 2484,
+    LAB: 9739,
+  // Tuberculosis smear microscopy method
     SAMPLE_ONE_GENEXPERT_RESULT: 9834,
     SAMPLE_TWO_GENEXPERT_RESULT: 9835,
     SAMPLE_ONE_RIF_RESISTANCE_PATTERN: 9836,
@@ -178,7 +188,9 @@ const Concept = function () {
     OTHER: 6408,
     TB_SYMPTOMS: 1560,
     MICROSCOPY: 1444,
-    XPERTRIF: 9815
+    XPERTRIF: 9815,
+    'Urine': 1592,
+    SPECIMEN_TYPE: 9738
   }
 
   /**
@@ -198,6 +210,17 @@ const Concept = function () {
       body: JSON.stringify(data.params)
     })
   }
+
+  /**
+   * Function to lookup concept names in the CONCEPT_IDS object
+   * 
+   * @param {string} conceptName
+   * 
+   * @return {number|null}
+   */
+  function getConceptIdByName (conceptName = '') {
+    return CONCEPT_IDS[conceptName] || null
+  } 
 
   return {
     create,
