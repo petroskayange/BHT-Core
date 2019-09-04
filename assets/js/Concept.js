@@ -21,17 +21,6 @@ const Concept = function () {
     concept = data
   }
 
-  /**
-   * Function to lookup concept names in the CONCEPT_IDS object
-   * 
-   * @param {string} conceptName
-   * 
-   * @return {number|null}
-   */
-  function getConceptIdByName (conceptName = '') {
-    return CONCEPT_IDS[conceptName] || null
-  } 
-
   /** 
    * Central object containing concept ids
    * 
@@ -221,12 +210,16 @@ const Concept = function () {
     })
   }
 
-  function retrieve(queryString = ''){
-    return fetch (`${apiRoot}/encounters`, {
-      method: 'GET',
-      headers: headers
-    })
-  }
+  /**
+   * Function to lookup concept names in the CONCEPT_IDS object
+   * 
+   * @param {string} conceptName
+   * 
+   * @return {number|null}
+   */
+  function getConceptIdByName (conceptName = '') {
+    return CONCEPT_IDS[conceptName] || null
+  } 
 
   return {
     create,
