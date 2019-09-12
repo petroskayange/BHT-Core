@@ -193,7 +193,8 @@ const Concept = function () {
     SPECIMEN_TYPE: 9738,
     ART_START_DATE: 2516,
     ON_CPT: 7024,
-    OCCUPATION: 1304
+    OCCUPATION: 1304,
+    KNOWN_RESISTANCE: 2183
   }
 
   /**
