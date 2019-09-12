@@ -190,7 +190,9 @@ const Concept = function () {
     MICROSCOPY: 1444,
     XPERTRIF: 9815,
     'Urine': 1592,
-    SPECIMEN_TYPE: 9738
+    SPECIMEN_TYPE: 9738,
+    ART_START_DATE: 2516,
+    ON_CPT: 7024
   }
 
   /**
