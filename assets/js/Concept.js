@@ -192,7 +192,8 @@ const Concept = function () {
     'Urine': 1592,
     SPECIMEN_TYPE: 9738,
     ART_START_DATE: 2516,
-    ON_CPT: 7024
+    ON_CPT: 7024,
+    OCCUPATION: 1304
   }
 
   /**
