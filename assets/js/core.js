@@ -414,6 +414,14 @@ function printTBNumber() {
     print_and_redirect('/views/print/tb_ipt_number.html', '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID);
 }
 
+function printLabOrderSummary(order = {}){
+    document.location = `/views/print/print_lab_order_summary.html?patient_id=${sessionStorage.patientID}
+    &session_date=${sessionStorage.sessionDate}&test_type=${order.tests[0].test_type}&specimen_type=${order.tests[0].sample_type}
+    &recommended_examination=${order.tests[0].recommended_examination}&target_lab=${order.tests[0].target_lab}
+    &reason_for_examination=${order.tests[0].reason}&previous_tb_patient=${order.tests[0].treatment_history}`
+
+}
+
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
