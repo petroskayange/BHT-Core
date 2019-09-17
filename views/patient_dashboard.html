@@ -830,7 +830,7 @@
             encounters.innerHTML = "";
         } else {
         }
-        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value;
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/encounters?paginate=false&patient_id=' + id + '&date=' + value+'program_id='+sessionStorage.programID;
         var req = new XMLHttpRequest();
         var counter = 0;
         req.onreadystatechange = function () {

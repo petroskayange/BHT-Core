@@ -591,7 +591,7 @@ var global_property = GlobalProperty({
     obj = obj["person"];
     patient_id = patient["patient_id"];
     sessionStorage.patientID = patient_id;
-
+    checkIfEnrolled(patient_id);
     var names = obj["names"][0];
     var client_name = document.getElementById("client-name");
     client_name.innerHTML = names["given_name"] + " " + names["family_name"];
@@ -1345,7 +1345,46 @@ var global_property = GlobalProperty({
   </div>
 </div>
 
+<div class="modal fade" id="enroll-program" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 style="text-align: center" class="text-uppercase">Patient Is not enrolled in porgram, enroll now?</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" style="float: left" onclick="enrollPatient()">Yes</button> <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  function enrollPatient() {
+        // sessionStorage.patientID = person_id;
+        var http = new XMLHttpRequest();
+        var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + sessionStorage.patientID + "/programs/";
+        var params = JSON.stringify({
+            program_id: sessionStorage.programID,
+            date_enrolled: moment(sessionStorage.sessionDate).format("YYYY-MM-DD")
+        });
+        http.open('POST', url, true);
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function () { //Call a function when the state changes.
+            if (http.readyState == 4) {
+                if (http.status == 201) {
+                    var v = JSON.parse(http.responseText);
+                    $('#myModal').modal('hide');
+                } else if (http.status == 409) {
+                    alert('Username already exists');
+                } else {
+                    alert('error' + http.status);
+                }
+            }
+        }
+        http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
+        http.send(params);
+  }
   buildInfoBoxes();
 
   function finish(id) {
@@ -1727,6 +1766,31 @@ function populateNextTask(patient_id) {
   xhttp.send();
 }
 
+function checkIfEnrolled(patient_id) {
+  
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/";
+  url += sessionStorage.patientID + "/programs";
+  let enrolled = false;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      var obj = JSON.parse(this.responseText);
+      for (let index = 0; index < obj.length; index++) {
+        if(parseInt(obj[index].program.program_id) === parseInt(sessionStorage.programID)) {
+          enrolled = true;
+          break;
+        }
+      }
+      if (enrolled == false){
+          $("#enroll-program").modal();
+      }
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader("Authorization",sessionStorage.getItem("authorization"));
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+}
 var activePrefix;
 var dormantPrefix;
 var user_filing_numbers = false;

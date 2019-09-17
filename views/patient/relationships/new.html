@@ -926,7 +926,7 @@ function enrollPatient(person_id) {
   var http = new XMLHttpRequest();
   var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/'+person_id +"/programs/";
   var params = JSON.stringify({
-  program_id: 1,
+  program_id: sessionStorage.programID,
   });
   http.open('POST', url, true);
   //Send the proper header information along with the request
@@ -936,7 +936,7 @@ function enrollPatient(person_id) {
   if (http.status == 201) {
   var v = JSON.parse(http.responseText);
   getDemographics(person_id);
-  nextEncounter(person_id, 1);
+  nextEncounter(person_id, sessionStorage.programID);
   } else if (http.status == 409) {
   alert('Username already exists');
   } else {
