@@ -194,7 +194,8 @@ const Concept = function () {
     ART_START_DATE: 2516,
     ON_CPT: 7024,
     OCCUPATION: 1304,
-    KNOWN_RESISTANCE: 2183
+    KNOWN_RESISTANCE: 2183,
+    CPT_START_DATE: 9856
   }
 
   /**
