@@ -542,7 +542,7 @@ function postAppointmentObs(encounter) {
 
   sysDate = year + "-" + month + "-" + day;
 
-  if ((parseInt(programID) == 12) || (parseInt(programID) == 21)){
+  if (parseInt(programID) == 12){
 
     var value = (appointment)
     var obs = {
@@ -557,6 +557,19 @@ function postAppointmentObs(encounter) {
     }
 
     submitParameters(obs, "/observations", "red"); 
+
+  }else if (parseInt(programID) == 21){
+
+    var value = (appointment)
+    var obs = {
+      encounter_id: encounter["encounter_id"],
+      observations: [
+      { 
+        concept_id: 5096, value_datetime: appointment 
+      }
+      ]};
+
+    submitParameters(obs, "/observations", "nextPage"); 
 
   }else{
     
