@@ -535,6 +535,8 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printLabResults();");
                 }else if (tasks[i][0].match(/Patient History \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printPatientHistory();");
+                }else if (tasks[i][0].match(/TB Number \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "printTBNumber();");
                 }else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
                 }
