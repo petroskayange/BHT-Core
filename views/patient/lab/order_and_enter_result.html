@@ -130,9 +130,9 @@
                 sample_drawn = formatTsDate(sample_drawn);
                 var element = document.getElementById('touchscreenInput' + tstCurrentPage);
                 element = (formatTsDate(element.value));;
-                if(sample_drawn > element){
-                showMessage("Result date can not be less than sample draw date");
-                return;
+                if((new Date(sample_drawn) > new Date(element))){
+		  showMessage("Result date can not be less than sample draw date");
+                  return;
                 }
                 
 
