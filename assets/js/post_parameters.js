@@ -1,5 +1,20 @@
 
+function getExpected(element) {
+  let expected = ["value_group_id","value_boolean","value_coded","value_coded_name_id","value_drug","value_datetime","value_numeric","value_modifier","value_text"] ;
+  let key = "";
+  Object.keys(element).filter(function(elem) {
+    if(expected.includes(elem)){
+      key = elem;
+    }
+  } );
+  return key;
+}
 function submitParameters(parameters, url, returnToFunction) {
+  if(parameters["observations"]) {
+    parameters["observations"] = parameters["observations"].filter(function(element) { 
+        return (element[getExpected(element)] !== "" && element[getExpected(element)] !== undefined);
+    });
+  }
   try {
     buildWall();
     showStatus();
