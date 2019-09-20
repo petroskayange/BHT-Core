@@ -3,7 +3,7 @@
  * 
  * @return {object}
  */
-const LabOrder = function () {
+var LabOrder = function () {
     /** @type {string} */
     const apiRoot =  `${sessionStorage.apiProtocol}://${sessionStorage.apiURL}:${sessionStorage.apiPort}/api/v1`
   
@@ -43,7 +43,15 @@ const LabOrder = function () {
       })
     }
 
+    function getRecentOrders(params = {}){
+      return fetch (`${apiRoot}/patients/${params.patient_id}/recent_lab_orders?patient_id=${params.patient_id}&program_id=${params.program_id}`, {
+        method: 'GET',
+        headers: headers
+      })
+    }
+
     return {
-      create
+      create,
+      getRecentOrders
     }
   }()
