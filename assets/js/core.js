@@ -422,6 +422,89 @@ function printLabOrderSummary(order = {}){
 
 }
 
+function reprintLabOrderSummary(order = {}){
+    document.location = `/views/print/print_lab_order_summary.html?patient_id=${sessionStorage.patientID}
+    &session_date=${order[0].order_date}&test_type=${order[0].test_type}&specimen_type=${order[0].sample_type}
+    &recommended_examination=${order[0].recommended_examination}&target_lab=${order[0].target_lab}
+    &reason_for_examination=${order[0].reason}&previous_tb_patient=${order[0].treatment_history}`
+
+}
+
+function rePrintLabOrderSummary(){
+    $.getScript('/assets/js/Lab.js', function()
+    {
+
+    params = {
+        patient_id: sessionStorage.patientID,
+        program_id: sessionStorage.programID
+    }
+
+    CONCEPTS = {
+        9737: 'Test type',
+        7691: 'Tuberculous',
+        1004: 'Sputum',
+        1594: 'CSF',
+        6690: 'Pleural Fluid',
+        6691: 'Ascitic Fluid',
+        6692: 'Pericardial Fluid',
+        2483: 'Peritoneal Fluid',
+        9820: 'Pus',
+        1592: 'Urine',
+        3065: 'Diagnosis',
+        2484: 'Follow-up',
+        9739: 'Lab',
+        3050: 'Tuberculosis smear microscopy method',
+        9815: 'Xpert MTB/RIF', 
+        9816: 'Xpert MTB/RIF Ultra',
+        9817: 'LPA'
+    }
+
+    function buildLabDetails(orderDetails = [], orderDates){
+        console.log(orderDates)
+        return [
+            {
+                order_date: orderDates,
+                test_type: orderDetails[0],
+                sample_type: orderDetails[1],
+                recommended_examination: orderDetails[3],
+                target_lab: 'N/A',
+                reason: orderDetails[2],
+                treatment_history: "N/A"
+            }
+        ] 
+    }
+
+    var obs_values = []
+
+    function filterDetails(details = {}){
+
+        return details.map(item => obs_values[CONCEPTS[item]] = CONCEPTS[item]).filter(filtered => filtered != null || undefined)
+
+    }
+
+    LabOrder.getRecentOrders(params)
+      .then((payload) => {
+        if (payload.ok) {
+
+            payload.json().then(order => {
+
+            var orderDates = order.map(order => order.observations)[0].map(value => {
+                    return value.obs_datetime
+            })
+            
+            var details = order.map(order => order.observations)[0].map(value => {
+                return value.value_coded
+            })
+            reprintLabOrderSummary(buildLabDetails(filterDetails(details), orderDates[0]))
+
+        })
+        } else logErrorAndNotify(payload.statusText)
+      })
+      .catch(error => logErrorAndNotify(error))
+
+    });
+}
+
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:application/label;charset=utf-8,' + encodeURIComponent(text));
@@ -537,6 +620,8 @@ function buildDashboardButtons(tasks, container) {
                     containerTableCell.setAttribute("onmousedown", "printPatientHistory();");
                 }else if (tasks[i][0].match(/TB Number \(Print\)/i)) {
                     containerTableCell.setAttribute("onmousedown", "printTBNumber();");
+                }else if (tasks[i][0].match(/Lab Order Summary \(Print\)/i)) {
+                    containerTableCell.setAttribute("onmousedown", "rePrintLabOrderSummary();");
                 }else {
                     containerTableCell.setAttribute("onmousedown", "document.location='" + tasks[i][2] + "'");
                 }
