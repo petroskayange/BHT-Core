@@ -13,9 +13,11 @@ var consent = "";
 var circumcision_consent = "";
 var id = url.searchParams.get("patient_id");
 sessionStorage.setItem("backupPatientID", id);
+sessionStorage.setItem("filingNumnerAvailable", "false");
 // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
 // var activities_tab_content = "";
 // })
+
 var admin_tab_content = '';
 if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
   admin_tab_content = '<button class="overview-btns overview-btns-2nd-class" id="create-user" onclick="redirect(this.id);"><img src="/assets/images/add-user.png" class="btn-icons"/><span>Create user</span></button>';
@@ -971,13 +973,22 @@ function buildPrintOutandOthers(data) {
     var j = Object.keys(data.others);
     var i = 0;
     var tasks = [];
+    
     j.forEach(function (j) {
         var values = data.others[j]
         var name = values.activitiesName;
         var icon = values.activitiesIcon;
         var url = values.url;
         url = (url == undefined ? '#' : url);
-        tasks.push([name, icon, url]);
+        if(sessionStorage.filingNumnerAvailable == "false"){
+          if(name != 'Filing Number (Print)' && name != 'Archive client'){
+            tasks.push([name, icon, url]);
+          }
+        }else{
+          if(name != 'Assign filing number'){
+            tasks.push([name, icon, url]);
+          }
+        }
     });
 
     var container = document.getElementById("activities-body");
