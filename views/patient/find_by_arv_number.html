@@ -137,8 +137,9 @@
                          window.location = "/views/confirm.html?person_id=" + people[0].patient_id;
                      } else{
                          alertify
-                             .alert("Missing National ID", "Patient was found BUT has no National ID", function () {
-                                 window.location = "/views/patient/find_by_menu.html";
+                             .alert("Missing National ID", "Patient was found BUT has no National ID.<br />The system is going to assign the patient with a new ID", function () {
+                                 //window.location = "/views/patient/find_by_menu.html";
+                                 assignNHID(people[0].patient_id);
                              })
                      }
 
@@ -156,6 +157,21 @@
             xhttp.send();
         }
 
+        function assignNHID(person_id) {
+          var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + person_id + "/npid";
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+              var obj = JSON.parse(this.responseText);
+              window.location = "/views/confirm.html?person_id=" + obj.new_identifier.patient_id;
+            }
+          };
+
+          xhttp.open("POST", url, true);
+          xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+          xhttp.setRequestHeader('Content-type', "application/json");
+          xhttp.send();
+      }
     </script>
 
     <style type="text/css">
