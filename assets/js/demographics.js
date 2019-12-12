@@ -40,7 +40,8 @@ function getDemographics(patient_id) {
             } else{
                 patientGender = "MALE";
             }
-            console.log(roundedAge);
+            
+            //console.log(roundedAge);
             sessionStorage.patientDOB = moment(obj["birthdate"]).format("DD/MMM/YYYY");
             //sessionStorage.sessionDate = moment().format("YYYY-MM-DD");
             sessionStorage.currentWeight = 0;

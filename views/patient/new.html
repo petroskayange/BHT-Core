@@ -1525,7 +1525,8 @@
                 } else if (http.status == 409) {
                     alert('Username already exists');
                 } else {
-                    alert('error' + http.status);
+                    //alert('error' + http.status);
+                    submitPatienttype(person_id);
                 }
             }
         }

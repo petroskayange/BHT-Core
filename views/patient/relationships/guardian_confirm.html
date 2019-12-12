@@ -1,465 +1,466 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Guardian confirm</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <script type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script> -->
-  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/header.css">
-  <link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
-  <link rel="stylesheet" href="/assets/css/custom.css">
-  <link rel="stylesheet" href="/assets/css/patientdashboard.css">
-  <link rel="stylesheet" href="/assets/css/demographics-header.css">
-  <link rel="stylesheet" href="./assets/css/custom.css">
-  <script src="/assets/js/jquery.min.js"></script>
-  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-  <script src="/assets/js/moment.js"></script>
-  <script src="/assets/js/demographics.js"></script>
-    <script type="text/javascript" src="/assets/js/post_parameters.js"></script>
-</head>
-<body>  
-  <script src="/assets/js/generic_ajaxrequest.js">
 
-  </script>   
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/js/moment.js"></script>
+<script src="/assets/js/demographics.js"></script>
+<script type="text/javascript" src="/assets/js/post_parameters.js"></script>
+<script src="/assets/js/generic_ajaxrequest.js"></script>
+<script src="/assets/js/core.js"></script>
 
-  <style>
-     .flash_notice{
-        left: calc(50% - 225px);
-        width: 450px;
-        position: absolute;
-        top: 250px;
-        font-size: 1.5em;
-        text-align: center;
-        background-color: tomato;
-        color: #292626;
-        padding: 10px;
-        z-index: 999;
-        border: 2px outset tomato;
-        border-radius: 15px;
-    }
+<style>
 
-  </style>
-  
-  <div class="flash_notice" id="message_div" style="visibility: hidden;">
-        <span id="message" style="width: 100%; text-align: 'center'">&nbsp;</span> <br/>
-        <button class="blue" id="ok">OK</button>
+body {
+ -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */  
+}
+
+.div-table {
+  width: 100%;
+  display: table;
+  border-collapse: separate;
+   border-spacing: 10px;
+}
+
+.div-row {
+  display: table-row;
+}
+
+.div-cell {
+  display: table-cell;
+}
+
+.demographics {
+  border-style: solid;
+  border-width: 1px;
+  padding: 10px;
+  box-shadow: 1px 5px 10px #888888;
+  width: 45%;
+  height: 130px;
+}
+
+#relationships-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: 1px 5px 10px #888888;
+}
+
+.relationships-cells {
+  border-style: solid;
+  border-width: 1px;
+  width: 88px;
+  height: 75px;
+  padding: 0px 15px 0px 15px;
+  border-radius: 12px;
+  box-shadow: 5px 10px #888888;
+}
+
+.btn-danger {
+	float: left;
+  border: 1px solid #ff6347;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-size: 28px;
+	font-family: arial, helvetica, sans-serif;
+	padding: 10px 10px 10px 10px;
+	text-decoration: none;
+	display: inline-block;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #ff6347;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ff6347), to(#ff6347));
+	background-image: -webkit-linear-gradient(top, #ff6347, #ff6347);
+	background-image: -moz-linear-gradient(top, #ff6347, #ff6347);
+	background-image: -ms-linear-gradient(top, #ff6347, #ff6347);
+	background-image: -o-linear-gradient(top, #ff6347, #ff6347);
+	background-image: linear-gradient(to bottom, #a7cfdf, #ff6347);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#ff6347, endColorstr=#ff6347);
+}
+
+.btn-blue {
+	border: 1px solid #7eb9d0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-size: 28px;
+	font-family: arial, helvetica, sans-serif;
+	padding: 10px 10px 10px 10px;
+	text-decoration: none;
+	display: inline-block;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #a7cfdf;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+	background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+}
+
+.btn-green {
+	border: 1px solid #008000;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-size: 28px;
+	font-family: arial, helvetica, sans-serif;
+	padding: 10px 10px 10px 10px;
+	text-decoration: none;
+	display: inline-block;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #a7cfdf;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#008000), to(#008000));
+	background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+	background-image: linear-gradient(to bottom, #a7cfdf, #008000);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+}
+
+.relationship-text {
+  color: green;      
+  /*color:steelblue;*/
+  font-weight: bolder;
+  font-style: initial;
+}
+
+.demographic-tables {
+  width: 100%;
+}
+
+.demographic-tables th {
+  text-align: left;
+}
+
+.icons {
+  height: 22px;
+  margin-bottom: -3px;
+}
+
+</style>
+
+
+<link rel="stylesheet" href="/assets/css/maindashboard/footer.css">
+
+
+
+
+
+
+
+<div class="div-table">
+
+  <div class="div-row">
+    <div class="div-cell demographics">
+      <b>Patient:&nbsp;</b><span id="patient-table-person-name"></span>&nbsp;<img class="icons" id="patient-table-person-gender"/><br />
+      <hr />
+      <table id="patient-table" class="demographic-tables">
+      </table>
+    </div>
+    <div class="div-cell demographics">
+      <b>Guardian:&nbsp;</b><span id="guardian-table-person-name"></span>&nbsp;<img class="icons" id="guardian-table-person-gender"/><br />
+      <hr />
+      <table id="guardian-table" class="demographic-tables">
+      </table>
+    </div>
   </div>
-  <!-- container -->
-  <div class="container" style="width: 100%; margin-bottom: 1%;">
+  
+</div>
 
-   <div class="demo-header">
-      <div class="demo-header-row">
+<div class="div-table">
+  <div class="div-row">
+    <div class="div-cell">
+      
+      <div id="relationships-container">
+        <div id="relationships" class="div-table">
+          
+          <div class="div-row">
+            <div class="div-cell">
+              <div class="div-table" id="relationships-a">
+              </div>
+            </div>
+            <div class="div-cell">
+              <div class="div-table" id="relationships-b">
+              </div>
+            </div>
+          </div>
 
-      <div class="demo-header-cell demo-left">
-        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="guardian_gender" /><span class="h3" id="guardian_name">&nbsp;</span><span class="h3"><font color="#006699"> &nbsp;&nbsp;&nbsp;Guardian</font></span></div>
-        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
-        <span id="guardian_DOB"></span>&nbsp;<span id="guardian_age">&nbsp;</span>
-        &nbsp;(<span id="guardian_npid"></span>)
+
         </div>
-        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="guardian_addressl1"></span></div>
-        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="guardian_phone_number"></span></div>
-        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="guardian_addressl3"></span></div>
       </div>
 
-      <div class="demo-header-cell demo-left">
-        <div id="name-title" style="display: flex; margin-top: 0;"><img src="" class="gender-icon" id="patient_gender" /><span class="h3" id="patient_name"></span><span class="h3"><font color="#006699">&nbsp;&nbsp;&nbsp;Patient</font></span></div>
-        <div class="birthdates"><span class="headers">Birthdate:</span>&nbsp;
-        <span id="patient_DOB"></span>&nbsp;<span id="patient_age"></span>
-        &nbsp;(<span id="patient_npid"></span>)
-        </div>
-        <div class="addresses"><span class="headers">Current Village:</span>&nbsp;<span id="patient_addressl1"></span></div>
-        <div class="addresses"><span class="headers">Phone#:</span>&nbsp;<span id="patient_phone_number"></span></div>
-        <div class="addresses" style="visibility: hidden;"><span class="headers">Phone#:</span>&nbsp;<span id="patient_addressl3"></span></div>
-      </div>  
-    </div> 
+    </div>
+  </div>
+</div>
 
-   </div>
-   <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10 cards" style="border: solid 2px;width: 80%; padding: 0; margin-left: 1%; height: 520px; margin-top: 1%;margin-right: 2%; width: 98%;" id="generic_tabs">
-        <div class="row" style="display: flex;"> <h2 class="headers" style="margin-left: 40px; "> Select Guardian Relationship: </h2></div>
-        <div class="options">
-          <ul id="options_ul"></ul>
-        </div>
-    </div>
-    </div>
-    <footer class="footer">
-      <div class="container-footer">
-        <button class="btn btn-danger buttons red " style="width: 200px; font-size: 2rem;" onmousedown="finish();" id="logout">Cancel</button>
-        <button id="btnNext" class="btn btn-success buttons green" style="width: 200px; font-size: 2rem; margin: 5px 0px 0px; padding: 0px; float: right;" onclick="dashboard_redirect()">
-        <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Finish &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</span>
-        </button>
-         <button id="tasks" class="btn btn-success buttons blue" style="width: 200px; font-size: 2rem;margin-right: 5px;" onmousedown="newSearchRedirect();">
-        <span>&nbsp; &nbsp; &nbsp; New search &nbsp; &nbsp; &nbsp;</span>
-        </button>
-      </div>
-    </footer> 
-  </body>
-<script src="/assets/js/core.js "></script>
+
+<footer class="footer">
+  <div class="container-footer">
+    <button class="btn btn-danger buttons red" 
+      style="width: 200px; font-size: 2rem;" 
+      onmousedown="cancelRedirect();" id="logout">Cancel</button>
+
+    <button class="btn btn-green buttons" 
+      style="width: 200px; font-size: 2rem; margin-left: 10px;" 
+      onmousedown="createRelationship();" id="logout">Finish</button>
+
+    <button class="btn btn-blue buttons" 
+      style="width: 280px; font-size: 2rem;" 
+      onmousedown="newSearchRedirect();" id="logout">New Guardian</button>
+
+
+
+  </div>
+</footer> 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
-  var guardian_options = "";
-  var url = new URL(url);
-  var guardianID = url.searchParams.get("guardian_identifier");
-  sessionStorage.setItem("guardianID", guardianID);
-  // var p = sessionStor age.;
-  var selectedEncounterID = ""; 
-  var elementId = "";
-  sessionStorage.guardian_options = elementId;
 
-  function finish() {
-    window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.backupPatientID;
+
+function buildGuardianRelationships() {
+
+  var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/types/relationships';
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var guardian_options = JSON.parse(this.responseText);
+      guardian_a = document.getElementById("relationships-a");
+      guardian_b = document.getElementById("relationships-b");
+
+      for (var i = 0; i < guardian_options.length; i++) {
+        var divRow = document.createElement("div");
+        divRow.setAttribute("class","div-row");
+        if(i < 5)
+          guardian_a.appendChild(divRow);
+
+        if(i >= 5)
+          guardian_b.appendChild(divRow);
+
+          
+
+        var divCell = document.createElement("div");
+        divRow.appendChild(divCell);
+        divCell.setAttribute("class","div-cell relationships-cells");
+        divCell.setAttribute("onmousedown", "selectRelationship(this);");
+        divCell.setAttribute("id", guardian_options[i].relationship_type_id);
+        p1 = document.createElement("p");
+        p1.innerHTML = "<b>Relationship</b>: <span class='relationship-text'>" + guardian_options[i].b_is_to_a + "</span>";
+        p1.innerHTML += "<br /><b>Desc: </b> " + guardian_options[i].description;
+        divCell.appendChild(p1);
+      }
+    }
+  };
+  try {
+    req.open("GET", url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+    req.send(null);
+  } catch (e) {}
+
+}
+
+function selectRelationship(e) {
+  var cells = document.getElementsByClassName("relationships-cells");
+  for(var i = 0 ; i < cells.length; i++){
+    cells[i].setAttribute("style", "background-color: white;");
+  }
+  e.setAttribute("style", "background-color: lightblue;");
+  selected_relationship = e.id;
+}
+
+
+buildGuardianRelationships();
+
+
+function getPerson(person_id, table) {
+
+  var url = sessionStorage.apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + person_id;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var person = JSON.parse(this.responseText);
+      buildDemographics(table, person);
+    }
+  };
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+    req.send(null);
+  } catch (e) {}
+}
+
+var mainUrl = window.location.href;
+var mainUrl = new URL(mainUrl);
+var patientID = url.searchParams.get("patient_id");
+var guardianID = url.searchParams.get("guardian_identifier");
+
+var table = document.getElementById("patient-table");
+getPerson(patientID, table);
+table = document.getElementById("guardian-table");
+getPerson(guardianID, table);
+
+
+function buildDemographics(table, e) {
+  var person_name = document.getElementById(table.id + "-person-name");
+  person_name.innerHTML = e.person.names[0].given_name;
+  person_name.innerHTML += " " + e.person.names[0].family_name;
+  var tr = document.createElement("tr");
+  table.appendChild(tr);
+
+  var person_gender = document.getElementById(table.id + "-person-gender");
+  try {
+    var gender = e.person.gender.toUpperCase().charAt(0);
+    var icon = (gender == 'F' ? "female.gif" : "male.gif");
+    person_gender.setAttribute("src", "../../../assets/images/" + icon);
+  }catch(x) {
+    var gender = 'N/A';
   }
 
-  function cancel_redirect() {
-    window.location = "/views/patient_dashboard.html?patient_id=" + backupPatientID;
+
+  var th = document.createElement("th");
+  th.innerHTML = "Birthdate: ";
+  tr.appendChild(th);
+
+  var td = document.createElement("td");
+  try {
+    var dob = moment(e.person.birthdate).format("DD/MMM/YYYY");
+  }catch(x) {
+    var dob = "Not available";
   }
+  td.innerHTML = dob;
+  tr.appendChild(td);
 
-  function newSearchRedirect() {
-    window.location = "/views/patient/relationships/guardian_search.html?patient_id=" + backupPatientID;
-  }
+  var tr = document.createElement("tr");
+  table.appendChild(tr);
 
-  var showMessage = (message)=>{
-        //Show pop message div
-        $("#message_div").css({"visibility":"visible"});
+  var th = document.createElement("th");
+  th.innerHTML = "Home address: ";
+  tr.appendChild(th);
 
-        //Message
-        $("#message").html(message);
-        
-        //Button
-        document.getElementById("ok").onmousedown = ()=>{
-            $("#message").html("");
-            $("#message_div").css({"visibility":"hidden"});
-        }
-   
-  }
+  var td = document.createElement("td");
+  var address = e.person.addresses[0];
+  td.innerHTML =  address.address2;
+  td.innerHTML += " " + address.county_district;
+  td.innerHTML += " " + address.neighborhood_cell; 
+  tr.appendChild(td);
+}
 
-  // function showMessage(message) {
-  //       //Show pop message div
-  //       $("#message_div").css({"visibility":"visible"});
+function cancelRedirect() {
+  window.location = "/views/patient_dashboard.html?patient_id=" + patientID;
+} 
+      
+function newSearchRedirect() {
+  window.location = "/views/patient/relationships/guardian_search.html?patient_id=" + patientID;
+}
 
-  //       //Message
-  //       $("#message").html(message);
-        
-  //       //Button
-  //       document.getElementById("ok").onmousedown = ()=>{
-  //           $("#message").html("");
-  //           $("#message_div").css({"visibility":"hidden"});
-  //       }
-  // }
+var selected_relationship = null;
 
-  function dashboard_redirect(e) {
+function createRelationship() {
+  if(selected_relationship == null)
+    return;
+
+  buildWall(); 
+
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/people/" + patientID + "/relationships/";
+  var processedParams = JSON.stringify({
+    relationship_type_id: selected_relationship,
+    relation_id: guardianID
+  });
   
-    if(guardian_options.length == 0) {
-        showMessage("Select relationship type to continue"); 
-    }else {
-      assignRelationShip(relationship_type_id);
+
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4) {
+      if ( (this.status == 201 || this.status == 200)) {
+        sessionStorage.patientID = patientID;
+        enrollProgram();
+      }
     }
-    
-  }
-    
-  function changeIcon(gender,person_type) {
-    var img = document.getElementById(person_type+'_gender');
-    if (gender === "M") {
-      img.setAttribute("src", "/assets/images/male.gif");
-    } else {
-      img.setAttribute("src", "/assets/images/female.gif");
-    }
-  }
+  };
+  try {
+    req.open('POST', url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+    req.setRequestHeader('Content-type', "application/json");
+    req.send(processedParams);
+  } catch (e) {}
+}
   
-  function assignRelationShip(relationship_type_id) {
-    var http = new XMLHttpRequest();
-    var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/people/'+sessionStorage.backupPatientID+ '/relationships/';
-    var params = JSON.stringify({
-    relationship_type_id: 6,
-    relation_id: sessionStorage.guardianID
-    });
-    http.open('POST', url, true);
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange = function () { //Call a function when the state changes.
-    if (http.readyState == 4) {
-    if (http.status == 201) {
-    var v = JSON.parse(http.responseText);
-    sessionStorage.patientID = sessionStorage.backupPatientID;
-      getDemographics(backupPatientID);
-      enrollPatient(backupPatientID);
-      // window.location.href = "/views/patient/relationships/print.html?patient_id="+backupPatientID+"&guardian_id="+ guardianID;
-      
 
-    } else if (http.status == 409) {
-      
-    } else {
-    }
-    }
-    }
-    http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-    http.send(params);
-  }
-  loadConfigurations();
-
-  var url = new URL(url);
-  var apiURL = sessionStorage.getItem("apiURL");
-  var apiPort = sessionStorage.getItem("apiPort");
-  var apiProtocol = sessionStorage.getItem("apiProtocol");
-  var id = url.searchParams.get("guardian_identifier");
-  var backupPatientID = sessionStorage.getItem("backupPatientID");
-  url = new URL(url);
-  var d = new Date();
-
-  function ajaxGuardianRequest() {
-    console.log(id);
-    var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-
-      if (this.readyState == 4 && this.status == 200) {
-        var results = JSON.parse(this.responseText);
-        var guardian_age = results.person.birthdate;
-        var gender = results.person.gender;
-        var guardian_identifier = "";
-        var guardian_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
-        
-        try {
-        console.table(results.person.address);
-        var guardian_addressl1 = results.person.addresses[0].address1 ;
-        var addressl2 = results.person.addresses[0].address2;
-        var guardian_phone_number = results.person.person_attributes[1].value;
-        }
-        catch (e){
-          var guardian_addressl1 = "";
-        var addressl2 = "";
-        var guardian_phone_number = "";
-        }
-        try {
-          guardian_identifier = results.patient_identifiers[0].identifier || "no value available";
-        } catch (e) {
-
-        }
-      
-        setGuardianValues(guardian_name, gender, guardian_age, guardian_addressl1, addressl2, guardian_phone_number, guardian_identifier);
-      }
-    };
-    try {
-      req.open('GET', url, true);
-      req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
-      req.send(null);
-    } catch (e) {}
-  }
-
-  function ajaxRequest(ajaxUrls) {
-    var url_string = window.location.href;
-    var url = new URL(url_string);
-    var patient_id = url.searchParams.get("patient_id");
-    var guardian_id = url.searchParams.get("guardian_identifier");
-
-    // ---- Dynamic ajax for multiple calls
-    const ajaxUrlsParams = Object.keys(ajaxUrls)
-
-    ajaxUrlsParams.forEach(function (key) {
-        const person_type = key;
-        const person_url = ajaxUrls[key];
-        // console.log(person_type,person_url);
-
-        const req = new XMLHttpRequest();
-
-        req.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-            const results = JSON.parse(this.responseText);
-            const age = results.person.birthdate;
-            const gender = results.person.gender;
-            const identifier = "";
-            const patient_name = results.person.names[0].given_name + " " + results.person.names[0].family_name;
-            
-            try {
-              var addressl1 = results.person.addresses[0].address1;
-              var addressl2 = results.person.addresses[0].address2;
-              var phone_number = results.person.person_attributes[1].value;
-              city_village = results.person.addresses[0].city_village;
-            }
-            catch (e){
-              var addressl1 = "";
-              var addressl2 = "";
-              var phone_number = "";
-            }
-            try {
-              identifier = results.patient_identifiers[0].identifier || "no value available";
-            } catch (e) {
-
-            }
-            setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier, person_type, city_village);
-          }
-        };
-        try {
-          req.open('GET', person_url, true);
-          req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
-          req.send(null);
-        } catch (e) {}         
-      }
-    );
-  }
-
-    function setValues(patient_name, gender, age, addressl1, addressl2, phone_number, identifier, person_type, city_village) {
-      document.getElementById(person_type+"_name").innerHTML = patient_name;
-      var roundedAge = Math.floor(moment().diff(age, 'years', true));
-      document.getElementById(person_type+"_DOB").innerHTML = moment(age).format("DD/MMM/YYYY");;
-      document.getElementById(person_type+"_npid").innerHTML = formatNIPD(identifier);
-      document.getElementById(person_type+"_age").innerHTML = "(" + roundedAge + ")";
-      sessionStorage.patientAge = roundedAge; 
-      sessionStorage.patientGender = gender;
-      sessionStorage.patientDOB = moment(age).format("DD/MMM/YYYY");
-      // sessionStorage.sessionDate = moment().format("DD/MMM/YYYY");
-      document.getElementById(person_type+"_addressl1").innerHTML = addressl1;
-      document.getElementById(person_type+"_addressl3").innerHTML = addressl2;
-      document.getElementById(person_type+"_phone_number").innerHTML = phone_number;
-      document.getElementById(person_type + '_addressl1').innerHTML = city_village;
-      changeIcon(gender,person_type);
-    }
-
-    function formatNIPD(identifier) {
-      if(identifier.length < 1)
-        return identifier;
-
-      if(identifier.length == 6){
-        return (identifier.substring(0,3) + "-" + identifier.substring(3,6));
-      }else if(identifier.length == 13){
-        return (identifier.substring(0,5) + "-" + identifier.substring(5,9) + "-" + identifier.substring(9, 13));
-      }else{
-        return identifier;
-      }
-    }
-
-    function build_guardian_options() {
-
-      var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/types/relationships';
-      var req = new XMLHttpRequest();
-      req.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          var guardian_options = JSON.parse(this.responseText);
-          for (var i = 0; i < guardian_options.length; i++) {
-            var options_ul = document.getElementById('options_ul');
-            var list_option = document.createElement('li');
-            if(i%2 == 0){
-              list_option.className = 'even';
-            } else {
-              list_option.className = 'odd';
-            }     
-            list_option.id = 'guardian_option_'+i;   
-            list_option.innerHTML = guardian_options[i]['a_is_to_b'];    
-            list_option.setAttribute("onclick", 'selectGuardian(this.innerHTML, guardian_options = this.id, relationship_type_id='+guardian_options[i].relationship_type_id+')');  
-
-            options_ul.appendChild(list_option);
-          }
-        }
-      };
-      try {
-        req.open('GET', url, true);
-        req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
-        req.send(null);
-      } catch (e) {}
-
-    }
-
-    const patient_url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + backupPatientID
-    const guardian_url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/' + id;
-    
-    const ajaxUrls = {
-      patient: patient_url, 
-      guardian: guardian_url
-    }
-
-    build_guardian_options();
-
-    ajaxRequest(ajaxUrls);
-
-    function selectGuardian(value, elementId) {
-      //alert(value + ' - ' + elementId);
-      const selected_option = document.getElementById(elementId);
-      selected_option.style.backgroundColor = 'lightblue';
-
-      resetBackGroundColor(elementId)
-
-    }
-
-function resetBackGroundColor(elementId){
-  // console.log(elementId)
-  liElements = document.getElementsByTagName("li");
-  for (var i=0; i<= liElements.length -1; i++){
-    liElements[i].style = "";
-  }
-  document.getElementById(elementId).style.backgroundColor = "lightblue";
-}
-
-function submitPatienttype(patient_id) {
-  var currentTime = moment().format(' HH:mm:ss');
-  var encounter_datetime = moment(sessionStorage.sessionDate).format('YYYY-MM-DD'); 
-  encounter_datetime += currentTime;
-    
-  var encounter = {
-    encounter_type_name: 'REGISTRATION',
-    encounter_type_id:  5,
-    patient_id: patient_id,
-    program_id: sessionStorage.programID,
-    encounter_datetime: encounter_datetime
-  }
-
-  submitParameters(encounter, "/encounters", "postPatienttypeObs");
-}
-
-var answers_hash = {
-    patient_type: ""
-}
-
-var patient_type_map = {
-    "New patient": 7572,
-    "External consultation": 9684
-}
-
-function postPatienttypeObs(encounter) {
-  var patient_type = $('patient_type');
-  var ans = patient_type_map[patient_type.value];
-  var obs = {
-    encounter_id: encounter.encounter_id,
-    observations: [
-      { concept_id: 3289, value_coded: ans }
-    ]
-  }; 
-
-  submitParameters(obs, "/observations", "savePatienttypeThenRedirect");  
-}
-
-function savePatienttypeThenRedirect(obs){
-  var url = new URL(location.href);
-  var patientID = url.searchParams.get("patient_id");
-  document.location = "/views/patient/print.html?person_id=" + patientID;
-}
-
-function enrollPatient(person_id) {
-  sessionStorage.patientID = person_id;
-  var http = new XMLHttpRequest();
-  var url = sessionStorage.apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients/'+person_id +"/programs/";
-  var params = JSON.stringify({
+function enrollProgram() {
+  var url = sessionStorage.apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + patientID + "/programs/";
+  var processedParams = JSON.stringify({
     program_id: sessionStorage.programID,
     date_enrolled: moment(sessionStorage.sessionDate).format("YYYY-MM-DD")
   });
-  http.open('POST', url, true);
-  //Send the proper header information along with the request
-  http.setRequestHeader('Content-type', 'application/json');
-  http.onreadystatechange = function () { //Call a function when the state changes.
-  if (http.readyState == 4) {
-  if (http.status == 201) {
-    var v = JSON.parse(http.responseText);
-    submitPatienttype(person_id);
+  
 
-  } else if (http.status == 409) {
-    nextEncounter(person_id, sessionStorage.programID);
-  } else {
-  alert('error' + http.status);
-  }
-  }
-  }
-  http.setRequestHeader('Authorization', sessionStorage.getItem('authorization'));
-  http.send(params);
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4) {
+      console.log(this.status)
+      if ( (this.status == 201 || this.status == 200 || this.status == 409)) {
+        nextEncounter(patientID, sessionStorage.programID, true);
+      }
+    }
+  };
+  try {
+    req.open('POST', url, true);
+    req.setRequestHeader('Authorization', sessionStorage.getItem("authorization"))
+    req.setRequestHeader('Content-type', "application/json");
+    req.send(processedParams);
+  } catch (e) {}
 }
-   </script>
+  
+function buildWall() {
+  var submitCover = document.getElementById('submit-cover');
+  if (submitCover){
+      submitCover.parentNode.removeChild(submitCover);
+  }
 
-</html>
+  var divCover = document.createElement('div');
+  divCover.setAttribute('id','submit-cover');
+  var wBody = document.getElementsByTagName('body')[0];
+  
+  var span = document.createElement('span');
+  span.innerHTML = "<style>\
+    #submit-cover {\
+    position: absolute;\
+    background-color: black;\
+    width: 100%;\
+    height: 102%;\
+    left: 0%;\
+    top: 0%;\
+    z-index: 990;\
+    opacity: 0.65;\
+  }\
+  </style>";
+  
+  try {
+    wBody.appendChild(span);
+    wBody.appendChild(divCover);
+  }catch(i) {}
+}
+</script>

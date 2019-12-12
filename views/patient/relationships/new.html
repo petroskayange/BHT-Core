@@ -907,7 +907,7 @@ function createPatient(person_id) {
       //   document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
       // } else {
         // document.location = "../patient_dashboard.html?patient_id=" + person_id;
-        enrollPatient(person_id);
+        //enrollPatient(person_id);
         sessionStorage.guardianID = person_id;
         document.location = "/views/patient/relationships/guardian_confirm.html?patient_id=" + sessionStorage.backupPatientID + "&guardian_identifier="+person_id;
       // }
