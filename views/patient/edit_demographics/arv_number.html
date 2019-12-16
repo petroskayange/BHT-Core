@@ -212,6 +212,42 @@
         jQuery(".loader").hide();
     }
 
+
+function addVoidBtn() {
+  var root = document.getElementById("buttons");
+  var btn = '<button id="voidButton" class="button red navButton"';
+  btn += ' onmousedown="voidARVnumber()"><span>Void ARV number</span></button>';
+  var span = document.createElement("span");
+  span.innerHTML = btn;
+  root.appendChild(span);
+}
+
+function voidARVnumber() {                            
+  var arv_number = $('touchscreenInput1').value;
+  var inputFrame = document.getElementById('inputFrame1');
+  var span = inputFrame.getElementsByTagName("span")[0];
+  var site_code = span.innerHTML;
+
+  if(site_code.length < 1)
+    return;
+
+  var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/programs/1/void_arv_number/";
+  url += site_code + "-ARV-" + arv_number;
+ 
+  var xhttp3 = new XMLHttpRequest();
+  xhttp3.onreadystatechange = function() {
+    if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+      //var obj = JSON.parse(this.responseText);
+      console.log(this.responseText);
+      window.location.reload();
+    }
+  };
+
+  xhttp3.open("POST", url, true);
+  xhttp3.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+  xhttp3.setRequestHeader('Content-type', "application/json");
+  xhttp3.send();
+}
 </script>
 
 <body id="mateme">
@@ -225,7 +261,7 @@
                    tt_pageStyleClass="NoControls" optional="true"/>
 
             <input allowFreeText="true" field_type="alpha" helpText="ART number" id="art_number" name="arv_number"
-                   tt_onLoad="press('num'); loadARVNumber(); changeSubmitButton();"
+                   tt_onLoad="press('num'); loadARVNumber(); changeSubmitButton();addVoidBtn();"
                    tt_pageStyleClass="Numeric NumbersOnly" type="text"/>
         </form>
 
