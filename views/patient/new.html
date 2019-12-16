@@ -62,7 +62,6 @@
             for (var i = 0; i < rows.length; i++) {
 
                 var title = rows[i].getElementsByTagName('th')[0].innerHTML.trim();
-                console.log(title);
                 var data = rows[i].getElementsByTagName('td')[0].innerHTML.trim();
 
                 if (title.match(/Given name/i)) {
@@ -1411,7 +1410,14 @@
     }
 
     function savePatienttypeThenRedirect(obs) {
-        document.location = "/views/patient/print.html?person_id=" + obs[0].person_id;
+      var person_id = obs[0].person_id;
+
+      if(redirect_to_guardian_search == true) {
+        document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
+      }else{
+        document.location = "/views/patient/print.html?person_id=" + person_id;
+      }
+
     }
 
     function setNextButtonToGetInputValue(key) {
@@ -1484,6 +1490,8 @@
         return apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/' + resource;
     }
 
+    var redirect_to_guardian_search = false;
+
     function createPatient(person_id) {
         var url = apiProtocol + '://' + apiURL + ':' + apiPort + '/api/v1/patients';
         var parametersPassed = JSON.stringify({person_id: person_id, program_id: sessionStorage.programID});
@@ -1493,7 +1501,9 @@
             if (this.readyState == 4 && this.status == 201) {
                 var obj = JSON.parse(this.responseText);
                 if (__$('guardian_present').value == 'Yes' && showTypeOfPatient() == true) {
-                    document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
+                    redirect_to_guardian_search = true;
+                    enrollPatient(person_id);
+                    //document.location = "/views/patient/relationships/guardian_search.html?patient_id=" + person_id;
                 } else {
                     enrollPatient(person_id);
                 }
