@@ -1327,12 +1327,12 @@ function showVersions() {
   console.log(system_version_core);
   console.log(system_version_module);
   var innerHTML = "<div style='padding: 15px; font-size: 27px;'>";
+  innerHTML += "<p style='font-size: 20px;'>Selected module versions</p>";
+  innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
   innerHTML += "<p><b>BHT-EMR-API</b>&nbsp;: ";
   innerHTML += "<span style='color: green;'>" + system_version_api + "<span></p>";
-  innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
   innerHTML += "<p><b>BHT-Core</b>&nbsp;: ";
   innerHTML += "<span style='color: green;'>" + system_version_core + "<span></p>";
-  innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
   innerHTML += "<p><b>" + sessionStorage.applicationName + "</b>&nbsp;: ";
   innerHTML += "<span style='color: green;'>" + system_version_module + "<span></p></div>";
   $("#generic_tabs").html(innerHTML)
