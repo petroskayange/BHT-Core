@@ -42,6 +42,7 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="userStats" onclick="redirect(this.id); "><img src="/assets/images/add-user.png" class="btn-icons"/><span>User Stats</span></button>';
 
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="systemVersion" onclick="showVersions();"><img src="/assets/images/version-control.png" class="btn-icons"/><span>View system version</span></button>';
 // alert(window.innerHeight);
 
 var addDiv = "<div class='col-sm-2 tasks'>";
@@ -1271,3 +1272,70 @@ function getSavedEncounters() {
     }
   
   }
+
+
+var system_version_api;
+var system_version_core;
+var system_version_module;
+
+function fetchVersion() {
+  var url = sessionStorage.apiProtocol + "://" + apiURL+ ":" + apiPort + "/api/v1/version";
+
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        var results = JSON.parse(this.responseText);
+        system_version_api = results['System version'];
+        fetchCoreVersion();
+      }
+    }
+  };
+
+  try {
+    req.open('GET', url, true);
+    req.setRequestHeader('Authorization',sessionStorage.getItem('authorization'));
+    req.send();
+  } catch (e) {
+    console.log(e);
+  }
+
+}
+
+function fetchCoreVersion() {
+  $.get("HEAD", function(data) {
+   system_version_core = data;
+   fetchModuleVersion();
+  }, 'text').fail(function () {
+    console.log("HEAD file missing in BHT-Core folder");
+  });
+}
+
+function fetchModuleVersion() {
+  $.get("apps/" + sessionStorage.applicationName + "/HEAD", function(data) {
+   system_version_module = data;
+   if(system_version_module != undefined)
+    $("#module-version").html(system_version_module);  
+
+  }, 'text').fail(function () {
+    console.log("HEAD is missing from /apps/" + sessionStorage.applicationName + " folder");
+  });
+}
+
+function showVersions() {
+  console.log(system_version_api);
+  console.log(system_version_core);
+  console.log(system_version_module);
+  var innerHTML = "<div style='padding: 15px; font-size: 27px;'>";
+  innerHTML += "<p><b>BHT-EMR-API</b>&nbsp;: ";
+  innerHTML += "<span style='color: green;'>" + system_version_api + "<span></p>";
+  innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
+  innerHTML += "<p><b>BHT-Core</b>&nbsp;: ";
+  innerHTML += "<span style='color: green;'>" + system_version_core + "<span></p>";
+  innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
+  innerHTML += "<p><b>" + sessionStorage.applicationName + "</b>&nbsp;: ";
+  innerHTML += "<span style='color: green;'>" + system_version_module + "<span></p></div>";
+  $("#generic_tabs").html(innerHTML)
+}
+
+fetchVersion();
