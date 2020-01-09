@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/background.css" type="text/css">
+    <script src="/assets/js/jquery.min.js"> </script>
+    <script language="javascript" defer="true">
+        tstUsername = "";
+        tstUserKeyboardPref = "abc";
+        var d = new Date();
+        d.toDateString();
+        var choices = {};
+
+        
+
+        function getInput() {
+            key = $('touchscreenInput' + tstCurrentPage).getAttribute("key");
+            value = $('touchscreenInput' + tstCurrentPage).value;
+            choices[key] =  value;
+            console.log(choices);
+        }
+
+        function getPass() {
+        }
+
+        function isStringEmpty(str) {
+          try {
+              return (str.replace(/\s+/g, '').length < 1);
+          } catch (e) {
+              return true;
+          }
+        }
+
+    </script>
+
+    <script language="javascript" type="text/javascript" src="/public/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js"
+        defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/javascripts/show_category_hack.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/assets/js/core.js" defer="true"></script>
+    <script language="javascript" type="text/javascript" src="/assets/js/post_parameters.js" defer="true"></script>
+</head>
+
+<body id="mateme">
+    <div id="container">
+        <div id="content">
+            <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
+            </div>
+            <script type="text/javascript">
+            var tt_cancel_destination = "/";
+
+            function submitPortal(passed_property, property_name, functionToBePassed) {
+                var url = "/global_properties";
+                var global_property = {property: property_name, property_value: passed_property}
+                submitParameters(global_property, url, functionToBePassed);
+            }
+
+            function changeFinishBtn() {
+              var nextButton = document.getElementById('nextButton');
+              nextButton.setAttribute("onmousedown", "createPath();");
+            }
+
+            function createPath() {
+              var path = document.getElementById('touchscreenInput0').value;
+              if(isStringEmpty(path)) 
+                showMessage("Please enter a valid path");
+              
+
+              submitPortal(path, "backup.path", "redirex");
+            }
+
+            function redirex(e) {
+              document.location = "/";
+            }
+            </script>
+
+            <form id='sessions' action="/" method='post'>
+              <label for="ip-address">ip address</label>
+              <input field_type="text"
+                helpText="Enter backup folder path<span style='font-size: 17px; padding-left: 10px;'>e.g: /home/meduser/backups</span>" 
+                  id="backup-path" name="backup-path" 
+                    tt_onLoad="changeFinishBtn();" type="text" tt_onUnload="getInput();" key="backup-path" /><br>
+
+            </form>
+            <div id="footer">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

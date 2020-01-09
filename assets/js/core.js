@@ -38,12 +38,18 @@ admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="military-site" onclick="redirect(this.id); "><img src="/assets/images/soldier.png" class="btn-icons"/><span>Is this a military site?</span></button>';
 
-admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="registers" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Manage Registers</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="registers" onclick="redirect(this.id); "><img src="/assets/images/list.png" class="btn-icons"/><span>Manage Registers</span></button>';
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="userStats" onclick="redirect(this.id); "><img src="/assets/images/add-user.png" class="btn-icons"/><span>User Stats</span></button>';
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="systemVersion" onclick="showVersions();"><img src="/assets/images/version-control.png" class="btn-icons"/><span>View system version</span></button>';
-// alert(window.innerHeight);
+
+if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|Superuser|System Developer/i)) {
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="systemBackups" onclick="enterBabckupPath();"><img src="/assets/images/path.png" class="btn-icons"/><span>Database backup path</span></button>';
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="systemBackups" onclick="showBabckups();"><img src="/assets/images/backup.png" class="btn-icons"/><span>View database backups</span></button>';
+}
+
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="systemUsage" onclick="systemUsage();"><img src="/assets/images/usage.png" class="btn-icons"/><span>View user app usasge</span></button>';
 
 var addDiv = "<div class='col-sm-2 tasks'>";
 var endDiv = "</div>"
@@ -1323,9 +1329,6 @@ function fetchModuleVersion() {
 }
 
 function showVersions() {
-  console.log(system_version_api);
-  console.log(system_version_core);
-  console.log(system_version_module);
   var innerHTML = "<div style='padding: 15px; font-size: 27px;'>";
   innerHTML += "<p style='font-size: 20px;'>Selected module versions</p>";
   innerHTML += "<hr style='margin: 0px 5px 0px 5px; height: 1px; background-color: black;' />"
@@ -1335,7 +1338,19 @@ function showVersions() {
   innerHTML += "<span style='color: green;'>" + system_version_core + "<span></p>";
   innerHTML += "<p><b>" + sessionStorage.applicationName + "</b>&nbsp;: ";
   innerHTML += "<span style='color: green;'>" + system_version_module + "<span></p></div>";
-  $("#generic_tabs").html(innerHTML)
+  $("#generic_tabs").html(innerHTML);
+}
+
+function enterBabckupPath() {
+  document.location = "views/backup_path.html";
+}
+
+function showBabckups() {
+  document.location = "/views/database_backups.html";
+}
+
+function systemUsage() {
+  document.location = "/views/system_usage_timelines.html";
 }
 
 fetchVersion();
