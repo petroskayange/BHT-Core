@@ -636,7 +636,7 @@ var global_property = GlobalProperty({
     getWeight(patient_id);
     sessionStorage.patientID = patient_id;
     
-    buildIdentifiers(patient["patient_identifiers"]);
+    buildIdentifiers(patient["patient_identifiers"], patient_id);
     if(sessionStorage.programID == '1') {
       showOrders();
       buildStates(obj, patient_id);
@@ -732,7 +732,7 @@ var global_property = GlobalProperty({
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
   }
-  function buildIdentifiers(identifiers) {
+  function buildIdentifiers(identifiers, patient_id) {
     var identifiersHash = {};
     for (var i = 0; i < identifiers.length; i++) {
       if (identifiers[i]["identifier_type"] == 3) {
@@ -774,6 +774,13 @@ var global_property = GlobalProperty({
         td.setAttribute('id', 'filing-number');
       }
 
+      if (!Object.keys(identifiersHash).includes("NPID")) {
+        alertify
+          .alert("Missing National ID", "Patient was found BUT has no National ID.<br />The system is going to assign the patient with a new ID", function () {
+              //window.location = "/views/patient/find_by_menu.html";
+              assignNHID(patient_id);
+          })
+      }
       tr.appendChild(td);
       table.appendChild(tr);
 
@@ -791,7 +798,30 @@ var global_property = GlobalProperty({
     var container = document.getElementById("section-body-0");
     container.appendChild(table);
   }
+  function assignNHID(person_id) {
+          var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1/patients/" + person_id + "/npid";
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
+              var obj = JSON.parse(this.responseText);
+              var url = "/patients/" + patientID + "/labels/national_health_id";
+              url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1" + url;
+              // console.log(obj.new_identifier);
+              document.location = url;
+              // var id = v.new_identifier.identifier;
+              document.getElementById("continue").setAttribute("disabled", "");
+              setTimeout(function () {
+                window.location = "/views/confirm.html?person_id=" + obj.new_identifier.patient_id;
+              }, 1000);
+              
+            }
+          };
 
+          xhttp.open("POST", url, true);
+          xhttp.setRequestHeader('Authorization', sessionStorage.getItem("authorization"));
+          xhttp.setRequestHeader('Content-type', "application/json");
+          xhttp.send();
+  }
   function buildStates(identifiers, patient_id) {
     var identifiersHash = {};
     var url =
