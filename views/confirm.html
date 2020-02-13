@@ -774,13 +774,6 @@ var global_property = GlobalProperty({
         td.setAttribute('id', 'filing-number');
       }
 
-      if (!Object.keys(identifiersHash).includes("NPID")) {
-        alertify
-          .alert("Missing National ID", "Patient was found BUT has no National ID.<br />The system is going to assign the patient with a new ID", function () {
-              //window.location = "/views/patient/find_by_menu.html";
-              assignNHID(patient_id);
-          })
-      }
       tr.appendChild(td);
       table.appendChild(tr);
 
@@ -794,7 +787,14 @@ var global_property = GlobalProperty({
           }
         }
       }
-    }  
+    } 
+    if (!Object.keys(identifiersHash).includes("NPID")) {
+        alertify
+          .alert("Missing National ID", "Patient was found BUT has no National ID.<br />The system is going to assign the patient with a new ID", function () {
+              //window.location = "/views/patient/find_by_menu.html";
+              assignNHID(patient_id);
+          })
+      } 
     var container = document.getElementById("section-body-0");
     container.appendChild(table);
   }
