@@ -33,6 +33,7 @@ if(sessionStorage.userRoles && sessionStorage.userRoles.match(/Program Manager|S
 
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-change-date" onclick="redirect(this.id); "><img src="/assets/images/time.png" class="btn-icons"/><span>Change sesison date</span></button>';
 
+admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="change-password" onclick="redirect(this.id); "><img src="/assets/images/key.png" class="btn-icons"/><span>Change Password</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="print-location" onclick="redirect(this.id); "><img src="/assets/images/location.png" class="btn-icons"/><span>Print Location</span></button>';
 admin_tab_content += '<button class="overview-btns overview-btns-2nd-class" id="view-duplicates" onclick="redirect(this.id); "><img src="/assets/images/duplicate.png" class="btn-icons"/><span>View Duplicates</span></button>';
 
@@ -827,6 +828,8 @@ function redirect(id) {
         window.location.href = '/views/portal.html';
     }if (id === "view-duplicates") {
         window.location.href = '/views/search_identifiers.html';
+    }if (id === "change-password") {
+        window.location.href = '/views/users/change_password.html?user_id='+sessionStorage.userID;
     }
     if (id === "view-sys-settings") {
       var obj = document.createElement("object");
@@ -1056,6 +1059,7 @@ function checkCredentials(username, password) {
                
                 sessionStorage.setItem("authorization", v.authorization.token);
                 sessionStorage.setItem("userRoles", user_roles.join(','));
+                sessionStorage.setItem("userID", v.authorization.user.user_id);
                 sessionStorage.removeItem("userPassword");
                 window.location.href = "location.html";
                 // sessionStorage.removeItem("userPassword");
