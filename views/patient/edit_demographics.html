@@ -551,14 +551,11 @@
         document.getElementById("home-village").innerHTML = results.person.addresses[0].county_district;
         document.getElementById("current-district").innerHTML = results.person.addresses[0].state_province;
         var identifiers = results.person.person_attributes;
-        for (var x = 0; x < identifiers.length; x++) {
-          if(identifiers[x].person_attribute_type_id == "12") {
-            document.getElementById("cellphone-number").innerHTML = identifiers[x].value;
-          }else {
-            document.getElementById("cellphone-number").innerHTML = "Unknown";
-          }
-          
-        }
+        let attribute = identifiers.filter(attr =>  {
+              return attr.person_attribute_type_id === 12;
+            });
+        let f = (attribute.length > 0 ? attribute[0].value : "Unknown");
+        document.getElementById("cellphone-number").innerHTML = f;
       }
       }
       };
