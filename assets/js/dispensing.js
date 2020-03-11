@@ -525,6 +525,8 @@ function addPrescriptions(data, onFinishCallback) {
             row.splice(2, 0, addValue(order_id, stock, false));
             drawTableRow();
             buildPrescriptionsTableBody(otherOrders, {includeStock});
+        }).catch((error) => {
+            showMessage(error);
         });
     }
 
@@ -552,6 +554,10 @@ function fetchAvailableDrugStock(drug_id) {
 
         return response.json();
     }).then(stockItems => {
+        if (stockItems.length === 0) {
+            return "N/A";
+        }
+
         return stockItems.reduce((accum, {current_quantity}) => accum + current_quantity, 0);
     });
 }
