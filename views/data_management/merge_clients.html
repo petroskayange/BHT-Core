@@ -81,7 +81,16 @@
 .reset-buttons {
   width: 95%;
 }
-
+.searchBar {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: large;
+}
+.searchBar :focus {
+  border-color: blue;
+}
 </style>
 
 
@@ -108,12 +117,16 @@ function buildMergePage() {
     divC.setAttribute('id','container-cell-' + cells[i]);
     divR.appendChild(divC);
 
-    var button = document.createElement('button');
-    button.innerHTML = '<span>Add client</span>';
-    button.setAttribute('class','button blue navButton fetch-buttons');
-    button.setAttribute('onmousedown','addClient("' + cells[i] + '")');
-    button.setAttribute('id','fetch-button-' + cells[i]);
-    divC.appendChild(button);
+    var searchbar = document.createElement('input');
+    searchbar.setAttribute('class', 'searchBar');
+    searchbar.setAttribute('id','searchbar-' + cells[i]);
+    divC.appendChild(searchbar);
+    // var button = document.createElement('button');
+    // button.innerHTML = '<span>Add client</span>';
+    // button.setAttribute('class','button blue navButton fetch-buttons');
+    // button.setAttribute('onmousedown','addClient("' + cells[i] + '")');
+    // button.setAttribute('id','fetch-button-' + cells[i]);
+    // divC.appendChild(button);
   }
 
   initSearch();
@@ -132,9 +145,10 @@ function isHashEmpty(obj) {
 }
 
 function initSearch() {
+  lookForTag()
   var url = window.location.href;
   url = new URL(url);
-  var gender = url.searchParams.get("gender");
+  // var gender = url.searchParams.get("gender");
   var given_name = url.searchParams.get("first_name");
   var family_name = url.searchParams.get("last_name");
   var side = url.searchParams.get("side");
@@ -146,12 +160,12 @@ function initSearch() {
   if(side == 'right'){
     sessionStorage.mergeClientParametersRight = "?given_name=" + given_name;
     sessionStorage.mergeClientParametersRight += "&family_name=" + family_name;
-    sessionStorage.mergeClientParametersRight += "&gender=" + gender;
+    // sessionStorage.mergeClientParametersRight += "&gender=" + gender;
     sessionStorage.mergeClientParametersRight += "&side=right";
   }else{
     sessionStorage.mergeClientParametersLeft = "?given_name=" + given_name;
     sessionStorage.mergeClientParametersLeft += "&family_name=" + family_name;
-    sessionStorage.mergeClientParametersLeft += "&gender=" + gender;
+    // sessionStorage.mergeClientParametersLeft += "&gender=" + gender;
     sessionStorage.mergeClientParametersLeft += "&side=left";
   }
 
@@ -187,9 +201,10 @@ function initSearch() {
   }
 }
 
-function searchClient(first_name, last_name, gender, side) {
+function searchClient(first_name, last_name, side) {
+  console.log(side);
   var url = apiProtocol + "://" + apiURL + ":" + apiPort + "/api/v1";
-    url += "/search/patients?given_name=" + first_name + "&family_name=" + last_name +"&gender=" + gender;
+    url += "/search/patients?given_name=" + first_name + "&family_name=" + last_name ;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && (this.status == 201 || this.status == 200)) {
@@ -209,8 +224,12 @@ function processResults(results, side) {
 
   var result_container = document.createElement('div');
   result_container.setAttribute('class','result-container');
+  var searchbar = document.createElement('input');
+  searchbar.setAttribute('class', 'searchBar');
+  result_container.appendChild(searchbar);
   container.appendChild(result_container);
-
+  
+  
   for(var i = 0 ; i < results.length; i++){
     var container_row = document.createElement('div');
     container_row.setAttribute('class','result-container-row');
@@ -228,12 +247,7 @@ function processResults(results, side) {
     addResult(results[i], container_cell);
   }
 
-  var button = document.createElement('button');
-  button.setAttribute('id','reset-button-' + side);
-  button.setAttribute('class','reset-buttons');
-  button.innerHTML = '<span>New search</span>';
-  button.setAttribute('onmousedown', 'addClient("' + side + '")');
-  container.appendChild(button);
+  lookForTag()
 
 }
 
@@ -248,12 +262,16 @@ function addResult(result, cell) {
   var th = document.createElement('th');
   th.innerHTML = 'NPID';
   tr.appendChild(th);
-
+try {
+  
+} catch (error) {
+  
   var td = document.createElement('td');
   td.innerHTML = (result.patient_identifiers.filter(id => id.identifier_type == 3))[0].identifier;
   tr.appendChild(td);
   /* ............................. */
 
+}
   var tr = document.createElement('tr');
   table.appendChild(tr);
 
@@ -427,6 +445,136 @@ function getIdentifier(identifiers, identifier_type) {
   }
     return identifier;
 }
+
+function search_func(value)
+{
+    if (req != null) req.abort();
+
+    req = $.ajax({
+        type: "GET",
+        url: "virtual.keyboard",
+        data: {'search_keyword' : value},
+        dataType: "text",
+        success: function(virtualkeyboard){
+                    //Receiving the result of search here
+        }
+    });
+}
+ 
+
+var targetInput;
+
+function lookForTag() {
+  inputs = document.getElementsByTagName('input');
+  
+  //loop through the inputs to assign virtual-keyboard
+  for(var i = 0 ; i < inputs.length; i++){
+    var keyup = inputs[i].getAttribute('onkeyup');
+    if(keyup == undefined){
+      inputs[i].setAttribute('onfocus', 'popupVK(this);');
+    }else{
+      inputs[i].setAttribute('onfocus', keyup + '; popupVK(this);');
+    }
+  }
+}
+
+function popupVK(e) {
+  var vl = document.getElementById('virtual-keyboard');
+  var w = document.getElementsByTagName('body')[0];
+  if(vl != undefined) {
+    w.removeChild(vl);
+    return;
+  }
+  
+  var div = document.createElement('div');
+  div.setAttribute('id','virtual-keyboard');
+  div.setAttribute('class','keyboard');
+  var divStyle = "background-color: #F4F4F4;border: 2px solid #E0E0E0;"
+  divStyle += "border-radius: 15px;height: 200px;";
+  divStyle += "z-index: 991;width: 820px;";
+
+  var l = e.getBoundingClientRect().left;
+  //var divPos = ((50 / width)*100);
+  var inputPos = e.getBoundingClientRect().top;
+  inputPos = parseInt(inputPos);
+
+  divStyle += "left:20px;top: " + (inputPos + 70) + "px;";
+  div.style = divStyle;
+
+  keyboardKeys(e, div);
+
+
+  w.appendChild(div);
+}
+
+function keyboardKeys(e, table) {
+  var keypress = [
+    ["q","w","e","r","t","y","u","i","o","p"],
+    ["a","s","d","f","g","h","j","k","l","Del."],
+    ["z","x","c","v","b","n","m", "Hide",  "space" ,"Search"]
+  ];
+
+  //var table = document.createElement("div");
+  //table.setAttribute("class","keyboard");
+
+  for(var i = 0 ; i < keypress.length ; i++){
+    var row = document.createElement("span")
+    row.setAttribute("class","buttonLine");
+    table.appendChild(row);
+
+    for(var x = 0 ; x < keypress[i].length ; x++){
+      var cell = document.createElement("button")
+      cell.setAttribute("class","keyboardButton");
+      row.appendChild(cell);
+
+      cell.setAttribute("onmousedown","keyPressed(this);");
+      cell.innerHTML = "<span>" + keypress[i][x] + "</span>";
+
+
+    }
+  }
+
+  targetInput = e;
+}
+
+function keyPressed(e) {
+  var inputBox = targetInput;
+  var value_string = e.innerHTML.replace('<span>','');
+  value_string = value_string.replace('</span>','');
+
+  try{
+
+    if(value_string.match(/Del/i)){
+      inputBox.value = inputBox.value.substring(0, inputBox.value.length - 1);
+    }else if(e.innerHTML.match(/Caps/i)){
+    }else if(e.innerHTML.match(/Hide/i)){
+      var vl = document.getElementById('virtual-keyboard');
+      var w = document.getElementsByTagName('body')[0];
+      w.removeChild(vl);
+    }
+    else if(e.innerHTML.match(/Space/i)){
+      inputBox.value += " ";
+    }
+    else if(e.innerHTML.match(/Search/i)){
+     var name = inputBox.value.split(' ');
+     var searchbarSide = inputBox.id.replace(/searchbar-/, '') ;
+     console.log(searchbarSide === 'left');
+      searchClient(name[0], name[1], searchbarSide);
+      var vl = document.getElementById('virtual-keyboard');
+      var w = document.getElementsByTagName('body')[0];
+      w.removeChild(vl);
+    }
+    else{
+
+      inputBox.value += value_string;
+    }
+ 
+    try {
+      $('input[type="search"]').val(inputBox.value).keyup();
+    }catch(z) {}
+  }catch(x) { }
+
+}
 </script>
 
 
@@ -445,5 +593,6 @@ function getIdentifier(identifiers, identifier_type) {
 
    </div>
  </div>
+
 </body>
 
