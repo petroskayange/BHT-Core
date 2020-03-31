@@ -226,6 +226,7 @@ function processResults(results, side) {
   result_container.setAttribute('class','result-container');
   var searchbar = document.createElement('input');
   searchbar.setAttribute('class', 'searchBar');
+  searchbar.setAttribute('id','searchbar-' + side);
   result_container.appendChild(searchbar);
   container.appendChild(result_container);
   
