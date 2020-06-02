@@ -250,10 +250,19 @@ function addPopDescription(order_id) {
         if (j == 1) {
             document.getElementById("medication-td").innerHTML = cells[j].innerHTML;
         } else if (j == 2) {
-            document.getElementById("amount-needed-td").innerHTML = cells[j].innerHTML;
+            if(cells.length == 6){
+              document.getElementById("amount-needed-td").innerHTML = cells[(j + 1)].innerHTML;
+            }else{
+              document.getElementById("amount-needed-td").innerHTML = cells[j].innerHTML;
+            }
         } else if (j == 3) {
-            document.getElementById("amount-dispensed-td").innerHTML = cells[j].innerHTML;
-            totalDispensed = (cells[j].innerHTML).replace(/<[^>]*>/g, "");
+            if(cells.length != 6){
+              document.getElementById("amount-dispensed-td").innerHTML = cells[j].innerHTML;
+              totalDispensed = (cells[j].innerHTML).replace(/<[^>]*>/g, "");
+            }else{
+              document.getElementById("amount-dispensed-td").innerHTML = cells[(j + 1)].innerHTML;
+              totalDispensed = (cells[(j + 1)].innerHTML).replace(/<[^>]*>/g, "");
+            }
         }
     }
 
