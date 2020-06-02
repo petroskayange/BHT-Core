@@ -1,6 +1,26 @@
 var fetchedPrescriptions;
 var ordersToPost;
 var totalDispensed;
+var dataTable;
+
+function getDataTable() {
+    if (dataTable) {
+        return dataTable;
+    }
+    
+    dataTable = jQuery('#med-list').DataTable({
+      fixedHeader: true,
+      searching: false,
+      paging: false,
+      scrollY: 330,
+      scroller: {
+        loadingIndicator: true
+      }
+    });
+
+    return dataTable;
+}
+
 function addModalDiv() {
     var iFrame = document.getElementById("inputFrame" + tstCurrentPage);
     var modal = document.createElement("div");
@@ -459,38 +479,101 @@ function gotoAppointmentEncounterType() {
 }
 
 
-function addPrescriptions(data) {
+function addPrescriptions(data, onFinishCallback) {
+    function buildPrescriptionsTableBody([order, ...otherOrders], {includeStock = false}) {
+        if (!order) {
+            onFinishCallback && onFinishCallback();
+            return;
+        }
 
-    for (var i = 0; i < data.length; i++) {
-        var order_id = data[i].order_id;
-        var drug_id = data[i].drug_inventory_id;
-        var medication = data[i].drug.name;
-        var amount_needed = data[i].amount_needed;
-        var quantity = data[i].quantity;
+        var order_id = order.order_id;
+        var drug_id = order.drug_inventory_id;
+        var medication = order.drug.name;
+        var amount_needed = order.amount_needed;
+        var quantity = order.quantity;
 
         if(amount_needed <= 0 && parseFloat(quantity) >= 0) {
-          var needed_amount = calculate_complete_pack(data[i], parseFloat(quantity));
+          var needed_amount = calculate_complete_pack(order, parseFloat(quantity));
           if(parseFloat(needed_amount) > 0)
             amount_needed = needed_amount;
 
         }
 
-        var complete_pack = calculate_complete_pack(data[i], parseFloat(amount_needed)) - (quantity || 0)
+        var complete_pack = calculate_complete_pack(order, parseFloat(amount_needed)) - (quantity || 0)
         fetchedPrescriptions[drug_id] = order_id;
         complete_pack = complete_pack < 0 ? 0 : complete_pack;
 
-        setDataTable.row.add([addDeleteBTN(order_id), addValue(order_id, medication, true), addValue(order_id, complete_pack, false), addValue(order_id, quantity, false), addReset(order_id)]).node().id = order_id;
-        setDataTable.draw();
-        addClassIMGcontainter(order_id);
+        const row = [addDeleteBTN(order_id),
+                     addValue(order_id, medication, true),
+                     addValue(order_id, complete_pack, false),
+                     addValue(order_id, quantity, false),
+                     addReset(order_id)];
+
+        drawTableRow = () => {
+            getDataTable().row.add(row).node().id = order_id;
+            getDataTable().draw();
+            addClassIMGcontainter(order_id);
+        };
+
+        if (!includeStock) {
+            drawTableRow();
+            buildPrescriptionsTableBody(otherOrders, {includeStock})
+            return;
+        }
+
+        fetchAvailableDrugStock(drug_id).then(stock => {
+            row.splice(2, 0, addValue(order_id, stock, false));
+            drawTableRow();
+            buildPrescriptionsTableBody(otherOrders, {includeStock});
+        }).catch((error) => {
+            showMessage(error);
+        });
     }
+
+    ifArtStockIsEnabled({
+        and: () => sessionStorage.programID == HIV_PROGRAM_ID,
+        then: () => buildPrescriptionsTableBody(data, {includeStock: true}),
+        otherwise: () => buildPrescriptionsTableBody(data, {includeStock: false})
+    });
+}
+
+function fetchAvailableDrugStock(drug_id) {
+    const url = fullResourcePath(`pharmacy/items?drug_id=${drug_id}`)
+    const requestParams = {
+        headers: {
+            'Authorization': sessionStorage.authorization,
+            'Content-type': 'application/json'
+        },
+        mode: 'cors'
+    };
+
+    return fetch(url, requestParams).then(response => {
+        if (!response.ok) {
+            throw new Error("Unable to retrieve available drug stock");
+        }
+
+        return response.json();
+    }).then(stockItems => {
+        if (stockItems.length === 0) {
+            return "N/A";
+        }
+
+        return stockItems.reduce((accum, {current_quantity}) => accum + current_quantity, 0);
+    });
 }
 
 function addClassIMGcontainter(order_id) {
     var row = document.getElementById(order_id);
-    var td = row.getElementsByTagName("td")[0];
+    var cells = row.getElementsByTagName("td"); 
+    var td = cells[0];
     td.setAttribute("class", "delete-container");
 
-    var td = row.getElementsByTagName("td")[2];
+    if (cells.length === 6) {
+        td = row.getElementsByTagName("td")[3]
+    } else {
+        td = row.getElementsByTagName("td")[2];
+    }
+    
     td.setAttribute("class", "medication-amount-needed");
 }
 
@@ -559,11 +642,12 @@ function getPrescriptions() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(this.responseText);
             fetchedPrescriptions = {}
-            addPrescriptions(obj);
-            if (checkIfDoneDispensing == true) {
-                dispensationDone();
-                checkIfDoneDispensing = false;
-            }
+            addPrescriptions(obj, () => {
+                if (checkIfDoneDispensing == true) {
+                    dispensationDone();
+                    checkIfDoneDispensing = false;
+                }
+            });
         }
     };
 
@@ -573,49 +657,91 @@ function getPrescriptions() {
     xhttp.send();
 }
 
-function buildDispensingPage() {
-    var rightContainer = document.getElementById("controls-table-cell-right");
+const HIV_PROGRAM_ID = 1;
+const PROPERTIES = { artStockActivated: null };
 
-    var medList = document.createElement("div");
-    medList.setAttribute("id", "medList-container");
-
-    var table = document.createElement("table");
-    table.setAttribute("id", "med-list");
-    table.setAttribute("class", "uk-table uk-table-hover uk-table-striped");
-    var thead = document.createElement("thead");
-    table.appendChild(thead);
-
-    var tr = document.createElement("tr");
-    thead.appendChild(tr);
-
-    var headers = ["&nbsp;", "Medication", "Amount needed", "Amount dispensed", "Reset"];
-
-    for (var i = 0; i < headers.length; i++) {
-        var th = document.createElement("th");
-        th.innerHTML = headers[i];
-        if (i == 1)
-            th.style = "width: 50%;"
-
-        tr.appendChild(th);
+function fullResourcePath(resource = null) {
+    if (resource === null) {
+        return `${apiProtocol}://${apiURL}:${apiPort}/api/v1`;       
     }
+    
+    return `${apiProtocol}://${apiURL}:${apiPort}/api/v1/${resource}`;   
+}
 
-    var tbody = document.createElement("tbody");
-    table.appendChild(tbody);
+function ifArtStockIsEnabled({and = null, then, otherwise = (_) => null}) {
+    if (and !== null && and() === false) return otherwise();
 
-    medList.appendChild(table);
-    rightContainer.appendChild(medList);
+    if (PROPERTIES.artStockActivated === null) {
+        const requestOptions = { path: fullResourcePath(), authToken: sessionStorage.authorization };
+        
+        return GlobalProperty(requestOptions).isEnabled(
+            'activate.drug.management', 
+            (isEnabled) => {
+                if (isEnabled) {
+                    PROPERTIES.artStockActivated = true;
+                    return then();
+                } else {
+                    PROPERTIES.artStockIsActivated = false;
+                    return otherwise();
+                }
+            }
+        );
+    } else if(PROPERTIES.artStockActivated) {
+        return then();
+    } else {
+        return otherwise();
+    }
+}
+
+function buildDispensingPage() {
+    function makePage(headers) {
+        var rightContainer = document.getElementById("controls-table-cell-right");
+
+        var medList = document.createElement("div");
+        medList.setAttribute("id", "medList-container");
+
+        var table = document.createElement("table");
+        table.setAttribute("id", "med-list");
+        table.setAttribute("class", "uk-table uk-table-hover uk-table-striped");
+        var thead = document.createElement("thead");
+        table.appendChild(thead);
+
+        var tr = document.createElement("tr");
+        thead.appendChild(tr);
+
+        for (var i = 0; i < headers.length; i++) {
+            var th = document.createElement("th");
+            th.innerHTML = headers[i];
+            if (i == 1)
+                th.style = "width: 50%;"
+
+            tr.appendChild(th);
+        }
+
+        var tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+
+        medList.appendChild(table);
+        rightContainer.appendChild(medList);
 
 
-    /* ............................................. */
+        /* ............................................. */
 
-    var barcodeDiv = document.createElement("div");
-    barcodeDiv.setAttribute("id", "barcode-container");
-    barcodeDiv.setAttribute("class", "barcode");
-    barcodeDiv.setAttribute("functionName", "scannedMedicationBarcode");
+        var barcodeDiv = document.createElement("div");
+        barcodeDiv.setAttribute("id", "barcode-container");
+        barcodeDiv.setAttribute("class", "barcode");
+        barcodeDiv.setAttribute("functionName", "scannedMedicationBarcode");
 
 
-    rightContainer.appendChild(barcodeDiv);
-    inserBarcodeScan();
+        rightContainer.appendChild(barcodeDiv);
+        inserBarcodeScan();
+    }
+    
+    ifArtStockIsEnabled({
+        and: () => sessionStorage.programID == HIV_PROGRAM_ID,
+        then: () => makePage(["&nbsp;", "Medication", "Amount available", "Amount needed", "Amount dispensed", "Reset"]),
+        otherwise: () => makePage(["&nbsp;", "Medication", "Amount needed", "Amount dispensed", "Reset"])
+    });
 }
 
 
@@ -677,14 +803,13 @@ function setPage(e) {
 function buildPage(e) {
     leftContainer = document.getElementById("controls-table-cell-right");
     leftContainer.innerHTML = null;
+    dataTable = null;   // Mark bound data table as null;
 
     if (e.innerHTML.match(/Prescribed/i)) {
         buildDispensingPage();
-        initDataTable();
         getPrescriptions();
     } else if (e.innerHTML.match(/History/i)) {
         buildMedicationHistory();
-        initDataTable();
         loadHostory();
     }
 
@@ -746,14 +871,14 @@ function addRows(data) {
 
         start_date = formatDate(start_date);
 
-        setDataTable.row.add([medication, start_date, quantity]).node().id = order_id;
+        getDataTable().row.add([medication, start_date, quantity]).node().id = order_id;
         /*var table = $('#example').DataTable();
 
         $('#example tbody').on('click', 'tr', function () {
             var data = table.row( this ).data();
             alert( 'You clicked on '+data[0]+'\'s row' );
         } );*/
-        setDataTable.draw();
+        getDataTable().draw();
     }
 }
 
