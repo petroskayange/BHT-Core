@@ -693,6 +693,10 @@ function ifArtStockIsEnabled({and = null, then, otherwise = (_) => null}) {
                     PROPERTIES.artStockIsActivated = false;
                     return otherwise();
                 }
+            },
+            (_error) => {
+                PROPERTIES.artStockActivated = false;
+                return otherwise();
             }
         );
     } else if(PROPERTIES.artStockActivated) {
