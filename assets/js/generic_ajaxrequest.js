@@ -71,15 +71,17 @@ function checkIfEncounterCaptured(encounter_name, id, redirect) {
 
 }
 
-function confirmCancelEntryWithMessage(save, message = "Are you sure you want to Cancel", patientDashboard) {     // If you want to save state set save =
+function confirmCancelEntryWithMessage(save, message = "Are you sure you want to Cancel", patientDashboard, noRedirect) {     // If you want to save state set save =
   // true
+  var href = noRedirect ? '' : 'window.location.href=&#034/&#034';
+  var button =  "<button onmousedown='hideMessage(); "+href+"'><span>No</span></button>";
   if (tstConfirmCancel) {
     tstMessageBar.innerHTML = message + "<br/>" +
       "<button onmousedown='hideMessage(); window.location.href = &#034" + patientDashboard + "&#034;'><span>Yes</span></button>" +
       (save ? "<button onmousedown='var completeField = document.createElement(\"input\"); \n\
       completeField.type = \"hidden\"; completeField.value = \"false\"; completeField.name = \"complete\"; \n\
       document.forms[0].appendChild(completeField); document.forms[0].submit(); hideMessage();'><span>Save</span></button>": "") +
-      "<button onmousedown='hideMessage();window.location.href=&#034/&#034'><span>No</span></button>";
+      button
     tstMessageBar.style.display = "block";
   }
 
