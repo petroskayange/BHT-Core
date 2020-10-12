@@ -150,13 +150,13 @@ function voidProgram(patient_program_id){
 
 function voidSelectedProgram(patient_program_id){
   var url = sessionStorage.apiProtocol+ '://' + apiURL + ':' + apiPort + '/api/v1/' 
-  url += "patient_programs/" + patient_program_id;
+  url += "patient_programs/" + patient_program_id + "?reason=" + void_reason;
   var req = new XMLHttpRequest();
   req.onreadystatechange = function () {
 
     if (this.readyState == 4) {
-      if (this.status == 200) {
-        window.reload();
+      if (this.status == 204) {
+        window.location.reload();
       }
     }
   };
