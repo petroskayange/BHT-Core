@@ -50,15 +50,16 @@
   var setDataTable = null;
 
   function initDataTable() {
-    setDataTable = jQuery('#med-list').DataTable( {
-      fixedHeader: true,
-      searching: false,
-      paging: false,
-      scrollY: 330,
-      scroller: {
-        loadingIndicator: true
-      }
-    } );
+    // setDataTable = jQuery('#med-list').DataTable( {
+    //   fixedHeader: true,
+    //   searching: false,
+    //   paging: false,
+    //   scrollY: 330,
+    //   scroller: {
+    //     loadingIndicator: true
+    //   }
+    // } );
+    getDataTable();
   }
 
 function changeNextButton() {
@@ -67,11 +68,11 @@ function changeNextButton() {
 }
 
 function doneDispensation() {
-  if(sessionStorage.userActivities.search(/Dispensations/ig) > 0) {
-    confirmCancelEntryWithMessage(null, "Are all dispensationsations complete?, continue to patient dashboard?", '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID, true);
-  }else {
+  // if(sessionStorage.userActivities.search(/Dispensations/ig) > 0) {
+  //   confirmCancelEntryWithMessage(null, "Are all dispensationsations complete?, continue to patient dashboard?", '/views/patient_dashboard.html?patient_id=' + sessionStorage.patientID, true);
+  // }else {
     window.location = "/views/patient_dashboard.html?patient_id=" + sessionStorage.patientID
-  }
+  // }
 
 }
 var patient_id = sessionStorage.patientID;

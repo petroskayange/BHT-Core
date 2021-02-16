@@ -1113,6 +1113,7 @@ function getAPI() {
                         apiPort = data.apiPort;
                         sessionStorage.setItem("apiProtocol", data.apiProtocol);
                         apiProtocol = data.apiProtocol;
+
                     } catch (e) {
                         console.log("invalid json formatting");
                     }
