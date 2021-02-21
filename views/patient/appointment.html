@@ -653,7 +653,7 @@ function selectDate(e) {
   } 
   
   if(clinic_holidays.indexOf(selected_date) >= 0){
-    showMessage(moment().format('DD/MMM/YYYY') + ' is a clinic holiday');
+    showMessage(moment(selected_date).format('DD/MMM/YYYY') + ' is a clinic holiday');
     return;
   } 
   

@@ -1297,6 +1297,7 @@ function fetchVersion() {
       if (this.status == 200) {
         var results = JSON.parse(this.responseText);
         system_version_api = results['System version'];
+        sessionStorage.apiVersion = system_version_api;
         fetchCoreVersion();
       }
     }
@@ -1315,8 +1316,11 @@ function fetchVersion() {
 function fetchCoreVersion() {
   $.get("HEAD", function(data) {
    system_version_core = data;
+   sessionStorage.coreVersion = system_version_core;
    fetchModuleVersion();
   }, 'text').fail(function () {
+
+    system_version_core = "development";
     console.log("HEAD file missing in BHT-Core folder");
   });
 }
@@ -1326,6 +1330,7 @@ function fetchModuleVersion() {
    system_version_module = data;
    if(system_version_module != undefined)
     $("#module-version").html(system_version_module);  
+    sessionStorage[sessionStorage.applicationName + "Version"] = system_version_module;    
 
   }, 'text').fail(function () {
     console.log("HEAD is missing from /apps/" + sessionStorage.applicationName + " folder");
