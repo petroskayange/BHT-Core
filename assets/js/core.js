@@ -383,8 +383,10 @@ function getTasks(encountersData) {
             var url = values.url;
             var icon = values.activitiesIcon;
             var show = values.show;
+            var available = values.available;
 
-            if (show || show == undefined) tasks.push([j, icon, url]);
+          
+            if ((show || show == undefined) && available) tasks.push([j, icon, url]);
         });
     }
 
