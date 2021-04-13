@@ -77,6 +77,7 @@ function keyboardKeys(e, table) {
 }
 
 function keyPressed(e) {
+  console.log(e);
   var inputBox = targetInput;
   var value_string = e.innerHTML.replace('<span>','');
   value_string = value_string.replace('</span>','');
